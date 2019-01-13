@@ -29,7 +29,7 @@
 			--><button onclick="changeScale(false);">-</button><!--
 			--><button onclick="rec()">Rec</button><!--
 			--><button onclick="changeMode()">Mode</button><!--
-			--><select id="samplerate-change" onchange="changeSampleRate(this);"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			--><select id="samplerate-change" onchange="setSampleRate(+this.selectedOptions[0].value);"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
 		</div>
 		<div id="error"></div>
 		<canvas id="graph" width="1024" height="256"></canvas>

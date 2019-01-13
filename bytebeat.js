@@ -1,4 +1,26 @@
 var sampleRate = 8000;
+var bufferSize = 8192;
+
+function $q(path, root) {
+	return (root || document.body).querySelector(path);
+};
+
+function $Q(path, root) {
+	return (root || document.body).querySelectorAll(path);
+};
+
+function $id(id) {
+	return document.getElementById(id);
+};
+
+function $toggle(el) {
+	var isHidden = el.style.display;
+	if(isHidden) {
+		el.style.removeProperty('display');
+	} else {
+		el.style.display = 'none';
+	}
+};
 
 function play() {
 	if(!playing) {
@@ -16,12 +38,6 @@ function stop() {
 	n = 0;
 }
 
-function changeScale(isIncrement) {
-	if(!isIncrement && scale > 0 || isIncrement && scale < 13) {
-		scale += isIncrement ? 1 : -1;
-	}
-}
-
 function rec() {
 	if(!recording) {
 		mediaRecorder.start();
@@ -33,13 +49,29 @@ function rec() {
 	}
 }
 
+function changeScale(isIncrement) {
+	if(!isIncrement && scale > 0 || isIncrement && scale < 13) {
+		scale += isIncrement ? 1 : -1;
+	}
+}
+
 function changeMode() {
 	mode = +!mode;
 }
 
-function changeSampleRate(el) {
-	sampleRate = +el.selectedOptions[0].value;
+function setSampleRate(rate) {
+	sampleRate = rate;
 	sampleSize = sampleRate / context.sampleRate;
+}
+
+function applySampleRate(rate) {
+	setSampleRate(rate);
+	var selectBox = $id('samplerate-change');
+	selectBox.childNodes.forEach(function(el, index) {
+		if(+el.value === sampleRate) {
+			selectBox.selectedIndex = index;
+		}
+	});
 }
 
 function refeshCalc(e) {
@@ -54,7 +86,8 @@ function refeshCalc(e) {
 		return;
 	}
 	errorEl.innerText = '';
-	window.location.hash = '#v3b64' + btoa(pako.deflateRaw(formula, { to: 'string' }));
+	var pData = (sampleRate === 8000 ? formula : JSON.stringify({ sampleRate: sampleRate, formula: formula }));
+	window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
 	draw(imageData.data);
 }
 
@@ -110,7 +143,6 @@ var recording = false;
 var func = function() {
 	return 0;
 };
-
 var context = new (window.AudioContext || window.webkitAudioContext ||
 	window.mozAudioContext || window.oAudioContext || window.msAudioContext)();
 if(!context.createGain) {
@@ -122,8 +154,6 @@ if(!context.createDelay) {
 if(!context.createScriptProcessor) {
 	context.createScriptProcessor = context.createJavaScriptNode;
 }
-
-var bufferSize = 8192;
 var sampleSize = sampleRate / context.sampleRate;
 var scriptNode = context.createScriptProcessor(bufferSize, 1, 1);
 scriptNode.onaudioprocess = function(e) {
@@ -173,24 +203,6 @@ mediaRecorder.onstop = function(e) {
 scriptNode.connect(dest);
 
 document.addEventListener('DOMContentLoaded', function() {
-	var $q = function(path, root) {
-		return (root || document.body).querySelector(path);
-	};
-	var $Q = function(path, root) {
-		return (root || document.body).querySelectorAll(path);
-	};
-	var $id = function(id) {
-		return document.getElementById(id);
-	};
-	var $toggle = function(el) {
-		var isHidden = el.style.display;
-		if(isHidden) {
-			el.style.removeProperty('display');
-		} else {
-			el.style.display = 'none';
-		}
-	};
-
 	var contScrollEl = $q('.container-scroll');
 	var contFixedEl = $q('.container-fixed');
 	var setScrollHeight = function() {
@@ -212,14 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		var el = e.target;
 		if(el.tagName === 'CODE') {
 			inputEl.innerText = el.innerText.trim();
-			sampleRate = +el.getAttribute('samplerate') || 8000;
-			sampleSize = sampleRate / context.sampleRate;
-			var selectBox = $id('samplerate-change');
-			selectBox.childNodes.forEach(function(el, index){
-				if(+el.value === sampleRate) {
-					selectBox.selectedIndex = index;
-				}
-			})
+			applySampleRate(+el.getAttribute('samplerate') || 8000);
 			setScrollHeight();
 			n = 0;
 			refeshCalc();
@@ -244,9 +249,18 @@ document.addEventListener('DOMContentLoaded', function() {
 			atob(decodeURIComponent(window.location.hash.substr(4))),
 			{ to: 'string' }) + ';';
 	} else if(window.location.hash.indexOf('#v3b64') === 0) {
-		inputEl.innerText = pako.inflateRaw(
+		var pData = pako.inflateRaw(
 			atob(decodeURIComponent(window.location.hash.substr(6))),
 			{ to: 'string' });
+		formula = pData;
+		if(pData.startsWith('{')) {
+			try {
+				pData = JSON.parse(pData);
+				formula = pData.formula;
+				applySampleRate(+pData.sampleRate);
+			} catch(err) {}
+		}
+		inputEl.innerText = formula;
 	}
 
 	canvas = document.getElementById('graph');
