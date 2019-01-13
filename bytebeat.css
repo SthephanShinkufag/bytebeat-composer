@@ -1,0 +1,110 @@
+html {
+	background-color: #000;
+	color: #fff;
+	font-size: 16px;
+	font-family: Courier, Sans, sans-serif;
+}
+
+body {
+	margin: 0 auto;
+	width: 1028px;
+}
+
+a, a:visited {
+	color: #88d2fb;
+}
+
+a.link-home {
+	text-decoration:none;
+}
+
+a.link-home:not(:hover) {
+	color: #fff;
+}
+
+.buttons-control {
+	margin: 7px 0;
+}
+
+.buttons-control > button {
+	display: inline-block;
+	font-family: Courier, Sans, sans-serif;
+	margin-right: 3px;
+}
+
+.button-toggle {
+	cursor: pointer;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.button-toggle:hover, code:hover {
+	color: #88d2fb;
+}
+
+canvas {
+	border: 1px solid #fcc33d;
+}
+
+code {
+	color: #ffcc53;
+	cursor: pointer;
+}
+
+.container-scroll {
+	overflow-y: auto;
+}
+
+#error {
+	color: #f92672;
+}
+
+#graph {
+	height: 256px;
+	width: 1024px;
+}
+
+#input {
+	border: 2px solid white;
+	max-height: 999999px;
+	padding: 5px;
+	width: 1014px;
+}
+
+li {
+	padding-bottom: 7px;
+}
+
+#library > ul > li {
+	padding-bottom: 5px;
+}
+
+.middle {
+	margin-top: 15px;
+}
+
+.paragraph {
+	margin-bottom: 15px;
+	max-height: 999999px;
+	font-size: 0.85em;
+}
+
+.yellow {
+	color: yellow;
+}
+
+/* ==[ Mobile devices ]==================================================================================== */
+
+@media (max-width: 1080px) {
+	body {
+		font-size: 1.7rem;
+	}
+
+	.buttons-control > button, #input {
+		font-size: 2.2rem;
+	}
+
+	.paragraph {
+		font-size: 1.5rem;
+	}
+}
