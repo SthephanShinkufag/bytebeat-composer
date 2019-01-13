@@ -1,3 +1,5 @@
+var sampleRate = 8000;
+
 function play() {
 	if(!playing) {
 		playing = true;
@@ -35,6 +37,11 @@ function changeMode() {
 	mode = +!mode;
 }
 
+function changeSampleRate(el) {
+	sampleRate = +el.selectedOptions[0].value;
+	sampleSize = sampleRate / context.sampleRate;
+}
+
 function refeshCalc(e) {
 	var formula = inputEl.innerText;
 	var oldF = func;
@@ -54,9 +61,8 @@ function refeshCalc(e) {
 function draw(data) {
 	// | 0 is faster than Math.floor
 	var graphSizeInSamples = (data.length >> 2) >> scale;
-	var k = 8e3 / context.sampleRate;
-	var currentSample = k * n;
-	// var deltaTime = (k * bufferSize) | 0;
+	var currentSample = sampleSize * n;
+	// var deltaTime = (sampleSize * bufferSize) | 0;
 	var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
 	var width = canvas.width;
 	var height = canvas.height;
@@ -118,7 +124,7 @@ if(!context.createScriptProcessor) {
 }
 
 var bufferSize = 8192;
-var sampleSize = 8e3 / context.sampleRate;
+var sampleSize = sampleRate / context.sampleRate;
 var scriptNode = context.createScriptProcessor(bufferSize, 1, 1);
 scriptNode.onaudioprocess = function(e) {
 	draw(imageData.data);
@@ -206,6 +212,14 @@ document.addEventListener('DOMContentLoaded', function() {
 		var el = e.target;
 		if(el.tagName === 'CODE') {
 			inputEl.innerText = el.innerText.trim();
+			sampleRate = +el.getAttribute('samplerate') || 8000;
+			sampleSize = sampleRate / context.sampleRate;
+			var selectBox = $id('samplerate-change');
+			selectBox.childNodes.forEach(function(el, index){
+				if(+el.value === sampleRate) {
+					selectBox.selectedIndex = index;
+				}
+			})
 			setScrollHeight();
 			n = 0;
 			refeshCalc();

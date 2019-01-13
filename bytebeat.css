@@ -15,7 +15,7 @@ a, a:visited {
 }
 
 a.link-home {
-	text-decoration:none;
+	text-decoration: none;
 }
 
 a.link-home:not(:hover) {
@@ -75,10 +75,6 @@ li {
 	padding-bottom: 7px;
 }
 
-#library > ul > li {
-	padding-bottom: 5px;
-}
-
 .middle {
 	margin-top: 15px;
 }
@@ -86,7 +82,11 @@ li {
 .paragraph {
 	margin-bottom: 15px;
 	max-height: 999999px;
-	font-size: 0.85em;
+	font-size: 12px;
+}
+
+select {
+	vertical-align: -2px;
 }
 
 .yellow {
@@ -100,7 +100,7 @@ li {
 		font-size: 1.7rem;
 	}
 
-	.buttons-control > button, #input {
+	.buttons-control > button, #input, #samplerate-change {
 		font-size: 2.2rem;
 	}
 
