@@ -95,7 +95,6 @@ function draw(data) {
 	// | 0 is faster than Math.floor
 	var graphSizeInSamples = (data.length >> 2) >> scale;
 	var currentSample = sampleSize * n;
-	// var deltaTime = (sampleSize * bufferSize) | 0;
 	var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
 	var width = canvas.width;
 	var height = canvas.height;
@@ -114,10 +113,6 @@ function draw(data) {
 	}
 	if(mode === 1) {
 		var arrLen = arr.length;
-		// var ratio1 = dataLen / (arrLen * 4);
-		// var ratio2 = Math.pow(2, scale);
-		// ratio1 === ratio2;
-		// console.log(dataLen, arrLen, ratio, ratio2);
 		for(var i = 0; i < arrLen; i++) {
 			var pos = (arr[i] * width + (((i * width / arrLen) | 0) || 1)) << 2;
 			data[pos++] = data[pos++] = data[pos] = 255;

@@ -66,9 +66,11 @@ code {
 
 #input {
 	border: 2px solid white;
-	max-height: 999999px;
+	max-height: 125px;
 	padding: 5px;
 	width: 1014px;
+	word-wrap: break-word;
+	overflow-y: auto;
 }
 
 li {
@@ -83,6 +85,12 @@ li {
 	margin-bottom: 15px;
 	max-height: 999999px;
 	font-size: 12px;
+}
+
+.samplerate {
+	font-size: 10px;
+	color: #47d738;
+	cursor: default;
 }
 
 select {

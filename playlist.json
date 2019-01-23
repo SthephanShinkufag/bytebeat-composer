@@ -1,0 +1,787 @@
+{ "playlist": {
+	"classic8k": [
+		{
+			"author": "Bear & Celephais",
+			"code": "t>>6^t&37|t+(t^t>>11)-t*((t%24?2:6)&t>>11)^t<<1&(t&598?t>>4:t>>10)",
+			"starred": 1
+		}, {
+			"description": "Viznut-like",
+			"children": [{
+				"author": "Viznut",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=15s",
+				"code": "10*(t>>6|t|t>>(t>>16))+(7&t>>11)",
+				"starred": 1
+			}, {
+				"author": "Viznut, Xpansive, Varjohukka",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m31s",
+				"code": "10*(t>>6|t|t>>7)+4*(t&t>>13|t>>6)",
+				"starred": 2
+			}, {
+				"description": "Frere Jacques",
+				"author": "Lord Graga",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=7#c388764",
+				"code": "10*(t>>7|3*t|t>>(t>>15))+(t>>8&5)"
+			}]
+		}, {
+			"author": "Stimmer",
+			"code": "(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))",
+			"starred": 2
+		}, {
+			"description": "Street Surfer",
+			"author": [
+				["Skurk", "http://www.pouet.net/topic.php?which=8357&page=4#c388479"],
+				["Raer", "http://www.pouet.net/topic.php?which=8357&page=4#c388494"]],
+			"code": "t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t)",
+			"starred": 2
+		}, {
+			"author": "Varjohukka",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388503",
+			"children": [{
+				"code": "(t&8192?t&4096?t&1024?2*t:4*t:t&512?4*t:4.2*t:(t&4096?t&1024?2*t:10*t:t&512?2*t:8*t)>>2)*(t&16384?3:2)|t*(t&16384?.125:1/(.01*t))"
+			}, {
+				"description": "simplified",
+				"code": "(t&8192?t&4096?t&1024?2*t:4*t:t&512?4*t:4.2*t:(t&4096?t&1024?2*t:10*t:t&512?2*t:8*t)>>2)*(t&16384?3:2)"
+			}]
+		}, {
+			"description": "Varjohukka + Street Surfer",
+			"author": "Raer",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388504",
+			"code": "(t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t))^((t&8192?t&4096?t&1024?2*t:4*t:t&512?4*t:4.2*t:(t&4096?t&1024?2*t:10*t:t&512?2*t:8*t)>>2)*(t&16384?3:2)|t*(t&16384?.125:1/(.01*t))>>1)",
+			"starred": 1
+		}, {
+			"author": "Paralax",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=6#c388670",
+			"code": "10*(t&5*t|t>>6|(t&32768?-6*t/7:(t&65536?-9*t&100:-9*(t&100))/11))",
+			"starred": 2
+		}, {
+			"description": "Electrohouse",
+			"code": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&t>>4",
+			"starred": 1
+		}, {
+			"description": "Running man",
+			"author": "Viznut",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930",
+			"code": "t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)",
+			"starred": 2
+		}, {
+			"description": "Sierpinski harmony",
+			"children": [{
+				"author": "Miiro",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s",
+				"code": "5*t&t>>7|3*t&4*t>>10",
+				"starred": 1
+			}, {
+				"author": "Stephth",
+				"url": "https://news.ycombinator.com/item?id=3064986",
+				"code": "(9*t&t>>4|5*t&t>>7|3*t&t>>10)",
+				"starred": 1
+			}, {
+				"description": "with drums",
+				"code": "(9*t&t>>4|5*t&t>>7|3*t&t>>10)-1"
+			}, {
+				"author": "Radavis",
+				"url": "https://github.com/radavis/bytebeat/blob/master/errie_error.c",
+				"code": "9*t&t>>4|5*t&t>>7|(3*t&t>>10)-1"
+			}]
+		}, {
+			"description": "CA98",
+			"author": [
+				["Rrola", "http://www.pouet.net/topic.php?which=8357&page=9#c388902"],
+				["Ryg", "http://www.pouet.net/topic.php?which=8357&page=9#c388929"]],
+			"children": [{
+				"code": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8"
+			}, {
+				"code": "t*(0xCA98>>(t>>9&14)&15)|t>>8",
+				"starred": 1
+			}]
+		}, {
+			"description": "Bassline",
+			"author": "Tejeez",
+			"code": "(-t>>2)*((127&t*(7&t>>10))<(245&t*(2+(5&t>>14))))",
+			"starred": 1
+		}, {
+			"description": "Crowd",
+			"author": "Erlehmann",
+			"url": "https://github.com/erlehmann/algorithmic-symphonies/blob/master/crowd/",
+			"code": "t<<1^(t<<1)+(t>>7)&t>>12|t>>4-(1^7&t>>19)|t>>7"
+		}, {
+			"author": "µB",
+			"url": "https://chipmusic.org/%C2%B5b/music/one-liner/",
+			"code": "64*(t>>3|t>>4|t>>9)+(t>>11&t<<2)^2*(t>>16|t|t>>7)+32*(t>>t&32)"
+		}, {
+			"description": "Old noisy beat",
+			"author": "Lucasvb",
+			"url": "http://www.reddit.com/r/programming/comments/kyj77/algorithmic_symphonies_from_one_line_of_code_how/",
+			"code": "(t>>6|t<<1)+(t>>5|t<<3|t>>3)|t>>2|t<<1"
+		}, {
+			"description": "Computing...",
+			"author": "Bear & Celephais",
+			"code": "t+(t&t^t>>6)-t*(t>>9&(t%16?2:6)&t>>9)"
+		}, {
+			"description": "Moon scanner",
+			"author": "Viznut & Jaffa",
+			"code": "2*(t>>5&t)-(t>>5)+t*(t>>14&14)",
+			"starred": 1
+		}, {
+			"description": "Fractal trees",
+			"author": "Danharaj & 216",
+			"code": "t|t%255|t%257"
+		}, {
+			"author": "Droid",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=10#c388999",
+			"code": "t>>6&1?t>>5:-t>>4"
+		}, {
+			"description": "The fall of Derp Herp",
+			"author": "Marmakoide",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=10#c388980",
+			"code": "t*(0x13371337>>(t>>13&27)&127)|t>>4|t<<5",
+			"starred": 2
+		}, {
+			"description": "Zemfira",
+			"author": "Anonymous",
+			"code": "430*(5*t>>11|5*t>>1)",
+			"starred": 1
+		}, {
+			"description": "Mr. arpeggiator playing a solo",
+			"author": "Tonic",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=5#c388569",
+			"code": "t/8>>(t>>9)*t/((t>>14&3)+4)"
+		}, {
+			"description": "The 42 melody",
+			"code": "t*(42&t>>10)"
+		}, {
+			"description": "A jaunty tune",
+			"author": "Ryg",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=17#c389829",
+			"code": "(t*(t>>12)*64+(t>>1)*(t>>10)*(t>>11)*48)>>(((t>>16)|(t>>17))&1)"
+		}, {
+			"description": "Arcade game",
+			"author": "Niklas Roy",
+			"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318497618021#c332012386255047591",
+			"children": [{
+				"code": "t*((t>>9|t>>13)&15)&129"
+			}, {
+				"description": "Clean melody",
+				"code": "t*(t>>9|t>>13)&16"
+			}, {
+				"description": "Louder clean melody",
+				"code": "9*(t*((t>>9|t>>13)&15)&16)"
+			}]
+		}, {
+			"description": "Modem melody",
+			"author": "Krcko",
+			"children": [{
+				"code": "(t&t>>12)*(t>>4|t>>8)",
+				"starred": 1
+			}, {
+				"author": "[deleted]",
+				"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
+				"code": "(t-(t>>4&t>>8)&t>>12)-1"
+			}]
+		}, {
+			"description": "Good old fractal melody",
+			"author": "Blueberry",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=12#c389114",
+			"code": "(t>>9^(t>>9)-1^1)%13*t"
+		}, {
+			"author": "Yehar",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401680",
+			"children": [{
+				"code": "t>>4+!(-t>>13&7)+2*!(t>>17)|t*t*(t>>(t>>12^t>>11)%3+10)/(7+(t>>10&t>>14&3))*!(t&512)<<3+(t>>14&1)"
+			}, {
+				"description": "a bare-bones version",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401690",
+				"code": "t>>4|t*t*(t>>6&8^8)*(t>>11^t/3>>12)/(7+(t>>10&t>>14&3))",
+				"starred": 1
+			}]
+		}, {
+			"author": "Yehar",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=20#c401561",
+			"code": "t*(t>>(t>>11&15))*(t>>9&1)<<2"
+		}, {
+			"description": "Lemmings March",
+			"author": "Marmakoide",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=7#c388798",
+			"code": "t>>5|t<<4|t&1023^1981|t-67>>4"
+		}, {
+			"description": "Ratchet modem",
+			"code": "100*((t<<2|t>>5|t^63)&(t<<10|t>>11))"
+		}, {
+			"description": "Noisy beats",
+			"author": "Tejeez",
+			"url": "https://youtu.be/GtQdIYUtAHg?t=2m55s",
+			"code": "((-t&4095)*(255&t*(t&t>>13))>>12)+(127&t*(234&t>>8&t>>3)>>(3&t>>14))"
+		}, {
+			"description": "8-bit Atari inspired sounds",
+			"author": "Visy",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250",
+			"children": [{
+				"description": "simplified version",
+				"code": "t%25+(t>>2|15*t)+t>>3"
+			}]
+		}, {
+			"author": "Ola",
+			"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318368575135#c8615755234789420078",
+			"code": "2*(1-(t+10>>(t>>9&t>>14)&t>>4&-2))*((t>>10^t+(t>>6&127)>>10)&1)*32+128"
+		}, {
+			"description": "Robot out of control",
+			"author": "Frenzy",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=6#c388680",
+			"code": "(t&64|t>>5)^(t&33|t>>8)^(t&14|t>>9|t&76)^(t|187)^t*(t>>8&838+t>>13)&644",
+			"starred": 1
+		}, {
+			"description": "One million alarm clocks",
+			"author": "Yehar",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401895",
+			"code": "t*t/(t>>12&t>>8)<<7",
+			"starred": 1
+		}, {
+			"author": "Xpansive",
+			"children": [{
+				"author": "Xpansive",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401775",
+				"code": "t%(t/(t>>9|t>>13))"
+			}, {
+				"description": "Lost in Space",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=3#c388375",
+				"code": "t*(t>>8|t>>9)&46&t>>8^(t&t>>13|t>>6)"
+			}]
+		}, {
+			"description": "C64 weird jumps",
+			"author": "Skurk",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=8#c388896",
+			"code": "t*(t>>(t&4096?t*t>>12:t>>12))|t<<(t>>8)|t>>4"
+		}, {
+			"description": "Oh the headaches",
+			"author": "Sub",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=2#c388363",
+			"code": "t>>5|(t<<3)+12*t*(t>>13|(t>>1|t>>10|t>>2)&t>>8)"
+		}, {
+			"author": "Godinpants",
+			"url": "https://chipmusic.org/forums/post/79378/#p79378",
+			"children": [{
+				"code": "t/3>>t%40+5|t/(24+t&3)>>t%(15-(t>>15)%8*6)+5"
+			}, {
+				"code": "t/3>>1|t/2>>2&t/5>>7|t&31*t*(t>>8)"
+			}]
+		}, {
+			"description": "Harmonics phone",
+			"code": "t*(4+(t>>9)%3)&t/3>>7&224"
+		}, {
+			"description": "Explosions",
+			"code": "t>>5|(t>>2)*(t>>5)"
+		}, {
+			"description": "Driving my 8 bit car",
+			"author": "Direm01",
+			"url": "https://www.reddit.com/r/bytebeat/comments/7e7a61/t6t4300xccdd1000_11khz_infix/",
+			"code": "0xCCDD*((t>>6)*t>>430)%0x1E3",
+			"starred": 1
+		}, {
+			"author": "Harism",
+			"code": "3*((t>>1)+20)*t>>14*t>>18"
+		}, {
+			"author": "[Deleted]",
+			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
+			"children": [{
+				"description": "\"Harmony\". Based off of mu6k's \"Long Line Theory\"",
+				"code": "t%50.01+t%40.1+t%30.1+t%60.01"
+			}, {
+				"description": "Wip",
+				"code": "(((t&t*5)|t>>4)+(t|t>>4*t<<8-1))^t>>12",
+				"starred": 1
+			}, {
+				"description": "Extremely loud grinding machine",
+				"code": "t/(t%(t>>8|t>>16))",
+				"starred": 1
+			}, {
+				"description": "Everything is broken",
+				"code": "t*t/(1+(t>>9&t>>8))&128",
+				"starred": 1
+			}, {
+				"description": "It wont stop",
+				"code": "t*((t/401)^(t/400))"
+			}, {
+				"description": "Ststututterter",
+				"code": "t*-(t>>8|t|t>>9|t>>13)^t"
+			}, {
+				"description": "Waiver",
+				"code": "(t/91&t^t/90&t)-1"
+			}, {
+				"description": "Glissando",
+				"code": "t*t/(t>>13^t>>8)"
+			}, {
+				"description": "Plucker v2",
+				"code": "((t/4)>>t/4)|(t>>2)"
+			}]
+		}, {
+			"author": "noisebridge.net",
+			"url": "https://www.noisebridge.net/wiki/Bytebeat",
+			"children": [{
+				"code": "t*(1+(t>>10)*(43+2*(t>>15-(t>>16)%13)%8)%8)*(1+(t>>14)%4)"
+			}, {
+				"code": "11*(t*(1|(t>>10-(t>>17)%4)%8)&(8<<(t>>13)%4)*(1|(t>>15)%8))*(t>>10)"
+			}, {
+				"code": "(t>>(t>>12)%4)+t*(1+(1+(t>>16)%6)*(t>>10)*(t>>11)%8)^t>>13^t>>6"
+			}, {
+				"code": "(t*(t>>13|t>>8)|t>>16^t)-64"
+			}, {
+				"code": "(~t>>2)*(2+(42&2*t*(7&t>>10))<(24&t*((3&t>>14)+2)))"
+			}, {
+				"code": "(1+(t>>10)%7)*(t*(1+(t>>13)%4)%(24+9*(t>>14)%8)&16)*10"
+			}, {
+				"code": "t*(3+(t>>10)%(4+(t>>11)%8))|t>>5"
+			}, {
+				"code": "t^t>>4^(t*((t>>(11+(t>>16)%3))%16))^t*3"
+			}, {
+				"code": "t<<3+(t>>10)%3^t>>4+(t>>12)%4^t**(2+(t>>13)%8)"
+			}]
+		}, {
+			"author": "216",
+			"url": "https://youtu.be/tCRPUv8V22o?t=345",
+			"code": "t*(t^t+(t>>15|1)^(t-1280^t)>>10)"
+		}, {
+			"description": "New Sawtooth Music",
+			"author": "Gabriel Miceli",
+			"url": "https://www.youtube.com/watch?v=V4GfkFbDojc",
+			"code": "t*((t-2296&t)>>11)"
+		}, {
+			"description": "Triangle waves",
+			"author": "Ryg",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=11#c389010",
+			"children": [{
+				"description": "The general form is (t<&lt;N)^-(t<<(N-8)&1)",
+				"code": "(t<<5)^-(t>>3&1)"
+			}, {
+				"code": "(t<<4)^-(t>>4&1)"
+			}, {
+				"code": "(t<<3)^-(t>>5&1)"
+			}]
+		}, {
+			"description": "SIN non-math",
+			"author": "Erlehmann",
+			"url": "https://github.com/erlehmann/algorithmic-symphonies/blob/master/sine-nomath/",
+			"code": "(t&15)*(0-t&15)*(((t&16)>>3)-1)*128/65+128"
+		}
+	],
+	"js8k": [
+		{
+			"description": "No Limit (non-SIN version)",
+			"author": [
+				["Mu6k", "http://www.pouet.net/topic.php?which=8357&page=9#c388931"],
+				["Ryg", "http://www.pouet.net/topic.php?which=8357&page=10#c388986"]],
+			"code": "128/(y=t&4095)*25+(x=t*(15&0x9866>>(t>>12&12))/6&127)*y/1E4+((t>>6^t>>8|t>>12|x)&63)",
+			"starred": 1
+		}, {
+			"author": "[Deleted]",
+			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
+			"children": [{
+				"description": "\"Harmony v2\". Based off of mu6k's \"Long Line Theory\"",
+				"code": "w=[1,2,3,4,3,4,1][(t>>13)%7]*t,(w%50.01+w%40.1+w%30.1+w%60.01)",
+				"starred": 2
+			}, {
+				"description": "Array song",
+				"code": "a=[1,1,2,3,1,1,2,3,1,1,2,4,4,4,5,5,5][(t>>12)%17],b=[5,4,3,2][(t>>16)%4],(t*b/a)%50.1+(t*b/a)%50"
+			}, {
+				"description": "Trill",
+				"code": "Math.sin(Math.sin(t/100)-t/((2+(t>>10&t>>12)%9)))*64+128"
+			}]
+		}, {
+			"author": "Mu6k",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401841",
+			"code": "u=10^(t>>15&7),u+=3,y=(t>>11&7)/u,f=t*8*y,z=(t*16/u)&0x63|f|f*1.01,z*2",
+			"starred": 1
+		}, {
+			"author": "Gabriel Miceli",
+			"url": "https://www.youtube.com/watch?v=V4GfkFbDojc",
+			"children": [{
+				"description": "Now this actually sounds pretty cool",
+				"code": "d=t*465/(43+6*(t>>15&3^1)),((d/4&t>>6)+d/2&127)+(d/6&127)",
+				"starred": 2
+			}, {
+				"description": "Crazy Groovy Beats 2",
+				"code": "d=t>>12&1,h=(t>>9)+4,(t*t*(t&255)*d/156+(t*(t^15)+t)*((h|t/2048+1&127)-h)/64&127-d*((t>>5&127)*2/3+32))",
+				"starred": 1
+			}]
+		}, {
+			"description": "Industrial chiptune",
+			"author": [
+				["Rez", "http://www.pouet.net/topic.php?which=8357&page=11#c389003"],
+				["Ryg", "http://www.pouet.net/topic.php?which=8357&page=11#c389005"]],
+			"code": "t*(1+\"4451\"[t>>13&3]/10)&t>>9+(.003*t&3)"
+		}, {
+			"description": "Never Gonna Give You Up",
+			"author": "Gasman",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=12#c389109",
+			"code": "(t<<3)*[8/9,1,1.125,1.2,4/3,1.5,0][[0xd2d2c8,0xce4088,0xca32c8,0x8e4009][t>>14&3]>>3*(0x3dbe4688>>3*(9<(t>>10&15)?18:t>>10&15)&7)&7]",
+			"starred": 1
+		}, {
+			"description": "Constructivist",
+			"author": "A1k0n",
+			"url": "https://news.ycombinator.com/item?id=3064980",
+			"code": "SS=function(s,o,r,p){var c=s.charCodeAt((t>>r)%p);return c==32?0:31&t*Math.pow(2,c/12-o)},SS(\"0 0     7 7     037:<<\",6,10,32)+(t&4096?SS(\"037\",4,8,3)*(4096-(t&4095))>>12 : 0)"
+		}, {
+			"description": "Longline Theory",
+			"author": "Mu6k",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389287",
+			"children": [{
+				"code": "((sb=65535&lt;t)&0)+Math.max(Math.min(((y=Math.pow(2,[15,15,23,8][t>>14&3]/12))&0)+1.2*((y*t*.241&63)+(y*t*.25&63))+(((a=1-(t&2047)/2047)&0)+((5*t&2047)*a&128)*(1394811683>>(t>>11&31)&1)*a*1+((d=(14*t*t^t)&2047)*a&127)*(2755970116>>(t>>11&31)&1)*a*1.5+.1337*(a*a*d*(t>>9&1)&127))*sb+((g=(t&2047)/2047)&0)+((g=1-g*g)&0)+((h=Math.pow(2,[[15,18,17,17,17,17,999,999,22,22,999,18,999,15,20,22],[20,18,17,17,10,10,999,999,20,22,20,18,17,18,17,10]][2<(t>>14&3)&1][t>>10&15]/12))&0)+((h*t&31)+(h*t*1.992&31)+(h*t*.497&31)+(h*t*.977&31)-64)*g*2*sb,127),-128)"
+			}, {
+				"description": "300b Information Theory, minimized",
+				"author": "Ryg, Las, Decipher, P01",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=17#c389541",
+				"code": "w=t>>9,k=32,m=2048,a=1-t/m%1,d=(14*t*t^t)%m*a,y=[3,3,4.7,2][p=w/k&3]*t/4,h=\"IQNNNN!!]]!Q!IW]WQNN??!!W]WQNNN?\".charCodeAt(w/2&15|p/3<<4)/33*t-t,s=y*.98%80+y%80+(w>>7&&a*((5*t%m*a&128)*(0x53232323>>w/4&1)+(d&127)*(0xa444c444>>w/4&1)*1.5+(d*w&1)+(h%k+h*1.99%k+h*.49%k+h*.97%k-64)*(4-a-a))),s*s>>14?127:s",
+				"starred": 2
+			}]
+		}, {
+			"description": "G minor Bach, non-COS version",
+			"author": "Skurk",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=11#c389045",
+			"code": "30*t*Math.pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2>*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*>6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*<3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1;26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92=-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>9)/12-7)",
+			"starred": 2
+		}, {
+			"description": "Rabid symphony",
+			"author": "Rabidcow",
+			"url": "https://www.reddit.com/r/programming/comments/mbakl/experimental_oneline_algorithmic_music/",
+			"code": "t*Math.pow(2,(\"kotojokohogohotojokohogokokhpmjmjfokhomkjhggcckotojokohogohotojokohogokokhpmjmjfrmorokfjkkkkkkrpomkjkmokmpoprrjjkkoommoottqqhjkkjjhfecebccccccfffhihfdfcdahhhjkjhghegcmjcjmjpjojmjkhchkhohmhkhjhkhmhohphmhoomkjkhhhhhh\".charCodeAt((t>>10)&255)-58)/12)*63>>6&132"
+		}, {
+			"author": "Yehar",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=21#c401817",
+			"children": [{
+				"description": "No 4",
+				"code": "v=t/2^(t&64?63:0),v=v>>v,v/(1+(v>>7))&t/32|(t>>11)%8%3*t*t&15"
+			}, {
+				"description": "No 5",
+				"code": "u=3*t>>t/4096%4&-t%(t>>16|16)*t>>14&8191,u/(u>>6|1)*4"
+			}]
+		}, {
+			"author": "Tito",
+			"code": "t>>10<<(t>>4)%([8,9,10,11][(t>>11)%4]-(t>>15)%4)"
+		}, {
+			"description": "Interleaved major scale with a rest after each note",
+			"author": "Suborg",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=23#c459110",
+			"code": ".35*t*(\"#\\x0B;\\x0B&\\x0BA\\x0B)\\x0BG\\x0B+\\x0BK\\x0B/\\x0BS\\x0B3\\x0B[\\x0B8\\x0Be\\x0B;\\x0Bk\\x0B\".charCodeAt(t/1E3%32)-11)"
+		}, {
+			"description": "Fort Boyard",
+			"author": "Suborg",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=23#c459199",
+			"code": ".17*t*(\"33AAAAA\\x0BAAKKKGGG;;A\\x0BAK[KSSSSSSSS\\x0B\\x0B[\\x0B[SSSKKGGG;;;GGA\\x0BAK[KAAAAAAAA\".charCodeAt(t/1800%64)-11)",
+			"starred": 1
+		}
+	],
+	"high": [
+		{
+			"description": "Last Palette",
+			"author": "Pigdevil2010",
+			"url": "https://battleofthebits.org/arena/Entry/Last+Palette/25369/",
+			"samplerate": "44100",
+			"code": ["(((t<<(4-(t*3>>13&1)))/(\"@Lf@DUfD\".charCodeAt(t*3>>14&7))|(t*3>>9))&31)+",
+				"(((t<<(4-(t*3>>13&1)))/(\"3@L39DU93@L39D+9\".charCodeAt(t*3>>14&15))|(t*3>>9))*(254>>(t*3>>20&7)&1)&31)+",
+				"(((t<<2)/(\"LL`rLL`U\".charCodeAt(t*3>>18&7))|6)*(254>>(t*3>>21&7)&1)&31)+",
+				"(((t<<2)/(\"MMasMMaV\".charCodeAt(t*3>>18&7))|6)*(254>>(t*3>>21&7)&1)&31)+",
+				"(((t<<4)/(\"3@Lf\".charCodeAt(t>>11&3))|(-t*3>>12&7))*(22235>>(t*3>>14&15)&1)*(126>>(t*3>>21&7)&1)&15)+",
+				"((((t*t/21+t&(t>>3))|t*3>>9|t*3>>10)-((t*3>>16&1)*9))*(6>>(t*3>>22&3)&1)&63)+",
+				"(((t<<5)/(\"LLLD@DUfLLL3DD+933L3&+39@@f@DDUf\".charCodeAt(t*3>>16&31))^(t*3>>11)|(t*3>>14&15))*(104>>(t*3>>21&7)&1)&31)+",
+				"(((t<<3)/(\"393+&+3@030&+33+&@3+ \\\"&+03@3+33@\".charCodeAt(t*3>>16&31))^(-t*3>>11)|(-t*3>>14&15))*(104>>(t*3>>21&7)&1)&15)"],
+			"starred": 2
+		}, {
+			"description": "Last Fountain",
+			"author": "Pigdevil2010",
+			"url": "https://battleofthebits.org/arena/Entry/Last+Fountain/27281/",
+			"samplerate": "44100",
+			"code": ["s=(a,b,c)=>c/a.charCodeAt(b),d=a=>a&1?-1:1,e=(a,b)=>t>>22&1?b:a,b=a=>(s(a,r(t)+p*16,t<<2)*(254>>(t>>20&7)&1))&20,",
+				"p=178>>(t>>19&7)&1,q=a=>120>>(a>>20&7)&1?1:(-a>>16&1),r=a=>112>>(a>>20&7)&1?t>>14&15:(t>>17&1)*8,",
+				"l=\"  QQffQQLLLfLLDDQQQfff  rrff``UU  QQDDQQLLLfLLDD<<f333  r\\x98rf`r`U  <<<9<LUUU\\x80U\\x80UL[[rLLL  rrff`frr  <<<93U999`9U3+--9&&&  rrff``UU\",",
+				"b(\"rrLr99rrUUrU99rULLyL<<yy``\\x80`@@\\x80`\")*2+b(\"qqKq88qqTTqT88qTKKxK;;xx__\\x7f_??\\x7f_\")+",
+				"(s(\"rf[<r`L@\\x98\\x88yQ\\x80fUL\",(t&3)+(t>>17&1)*4+p*8,t<<2)&7)*(t*d(t>>16)>>12&15^e(0,5))*3/4+",
+				"((s(\"rf[L<9-\\x1e&-3&-3-3\\xab\\x98\\x90r`UH0+&9+&\\x1d&+\\x98\\x88yfQL<(3<D3<3-(&09HL`ULU`r`UL@9\",(t>>13&31)+p*32,t<<5-(t>>11&3))|t>>8)*q(t)&31)+",
+				"(((s(l,t>>14&127,t<<6)&s(l,t>>14&127,(t*e(89/88,499/498))<<6))*(63486>>(t>>15&15)&1)*(102>>(t>>20&7)&1))&e(42,32))+",
+				"((((253507989>>(t>>6&31))*(1>>(t>>11&3))*(19593>>(t>>13&15)&1)&1)*50)+",
+				"((((t*t/21+t&(t>>3))|t>>7|t>>8)-7)*(3>>(t>>11&3)&1)*(2450526224>>(t>>13&31)&1)&31)*5/2)*(112>>(t>>20&7)&1)"],
+			"starred": 2
+		}, {
+			"description": "Drone Choords",
+			"author": "LJ",
+			"samplerate": "32000",
+			"code": ["((Math.abs(t*(.02+(t*.0001&0x4)*.01)*(1+((t*.0001)%4)<<5)%0xFF-0x80))&0xFF)+",
+				"(t%100)*.3*Math.abs(Math.sin(t*.00005)*.25+.5)+Math.min(Math.max((t>>16)-2,0)*.5,1)*(t*.1&0xF)*(t*.01&0xFF)/0x70"]
+		}, {
+			"author": "Ryg",
+			"url": "https://youtu.be/tCRPUv8V22o?t=177",
+			"children": [{
+				"samplerate": "44100",
+				"code": "t*(\"36364689\"[t>>13&7]&15)/12&128"
+			}, {
+				"samplerate": "44100",
+				"code": "(t*(\"36364689\"[t>>13&7]&15)/12&128)+(((t>>12^(t>>12)-2)%11*t/4|t>>13)&127)",
+				"starred": 1
+			}]
+		}, {
+			"description": "No Limit",
+			"author": "Mu6k",
+			"samplerate": "32000",
+			"code": "35*(3E3/(y=t&16383)&1)+(x=t*\"6689\"[t>>16&3]/24&127)*y/4E4+((t>>8^t>>10|t>>14|x)&63)"
+		}, {
+			"description": "Good old fractal melody",
+			"author": "Blueberry",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=12#c389114",
+			"samplerate": "11025",
+			"code": "(t>>9^(t>>9)-1^1)%13*t"
+		}, {
+			"author": "Gabriel Miceli",
+			"url": "https://www.youtube.com/watch?v=V4GfkFbDojc",
+			"children": [{
+				"description": "Noise Maker",
+				"samplerate": "11025",
+				"code": "i=t&8191,(((t*((t>>9^((t>>9)-1)^1)%13)&255)/2)+((((t>>3|t<<(t>>12&2))*(i<4096)+(t>>4|t*(t^t+t/256))*(i>4095)))&255)/2)*(2+(t>>16))",
+				"starred": 1
+			}, {
+				"description": "Techno",
+				"samplerate": "11025",
+				"code": "(((t/10|0)^(t/10|0)-1280)%11*t/2&127)+(((t/640|0)^(t/640|0)-2)%13*t/2&127)"
+			}, {
+				"description": "Crazy Groovy Beats",
+				"samplerate": "32000",
+				"code": "a=t-2048,((t&t>>6)&(t*(t>>((t&65535)>>12))))+((t*3/4&t>>12)&127)+(t*(a>>7&a>>8&a>>9&16)>>t/64)"
+			}, {
+				"description": "Crude Sinevawe Dubstep",
+				"samplerate": "44100",
+				"code": "d=(t*(t&t>>12)*8/11025)|0,((d&16)/8-1)*(d*(d^15)+d+127)"
+			}]
+		}, {
+			"description": "Chip arpeggio that eats itself",
+			"author": "Kb_",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=8#c388898",
+			"samplerate": "44100",
+			"code": "((t>>1)*(15&0x234568a0>>(t>>8&28))|t>>1>>(t>>11)^t>>12)+(t>>4&t&24)"
+		}
+	],
+	"sthephanshi": [
+		{
+			"description": "Explosive beat<br>- Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
+			"children": [{
+				"code": "(t>>4)*(t>>3)|t>>2"
+			}, {
+				"code": "(t>>4)*(t>>3)|t>>3"
+			}, {
+				"code": "(t>>4)*(t>>3)|t>>4"
+			}, {
+				"description": "\"Explosive beat\". Obtained from combining the first two formulas",
+				"code": "(t>>4)*(t>>3)|t>>(t&4096?3:2)",
+				"starred": 1
+			}, {
+				"description": "\"M-m-multiple explosion beat\"",
+				"code": "(t>>4)*(t>>2)|t>>(t>>12)%4"
+			}, {
+				"description": "\"Diesel engine\"",
+				"code": "(t>>5)*(t>>5)|t>>2"
+			}]
+		}, {
+			"description": "Robocop<br>- Cool beat discovered by experimenting with [<code>(t>>2)*(t&16)|t>>2</code>]",
+			"children": [{
+				"description": "\"Robocop\". Very cool sound with biting blows",
+				"code": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
+				"starred": 1
+			}, {
+				"description": "Lower bass",
+				"code": "(t>>3)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2"
+			}, {
+				"description": "Slower tempo",
+				"code": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&24))|t>>3"
+			}]
+		}, {
+			"description": "Trance beat<br>- Experiments with t>>N and ternary operations",
+			"children": [{
+				"code": "t>>(t%16?4:6)|t>>(t%128?10:4)"
+			}, {
+				"code": "t>>(t%32?4:3)|(t%128?t>>3:t>>3|t>>9)"
+			}]
+		}, {
+			"description": "Toy phone<br>- Interesting formulas, sounds very similar to children's toys",
+			"children": [{
+				"description": "Someone is calling by phone",
+				"code": "t*((t>>10|t%16*t>>5)&8*t>>10&18)"
+			}, {
+				"description": "Very funny voice :)",
+				"code": "t*((t>>10|t%16*t>>5)&8*t>>12&18)",
+				"starred": 1
+			}, {
+				"description": "I hear the long mewing of a cat :)",
+				"code": "t*((t>>10|t%16*t>>8)&8*t>>12&18)"
+			}]
+		}, {
+			"description": "Cat-girl",
+			"children": [{
+				"description": "Nya!",
+				"code": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
+				"starred": 1
+			}]
+		}, {
+			"description": "Kachelki",
+			"children": [{
+				"description": "Cool happy tune",
+				"code": "t>>9&2*t&10*t|t>>5&6*t",
+				"starred": 2
+			}]
+		}, {
+			"description": "Brain burner",
+			"children": [{
+				"description": "RIP headphone users!",
+				"code": "129*t%(t>>7)"
+			}]
+		}, {
+			"description": "Psychedelica",
+			"children": [{
+				"description": "Experimenting with resonance",
+				"code": "t^t%1001+t^t%1002"
+			}]
+		}, {
+			"description": "Protoss engine",
+			"children": [{
+				"description": "Experimenting with resonance, a pretty hypnotic result",
+				"code": "2*(-t%128|t%130)"
+			}]
+		}, {
+			"description": "Harmonics",
+			"code": "t<<2^t>>4^t<<4&t>>8|t<<1&-t>>4"
+		}, {
+			"description": "Bass beat + lead",
+			"code": "15-t%(t&16384?26:29)&t>>4|t<<1&-t>>4"
+		}, {
+			"description": "Arabic beat",
+			"children": [{
+				"code": "t%((t&-16|t>>10)&42)<<2|t>>4"
+			}, {
+				"description": "Allahu akbar!",
+				"code": "t%((t&-16|t>>11)&42)<<2|t>>4"
+			}]
+		}, {
+			"description": "Boss level / Running aliens<br>- Series of formulas discovered by experimenting with \"Running man\" <code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code><br>- Allows to get different interesting chiptune sounds<br>",
+			"children": [{
+				"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
+				"code": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
+			}, {
+				"description": "And just add |t>>2... The tune became cleaner",
+				"code": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)|t>>2"
+			}, {
+				"description": "Replacing 3&t>>14 with 2&t>>14 changes the period and the second tone",
+				"code": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>2"
+			}, {
+				"description": "\"Boss level\". Slow down |t>>2 rhythm to |t>>3... Sounds dangerous!<br>",
+				"code": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
+				"starred": 1
+			}, {
+				"description": "By playing with the \"Boss level\" I made a different percussion",
+				"code": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
+			}, {
+				"description": "\"Boss level #2\". |t>>4 rhythm sounds cool!<br>",
+				"code": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
+			}, {
+				"description": "Replacing (1+(1&t>>12)) with 3+(1&t>>8) adds an awesome harmonics",
+				"code": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
+			}, {
+				"description": "Coefficients 4-/3-/2+/3+ can slightly change them",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>4"
+			}, {
+				"description": "We can use a ternary operation for more complicated beat",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>(t&4096?3:4)"
+			}, {
+				"description": "\"Aliens on approach\". Slow down the explosions to 3&t>>9, get a heavy chiptune beat",
+				"code": "t*(t&16384?6:5)*(3-(1&t>>8))>>(3&t>>9)|t>>4",
+				"starred": 1
+			}, {
+				"description": "\"Aliens are close\". t>>5 rhythm",
+				"code": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>9)|t>>5",
+				"starred": 1
+			}, {
+				"description": "\"Aliens are here\". t>>6 rhythm - SUPER POWERFUL ECHOES",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
+				"starred": 2
+			}, {
+				"description": "Inverted explosions give us mysterious sounds<br>",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
+			}, {
+				"description": "\"Aliens attack\". More complicated (t|t*3)>>5 rhythm with explosion drums. Cool!",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
+				"starred": 1
+			}, {
+				"description": "\"Aliens encounter\". Replacing the rhythm with a ternary gives an EXTRA HARD BEAT!",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>(t&4096?3:4)",
+				"starred": 2
+			}, {
+				"description": "Funny inverted sounds :D<br>",
+				"code": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
+			}, {
+				"description": "\"Prepare to fight\". Long period formula with increasing from low to high sound",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
+				"starred": 1
+			}, {
+				"description": "\"Prepare to fight #2\". Previous formula with doubled freqency bass<br><br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound.<br>This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)",
+				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
+				"starred": 1
+			}, {
+				"description": "\"Aliens encounter + drums\". Impressive sound!",
+				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
+				"starred": 2
+			}, {
+				"description": "\"Prepare to fight #2 + drums\"<br><br>Finally you can use complex ternary operators to create more complex drums:",
+				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
+				"starred": 1
+			}, {
+				"description": "\"Ready to fight?\". Cool for a fighting game :)",
+				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
+				"starred": 2
+			}, {
+				"description": "\"Aliens won\". Playing with coefficients. My favorite!<br><br>Fantastic! Let's continue our experiments:",
+				"code": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
+				"starred": 2
+			}, {
+				"description": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
+				"code": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
+			}, {
+				"description": "\"Another level\". Adding a noise beat by using ternary opertion",
+				"code": "t*(t&16384?6:5)*(1+(3&t>>(t&2048?4:10)))>>(3&t>>8)|t>>2",
+				"starred": 1
+			}, {
+				"description": "\"Happy level\". Previous formula with slightly changed coefficitnts",
+				"code": "t*(t&16384?6:5)*(2+(3&t>>(t&2048?4:9)))>>(3&t>>8)|t>>2"
+			}, {
+				"description": "\"Happy level #2\". Inverted 3&-t>>8 gives a more happy tune :)",
+				"code": "t*(t&16384?6:5)*(2+(3&t>>9))>>(3&-t>>8)|t>>4"
+			}, {
+				"description": "\"Happy level #3\". We can get an awesome harmonics with 3&-t>>9",
+				"code": "t*(t&16384?6:5)*(2+(3&-t>>9))>>(3&t>>8)|t>>4",
+				"starred": 1
+			}, {
+				"description": "\"Happy level #2 + t>>11\"",
+				"code": "t*(t&16384?6:5)*(2+(3&t>>11))>>(3&-t>>8)|t>>4"
+			}, {
+				"description": "\"Awesome level\". We can get a cool cartoon-game melody!",
+				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
+				"starred": 2
+			}, {
+				"description": "\"Alien dungeon\". So sinister.. t>>6 gives a fading effect",
+				"code": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|t>>6",
+				"starred": 1
+			}, {
+				"description": "\"Alien dungeon\" with a complicated rhytm (t|t*3)>>5",
+				"code": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
+			}, {
+				"description": "Previous with a slightly different tune<br><br>Other \"Boss level\" variations:",
+				"code": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
+			}, {
+				"code": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
+			}, {
+				"description": "Previous tune with doubled drums",
+				"code": "t*(6+(1&t>>14))>>(3&t>>8)|2*t>>(t&4096?3:4)",
+				"starred": 1
+			}, {
+				"code": "t*(16+(1&t>>14))>>(3&t>>8)|t>>4"
+			}, {
+				"description": "Previous tune with a ternary magic",
+				"code": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
+				"starred": 1
+			}]
+		}
+	]
+} }
