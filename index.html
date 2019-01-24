@@ -24,13 +24,13 @@
 	<div class="middle container-fixed">
 		<div id="input" contenteditable value="(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))">(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))</div>
 		<div class="buttons-control">
-			<button onclick="play()">Play</button><!--
-			--><button onclick="stop()">Stop</button><!--
-			--><button onclick="changeScale(true);">+</button><!--
-			--><button onclick="changeScale(false);">-</button><!--
-			--><button onclick="rec()">Rec</button><!--
-			--><button onclick="changeMode()">Mode</button><!--
-			--><select id="samplerate-change" onchange="setSampleRate(+this.selectedOptions[0].value);"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			<button onclick="byteBeat.play()">Play</button><!--
+			--><button onclick="byteBeat.stop()">Stop</button><!--
+			--><button onclick="byteBeat.changeScale(true);">+</button><!--
+			--><button onclick="byteBeat.changeScale(false);">-</button><!--
+			--><button onclick="byteBeat.rec()">Rec</button><!--
+			--><button onclick="byteBeat.changeMode()">Mode</button><!--
+			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
 		</div>
 		<div id="error"></div>
 		<canvas id="graph" width="1024" height="256"></canvas>

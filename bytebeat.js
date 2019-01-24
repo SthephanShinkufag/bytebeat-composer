@@ -1,17 +1,14 @@
-var sampleRate = 8000;
-var bufferSize = 8192;
-
 function $q(path, root) {
 	return (root || document.body).querySelector(path);
-};
+}
 
 function $Q(path, root) {
 	return (root || document.body).querySelectorAll(path);
-};
+}
 
 function $id(id) {
 	return document.getElementById(id);
-};
+}
 
 function $toggle(el) {
 	var isHidden = el.style.display;
@@ -20,253 +17,46 @@ function $toggle(el) {
 	} else {
 		el.style.display = 'none';
 	}
-};
-
-function play() {
-	if(!playing) {
-		playing = true;
-		n = 0;
-	}
 }
 
-function stop() {
-	if(recording) {
-		mediaRecorder.stop();
-		recording = false;
-	}
-	playing = false;
-	n = 0;
+function ByteBeatClass() {
+	this.bufferSize = 8192;
+	this.canvas = null;
+	this.chunks = [];
+	this.ctx = null;
+	this.errorEl = null;
+	this.imageData = null;
+	this.mode = 0;
+	this.playing = false;
+	this.recording = false;
+	this.sampleRate = 8000;
+	this.scale = 3;
+	this.time = 0;
+
+	this.context = null;
+	this.audioRecorder = null;
+	this.sampleSize = 1;
+	this.initAudioContext();
+
+	this.contScrollEl = null;
+	this.contFixedEl = null;
+	document.addEventListener('DOMContentLoaded', function() {
+		this.contScrollEl = $q('.container-scroll');
+		this.contFixedEl = $q('.container-fixed');
+		this.setScrollHeight();
+		document.defaultView.addEventListener('resize', this.setScrollHeight);
+		this.initLibrary();
+		this.initInput();
+		this.initCanvas();
+		this.refeshCalc();
+	}.bind(this));
 }
-
-function rec() {
-	if(!recording) {
-		mediaRecorder.start();
-		recording = true;
-		chunks = [];
-		if(!playing) {
-			play();
-		}
-	}
-}
-
-function changeScale(isIncrement) {
-	if(!isIncrement && scale > 0 || isIncrement && scale < 13) {
-		scale += isIncrement ? 1 : -1;
-	}
-}
-
-function changeMode() {
-	mode = +!mode;
-}
-
-function setSampleRate(rate) {
-	sampleRate = rate;
-	sampleSize = sampleRate / context.sampleRate;
-}
-
-function applySampleRate(rate) {
-	setSampleRate(rate);
-	var selectBox = $id('samplerate-change');
-	selectBox.childNodes.forEach(function(el, index) {
-		if(+el.value === sampleRate) {
-			selectBox.selectedIndex = index;
-		}
-	});
-}
-
-function refeshCalc(e) {
-	var formula = inputEl.innerText;
-	var oldF = func;
-	try {
-		eval('func = function(t) { return ' + formula + '; }');
-		func(0);
-	} catch(e) {
-		func = oldF;
-		errorEl.innerText = e.toString();
-		return;
-	}
-	errorEl.innerText = '';
-	var pData = (sampleRate === 8000 ? formula : JSON.stringify({ sampleRate: sampleRate, formula: formula }));
-	window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
-	draw(imageData.data);
-}
-
-function draw(data) {
-	// | 0 is faster than Math.floor
-	var graphSizeInSamples = (data.length >> 2) >> scale;
-	var currentSample = sampleSize * n;
-	var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
-	var width = canvas.width;
-	var height = canvas.height;
-	var arr = [];
-	var dataLen = data.length;
-	for(var i = 0; i < dataLen; i += 4) {
-		var t = i >> 2;
-		var ts = (t >> scale);
-		var result = func(ts + page) & 255;
-		if(mode === 1) {
-			arr[ts] = result;
-		}
-		var pos = (width * (t % height) + ((t / height) | 0)) << 2;
-		data[pos++] = data[pos++] = data[pos++] = mode === 0 ? result : 0;
-		data[pos] = 255;
-	}
-	if(mode === 1) {
-		var arrLen = arr.length;
-		for(var i = 0; i < arrLen; i++) {
-			var pos = (arr[i] * width + (((i * width / arrLen) | 0) || 1)) << 2;
-			data[pos++] = data[pos++] = data[pos] = 255;
-		}
-	}
-	if(scale < 6) {
-		var cursor = ((page ? currentSample % page : currentSample) * width / graphSizeInSamples) | 0;
-		for(var i = 0; i < height; i++) {
-			var pos = (i * width + cursor) << 2;
-			data[pos] = data[pos + 4] = 255;
-			data[pos + 1] = data[pos + 2] = data[pos + 5] = data[pos + 6] = 0;
-		}
-	}
-	ctx.putImageData(imageData, 0, 0);
-}
-
-var canvas, ctx, imageData, saveData, errorEl, inputEl;
-var mode = 0;
-var n = 0;
-var scale = 3;
-var playing = false;
-var recording = false;
-var func = function() {
-	return 0;
-};
-var context = new (window.AudioContext || window.webkitAudioContext ||
-	window.mozAudioContext || window.oAudioContext || window.msAudioContext)();
-if(!context.createGain) {
-	context.createGain = context.createGainNode;
-}
-if(!context.createDelay) {
-	context.createDelay = context.createDelayNode;
-}
-if(!context.createScriptProcessor) {
-	context.createScriptProcessor = context.createJavaScriptNode;
-}
-var sampleSize = sampleRate / context.sampleRate;
-var scriptNode = context.createScriptProcessor(bufferSize, 1, 1);
-scriptNode.onaudioprocess = function(e) {
-	draw(imageData.data);
-	var data = e.outputBuffer.getChannelData(/* channel = */ 0);
-	var dataLen = data.length;
-	var lastSample = -1;
-	var lastOutput = 0;
-	for(var i = 0; i < dataLen; ++i) {
-		var resampledTime = (sampleSize * n) | 0;
-		if(!playing) {
-			data[i] = 0;
-		} else if(lastSample !== resampledTime) {
-			data[i] = lastOutput = (func(resampledTime) & 255) / 127 - 1;
-		} else {
-			data[i] = lastOutput;
-		}
-		lastSample = resampledTime;
-		if(playing) {
-			n++;
-		}
-	}
-}
-scriptNode.connect(context.destination);
-
-var chunks = [];
-var dest = context.createMediaStreamDestination();
-var mediaRecorder = new MediaRecorder(dest.stream);
-mediaRecorder.ondataavailable = function(e) {
-	chunks.push(e.data);
-};
-mediaRecorder.onstop = function(e) {
-	var file, type;
-	var types = ['audio/webm', 'audio/ogg'];
-	var files = ['track.webm', 'track.ogg'];
-	var check = (MediaRecorder.isTypeSupported || function(type) {
-		return MediaRecorder.canRecordMimeType && MediaRecordercanRecordMimeType(type) === 'probably';
-	});
-	while((file = files.pop()) && !check(type = types.pop())) {
-		if(types.length === 0) {
-			console.error('Saving not supported in this browser!');
-			break;
-		}
-	}
-	saveData(new Blob(chunks, { type: type }), file);
-};
-scriptNode.connect(dest);
-
-document.addEventListener('DOMContentLoaded', function() {
-	var contScrollEl = $q('.container-scroll');
-	var contFixedEl = $q('.container-fixed');
-	var setScrollHeight = function() {
-		contScrollEl.style.maxHeight =
-			(document.documentElement.clientHeight - contFixedEl.offsetHeight - 30) + 'px';
-	};
-
-	setScrollHeight();
-	document.defaultView.addEventListener('resize', setScrollHeight);
-
-	Array.prototype.forEach.call($Q('.button-toggle'), function(el) {
-		el.onclick = function() {
-			$toggle(el.nextElementSibling);
-		};
-	});
-
-	var libraryEl = $id('library');
-	libraryEl.onclick = function(e) {
-		var el = e.target;
-		if(el.tagName === 'CODE') {
-			inputEl.innerText = el.innerText.trim();
-			applySampleRate(+el.getAttribute('samplerate') || 8000);
-			setScrollHeight();
-			n = 0;
-			refeshCalc();
-			play();
-		}
-	};
-	libraryEl.onmouseover = function(e) {
-		var el = e.target;
-		if(el.tagName === 'CODE') {
-			el.title = 'Click to play this code';
-		}
-	};
-
-	errorEl = document.getElementById('error');
-	inputEl = document.getElementById('input');
-	inputEl.addEventListener('onchange', refeshCalc);
-	inputEl.addEventListener('onkeyup', refeshCalc);
-	inputEl.addEventListener('input', refeshCalc);
-
-	if(window.location.hash.indexOf('#b64') === 0) {
-		inputEl.innerText = pako.inflateRaw(
-			atob(decodeURIComponent(window.location.hash.substr(4))),
-			{ to: 'string' }) + ';';
-	} else if(window.location.hash.indexOf('#v3b64') === 0) {
-		var pData = pako.inflateRaw(
-			atob(decodeURIComponent(window.location.hash.substr(6))),
-			{ to: 'string' });
-		formula = pData;
-		if(pData.startsWith('{')) {
-			try {
-				pData = JSON.parse(pData);
-				formula = pData.formula;
-				applySampleRate(+pData.sampleRate);
-			} catch(err) {}
-		}
-		inputEl.innerText = formula;
-	}
-
-	canvas = document.getElementById('graph');
-	ctx = canvas.getContext('2d');
-	imageData = ctx.createImageData(canvas.width, canvas.height);
-
-	saveData = (function() {
+ByteBeatClass.prototype = {
+	get saveData() {
 		var a = document.createElement('a');
 		document.body.appendChild(a);
 		a.style.display = 'none';
-		return function(blob, fileName) {
+		var fn = function(blob, fileName) {
 			url = URL.createObjectURL(blob);
 			a.href = url;
 			a.download = fileName;
@@ -275,7 +65,229 @@ document.addEventListener('DOMContentLoaded', function() {
 				window.URL.revokeObjectURL(url);
 			});
 		};
-	}());
+		Object.defineProperty(this, 'saveData', { value: fn });
+		return fn;
+	},
+	applySampleRate: function(rate) {
+		this.setSampleRate(rate);
+		var selectBox = $id('samplerate-change');
+		selectBox.childNodes.forEach(function(el, index) {
+			if(+el.value === this.sampleRate) {
+				selectBox.selectedIndex = index;
+			}
+		}.bind(this));
+	},
+	changeMode: function() {
+		this.mode = +!this.mode;
+	},
+	changeScale: function(isIncrement) {
+		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 13) {
+			this.scale += isIncrement ? 1 : -1;
+		}
+	},
+	draw: function(data) {
+		// | 0 is faster than Math.floor
+		var graphSizeInSamples = (data.length >> 2) >> this.scale;
+		var currentSample = this.sampleSize * this.time;
+		var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
+		var width = this.canvas.width;
+		var height = this.canvas.height;
+		var arr = [];
+		var dataLen = data.length;
+		for(var i = 0; i < dataLen; i += 4) {
+			var t = i >> 2;
+			var ts = (t >> this.scale);
+			var result = this.func(ts + page) & 255;
+			if(this.mode === 1) {
+				arr[ts] = result;
+			}
+			var pos = (width * (t % height) + ((t / height) | 0)) << 2;
+			data[pos++] = data[pos++] = data[pos++] = this.mode === 0 ? result : 0;
+			data[pos] = 255;
+		}
+		if(this.mode === 1) {
+			var arrLen = arr.length;
+			for(var i = 0; i < arrLen; i++) {
+				var pos = (arr[i] * width + (((i * width / arrLen) | 0) || 1)) << 2;
+				data[pos++] = data[pos++] = data[pos] = 255;
+			}
+		}
+		if(this.scale < 6) {
+			var cursor = ((page ? currentSample % page : currentSample) * width / graphSizeInSamples) | 0;
+			for(var i = 0; i < height; i++) {
+				var pos = (i * width + cursor) << 2;
+				data[pos] = data[pos + 4] = 255;
+				data[pos + 1] = data[pos + 2] = data[pos + 5] = data[pos + 6] = 0;
+			}
+		}
+		this.ctx.putImageData(this.imageData, 0, 0);
+	},
+	func: function() {
+		return 0;
+	},
+	initAudioContext: function() {
+		var context = this.context = new (window.AudioContext || window.webkitAudioContext ||
+			window.mozAudioContext || window.oAudioContext || window.msAudioContext)();
+		if(!context.createGain) {
+			context.createGain = context.createGainNode;
+		}
+		if(!context.createDelay) {
+			context.createDelay = context.createDelayNode;
+		}
+		if(!context.createScriptProcessor) {
+			context.createScriptProcessor = context.createJavaScriptNode;
+		}
+		this.sampleSize = this.sampleRate / context.sampleRate;
+		var processor = context.createScriptProcessor(this.bufferSize, 1, 1);
+		processor.onaudioprocess = function(e) {
+			this.draw(this.imageData.data);
+			var data = e.outputBuffer.getChannelData(/* channel = */ 0);
+			var dataLen = data.length;
+			var lastSample = -1;
+			var lastOutput = 0;
+			for(var i = 0; i < dataLen; ++i) {
+				var resampledTime = (this.sampleSize * this.time) | 0;
+				if(!this.playing) {
+					data[i] = 0;
+				} else if(lastSample !== resampledTime) {
+					data[i] = lastOutput = (this.func(resampledTime) & 255) / 127 - 1;
+				} else {
+					data[i] = lastOutput;
+				}
+				lastSample = resampledTime;
+				if(this.playing) {
+					this.time++;
+				}
+			}
+		}.bind(this);
+		processor.connect(context.destination);
 
-	refeshCalc();
-});
+		var mediaDest = context.createMediaStreamDestination();
+		var audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
+		audioRecorder.ondataavailable = function(e) {
+			this.chunks.push(e.data);
+		}.bind(this);
+		audioRecorder.onstop = function(e) {
+			var file, type;
+			var types = ['audio/webm', 'audio/ogg'];
+			var files = ['track.webm', 'track.ogg'];
+			var check = (MediaRecorder.isTypeSupported || function(type) {
+				return MediaRecorder.canRecordMimeType && MediaRecordercanRecordMimeType(type) === 'probably';
+			});
+			while((file = files.pop()) && !check(type = types.pop())) {
+				if(types.length === 0) {
+					console.error('Saving not supported in this browser!');
+					break;
+				}
+			}
+			this.saveData(new Blob(this.chunks, { type: type }), file);
+		}.bind(this);
+		processor.connect(mediaDest);
+	},
+	initInput() {
+		this.errorEl = document.getElementById('error');
+		this.inputEl = document.getElementById('input');
+		this.inputEl.addEventListener('onchange', this.refeshCalc.bind(this));
+		this.inputEl.addEventListener('onkeyup', this.refeshCalc.bind(this));
+		this.inputEl.addEventListener('input', this.refeshCalc.bind(this));
+		if(window.location.hash.indexOf('#b64') === 0) {
+			this.inputEl.innerText = pako.inflateRaw(
+				atob(decodeURIComponent(window.location.hash.substr(4))),
+				{ to: 'string' }) + ';';
+		} else if(window.location.hash.indexOf('#v3b64') === 0) {
+			var pData = pako.inflateRaw(
+				atob(decodeURIComponent(window.location.hash.substr(6))),
+				{ to: 'string' });
+			formula = pData;
+			if(pData.startsWith('{')) {
+				try {
+					pData = JSON.parse(pData);
+					formula = pData.formula;
+					this.applySampleRate(+pData.sampleRate);
+				} catch(err) {}
+			}
+			this.inputEl.innerText = formula;
+		}
+	},
+	initCanvas: function() {
+		this.canvas = document.getElementById('graph');
+		this.ctx = this.canvas.getContext('2d');
+		this.imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
+	},
+	initLibrary() {
+		Array.prototype.forEach.call($Q('.button-toggle'), function(el) {
+			el.onclick = function() {
+				$toggle(el.nextElementSibling);
+			};
+		});
+		var libraryEl = $id('library');
+		libraryEl.onclick = function(e) {
+			var el = e.target;
+			if(el.tagName === 'CODE') {
+				this.inputEl.innerText = el.innerText.trim();
+				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
+				this.setScrollHeight();
+				this.time = 0;
+				this.refeshCalc();
+				this.play();
+			}
+		}.bind(this);
+		libraryEl.onmouseover = function(e) {
+			var el = e.target;
+			if(el.tagName === 'CODE') {
+				el.title = 'Click to play this code';
+			}
+		};
+	},
+	play: function() {
+		if(!this.playing) {
+			this.playing = true;
+			this.time = 0;
+		}
+	},
+	rec: function() {
+		if(!this.recording) {
+			this.audioRecorder.start();
+			this.recording = true;
+			this.chunks = [];
+			if(!this.playing) {
+				this.play();
+			}
+		}
+	},
+	refeshCalc: function() {
+		var formula = this.inputEl.innerText;
+		var oldF = this.func;
+		try {
+			eval('byteBeat.func = function(t) { return ' + formula + '; }');
+			this.func(0);
+		} catch(err) {
+			this.func = oldF;
+			this.errorEl.innerText = err.toString();
+			return;
+		}
+		this.errorEl.innerText = '';
+		var pData = (this.sampleRate === 8000 ? formula :
+			JSON.stringify({ sampleRate: this.sampleRate, formula: formula }));
+		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
+		this.draw(this.imageData.data);
+	},
+	setSampleRate: function(rate) {
+		this.sampleRate = rate;
+		this.sampleSize = this.sampleRate / this.context.sampleRate;
+	},
+	setScrollHeight: function() {
+		this.contScrollEl.style.maxHeight =
+			(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 30) + 'px';
+	},
+	stop: function() {
+		if(this.recording) {
+			this.audioRecorder.stop();
+			this.recording = false;
+		}
+		this.playing = false;
+		this.time = 0;
+	}
+};
+
+var byteBeat = new ByteBeatClass();
