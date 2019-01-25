@@ -108,8 +108,12 @@ select {
 		font-size: 1.7rem;
 	}
 
-	.buttons-control > button, #input, #samplerate-change {
+	.buttons-control > button, #samplerate-change {
 		font-size: 2.2rem;
+	}
+
+	#input {
+		font-size: 1rem;
 	}
 
 	.paragraph {

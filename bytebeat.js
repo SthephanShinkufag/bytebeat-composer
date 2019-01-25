@@ -231,6 +231,9 @@ ByteBeatClass.prototype = {
 		libraryEl.onclick = function(e) {
 			var el = e.target;
 			if(el.tagName === 'CODE') {
+				if(!this.context) {
+					this.initAudioContext();
+				}
 				this.inputEl.innerText = el.innerText.trim();
 				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
 				this.setScrollHeight();
