@@ -20,9 +20,15 @@ function $toggle(el) {
 }
 
 function ByteBeatClass() {
+	this.audioRecorder = null;
 	this.bufferSize = 8192;
 	this.canvas = null;
+	this.canvWidth = 0;
+	this.canvHeight = 0;
 	this.chunks = [];
+	this.context = null;
+	this.contFixedEl = null;
+	this.contScrollEl = null;
 	this.ctx = null;
 	this.errorEl = null;
 	this.imageData = null;
@@ -30,16 +36,9 @@ function ByteBeatClass() {
 	this.playing = false;
 	this.recording = false;
 	this.sampleRate = 8000;
+	this.sampleSize = 1;
 	this.scale = 3;
 	this.time = 0;
-
-	this.context = null;
-	this.audioRecorder = null;
-	this.sampleSize = 1;
-	this.initAudioContext();
-
-	this.contScrollEl = null;
-	this.contFixedEl = null;
 	document.addEventListener('DOMContentLoaded', function() {
 		this.contScrollEl = $q('.container-scroll');
 		this.contFixedEl = $q('.container-fixed');
@@ -79,10 +78,16 @@ ByteBeatClass.prototype = {
 	},
 	changeMode: function() {
 		this.mode = +!this.mode;
+		if(!this.playing) {
+			this.refeshCalc();
+		}
 	},
 	changeScale: function(isIncrement) {
 		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 13) {
 			this.scale += isIncrement ? 1 : -1;
+			if(!this.playing) {
+				this.refeshCalc();
+			}
 		}
 	},
 	draw: function(data) {
@@ -90,8 +95,8 @@ ByteBeatClass.prototype = {
 		var graphSizeInSamples = (data.length >> 2) >> this.scale;
 		var currentSample = this.sampleSize * this.time;
 		var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
-		var width = this.canvas.width;
-		var height = this.canvas.height;
+		var width = this.canvWidth;
+		var height = this.canvHeight;
 		var arr = [];
 		var dataLen = data.length;
 		for(var i = 0; i < dataLen; i += 4) {
@@ -102,8 +107,8 @@ ByteBeatClass.prototype = {
 				arr[ts] = result;
 			}
 			var pos = (width * (t % height) + ((t / height) | 0)) << 2;
-			data[pos++] = data[pos++] = data[pos++] = this.mode === 0 ? result : 0;
-			data[pos] = 255;
+			data[pos++] = data[pos++] = data[pos++] = this.mode === 0 ? result : 0; // R, G, B
+			data[pos] = 255; // Alpha
 		}
 		if(this.mode === 1) {
 			var arrLen = arr.length;
@@ -212,7 +217,9 @@ ByteBeatClass.prototype = {
 	initCanvas: function() {
 		this.canvas = document.getElementById('graph');
 		this.ctx = this.canvas.getContext('2d');
-		this.imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
+		this.canvWidth = this.canvas.width;
+		this.canvHeight = this.canvas.height;
+		this.imageData = this.ctx.createImageData(this.canvWidth, this.canvHeight);
 	},
 	initLibrary() {
 		Array.prototype.forEach.call($Q('.button-toggle'), function(el) {
@@ -240,13 +247,16 @@ ByteBeatClass.prototype = {
 		};
 	},
 	play: function() {
+		if(!this.context) {
+			this.initAudioContext();
+		}
 		if(!this.playing) {
 			this.playing = true;
 			this.time = 0;
 		}
 	},
 	rec: function() {
-		if(!this.recording) {
+		if(this.context && !this.recording) {
 			this.audioRecorder.start();
 			this.recording = true;
 			this.chunks = [];
@@ -281,6 +291,9 @@ ByteBeatClass.prototype = {
 			(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 30) + 'px';
 	},
 	stop: function() {
+		if(!this.context) {
+			return;
+		}
 		if(this.recording) {
 			this.audioRecorder.stop();
 			this.recording = false;
