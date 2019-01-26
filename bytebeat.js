@@ -21,7 +21,7 @@ function $toggle(el) {
 
 function ByteBeatClass() {
 	this.audioRecorder = null;
-	this.bufferSize = 8192;
+	this.bufferSize = 4096;
 	this.canvas = null;
 	this.canvWidth = 0;
 	this.canvHeight = 0;
@@ -33,12 +33,14 @@ function ByteBeatClass() {
 	this.errorEl = null;
 	this.imageData = null;
 	this.mode = 0;
+	this.needUpdate = false;
 	this.playing = false;
 	this.recording = false;
 	this.sampleRate = 8000;
 	this.sampleSize = 1;
 	this.scale = 3;
 	this.time = 0;
+	this.timePage = -1;
 	document.addEventListener('DOMContentLoaded', function() {
 		this.contScrollEl = $q('.container-scroll');
 		this.contFixedEl = $q('.container-fixed');
@@ -78,13 +80,15 @@ ByteBeatClass.prototype = {
 	},
 	changeMode: function() {
 		this.mode = +!this.mode;
+		this.needUpdate = true;
 		if(!this.playing) {
 			this.refeshCalc();
 		}
 	},
 	changeScale: function(isIncrement) {
-		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 13) {
+		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 11) {
 			this.scale += isIncrement ? 1 : -1;
+			this.needUpdate = true;
 			if(!this.playing) {
 				this.refeshCalc();
 			}
@@ -97,6 +101,12 @@ ByteBeatClass.prototype = {
 		var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
 		var width = this.canvWidth;
 		var height = this.canvHeight;
+		this.timeCursor.style.cssText = this.scale > 5 ? 'display: none;' : 'display: block; left: ' +
+			(((page ? currentSample % page : currentSample) * width / graphSizeInSamples) | 0) + 'px';
+		if(!this.needUpdate && page === this.timePage) {
+			return;
+		}
+		this.timePage = page;
 		var arr = [];
 		var dataLen = data.length;
 		for(var i = 0; i < dataLen; i += 4) {
@@ -114,18 +124,11 @@ ByteBeatClass.prototype = {
 			var arrLen = arr.length;
 			for(var i = 0; i < arrLen; i++) {
 				var pos = (arr[i] * width + (((i * width / arrLen) | 0) || 1)) << 2;
-				data[pos++] = data[pos++] = data[pos] = 255;
-			}
-		}
-		if(this.scale < 6) {
-			var cursor = ((page ? currentSample % page : currentSample) * width / graphSizeInSamples) | 0;
-			for(var i = 0; i < height; i++) {
-				var pos = (i * width + cursor) << 2;
-				data[pos] = data[pos + 4] = 255;
-				data[pos + 1] = data[pos + 2] = data[pos + 5] = data[pos + 6] = 0;
+				data[pos++] = data[pos++] = data[pos++] = data[pos] = 255;
 			}
 		}
 		this.ctx.putImageData(this.imageData, 0, 0);
+		this.needUpdate = false;
 	},
 	func: function() {
 		return 0;
@@ -190,8 +193,8 @@ ByteBeatClass.prototype = {
 		processor.connect(mediaDest);
 	},
 	initInput() {
-		this.errorEl = document.getElementById('error');
-		this.inputEl = document.getElementById('input');
+		this.errorEl = $id('error');
+		this.inputEl = $id('input');
 		this.inputEl.addEventListener('onchange', this.refeshCalc.bind(this));
 		this.inputEl.addEventListener('onkeyup', this.refeshCalc.bind(this));
 		this.inputEl.addEventListener('input', this.refeshCalc.bind(this));
@@ -215,7 +218,8 @@ ByteBeatClass.prototype = {
 		}
 	},
 	initCanvas: function() {
-		this.canvas = document.getElementById('graph');
+		this.timeCursor = $id('timecursor');
+		this.canvas = $id('canvas-main');
 		this.ctx = this.canvas.getContext('2d');
 		this.canvWidth = this.canvas.width;
 		this.canvHeight = this.canvas.height;
@@ -238,6 +242,7 @@ ByteBeatClass.prototype = {
 				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
 				this.setScrollHeight();
 				this.time = 0;
+				this.needUpdate = true;
 				this.refeshCalc();
 				this.play();
 			}

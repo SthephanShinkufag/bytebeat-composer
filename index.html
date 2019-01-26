@@ -33,7 +33,10 @@
 			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
 		</div>
 		<div id="error"></div>
-		<canvas id="graph" width="1024" height="256"></canvas>
+		<div id="canvas-container">
+			<canvas id="canvas-main" width="1024" height="256"></canvas>
+			<div id="timecursor"></div>
+		</div>
 	</div>
 	<div class="middle container-scroll">
 		<div id="button-info" class="button-toggle">[Info]</div>

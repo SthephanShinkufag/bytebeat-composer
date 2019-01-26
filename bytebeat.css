@@ -42,7 +42,15 @@ a.link-home:not(:hover) {
 	color: #88d2fb;
 }
 
-canvas {
+#canvas-container {
+	position: relative;
+	width: 1026px;
+	height: 258px;
+}
+
+#canvas-main {
+	width: 1024px;
+	height: 256px;
 	border: 1px solid #fcc33d;
 }
 
@@ -57,11 +65,6 @@ code {
 
 #error {
 	color: #f92672;
-}
-
-#graph {
-	height: 256px;
-	width: 1024px;
 }
 
 #input {
@@ -95,6 +98,14 @@ li {
 
 select {
 	vertical-align: -2px;
+}
+
+#timecursor {
+	top: 0;
+	bottom: 0;
+	border-left: 2px solid red;
+	position: absolute;
+	left: 20px;
 }
 
 .yellow {
