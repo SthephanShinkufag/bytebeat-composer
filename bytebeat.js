@@ -21,7 +21,7 @@ function $toggle(el) {
 
 function ByteBeatClass() {
 	this.audioRecorder = null;
-	this.bufferSize = 4096;
+	this.bufferSize = 8192;
 	this.canvas = null;
 	this.canvWidth = 0;
 	this.canvHeight = 0;
@@ -108,16 +108,15 @@ ByteBeatClass.prototype = {
 		}
 		this.timePage = page;
 		var arr = [];
-		var dataLen = data.length;
-		for(var i = 0; i < dataLen; i += 4) {
-			var t = i >> 2;
+		var dataLen = data.length >> 2;
+		for(var t = 0; t < dataLen; ++t) {
 			var ts = (t >> this.scale);
 			var result = this.func(ts + page) & 255;
 			if(this.mode === 1) {
 				arr[ts] = result;
 			}
 			var pos = (width * (t % height) + ((t / height) | 0)) << 2;
-			data[pos++] = data[pos++] = data[pos++] = this.mode === 0 ? result : 0; // R, G, B
+			data[pos++] = data[pos++] = data[pos++] = this.mode ? 0 : result; // R, G, B
 			data[pos] = 255; // Alpha
 		}
 		if(this.mode === 1) {
@@ -240,11 +239,13 @@ ByteBeatClass.prototype = {
 				}
 				this.inputEl.innerText = el.innerText.trim();
 				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
-				this.setScrollHeight();
 				this.time = 0;
 				this.needUpdate = true;
 				this.refeshCalc();
 				this.play();
+			}
+			if(el.classList.contains('prettycode-toggle')) {
+				el.classList.toggle('prettycode-show');
 			}
 		}.bind(this);
 		libraryEl.onmouseover = function(e) {
@@ -289,14 +290,17 @@ ByteBeatClass.prototype = {
 			JSON.stringify({ sampleRate: this.sampleRate, formula: formula }));
 		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
 		this.draw(this.imageData.data);
+		this.setScrollHeight();
 	},
 	setSampleRate: function(rate) {
 		this.sampleRate = rate;
 		this.sampleSize = this.sampleRate / this.context.sampleRate;
 	},
 	setScrollHeight: function() {
-		this.contScrollEl.style.maxHeight =
-			(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 30) + 'px';
+		if(this.contScrollEl) {
+			this.contScrollEl.style.maxHeight =
+				(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 20) + 'px';
+		}
 	},
 	stop: function() {
 		if(!this.context) {

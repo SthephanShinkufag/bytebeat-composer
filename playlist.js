@@ -4,6 +4,20 @@ function $id(id) {
 	return document.getElementById(id);
 };
 
+function processCodeHTML(code, samplerate) {
+	if(typeof code !== 'string') {
+		code = code.join('@!@LINE_BREAK@!@');
+	}
+	code = code.replace(/&/g, '&amp;')
+		.replace(/>/g, '&gt;')
+		.replace(/</g, '&lt;')
+		.replace(/ /g, '&#xA0;')
+		.replace(/@!@LINE_BREAK@!@/g, '<br>');
+	var sRate = samplerate;
+	return '<code' + (sRate ? ' samplerate="' + sRate + '"' : '') + '>' + code + '</code>' +
+		(sRate ? ' <span class="samplerate">' + sRate.substr(0, 2) + 'kHz</span>' : '');
+}
+
 function getEntryHTML(entry, isChildren) {
 	var descr = entry.description;
 	var author = entry.author;
@@ -32,24 +46,14 @@ function getEntryHTML(entry, isChildren) {
 	case 2: starredHTML = ' <span class="yellow">&#9733;</span>';
 	}
 	var codeHTML = '';
-	var code = entry.code;
-	if(code) {
-		if(typeof code !== 'string') {
-			code = code.join('@!@LINE_BREAK@!@');
-		}
-		code = code.replace(/&/g, '&amp;')
-			.replace(/>/g, '&gt;')
-			.replace(/</g, '&lt;')
-			.replace(/ /g, '&#xA0;')
-			.replace(/@!@LINE_BREAK@!@/g, '<br>');
-		var sRate = entry.samplerate;
-		codeHTML += '<code' +
-			(sRate ? ' samplerate="' + sRate + '"' : '') + '>' + code + '</code>' +
-			(sRate ? ' <span class="samplerate">' + sRate.substr(0, 2) + 'kHz</span>' : '');
+	if(entry.code) {
+		codeHTML = (entry.prettycode ? '<a class="prettycode-toggle">Toggle pretty code</a>' +
+			processCodeHTML(entry.prettycode, entry.samplerate) + '</br>' : '') +
+			processCodeHTML(entry.code, entry.samplerate);
 	}
 	return isChildren ?
 		codeHTML + (descrHTML ? (starredHTML || ' -') + ' ' + descrHTML : starredHTML) :
-		descrHTML + (code ? '<br>\r\n' + codeHTML + starredHTML : '');
+		descrHTML + (entry.code ? '<br>\r\n' + codeHTML + starredHTML : '');
 }
 
 function addPlaylist(obj, id) {

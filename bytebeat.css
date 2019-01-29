@@ -23,7 +23,7 @@ a.link-home:not(:hover) {
 }
 
 .buttons-control {
-	margin: 7px 0;
+	margin: 5px 0;
 }
 
 .buttons-control > button {
@@ -35,7 +35,7 @@ a.link-home:not(:hover) {
 .button-toggle {
 	cursor: pointer;
 	font-weight: bold;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 .button-toggle:hover, code:hover {
@@ -44,18 +44,19 @@ a.link-home:not(:hover) {
 
 #canvas-container {
 	position: relative;
-	width: 1026px;
+	width: 1028px;
 	height: 258px;
 }
 
 #canvas-main {
 	width: 1024px;
 	height: 256px;
-	border: 1px solid #fcc33d;
+	border: 2px solid #fcc33d;
 }
 
 code {
 	color: #ffcc53;
+	word-wrap: break-word;
 	cursor: pointer;
 }
 
@@ -81,17 +82,29 @@ li {
 }
 
 .middle {
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 .paragraph {
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 	max-height: 999999px;
 	font-size: 12px;
 }
 
+.prettycode-toggle {
+	cursor: pointer;
+}
+
+.prettycode-toggle + code, .prettycode-toggle + code + .samplerate {
+	display: none;
+}
+
+.prettycode-toggle.prettycode-show + code {
+	display: block;
+}
+
 .samplerate {
-	font-size: 10px;
+	font-size: 11px;
 	color: #47d738;
 	cursor: default;
 }
@@ -129,5 +142,9 @@ select {
 
 	.paragraph {
 		font-size: 1.5rem;
+	}
+
+	.samplerate {
+		font-size: 18px;
 	}
 }
