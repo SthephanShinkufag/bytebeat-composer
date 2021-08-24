@@ -210,6 +210,9 @@ ByteBeatClass.prototype = {
 				try {
 					pData = JSON.parse(pData);
 					formula = pData.formula;
+					if(!this.context) {
+						this.initAudioContext();
+					}
 					this.applySampleRate(+pData.sampleRate);
 				} catch(err) {}
 			}
