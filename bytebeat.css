@@ -28,6 +28,7 @@ a.link-home:not(:hover) {
 
 .buttons-control > button {
 	display: inline-block;
+	width: 50px;
 	font-family: Courier, Sans, sans-serif;
 	margin-right: 3px;
 }

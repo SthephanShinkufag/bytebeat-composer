@@ -32,13 +32,13 @@ function ByteBeatClass() {
 	this.ctx = null;
 	this.errorEl = null;
 	this.imageData = null;
-	this.mode = 0;
+	this.mode = 1;
 	this.needUpdate = false;
 	this.playing = false;
 	this.recording = false;
 	this.sampleRate = 8000;
 	this.sampleSize = 1;
-	this.scale = 3;
+	this.scale = 0;
 	this.time = 0;
 	this.timePage = -1;
 	document.addEventListener('DOMContentLoaded', function() {
@@ -48,6 +48,7 @@ function ByteBeatClass() {
 		document.defaultView.addEventListener('resize', this.setScrollHeight);
 		this.initLibrary();
 		this.initInput();
+		this.initControls();
 		this.initCanvas();
 		this.refeshCalc();
 	}.bind(this));
@@ -88,6 +89,14 @@ ByteBeatClass.prototype = {
 	changeScale: function(isIncrement) {
 		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 11) {
 			this.scale += isIncrement ? 1 : -1;
+			if(this.scale === 0) {
+				this.controlScaleUp.setAttribute('disabled', true);
+			} else if(this.scale === 11) {
+				this.controlScaleDown.setAttribute('disabled', true);
+			} else {
+				this.controlScaleUp.removeAttribute('disabled');
+				this.controlScaleDown.removeAttribute('disabled');
+			}
 			this.needUpdate = true;
 			if(!this.playing) {
 				this.refeshCalc();
@@ -226,6 +235,10 @@ ByteBeatClass.prototype = {
 		this.canvWidth = this.canvas.width;
 		this.canvHeight = this.canvas.height;
 		this.imageData = this.ctx.createImageData(this.canvWidth, this.canvHeight);
+	},
+	initControls: function() {
+		this.controlScaleUp = $id('control-scaleup');
+		this.controlScaleDown = $id('control-scaledown');
 	},
 	initLibrary() {
 		Array.prototype.forEach.call($Q('.button-toggle'), function(el) {

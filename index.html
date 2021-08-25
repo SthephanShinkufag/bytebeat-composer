@@ -26,8 +26,8 @@
 		<div class="buttons-control">
 			<button onclick="byteBeat.play()">Play</button><!--
 			--><button onclick="byteBeat.stop()">Stop</button><!--
-			--><button onclick="byteBeat.changeScale(true);">+</button><!--
-			--><button onclick="byteBeat.changeScale(false);">-</button><!--
+			--><button id="control-scaledown" onclick="byteBeat.changeScale(true);">+</button><!--
+			--><button id="control-scaleup" onclick="byteBeat.changeScale(false);" disabled>-</button><!--
 			--><button onclick="byteBeat.rec()">Rec</button><!--
 			--><button onclick="byteBeat.changeMode()">Mode</button><!--
 			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
