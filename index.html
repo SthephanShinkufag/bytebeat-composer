@@ -24,13 +24,15 @@
 	<div class="middle container-fixed">
 		<div id="input" contenteditable value="(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))">(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))</div>
 		<div class="buttons-control">
-			<button onclick="byteBeat.play()">Play</button><!--
-			--><button onclick="byteBeat.stop()">Stop</button><!--
+			<button id="control-toggleplay" onclick="byteBeat.togglePlay(!byteBeat.playing)">Play</button><!--
 			--><button id="control-scaledown" onclick="byteBeat.changeScale(true);">+</button><!--
-			--><button id="control-scaleup" onclick="byteBeat.changeScale(false);" disabled>-</button><!--
+			--><button id="control-scaleup" onclick="byteBeat.changeScale(false);">-</button><!--
 			--><button onclick="byteBeat.rec()">Rec</button><!--
 			--><button onclick="byteBeat.changeMode()">Mode</button><!--
 			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			<span id="control-counter" onclick="byteBeat.setTime(0);" title="Click to set t = 0">t =
+				<span id="control-counter-value">0</span>
+			</span>
 		</div>
 		<div id="error"></div>
 		<div id="canvas-container">
@@ -62,7 +64,13 @@
 				Here on this page you can play with the collection of one-liner bytebeat music formulas that I found on the internet (<a href="https://github.com/eclectics/ardcore/blob/master/e16_oneliner.ino" target="_blank">1</a>,
 				<a href="https://github.com/erlehmann/algorithmic-symphonies/" target="_blank">2</a>,
 				<a href="https://github.com/kragen/viznut-music/" target="_blank">3</a>,
-				<a href="http://www.pouet.net/topic.php?which=8357&page=1" target="_blank">4</a>) and which I discovered through experimentation, trial-and-error testing and piece-by-piece constructing.<br>
+				<a href="http://www.pouet.net/topic.php?which=8357&page=1" target="_blank">4</a>,
+				<a href="https://battleofthebits.org/" target="_blank">5</a>) and which I discovered through experimentation, trial-and-error testing and piece-by-piece constructing.
+			</p>
+			<p>
+				This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a><br>
+				<br>
+				Forked by SthephanShi aka Viraya
 			</p>
 		</div>
 		<div id="button-library" class="button-toggle">[Library]</div>
@@ -84,12 +92,6 @@
 			</div>
 			<div id="button-library-sthephanshi" class="button-toggle">- [SthephanShi] - classic 8kHz formulas I discovered</div>
 			<div id="library-sthephanshi" class="paragraph" style="display: none;"></div>
-		</div>
-		<div id="button-origin" class="button-toggle">[Original app]</div>
-		<div id="origin" class="paragraph" style="display: none;">
-			This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a><br>
-			<br>
-			Forked by SthephanShi aka Viraya
 		</div>
 		<a class="link-home" href="/" title="Home"><--</a>
 	</div>

@@ -14,6 +14,10 @@ a, a:visited {
 	color: #88d2fb;
 }
 
+a:hover, .button-toggle:hover, code:hover {
+	color: #ed88fb !important;
+}
+
 a.link-home {
 	text-decoration: none;
 }
@@ -23,12 +27,12 @@ a.link-home:not(:hover) {
 }
 
 .buttons-control {
-	margin: 5px 0;
+	margin: 3px 0;
 }
 
 .buttons-control > button {
 	display: inline-block;
-	width: 50px;
+	min-width: 50px;
 	font-family: Courier, Sans, sans-serif;
 	margin-right: 3px;
 }
@@ -36,11 +40,7 @@ a.link-home:not(:hover) {
 .button-toggle {
 	cursor: pointer;
 	font-weight: bold;
-	margin-bottom: 10px;
-}
-
-.button-toggle:hover, code:hover {
-	color: #88d2fb;
+	margin: 5px 0;
 }
 
 #canvas-container {
@@ -65,13 +65,17 @@ code {
 	overflow-y: auto;
 }
 
+#control-counter {
+	cursor: pointer;
+}
+
 #error {
 	color: #f92672;
 }
 
 #input {
 	border: 2px solid white;
-	max-height: 140px;
+	max-height: 176px;
 	padding: 5px;
 	width: 1014px;
 	word-wrap: break-word;
@@ -83,7 +87,7 @@ li {
 }
 
 .middle {
-	margin-top: 10px;
+	margin-top: 2px;
 }
 
 .paragraph {
@@ -115,11 +119,17 @@ select {
 }
 
 #timecursor {
+	display: none;
 	top: 0;
 	bottom: 0;
 	border-left: 2px solid red;
 	position: absolute;
 	left: 20px;
+}
+
+ul {
+	padding: 0 0 0 18px;
+	margin: 0;
 }
 
 .yellow {

@@ -21,7 +21,7 @@ function $toggle(el) {
 
 function ByteBeatClass() {
 	this.audioRecorder = null;
-	this.bufferSize = 8192;
+	this.bufferSize = 2048;
 	this.canvas = null;
 	this.canvWidth = 0;
 	this.canvHeight = 0;
@@ -33,21 +33,21 @@ function ByteBeatClass() {
 	this.errorEl = null;
 	this.imageData = null;
 	this.mode = 1;
-	this.needUpdate = false;
+	this.pageIdx = 0;
 	this.playing = false;
 	this.recording = false;
 	this.sampleRate = 8000;
 	this.sampleSize = 1;
-	this.scale = 0;
+	this.scaleMax = 9;
+	this.scale = 6;
 	this.time = 0;
-	this.timePage = -1;
 	document.addEventListener('DOMContentLoaded', function() {
 		this.contScrollEl = $q('.container-scroll');
 		this.contFixedEl = $q('.container-fixed');
 		this.setScrollHeight();
 		document.defaultView.addEventListener('resize', this.setScrollHeight);
 		this.initLibrary();
-		this.initInput();
+		this.initCodeInput();
 		this.initControls();
 		this.initCanvas();
 		this.refeshCalc();
@@ -81,62 +81,48 @@ ByteBeatClass.prototype = {
 	},
 	changeMode: function() {
 		this.mode = +!this.mode;
-		this.needUpdate = true;
-		if(!this.playing) {
-			this.refeshCalc();
-		}
 	},
 	changeScale: function(isIncrement) {
-		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < 11) {
+		if(!isIncrement && this.scale > 0 || isIncrement && this.scale < this.scaleMax) {
 			this.scale += isIncrement ? 1 : -1;
+			this.pageIdx = 0;
+			this.clearCanvas();
 			if(this.scale === 0) {
 				this.controlScaleUp.setAttribute('disabled', true);
-			} else if(this.scale === 11) {
+			} else if(this.scale === this.scaleMax) {
 				this.controlScaleDown.setAttribute('disabled', true);
 			} else {
 				this.controlScaleUp.removeAttribute('disabled');
 				this.controlScaleDown.removeAttribute('disabled');
 			}
-			this.needUpdate = true;
-			if(!this.playing) {
-				this.refeshCalc();
-			}
 		}
 	},
-	draw: function(data) {
-		// | 0 is faster than Math.floor
-		var graphSizeInSamples = (data.length >> 2) >> this.scale;
-		var currentSample = this.sampleSize * this.time;
-		var page = graphSizeInSamples * ((currentSample / graphSizeInSamples) | 0);
+	clearCanvas: function() {
+		this.ctx.clearRect(0, 0, this.canvWidth, this.canvHeight);
+		this.imageData = this.ctx.getImageData(0, 0, this.canvWidth, this.canvHeight);
+	},
+	// "| 0" is Math.floor but faster
+	// ">> 2" is division by 4
+	draw: function(sampleData) {
 		var width = this.canvWidth;
 		var height = this.canvHeight;
-		this.timeCursor.style.cssText = this.scale > 5 ? 'display: none;' : 'display: block; left: ' +
-			(((page ? currentSample % page : currentSample) * width / graphSizeInSamples) | 0) + 'px';
-		if(!this.needUpdate && page === this.timePage) {
-			return;
-		}
-		this.timePage = page;
-		var arr = [];
-		var dataLen = data.length >> 2;
-		for(var t = 0; t < dataLen; ++t) {
-			var ts = (t >> this.scale);
-			var result = this.func(ts + page) & 255;
-			if(this.mode === 1) {
-				arr[ts] = result;
-			}
-			var pos = (width * (t % height) + ((t / height) | 0)) << 2;
-			data[pos++] = data[pos++] = data[pos++] = this.mode ? 0 : result; // R, G, B
-			data[pos] = 255; // Alpha
-		}
-		if(this.mode === 1) {
-			var arrLen = arr.length;
-			for(var i = 0; i < arrLen; i++) {
-				var pos = (arr[i] * width + (((i * width / arrLen) | 0) || 1)) << 2;
-				data[pos++] = data[pos++] = data[pos++] = data[pos] = 255;
-			}
+		var scale = this.scale;
+		var pageWidth = width >> scale;
+		var pageIdx = this.pageIdx;
+		var x = pageWidth * pageIdx;
+		this.ctx.clearRect(x, 0, pageWidth, height);
+		this.imageData = this.ctx.getImageData(0, 0, width, height);
+		var imageData = this.imageData.data;
+		var bufLen = sampleData.length;
+		for(var i = 0; i < bufLen; i++) {
+			var pos = (width * sampleData[i] +
+				(pageWidth * pageIdx + ((pageWidth * i / bufLen) | 0))) << 2;
+			imageData[pos++] = imageData[pos++] = imageData[pos++] = imageData[pos] = 255;
 		}
 		this.ctx.putImageData(this.imageData, 0, 0);
-		this.needUpdate = false;
+		if(scale !== 0) {
+			this.pageIdx = pageIdx === (1 << scale) - 1 ? 0 : pageIdx + 1;
+		}
 	},
 	func: function() {
 		return 0;
@@ -156,24 +142,30 @@ ByteBeatClass.prototype = {
 		this.sampleSize = this.sampleRate / context.sampleRate;
 		var processor = context.createScriptProcessor(this.bufferSize, 1, 1);
 		processor.onaudioprocess = function(e) {
-			this.draw(this.imageData.data);
-			var data = e.outputBuffer.getChannelData(/* channel = */ 0);
-			var dataLen = data.length;
+			var chData = e.outputBuffer.getChannelData(/* channel = */ 0);
+			var dataLen = chData.length;
+			var sampleData = [];
 			var lastSample = -1;
 			var lastOutput = 0;
 			for(var i = 0; i < dataLen; ++i) {
 				var resampledTime = (this.sampleSize * this.time) | 0;
 				if(!this.playing) {
-					data[i] = 0;
+					chData[i] = sampleData[i] = 0;
 				} else if(lastSample !== resampledTime) {
-					data[i] = lastOutput = (this.func(resampledTime) & 255) / 127 - 1;
+					var value = this.func(resampledTime) & 255;
+					sampleData[i] = value;
+					chData[i] = lastOutput = value / 127 - 1;
 				} else {
-					data[i] = lastOutput;
+					sampleData[i] = 0;
+					chData[i] = lastOutput;
 				}
 				lastSample = resampledTime;
 				if(this.playing) {
-					this.time++;
+					this.setTime(this.time + 1);
 				}
+			}
+			if(this.playing) {
+				this.draw(sampleData);
 			}
 		}.bind(this);
 		processor.connect(context.destination);
@@ -200,7 +192,7 @@ ByteBeatClass.prototype = {
 		}.bind(this);
 		processor.connect(mediaDest);
 	},
-	initInput() {
+	initCodeInput() {
 		this.errorEl = $id('error');
 		this.inputEl = $id('input');
 		this.inputEl.addEventListener('onchange', this.refeshCalc.bind(this));
@@ -229,7 +221,6 @@ ByteBeatClass.prototype = {
 		}
 	},
 	initCanvas: function() {
-		this.timeCursor = $id('timecursor');
 		this.canvas = $id('canvas-main');
 		this.ctx = this.canvas.getContext('2d');
 		this.canvWidth = this.canvas.width;
@@ -237,8 +228,10 @@ ByteBeatClass.prototype = {
 		this.imageData = this.ctx.createImageData(this.canvWidth, this.canvHeight);
 	},
 	initControls: function() {
+		this.controlTogglePlay = $id('control-toggleplay');
 		this.controlScaleUp = $id('control-scaleup');
 		this.controlScaleDown = $id('control-scaledown');
+		this.controlCounter = $id('control-counter-value');
 	},
 	initLibrary() {
 		Array.prototype.forEach.call($Q('.button-toggle'), function(el) {
@@ -255,10 +248,9 @@ ByteBeatClass.prototype = {
 				}
 				this.inputEl.innerText = el.innerText.trim();
 				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
-				this.time = 0;
-				this.needUpdate = true;
 				this.refeshCalc();
-				this.play();
+				this.setTime(0);
+				this.togglePlay(true);
 			}
 			if(el.classList.contains('prettycode-toggle')) {
 				el.classList.toggle('prettycode-show');
@@ -271,22 +263,13 @@ ByteBeatClass.prototype = {
 			}
 		};
 	},
-	play: function() {
-		if(!this.context) {
-			this.initAudioContext();
-		}
-		if(!this.playing) {
-			this.playing = true;
-			this.time = 0;
-		}
-	},
 	rec: function() {
 		if(this.context && !this.recording) {
 			this.audioRecorder.start();
 			this.recording = true;
 			this.chunks = [];
 			if(!this.playing) {
-				this.play();
+				this.togglePlay(true);
 			}
 		}
 	},
@@ -305,8 +288,16 @@ ByteBeatClass.prototype = {
 		var pData = (this.sampleRate === 8000 ? formula :
 			JSON.stringify({ sampleRate: this.sampleRate, formula: formula }));
 		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
-		this.draw(this.imageData.data);
 		this.setScrollHeight();
+		this.pageIdx = 0;
+		this.clearCanvas();
+	},
+	setTime: function(value) {
+		this.controlCounter.textContent = this.time = value;
+		if(value === 0) {
+			this.pageIdx = 0;
+			this.clearCanvas();
+		}
 	},
 	setSampleRate: function(rate) {
 		this.sampleRate = rate;
@@ -315,10 +306,23 @@ ByteBeatClass.prototype = {
 	setScrollHeight: function() {
 		if(this.contScrollEl) {
 			this.contScrollEl.style.maxHeight =
-				(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 20) + 'px';
+				(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 4) + 'px';
 		}
 	},
-	stop: function() {
+	togglePlay: function(isPlay) {
+		this.controlTogglePlay.textContent = isPlay ? 'Stop' : 'Play';
+		if(isPlay) {
+			// Play
+			if(!this.playing) {
+				this.playing = true;
+				this.setTime(0);
+			}
+			if(!this.context) {
+				this.initAudioContext();
+			}
+			return;
+		}
+		// Stop
 		if(!this.context) {
 			return;
 		}
@@ -327,7 +331,7 @@ ByteBeatClass.prototype = {
 			this.recording = false;
 		}
 		this.playing = false;
-		this.time = 0;
+		this.setTime(0);
 	}
 };
 
