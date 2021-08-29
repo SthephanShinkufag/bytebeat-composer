@@ -22,15 +22,15 @@
 </head>
 <body>
 	<div class="middle container-fixed">
-		<div id="input" contenteditable value="(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))">(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))</div>
+		<div id="input-code" contenteditable value="(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))">2*(-t%128|t%130)</div>
 		<div class="buttons-control">
-			<button id="control-toggleplay" onclick="byteBeat.togglePlay(!byteBeat.playing)">Play</button><!--
-			--><button id="control-scaledown" onclick="byteBeat.changeScale(true);">+</button><!--
-			--><button id="control-scaleup" onclick="byteBeat.changeScale(false);">-</button><!--
+			<button id="control-toggleplay" onclick="byteBeat.togglePlay(!byteBeat.isPlaying)">Play</button><!--
+			--><button id="control-scaledown" onclick="byteBeat.changeScale(false);">+</button><!--
+			--><button id="control-scaleup" onclick="byteBeat.changeScale(true);">-</button><!--
 			--><button onclick="byteBeat.rec()">Rec</button><!--
 			--><button onclick="byteBeat.changeMode()">Mode</button><!--
 			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
-			<span id="control-counter" onclick="byteBeat.setTime(0);" title="Click to set t = 0">t =
+			<span id="control-counter" onclick="byteBeat.resetTime();" title="Click to set t = 0">t =
 				<span id="control-counter-value">0</span>
 			</span>
 		</div>
@@ -41,56 +41,49 @@
 		</div>
 	</div>
 	<div class="middle container-scroll">
-		<div id="button-info" class="button-toggle">[Info]</div>
+		<div id="button-info" class="button-toggle toggle">Info</div>
 		<div id="info" class="paragraph" style="display: none;">
-			<p>
-				Bytebeat music (or one-liner music) is discovered in september 2011. It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators. It's simply a single-line formula that defines a waveform as a function of time, processed 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256). If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application. Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
-				<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a>
-			</p>
-			<p>
-				Original blog posts and videos from Viznut:<br>
-				<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a><br>
-				<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a><br>
-				<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a><br>
-				<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a><br>
-				<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a>
-			</p>
-			<p>
-				On-line JavaScript players:<br>
-				<a href="http://entropedia.co.uk/generative_music/" target="_blank">Player by Paul Hayes</a><br>
-				<a href="http://wurstcaptures.untergrund.net/music/" target="_blank">Player by Bemmu and Rarefluid</a>
-			</p>
-			<p>
-				Here on this page you can play with the collection of one-liner bytebeat music formulas that I found on the internet (<a href="https://github.com/eclectics/ardcore/blob/master/e16_oneliner.ino" target="_blank">1</a>,
-				<a href="https://github.com/erlehmann/algorithmic-symphonies/" target="_blank">2</a>,
-				<a href="https://github.com/kragen/viznut-music/" target="_blank">3</a>,
-				<a href="http://www.pouet.net/topic.php?which=8357&page=1" target="_blank">4</a>,
-				<a href="https://battleofthebits.org/" target="_blank">5</a>) and which I discovered through experimentation, trial-and-error testing and piece-by-piece constructing.
-			</p>
-			<p>
-				This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a><br>
-				<br>
-				Forked by SthephanShi aka Viraya
-			</p>
+			Bytebeat music (or one-liner music) is discovered in september 2011. It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators. It's simply a single-line formula that defines a waveform as a function of time, processed 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256). If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application. Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
+			<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a><br>
+			<br>
+			Original blog posts and videos from Viznut:<br>
+			<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a><br>
+			<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a><br>
+			<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a><br>
+			<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a><br>
+			<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
+			<br>
+			On-line JavaScript players:<br>
+			<a href="http://entropedia.co.uk/generative_music/" target="_blank">Player by Paul Hayes</a><br>
+			<a href="http://wurstcaptures.untergrund.net/music/" target="_blank">Player by Bemmu and Rarefluid</a><br>
+			<br>
+			Here on this page you can play with the collection of one-liner bytebeat music formulas that I found on the internet (<a href="https://github.com/eclectics/ardcore/blob/master/e16_oneliner.ino" target="_blank">1</a>,
+			<a href="https://github.com/erlehmann/algorithmic-symphonies/" target="_blank">2</a>,
+			<a href="https://github.com/kragen/viznut-music/" target="_blank">3</a>,
+			<a href="http://www.pouet.net/topic.php?which=8357&page=1" target="_blank">4</a>,
+			<a href="https://battleofthebits.org/" target="_blank">5</a>) and which I discovered through experimentation, trial-and-error testing and piece-by-piece constructing.
+			<br>
+			<br>
+			This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a><br>
+			<br>
+			Forked by SthephanShi aka Viraya
 		</div>
-		<div id="button-library" class="button-toggle">[Library]</div>
+		<div id="button-library" class="button-toggle toggle toggle-show">Library</div>
 		<div id="library" class="paragraph">
-			<div id="button-library-common" class="button-toggle">- [Common] - formulas found on the internet</div>
-			<div id="library-common" class="paragraph">
-				<div id="button-library-classic8k" class="button-toggle">
-					&nbsp;- [Classic 8k] - classic formulas playing with 8kHz sample rate
-				</div>
-				<div id="library-classic8k" class="paragraph" style="display: none;"></div>
-				<div id="button-library-js8k" class="button-toggle">
-					&nbsp;- [JS 8k] - JavaScript code playing with 8kHz sample rate
-				</div>
-				<div id="library-js8k" class="paragraph" style="display: none;"></div>
-				<div id="button-library-high" class="button-toggle">
-					&nbsp;- [High rate] - classic & JS code playing with high sample rate
-				</div>
-				<div id="library-high" class="paragraph" style="display: none;"></div>
+			<div id="button-library-classic8k" class="button-toggle toggle">
+				[Classic 8kHz] - classic formulas playing with 8kHz sample rate
 			</div>
-			<div id="button-library-sthephanshi" class="button-toggle">- [SthephanShi] - classic 8kHz formulas I discovered</div>
+			<div id="library-classic8k" class="paragraph" style="display: none;"></div>
+			<div id="button-library-js8k" class="button-toggle toggle">
+				[JS 8kHz] - JavaScript code playing with 8kHz sample rate
+			</div>
+			<div id="library-js8k" class="paragraph" style="display: none;"></div>
+			<div id="button-library-high" class="button-toggle toggle">
+				[High rate] - classic & JS code playing with high sample rate
+			</div>
+			<div id="library-high" class="paragraph" style="display: none;"></div>
+			<div id="button-library-sthephanshi" class="button-toggle toggle">
+				[SthephanShi] - classic 8kHz formulas I discovered</div>
 			<div id="library-sthephanshi" class="paragraph" style="display: none;"></div>
 		</div>
 		<a class="link-home" href="/" title="Home"><--</a>

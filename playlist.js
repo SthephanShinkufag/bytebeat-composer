@@ -8,14 +8,13 @@ function processCodeHTML(code, samplerate) {
 	if(typeof code !== 'string') {
 		code = code.join('@!@LINE_BREAK@!@');
 	}
-	code = code.replace(/&/g, '&amp;')
-		.replace(/>/g, '&gt;')
-		.replace(/</g, '&lt;')
-		.replace(/ /g, '&#xA0;')
-		.replace(/@!@LINE_BREAK@!@/g, '<br>');
-	var sRate = samplerate;
-	return '<code' + (sRate ? ' samplerate="' + sRate + '"' : '') + '>' + code + '</code>' +
-		(sRate ? ' <span class="samplerate">' + sRate.substr(0, 2) + 'kHz</span>' : '');
+	return '<code' + (samplerate ? ' samplerate="' + samplerate + '"' : '') + '>' +
+		code.replace(/&/g, '&amp;')
+			.replace(/>/g, '&gt;')
+			.replace(/</g, '&lt;')
+			.replace(/ /g, '&#xA0;')
+			.replace(/@!@LINE_BREAK@!@/g, '<br>') +
+		'</code>';
 }
 
 function getEntryHTML(entry, isChildren) {
@@ -40,20 +39,21 @@ function getEntryHTML(entry, isChildren) {
 		descrHTML = author || !url ? descr : '<a href="' + url + '" target="_blank">' + descr + '</a>';
 	}
 	descrHTML += authorHTML;
-	var starredHTML = '';
+	var code = entry.code;
+	var pCode = entry.prettycode;
+	var sRate = entry.samplerate;
+	var starHTML = sRate ? ' <span class="samplerate">' + sRate.substr(0, 2) + 'kHz</span>' : '';
 	switch(entry.starred) {
-	case 1: starredHTML = ' &#9733;'; break;
-	case 2: starredHTML = ' <span class="yellow">&#9733;</span>';
+	case 1: starHTML += ' &#9733;'; break;
+	case 2: starHTML += ' <span class="yellow">&#9733;</span>';
 	}
-	var codeHTML = '';
-	if(entry.code) {
-		codeHTML = (entry.prettycode ? '<a class="prettycode-toggle">Toggle pretty code</a>' +
-			processCodeHTML(entry.prettycode, entry.samplerate) + '</br>' : '') +
-			processCodeHTML(entry.code, entry.samplerate);
-	}
+	var codeHTML = !code && !pCode ? '' :
+		(pCode ? '<a class="toggle">Toggle pretty code</a>' +
+			processCodeHTML(pCode, sRate) + '</br>' : '') +
+		(code ? processCodeHTML(code, sRate) : '');
 	return isChildren ?
-		codeHTML + (descrHTML ? (starredHTML || ' -') + ' ' + descrHTML : starredHTML) :
-		descrHTML + (entry.code ? '<br>\r\n' + codeHTML + starredHTML : '');
+		codeHTML + (descrHTML ? (starHTML || ' -') + ' ' + descrHTML : starHTML) :
+		descrHTML + (code || pCode ? starHTML + '<br>\r\n' + codeHTML : '');
 }
 
 function addPlaylist(obj, id) {
