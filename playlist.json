@@ -92,8 +92,14 @@
 				"code": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8"
 			}, {
 				"code": "t*(0xCA98>>(t>>9&14)&15)|t>>8",
-				"starred": 1
+				"starred": 2
 			}]
+		}, {
+			"description": "fiesta",
+			"author": "cce",
+			"url": "https://battleofthebits.org/arena/Entry/fiesta/17514/",
+			"code": "(t*(3+(4+(t>>12)%2)*(t>>10)%7)&128)*.5*(.15+(t>>9)%2)",
+			"starred": 1
 		}, {
 			"description": "Bassline",
 			"author": "Tejeez",
@@ -278,6 +284,11 @@
 			"code": "0xCCDD*((t>>6)*t>>430)%0x1E3",
 			"starred": 1
 		}, {
+			"description": "disheveeeel",
+			"author": "keramon",
+			"url": "https://battleofthebits.org/arena/Entry/disheveeeel.txt/17655/",
+			"code": "t*t%(t/3.33)"
+		}, {
 			"author": "Harism",
 			"code": "3*((t>>1)+20)*t>>14*t>>18"
 		}, {
@@ -424,6 +435,12 @@
 			"author": "A1k0n",
 			"url": "https://news.ycombinator.com/item?id=3064980",
 			"code": "SS=function(s,o,r,p){var c=s.charCodeAt((t>>r)%p);return c==95?0:31&t*Math.pow(2,c/12-o)},3*SS(\"0_0_____7_7_____037:<<\",6,10,32)+5*(t&4096?SS(\"037\",4,8,3)*(4096-(t&4095))>>12:0)",
+			"starred": 1
+		}, {
+			"description": "I could not explain this to the IT dept",
+			"author": "radian",
+			"url": "https://battleofthebits.org/arena/Entry/I+could+not+explain+this+to+the+IT+dept./17673/",
+			"code": "S=function(c,o,r,p){var c=c.charCodeAt((t>>r)%p);return c==32?0:31&t*Math.pow(2,c/12-o)},C=function(){if(t%8)return t&8096?S(\"047\",4,8,3)*(4096-(t&4095))>>12:0;return t&8096?S(\"259049\",4,8,6)*(4096-(t&4095))>>13:0},S(\"20-0-0-034-4-0-047-259:<<\",7,10,32)+C()+(t&4096?S(\"047\",3,8,3)*(4096-(t&4095))>>12:0)+(t&4096?S(\"0407\",5,16,4)*(4096-(t&4095))>>12:0)+(800/(t&16383)&2)*35",
 			"starred": 1
 		}, {
 			"author": "Yehar",

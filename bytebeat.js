@@ -75,7 +75,7 @@ ByteBeatClass.prototype = {
 		this.setSampleRate(rate);
 		var selectBox = $id('samplerate-change');
 		selectBox.childNodes.forEach(function(el, index) {
-			if(+el.value === this.sampleRate) {
+			if(+el.value === rate) {
 				selectBox.selectedIndex = index;
 			}
 		}.bind(this));
@@ -297,7 +297,9 @@ ByteBeatClass.prototype = {
 	},
 	setSampleRate: function(rate) {
 		this.sampleRate = rate;
-		this.sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
+		if(this.audioCtx) {
+			this.sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
+		}
 	},
 	setScrollHeight: function() {
 		if(this.contScrollEl) {
