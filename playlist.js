@@ -4,16 +4,16 @@ function $id(id) {
 	return document.getElementById(id);
 };
 
-function processCodeHTML(code, samplerate) {
+function processCodeHTML(code, sRate) {
 	if(typeof code !== 'string') {
 		code = code.join('@!@LINE_BREAK@!@');
 	}
-	return '<code' + (samplerate ? ' samplerate="' + samplerate + '"' : '') + '>' +
+	return '<code' + (sRate ? ' samplerate="' + sRate + '"' : '') + '>' +
 		code.replace(/&/g, '&amp;')
 			.replace(/>/g, '&gt;')
 			.replace(/</g, '&lt;')
 			.replace(/ /g, '&#xA0;')
-			.replace(/@!@LINE_BREAK@!@/g, '<br>') +
+			.replace(/@!@LINE_BREAK@!@/g, '<br>\r\n') +
 		'</code>';
 }
 
@@ -40,20 +40,24 @@ function getEntryHTML(entry, isChildren) {
 	}
 	descrHTML += authorHTML;
 	var code = entry.code;
-	var pCode = entry.prettycode;
+	var lCode = entry.loadcode;
 	var sRate = entry.samplerate;
 	var starHTML = sRate ? ' <span class="samplerate">' + sRate.substr(0, 2) + 'kHz</span>' : '';
 	switch(entry.starred) {
-	case 1: starHTML += ' &#9733;'; break;
-	case 2: starHTML += ' <span class="yellow">&#9733;</span>';
+	case 1: starHTML += ' <span class="star-white"></span>'; break;
+	case 2: starHTML += ' <span class="star-yellow"></span>';
 	}
-	var codeHTML = !code && !pCode ? '' :
-		(pCode ? '<a class="toggle">Toggle pretty code</a>' +
-			processCodeHTML(pCode, sRate) + '</br>' : '') +
-		(code ? processCodeHTML(code, sRate) : '');
+	var descr2HTML = entry.description2 ? ' - ' + entry.description2 : '';
+	var codeLen = !code ? 0 : '<span class="codelength">' +
+		(code instanceof Array ? code.join('').length : code.length) + 'B</span>';
+	var codeHTML = !code && !lCode ? '' :
+		(lCode ? '<a class="code-load" loadcode="' + lCode + '"' +
+			(sRate ? ' samplerate="' + sRate + '"' : '') +
+			'>&#9658; Click to load  pretty code</a>' + (code ? '</br>' : '') : '') +
+		(code ? processCodeHTML(code, sRate) + ' ' + codeLen : '');
 	return isChildren ?
-		codeHTML + (descrHTML ? (starHTML || ' -') + ' ' + descrHTML : starHTML) :
-		descrHTML + (code || pCode ? starHTML + '<br>\r\n' + codeHTML : '');
+		codeHTML + (descrHTML ? starHTML + ' ' + descrHTML : starHTML) + descr2HTML :
+		descrHTML + (code || lCode ? starHTML + '<br>\r\n' + codeHTML + descr2HTML : '');
 }
 
 function addPlaylist(obj, id) {
@@ -78,9 +82,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState === 4 && xhr.status === 200) {
 			var obj = JSON.parse(xhr.responseText);
-			addPlaylist(obj, 'classic8k');
-			addPlaylist(obj, 'js8k');
-			addPlaylist(obj, 'high');
+			addPlaylist(obj, 'classic8khz');
+			addPlaylist(obj, 'js8khz');
+			addPlaylist(obj, 'highrate1k');
+			addPlaylist(obj, 'bigcode');
 			addPlaylist(obj, 'sthephanshi');
 		}
 	};

@@ -8,9 +8,9 @@
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="/favicon.png">
 	<link rel="stylesheet" type="text/css" href="bytebeat.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min.js"></script>
 	<script src="bytebeat.js"></script>
 	<script src="playlist.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118978685-1"></script>
 	<script>
@@ -22,22 +22,24 @@
 </head>
 <body>
 	<div class="middle container-fixed">
-		<div id="input-code" contenteditable value="(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))">2*(-t%128|t%130)</div>
+		<textarea id="input-code" spellcheck="false">2*(-t%128|t%130)</textarea>
 		<div class="buttons-control">
 			<button id="control-toggleplay" onclick="byteBeat.togglePlay(!byteBeat.isPlaying)">Play</button><!--
 			--><button id="control-scaledown" onclick="byteBeat.changeScale(false);">+</button><!--
 			--><button id="control-scaleup" onclick="byteBeat.changeScale(true);">-</button><!--
 			--><button onclick="byteBeat.rec()">Rec</button><!--
-			--><button onclick="byteBeat.changeMode()">Mode</button><!--
-			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000">8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			--><button onclick="byteBeat.changeMode()" style="display: none;">Mode</button><!--
+			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000" selected>8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			<input id="control-volume" type="range" min="0" max="100" value="35" oninput="byteBeat.changeVolume(this);">
 			<span id="control-counter" onclick="byteBeat.resetTime();" title="Click to set t = 0">t =
 				<span id="control-counter-value">0</span>
 			</span>
 		</div>
 		<div id="error"></div>
-		<div id="canvas-container">
+		<div id="canvas-container" onclick="byteBeat.togglePlay(!byteBeat.isPlaying)">
 			<canvas id="canvas-main" width="1024" height="256"></canvas>
-			<div id="timecursor"></div>
+			<div id="canvas-timecursor"></div>
+			<div id="canvas-toggleplay" class="canvas-toggleplay-show"></div>
 		</div>
 	</div>
 	<div class="middle container-scroll">
@@ -54,14 +56,11 @@
 			<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
 			<br>
 			On-line JavaScript players:<br>
-			<a href="http://entropedia.co.uk/generative_music/" target="_blank">Player by Paul Hayes</a><br>
-			<a href="http://wurstcaptures.untergrund.net/music/" target="_blank">Player by Bemmu and Rarefluid</a><br>
+			<a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a><br>
+			<a href="http://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a><br>
+			<a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a><br>
 			<br>
-			Here on this page you can play with the collection of one-liner bytebeat music formulas that I found on the internet (<a href="https://github.com/eclectics/ardcore/blob/master/e16_oneliner.ino" target="_blank">1</a>,
-			<a href="https://github.com/erlehmann/algorithmic-symphonies/" target="_blank">2</a>,
-			<a href="https://github.com/kragen/viznut-music/" target="_blank">3</a>,
-			<a href="http://www.pouet.net/topic.php?which=8357&page=1" target="_blank">4</a>,
-			<a href="https://battleofthebits.org/" target="_blank">5</a>) and which I discovered through experimentation, trial-and-error testing and piece-by-piece constructing.
+			Here on this page you can play with the collection of bytebeat music code that I found on the internet, and discovered by myself through experimentation.
 			<br>
 			<br>
 			This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
@@ -69,20 +68,24 @@
 		</div>
 		<div id="button-library" class="button-toggle toggle toggle-show">Library</div>
 		<div id="library" class="paragraph">
-			<div id="button-library-classic8k" class="button-toggle toggle">
-				[Classic 8kHz] - classic formulas playing with 8kHz sample rate
+			<div id="button-library-classic8khz" class="button-toggle toggle">
+				[Classic 8kHz] - code of one variable (t), 8kHz sampling rate
 			</div>
-			<div id="library-classic8k" class="paragraph" style="display: none;"></div>
-			<div id="button-library-js8k" class="button-toggle toggle">
-				[JS 8kHz] - JavaScript code playing with 8kHz sample rate
+			<div id="library-classic8khz" class="paragraph" style="display: none;"></div>
+			<div id="button-library-js8khz" class="button-toggle toggle">
+				[JS 8kHz] - JavaScript code, 8kHz sampling rate
 			</div>
-			<div id="library-js8k" class="paragraph" style="display: none;"></div>
-			<div id="button-library-high" class="button-toggle toggle">
-				[High rate] - classic & JS code playing with high sample rate
+			<div id="library-js8khz" class="paragraph" style="display: none;"></div>
+			<div id="button-library-highrate1k" class="button-toggle toggle">
+				[High rate 1k] - more than 8kHz, compressed size less than 1kB
 			</div>
-			<div id="library-high" class="paragraph" style="display: none;"></div>
+			<div id="library-highrate1k" class="paragraph" style="display: none;"></div>
+			<div id="button-library-bigcode" class="button-toggle toggle">
+				[Big code] - code with size more than 1kB
+			</div>
+			<div id="library-bigcode" class="paragraph" style="display: none;"></div>
 			<div id="button-library-sthephanshi" class="button-toggle toggle">
-				[SthephanShi] - classic 8kHz formulas I discovered</div>
+				[SthephanShi] - code I discovered</div>
 			<div id="library-sthephanshi" class="paragraph" style="display: none;"></div>
 		</div>
 		<a class="link-home" href="/" title="Home"><--</a>

@@ -21,6 +21,7 @@ function $toggle(el) {
 
 function ByteBeatClass() {
 	this.audioCtx = null;
+	this.audioGain = null;
 	this.audioRecorder = null;
 	this.bufferSize = 2048;
 	this.canvCtx = null;
@@ -96,7 +97,13 @@ ByteBeatClass.prototype = {
 				this.controlScaleDown.removeAttribute('disabled');
 				this.controlScaleUp.removeAttribute('disabled');
 			}
+			this.toggleCursor();
 		}
+	},
+	changeVolume: function(el) {
+		var fraction = parseInt(el.value) / parseInt(el.max);
+		// Let's use an x * x curve (x-squared) instead of simple linear (x)
+		this.audioGain.gain.value = fraction * fraction;
 	},
 	clearCanvas: function() {
 		this.canvCtx.clearRect(0, 0, this.canvWidth, this.canvHeight);
@@ -108,6 +115,7 @@ ByteBeatClass.prototype = {
 		var height = this.canvHeight;
 		var scale = this.scale;
 		var pageWidth = width >> scale;
+		// var pageWidth = width * this.sampleRatio / (2 ** scale);
 		var pageIdx = this.pageIdx;
 		this.canvCtx.clearRect(pageWidth * pageIdx, 0, pageWidth, height);
 		this.imageData = this.canvCtx.getImageData(0, 0, width, height);
@@ -118,8 +126,10 @@ ByteBeatClass.prototype = {
 			imageData[pos++] = imageData[pos++] = imageData[pos++] = imageData[pos] = 255;
 		}
 		this.canvCtx.putImageData(this.imageData, 0, 0);
-		if(scale !== 0) {
-			this.pageIdx = pageIdx === (1 << scale) - 1 ? 0 : pageIdx + 1;
+		this.pageIdx = pageIdx === (1 << scale) - 1 ? 0 : pageIdx + 1;
+		// this.pageIdx = pageIdx === (((2 ** scale) / this.sampleRatio) | 0) - 1 ? 0 : pageIdx + 1;
+		if(this.scale > 3) {
+			this.timeCursor.style.left = pageWidth * this.pageIdx + 'px';
 		}
 	},
 	func: function() {
@@ -159,9 +169,10 @@ ByteBeatClass.prototype = {
 					lastByteValue = this.func(flooredTime) & 255;
 					lastValue = lastByteValue / 127 - 1;
 					lastTime = flooredTime;
+					//buffer.push(lastByteValue);
 				}
-				buffer[i] = lastByteValue;
 				chData[i] = lastValue;
+				buffer[i] = lastByteValue;
 				time += sampleRatio;
 			}
 			if(this.isPlaying) {
@@ -169,7 +180,10 @@ ByteBeatClass.prototype = {
 				this.drawGraphics(buffer);
 			}
 		}.bind(this);
-		processor.connect(audioCtx.destination);
+		var audioGain = this.audioGain = audioCtx.createGain();
+		this.changeVolume(this.controlVolume);
+		processor.connect(audioGain);
+		audioGain.connect(audioCtx.destination);
 
 		var mediaDest = audioCtx.createMediaStreamDestination();
 		var audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
@@ -191,34 +205,45 @@ ByteBeatClass.prototype = {
 			}
 			this.saveData(new Blob(this.recChunks, { type: type }), file);
 		}.bind(this);
-		processor.connect(mediaDest);
+		audioGain.connect(mediaDest);
 	},
-	initCodeInput() {
+	initCodeInput: function() {
 		this.errorEl = $id('error');
 		this.inputEl = $id('input-code');
 		this.inputEl.addEventListener('onchange', this.refeshCalc.bind(this));
 		this.inputEl.addEventListener('onkeyup', this.refeshCalc.bind(this));
 		this.inputEl.addEventListener('input', this.refeshCalc.bind(this));
+		this.inputEl.addEventListener('keydown', function(e) {
+			if(e.keyCode === 9 /* TAB */ && !e.shiftKey) {
+				e.preventDefault();
+				var el = e.target;
+				var value = el.value;
+				var selStart = el.selectionStart;
+				el.value = value.slice(0, selStart) + '\t' + value.slice(el.selectionEnd);
+				el.setSelectionRange(selStart + 1, selStart + 1);
+			}
+		});
 		if(window.location.hash.indexOf('#b64') === 0) {
-			this.inputEl.innerText = pako.inflateRaw(
+			this.inputEl.value = pako.inflateRaw(
 				atob(decodeURIComponent(window.location.hash.substr(4))),
 				{ to: 'string' }) + ';';
 		} else if(window.location.hash.indexOf('#v3b64') === 0) {
 			var pData = pako.inflateRaw(
 				atob(decodeURIComponent(window.location.hash.substr(6))),
 				{ to: 'string' });
-			formula = pData;
+			codeText = pData;
 			if(pData.startsWith('{')) {
 				try {
 					pData = JSON.parse(pData);
-					formula = pData.formula;
+					codeText = pData.formula;
 					this.applySampleRate(+pData.sampleRate);
 				} catch(err) {}
 			}
-			this.inputEl.innerText = formula;
+			this.inputEl.value = codeText;
 		}
 	},
 	initCanvas: function() {
+		this.timeCursor = $id('canvas-timecursor');
 		this.canvEl = $id('canvas-main');
 		this.canvCtx = this.canvEl.getContext('2d');
 		this.canvWidth = this.canvEl.width;
@@ -226,12 +251,14 @@ ByteBeatClass.prototype = {
 		this.imageData = this.canvCtx.createImageData(this.canvWidth, this.canvHeight);
 	},
 	initControls: function() {
+		this.canvasTogglePlay = $id('canvas-toggleplay');
 		this.controlTogglePlay = $id('control-toggleplay');
 		this.controlScaleUp = $id('control-scaleup');
 		this.controlScaleDown = $id('control-scaledown');
 		this.controlCounter = $id('control-counter-value');
+		this.controlVolume = $id('control-volume');
 	},
-	initLibrary() {
+	initLibrary: function() {
 		Array.prototype.forEach.call($Q('.button-toggle'), function(el) {
 			el.onclick = function() {
 				$toggle(el.nextElementSibling);
@@ -241,14 +268,17 @@ ByteBeatClass.prototype = {
 		libraryEl.onclick = function(e) {
 			var el = e.target;
 			if(el.tagName === 'CODE') {
-				this.inputEl.innerText = el.innerText.trim();
-				this.applySampleRate(+el.getAttribute('samplerate') || 8000);
-				this.refeshCalc();
-				this.resetTime();
-				this.togglePlay(true);
-			}
-			if(el.classList.contains('toggle')) {
-				el.classList.toggle('toggle-show');
+				this.insertAndRunCode(el, el.textContent);
+			} else if(el.classList.contains('code-load')) {
+				var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+					if(xhr.readyState === 4 && xhr.status === 200) {
+						this.insertAndRunCode(el, xhr.responseText);
+					}
+				}.bind(this);
+				xhr.open('GET', 'library/' + el.getAttribute('loadcode'), true);
+				xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				xhr.send(null);
 			}
 		}.bind(this);
 		libraryEl.onmouseover = function(e) {
@@ -257,6 +287,13 @@ ByteBeatClass.prototype = {
 				el.title = 'Click to play this code';
 			}
 		};
+	},
+	insertAndRunCode: function(codeEl, codeText) {
+		this.inputEl.value = codeText;
+		this.applySampleRate(+codeEl.getAttribute('samplerate') || 8000);
+		this.refeshCalc();
+		this.resetTime();
+		this.togglePlay(true);
 	},
 	rec: function() {
 		if(this.audioCtx && !this.isRecording) {
@@ -269,10 +306,18 @@ ByteBeatClass.prototype = {
 		}
 	},
 	refeshCalc: function() {
-		var formula = this.inputEl.innerText;
 		var oldF = this.func;
+		var codeText = this.inputEl.value;
+		var outputCode = codeText
+			.replace(/\/\/.*/g, ' ') // Remove // comments
+			.replace(/\n/g, ' ') // Remove line breaks
+			.replace(/\/\*.*?\*\//g, ' ') // Remove /* */ comments
+			.replace(/\bint\b/g, 'floor') // Replace int to floor
+			.replace(/(?:Math\.)?(\w+)/g, function(str, method) { // Replace sin to Math.sin, etc.
+				return Math.hasOwnProperty(method) && method !== 'E' ? 'Math.' + method : str;
+			});
 		try {
-			eval('byteBeat.func = function(t) { return ' + formula + '; }');
+			eval('byteBeat.func = function(t) { return ' + outputCode + '; }');
 			this.func(0);
 		} catch(err) {
 			this.func = oldF;
@@ -280,8 +325,8 @@ ByteBeatClass.prototype = {
 			return;
 		}
 		this.errorEl.innerText = '';
-		var pData = (this.sampleRate === 8000 ? formula :
-			JSON.stringify({ sampleRate: this.sampleRate, formula: formula }));
+		var pData = (this.sampleRate === 8000 ? codeText :
+			JSON.stringify({ sampleRate: this.sampleRate, formula: codeText }));
 		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
 		this.setScrollHeight();
 		this.pageIdx = 0;
@@ -291,6 +336,10 @@ ByteBeatClass.prototype = {
 		this.controlCounter.textContent = this.time = 0;
 		this.pageIdx = 0;
 		this.clearCanvas();
+		this.timeCursor.style.cssText = 'display: none; left: 0px;';
+		if(!this.isPlaying) {
+			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
+		}
 	},
 	setTime: function(value) {
 		this.controlCounter.textContent = this.time = value;
@@ -307,10 +356,16 @@ ByteBeatClass.prototype = {
 				(document.documentElement.clientHeight - this.contFixedEl.offsetHeight - 4) + 'px';
 		}
 	},
+	toggleCursor: function() {
+		this.timeCursor.style.display = this.scale <= 3 ? 'none' : 'block';
+	},
 	togglePlay: function(isPlay) {
 		this.controlTogglePlay.textContent = isPlay ? 'Stop' : 'Play';
+		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
 		if(isPlay) {
 			// Play
+			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');
+			this.toggleCursor();
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
 			}
