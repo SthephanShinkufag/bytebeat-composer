@@ -20,8 +20,18 @@
 			--><button id="control-scaledown" onclick="bytebeat.changeScale(false);">+</button><!--
 			--><button id="control-scaleup" onclick="bytebeat.changeScale(true);">-</button><!--
 			--><button onclick="bytebeat.rec()">Rec</button><!--
-			--><button onclick="bytebeat.changeMode()" style="display: none;">Mode</button><!--
-			--><select id="samplerate-change" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value); bytebeat.refeshCalc();"><option value="8000" selected>8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			--><select id="mode-change" onchange="bytebeat.mode = this.selectedOptions[0].value;">
+					<option value="bytebeat" selected>Bytebeat</option>
+					<option value="floatbeat">Floatbeat</option>
+				</select><!--
+			--><select id="samplerate-change" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value); bytebeat.refeshCalc();">
+				<option value="8000" selected>8000Hz</option>
+				<option value="11025">11025Hz</option>
+				<option value="16000">16000Hz</option>
+				<option value="22050">22050Hz</option>
+				<option value="32000">32000Hz</option>
+				<option value="44100">44100Hz</option>
+			</select>
 			<input id="control-volume" type="range" min="0" max="100" value="35" oninput="bytebeat.changeVolume(this);">
 			<span id="control-counter" onclick="bytebeat.resetTime();" title="Click to set t = 0">t =
 				<span id="control-counter-value">0</span>
@@ -37,7 +47,11 @@
 	<div class="middle container-scroll">
 		<div id="button-info" class="button-toggle toggle">Info</div>
 		<div id="info" class="paragraph" style="display: none;">
-			Bytebeat music (or one-liner music) was invented in september 2011. It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators. It's simply a single-line formula that defines a waveform as a function of time, processed 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256). If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application. Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
+			Bytebeat music (or one-liner music) was invented in september 2011.
+			It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
+			It's simply a single-line formula that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
+			If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
+			Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
 			<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a><br>
 			<br>
 			Original blog posts and videos from Viznut:<br>
@@ -61,7 +75,7 @@
 		<div id="button-library" class="button-toggle toggle toggle-show">Library</div>
 		<div id="library" class="paragraph">
 			<div id="button-library-classic8khz" class="button-toggle toggle">
-				[Classic 8kHz] - code of one variable (t), 8kHz sampling rate
+				[Classic 8kHz] - code with only one variable (t), no JavaScript, 8kHz sampling rate
 			</div>
 			<div id="library-classic8khz" class="paragraph" style="display: none;"></div>
 			<div id="button-library-js8khz" class="button-toggle toggle">
