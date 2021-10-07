@@ -292,25 +292,17 @@ BytebeatClass.prototype = {
 		const outputCode = codeText.replace(/\/\/.*/g, ' ') // Remove // comments
 			.replace(/\n/g, ' ') // Remove line breaks
 			.replace(/\/\*.*?\*\//g, ' '); // Remove /* */ comments
-		if((function() {
-			// create shortened functions
-			let mathMethods = 'var '; // hoisting is neccecary (this is peak jank)
-			for(const method of Object.getOwnPropertyNames(Math)) {
-				if(method !== 'E') {
-					mathMethods += `${ method } = Math.${ method },`;
-				}
-			}
-			eval(mathMethods + 'int = Math.floor;');
-			try {
-				eval(`bytebeat.func= t => { return ${ outputCode }\n; }`);
-				bytebeat.func(0);
-			} catch(err) {
-				bytebeat.func = oldF;
-				bytebeat.errorEl.innerText = err.toString();
-				return 1;
-			}
-			return 0;
-		})()) {
+		// create shortened functions
+		const params = Object.getOwnPropertyNames(Math).filter(k => k !== 'E');
+		const values = params.map(k => Math[k]);
+		params.push('int');
+		values.push(Math.floor);
+		try {
+			bytebeat.func = Function(...params, 't', `return ${ outputCode }\n;`).bind(window, ...values);
+			bytebeat.func(0);
+		} catch(err) {
+			bytebeat.func = oldF;
+			bytebeat.errorEl.innerText = err.toString();
 			return;
 		}
 		this.errorEl.innerText = '';
