@@ -289,20 +289,28 @@ BytebeatClass.prototype = {
 	refeshCalc() {
 		const oldF = this.func;
 		const codeText = this.inputEl.value;
-		const outputCode = codeText
-			.replace(/\/\/.*/g, ' ') // Remove // comments
+		const outputCode = codeText.replace(/\/\/.*/g, ' ') // Remove // comments
 			.replace(/\n/g, ' ') // Remove line breaks
-			.replace(/\/\*.*?\*\//g, ' ') // Remove /* */ comments
-			.replace(/\bint\b/g, 'floor') // Replace int to floor
-			.replace(/(?:Math\.)?(\w+)/g, (str, method) => // Replace sin to Math.sin, etc.
-				Object.prototype.hasOwnProperty.call(Math, method) && method !== 'E' ? 'Math.' + method : str
-			);
-		try {
-			eval(`bytebeat.func = function(t) { return ${ outputCode } };`);
-			this.func(0);
-		} catch(err) {
-			this.func = oldF;
-			this.errorEl.innerText = err.toString();
+			.replace(/\/\*.*?\*\//g, ' '); // Remove /* */ comments
+		if((function() {
+			// create shortened functions
+			let mathMethods = 'var '; // hoisting is neccecary (this is peak jank)
+			for(const method of Object.getOwnPropertyNames(Math)) {
+				if(method !== 'E') {
+					mathMethods += `${ method } = Math.${ method },`;
+				}
+			}
+			eval(mathMethods + 'int = Math.floor;');
+			try {
+				eval(`bytebeat.func= t => { return ${ outputCode }\n; }`);
+				bytebeat.func(0);
+			} catch(err) {
+				bytebeat.func = oldF;
+				bytebeat.errorEl.innerText = err.toString();
+				return 1;
+			}
+			return 0;
+		})()) {
 			return;
 		}
 		this.errorEl.innerText = '';
