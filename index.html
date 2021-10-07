@@ -14,7 +14,7 @@
 </head>
 <body>
 	<div class="middle container-fixed">
-		<textarea id="input-code" spellcheck="false">2*(-t%128|t%130)</textarea>
+		<textarea id="input-code" spellcheck="false" style="resize: vertical;">t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3</textarea>
 		<div class="buttons-control">
 			<button id="control-toggleplay" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">Play</button><!--
 			--><button id="control-scaledown" onclick="bytebeat.changeScale(false);">+</button><!--
