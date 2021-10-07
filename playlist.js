@@ -78,11 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState === 4 && xhr.status === 200) {
 			const obj = JSON.parse(xhr.responseText);
-			addPlaylist(obj, 'classic8khz');
-			addPlaylist(obj, 'js8khz');
-			addPlaylist(obj, 'highrate1k');
-			addPlaylist(obj, 'bigcode');
-			addPlaylist(obj, 'sthephanshi');
+			for(const p in obj.playlist) {
+				addPlaylist(obj, p);
+			}
 		}
 	};
 	xhr.open('GET', 'playlist.json', true);
