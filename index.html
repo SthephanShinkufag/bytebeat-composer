@@ -6,37 +6,29 @@
 	<meta name="description" content="Bytebeat music is a very short single-line JS expressions generating musical output. Bytebeat composer is an algorhithmic music generator.">
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
-	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="shortcut icon" href="favicon.png">
 	<link rel="stylesheet" type="text/css" href="bytebeat.css">
 	<script src="bytebeat.js"></script>
 	<script src="playlist.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min.js"></script>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118978685-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', 'UA-118978685-1');
-	</script>
 </head>
 <body>
 	<div class="middle container-fixed">
 		<textarea id="input-code" spellcheck="false">2*(-t%128|t%130)</textarea>
 		<div class="buttons-control">
-			<button id="control-toggleplay" onclick="byteBeat.togglePlay(!byteBeat.isPlaying)">Play</button><!--
-			--><button id="control-scaledown" onclick="byteBeat.changeScale(false);">+</button><!--
-			--><button id="control-scaleup" onclick="byteBeat.changeScale(true);">-</button><!--
-			--><button onclick="byteBeat.rec()">Rec</button><!--
-			--><button onclick="byteBeat.changeMode()" style="display: none;">Mode</button><!--
-			--><select id="samplerate-change" onchange="byteBeat.setSampleRate(+this.selectedOptions[0].value); byteBeat.refeshCalc();"><option value="8000" selected>8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
-			<input id="control-volume" type="range" min="0" max="100" value="35" oninput="byteBeat.changeVolume(this);">
-			<span id="control-counter" onclick="byteBeat.resetTime();" title="Click to set t = 0">t =
+			<button id="control-toggleplay" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">Play</button><!--
+			--><button id="control-scaledown" onclick="bytebeat.changeScale(false);">+</button><!--
+			--><button id="control-scaleup" onclick="bytebeat.changeScale(true);">-</button><!--
+			--><button onclick="bytebeat.rec()">Rec</button><!--
+			--><button onclick="bytebeat.changeMode()" style="display: none;">Mode</button><!--
+			--><select id="samplerate-change" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value); bytebeat.refeshCalc();"><option value="8000" selected>8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option></select>
+			<input id="control-volume" type="range" min="0" max="100" value="35" oninput="bytebeat.changeVolume(this);">
+			<span id="control-counter" onclick="bytebeat.resetTime();" title="Click to set t = 0">t =
 				<span id="control-counter-value">0</span>
 			</span>
 		</div>
 		<div id="error"></div>
-		<div id="canvas-container" onclick="byteBeat.togglePlay(!byteBeat.isPlaying)">
+		<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
 			<canvas id="canvas-main" width="1024" height="256"></canvas>
 			<div id="canvas-timecursor"></div>
 			<div id="canvas-toggleplay" class="canvas-toggleplay-show"></div>
@@ -45,7 +37,7 @@
 	<div class="middle container-scroll">
 		<div id="button-info" class="button-toggle toggle">Info</div>
 		<div id="info" class="paragraph" style="display: none;">
-			Bytebeat music (or one-liner music) is discovered in september 2011. It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators. It's simply a single-line formula that defines a waveform as a function of time, processed 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256). If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application. Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
+			Bytebeat music (or one-liner music) was invented in september 2011. It's a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators. It's simply a single-line formula that defines a waveform as a function of time, processed 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256). If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application. Or for example, you can generate PWM signal on the pin of your microcontroller and send it to the speaker.<br>
 			<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a><br>
 			<br>
 			Original blog posts and videos from Viznut:<br>
@@ -55,15 +47,15 @@
 			<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a><br>
 			<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
 			<br>
-			On-line JavaScript players:<br>
+			Online JavaScript players:<br>
 			<a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a><br>
 			<a href="http://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a><br>
 			<a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a><br>
 			<br>
-			Here on this page you can play with the collection of bytebeat music code that I found on the internet, and discovered by myself through experimentation.
+			This website has a collection of bytebeat music I created and found on the internet.
 			<br>
 			<br>
-			This application is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
+			This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
 			Forked by SthephanShi aka Viraya.
 		</div>
 		<div id="button-library" class="button-toggle toggle toggle-show">Library</div>
@@ -88,7 +80,8 @@
 				[SthephanShi] - code I discovered</div>
 			<div id="library-sthephanshi" class="paragraph" style="display: none;"></div>
 		</div>
-		<a class="link-home" href="/" title="Home"><--</a>
+		<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank">&gt;&gt; Discussion threads</a><br>
+		<a class="link" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">&gt;&gt; Github</a>
 	</div>
 </body>
 </html>

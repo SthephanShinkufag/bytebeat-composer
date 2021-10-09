@@ -18,12 +18,10 @@ a:hover, .button-toggle:hover, code:hover {
 	color: #ed88fb !important;
 }
 
-a.link-home {
+a.link {
+	font-size: 14px;
+	font-weight: bold;
 	text-decoration: none;
-}
-
-a.link-home:not(:hover) {
-	color: #fff;
 }
 
 .buttons-control {
@@ -201,7 +199,11 @@ ul {
 /* ==[ Mobile devices ]==================================================================================== */
 
 @media (max-width: 1080px) {
-	body {
+	a.link, .paragraph {
+		font-size: 1.6rem;
+	}
+
+	body, #control-counter {
 		font-size: 1.7rem;
 	}
 
@@ -212,18 +214,10 @@ ul {
 	.buttons-control > button, #samplerate-change {
 		font-size: 2.2rem;
 	}
-	
-	#control-counter {
-		font-size: 1.7rem;
-	}
 
 	#input-code {
 		font-size: 0.7rem;
 		height: 370px;
-	}
-
-	.paragraph {
-		font-size: 1.6rem;
 	}
 
 	.samplerate {
