@@ -308,10 +308,10 @@ BytebeatClass.prototype = {
 			return;
 		}
 		// delete single letter variables to prevent persistent variable errors (covers a good enough range)
-		for(let i = 0; i < 26; i++) {
-			delete window[String.fromCharCode(65 + i)];
-			delete window[String.fromCharCode(97 + i)];
-		}
+		//for(let i = 0; i < 26; i++) {
+		//	delete window[String.fromCharCode(65 + i)];
+		//	delete window[String.fromCharCode(97 + i)];
+		//}
 		this.errorEl.innerText = '';
 		let pData = { formula: codeText };
 		if(this.sampleRate !== 8000) {
