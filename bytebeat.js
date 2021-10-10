@@ -297,7 +297,8 @@ BytebeatClass.prototype = {
 		params.push('int');
 		values.push(Math.floor);
 		try {
-			bytebeat.func = Function(...params, 't', `return 0,${ codeText } \n;`).bind(window, ...values);
+			bytebeat.func =
+				Function(...params, 't', `return 0,${ codeText || 0 } \n;`).bind(window, ...values);
 			bytebeat.func(0);
 		} catch(err) {
 			bytebeat.func = oldF;
