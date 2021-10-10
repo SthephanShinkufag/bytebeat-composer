@@ -291,27 +291,24 @@ BytebeatClass.prototype = {
 	refeshCalc() {
 		const oldF = this.func;
 		const codeText = this.inputEl.value;
-		const outputCode = codeText.replace(/\/\/.*/g, ' ') // Remove // comments
-			.replace(/\n/g, ' ') // Remove line breaks
-			.replace(/\/\*.*?\*\//g, ' '); // Remove /* */ comments
 		// create shortened functions
 		const params = Object.getOwnPropertyNames(Math);
 		const values = params.map(k => Math[k]);
 		params.push('int');
 		values.push(Math.floor);
 		try {
-			bytebeat.func = Function(...params, 't', `return ${ outputCode }\n;`).bind(window, ...values);
+			bytebeat.func = Function(...params, 't', `return 0,${ codeText } \n;`).bind(window, ...values);
 			bytebeat.func(0);
 		} catch(err) {
 			bytebeat.func = oldF;
 			bytebeat.errorEl.innerText = err.toString();
 			return;
 		}
-		// delete single letter variables to prevent persistent variable errors (covers a good enough range)
-		//for(let i = 0; i < 26; i++) {
-		//	delete window[String.fromCharCode(65 + i)];
-		//	delete window[String.fromCharCode(97 + i)];
-		//}
+		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
+		for(let i = 0; i < 26; i++) {
+			delete window[String.fromCharCode(65 + i)];
+			delete window[String.fromCharCode(97 + i)];
+		}
 		this.errorEl.innerText = '';
 		let pData = { formula: codeText };
 		if(this.sampleRate !== 8000) {

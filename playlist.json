@@ -1178,8 +1178,12 @@
 				"code": "t*(t&16384?6:5)*(2+(3&-t>>9))>>(3&t>>8)|t>>4",
 				"starred": 1
 			}, {
-				"description": "\"Awesome level\". We can get a cool cartoon-game melody!<br>",
+				"description": "\"Awesome level\". We can get a cool cartoon-game melody!",
 				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
+				"starred": 2
+			}, {
+				"description": "\"Awesome level #2\". The next awesome level!<br>",
+				"code": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
 				"starred": 2
 			}, {
 				"description": "\"Alien dungeon\". So sinister.. t>>6 gives a fading effect",
