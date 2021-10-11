@@ -20,7 +20,7 @@
 			--><button id="control-scaledown" onclick="bytebeat.changeScale(false);">+</button><!--
 			--><button id="control-scaleup" onclick="bytebeat.changeScale(true);">-</button><!--
 			--><button onclick="bytebeat.rec()">Rec</button><!--
-			--><select id="mode-change" onchange="bytebeat.mode = this.selectedOptions[0].value;"><option value="bytebeat" selected>Bytebeat</option><option value="floatbeat">Floatbeat</option></select><!--
+			--><select id="mode-change" onchange="bytebeat.mode = this.selectedOptions[0].value;" style="display: none;"><option value="bytebeat" selected>Bytebeat</option><option value="floatbeat">Floatbeat</option></select><!--
 			--><select id="samplerate-change" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value); bytebeat.refeshCalc();"><option value="8000" selected>8000Hz</option><option value="11025">11025Hz</option><option value="16000">16000Hz</option><option value="22050">22050Hz</option><option value="32000">32000Hz</option><option value="44100">44100Hz</option>
 			</select>
 			<input id="control-volume" type="range" min="0" max="100" value="35" oninput="bytebeat.changeVolume(this);">

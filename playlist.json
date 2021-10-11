@@ -49,6 +49,11 @@
 			"code": "(t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t))^((t&8192?t&4096?t&1024?2*t:4*t:t&512?4*t:4.2*t:(t&4096?t&1024?2*t:10*t:t&512?2*t:8*t)>>2)*(t&16384?3:2)|t*(t&16384?.125:1/(.01*t))>>1)",
 			"starred": 1
 		}, {
+			"author": "RealZynx92",
+			"description": "remix of 'I hear the long meowing of a cat :)'",
+			"url": "https://www.reddit.com/r/bytebeat/comments/pz264e/remix_of_i_hear_the_long_meowing_of_a_cat/",
+			"code": "t*((t/2>>10|t%16*t>>8)&8*t>>12&18)|-(t/16)+64"
+		}, {
 			"description": "son of a glitch",
 			"author": "Xaser",
 			"url": "https://battleofthebits.org/arena/Entry/son+of+a+glitch.txt/17660/",
@@ -519,15 +524,9 @@
 			}]
 		}, {
 			"author": "RealZynx92",
-			"children": [{
-				"description": "remix of 'I hear the long meowing of a cat :)'",
-				"url": "https://www.reddit.com/r/bytebeat/comments/pz264e/remix_of_i_hear_the_long_meowing_of_a_cat/",
-				"code": "t*((t/2>>10|t%16*t>>8)&8*t>>12&18)|-(t/16)+64"
-			}, {
-				"description": "the 69 melody",
-				"url": "https://www.reddit.com/r/bytebeat/comments/pymhqk/the_69_melody_nice/",
-				"code": "128*sin(t*pow(1.4,t>>9&69)/40)+128|-t/16"
-			}]
+			"description": "the 69 melody",
+			"url": "https://www.reddit.com/r/bytebeat/comments/pymhqk/the_69_melody_nice/",
+			"code": "128*sin(t*pow(1.4,t>>9&69)/40)+128|-t/16"
 		}, {
 			"description": "Industrial chiptune",
 			"author": [

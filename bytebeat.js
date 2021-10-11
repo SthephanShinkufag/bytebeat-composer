@@ -296,9 +296,15 @@ BytebeatClass.prototype = {
 		const values = params.map(k => Math[k]);
 		params.push('int');
 		values.push(Math.floor);
+		this.fnRemover = this.fnRemover || (function() {
+			const keys = {};
+			Object.getOwnPropertyNames(globalThis).forEach(key => (keys[key] = true));
+			['console', 'Math', 'parseInt', 'window'].forEach(key => delete keys[key]);
+			return `let ${ Object.keys(keys).sort().join(',\n') }`;
+		}());
 		try {
-			bytebeat.func =
-				Function(...params, 't', `return 0,${ codeText || 0 } \n;`).bind(window, ...values);
+			bytebeat.func = Function(...params, 't', `${ this.fnRemover }; return 0, ${ codeText || 0 } \n;`)
+				.bind(window, ...values);
 			bytebeat.func(0);
 		} catch(err) {
 			bytebeat.func = oldF;
