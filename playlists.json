@@ -1,4 +1,4 @@
-{ "playlist": {
+{ "playlists": {
 	"classic8khz": [
 		{
 			"author": "Bear & Celephais",
@@ -235,8 +235,7 @@
 			"url": "https://youtu.be/GtQdIYUtAHg?t=2m55s",
 			"code": "((-t&4095)*(255&t*(t&t>>13))>>12)+(127&t*(234&t>>8&t>>3)>>(3&t>>14))"
 		}, {
-			"description": "8-bit Atari inspired sounds",
-			"description2": "simplified version",
+			"description": "8-bit Atari inspired sounds (simplified version)",
 			"author": "Visy",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250",
 			"code": "t%25+(t>>2|15*t)+t>>3"
@@ -395,19 +394,21 @@
 			"author": "Savestate",
 			"url": "http://battleofthebits.org/arena/Entry/Earl+Grey+Groove/20500/",
 			"code": "(((a=(s=int(t/9600%8))==0)*(y=t*2)*1.5873+(b=(s==1))*y*(v=1.4983)+(c=(s==2))*y*v+(d=(s==3))*y+(e=(s==4))*y*1.5873+(g=(s==5))*y*v+(h=(s==6))*y+(i=(s==7))*y)%(m=256)+((a|e)*(u=y*4)*v+u*((b|c|g|h)*1.3348+d*0.8908+i*1.2599))%m+(u*(i+(a|e)*1.1892+(b|c|g|h)*1.1224+d*v))%m+(u*((a|e)+(b|g|h)*0.8908+c*0.9438+d*1.1892+i*0.7491))%m+(u*((a|e)*0.7937+(b|c|g|h)*0.7491+d/2+i*0.627))%m)/8*((((w=int(t/800%96))<32)*(1<<w&0xC007307)+(w>=32&&w<64)*(1<<w&0x73070E70)+(w>64)*(1<<w&0xE70C400))!=0)+(t*sin(t*cos(t))%18+25)*((1<<(t/200%24)&1052928)!=0)+(t*sin(t*cos(t))%38+75)*((1<<(t/400%24)&12288)!=0)+(tan(sin(t*cos(t)))*32+74)*(t%sin(t/33)<cos(0.032*t))*((1<<(t/400%24)&1)!=0)+(pow(1.059463,z=((w==83|w==77|w==63|w==35|w==17|w==51|w==47|w==9|w==0|w==30)*-5+(w==3)*0.1+(w==41|w==6|w==74)*-2+(w==72|w==66|w==80|w==59|w==62|w==29|w==18|w==54|w==15|w==12)*-7+(w==69|w==56|w==26|w==20|w==14)*-9+(w==21)*-12+(w==50|w==44|w==33)*-4+(w==93)*-6))*u*2)%m/4*(z!=0)",
-			"loadcode": "Savestate - Earl Grey Groove.js",
+			"codeFile": "Savestate - Earl Grey Groove.js",
 			"starred": 2
 		}, {
 			"description": "Longline Theory",
-			"author": "mu6k",
-			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389287",
+			"starred": 2,
 			"children": [{
+				"author": "mu6k",
+				"mode": "Signed Bytebeat",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389287",
 				"code": "((sb=t>0xffff)&0)+max(min(((y=pow(2,[15,15,23,8][t>>14&3]/12))&0)+(((y*t*0.241)&127-64)+((y*t*0.25)&127-64))*1.2+(((a=1-(t&0x7ff)/0x7ff)&0)+(((5*t&0x7ff)*a)&255-127)*((0x53232323>>(t>>11&31))&1)*a*1.0+(((d=(14*t*t^t)&0x7ff)*a)&255-128)*((0xa444c444>>(t>>11&31))&1)*a*1.5+((a*a*d*(t>>9&1)&0xff-0x80)*0.1337))*sb+((g=(t&0x7ff)/0x7ff)&0)+((g=1-(g*g))&0)+((h=pow(2,([[15,18,17,17,17,17,999,999,22,22,999,18,999,15,20,22],[20,18,17,17,10,10,999,999,20,22,20,18,17,18,17,10]][((t>>14&3)>2)&1][t>>10&15])/12))&0)+(((h*t&31)+(h*t*1.992&31)+(h*t*.497&31)+(h*t*0.977&31)-64))*g*2.0*sb,127),-128)",
-				"loadcode": "mu6k - Longline Theory.js",
-				"starred": 2
+				"codeFile": "mu6k - Longline Theory.js"
 			}, {
 				"description": "300b Information Theory",
 				"author": "Ryg, Las, Decipher, P01",
+				"mode": "Signed Bytebeat",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=17#c389541",
 				"code": "w=t>>9,k=32,m=2048,a=1-t/m%1,d=(14*t*t^t)%m*a,y=[3,3,4.7,2][p=w/k&3]*t/4,h=\"IQNNNN!!]]!Q!IW]WQNN??!!W]WQNNN?\".charCodeAt(w/2&15|p/3<<4)/33*t-t,s=y*.98%80+y%80+(w>>7&&a*((5*t%m*a&128)*(0x53232323>>w/4&1)+(d&127)*(0xa444c444>>w/4&1)*1.5+(d*w&1)+(h%k+h*1.99%k+h*.49%k+h*.97%k-64)*(4-a-a))),s*s>>14?127:s"
 			}]
@@ -543,7 +544,7 @@
 			"description": "Last Fountain",
 			"author": "pigdevil2010",
 			"url": "https://battleofthebits.org/arena/Entry/Last+Fountain/27281/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": [
 				"s=(a,b,c)=>c/a.charCodeAt(b),d=a=>a&1?-1:1,e=(a,b)=>t>>22&1?b:a,b=a=>(s(a,r(t)+p*16,t<<2)*(254>>(t>>20&7)&1))&20,",
 				"p=178>>(t>>19&7)&1,q=a=>120>>(a>>20&7)&1?1:(-a>>16&1),r=a=>112>>(a>>20&7)&1?t>>14&15:(t>>17&1)*8,",
@@ -560,7 +561,7 @@
 			"description": "Last Palette",
 			"author": "pigdevil2010",
 			"url": "https://battleofthebits.org/arena/Entry/Last+Palette/25369/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": [
 				"(((t<<(4-(t*3>>13&1)))/(\"@Lf@DUfD\".charCodeAt(t*3>>14&7))|(t*3>>9))&31)+",
 				"(((t<<(4-(t*3>>13&1)))/(\"3@L39DU93@L39D+9\".charCodeAt(t*3>>14&15))|(t*3>>9))*(254>>(t*3>>20&7)&1)&31)+",
@@ -571,181 +572,180 @@
 				"(((t<<5)/(\"LLLD@DUfLLL3DD+933L3&+39@@f@DDUf\".charCodeAt(t*3>>16&31))^(t*3>>11)|(t*3>>14&15))*(104>>(t*3>>21&7)&1)&31)+",
 				"(((t<<3)/(\"393+&+3@030&+33+&@3+ \\\"&+03@3+33@\".charCodeAt(t*3>>16&31))^(-t*3>>11)|(-t*3>>14&15))*(104>>(t*3>>21&7)&1)&15)"
 			],
-			"loadcode": "pigdevil2010 - Last Palette.js",
+			"codeFile": "pigdevil2010 - Last Palette.js",
 			"starred": 2
 		}, {
 			"description": "HITLER-CHANデートシム",
 			"author": "Jimmyoshi",
 			"url": "https://battleofthebits.org/arena/Entry/HITLER-CHAN%E3%83%87%E3%83%BC%E3%83%88%E3%82%B7%E3%83%A0.txt/25871/",
-			"samplerate": "22050",
+			"sampleRate": "22050",
 			"code": "128+a();function a(){k=22050;tk=((t*11.5/k)&0xFFFF)%96;return c(tk)+c(tk-4)/10+(6-tk%6)*((tk%6>2&&tk%6<4)?(random()*128):0)/24}function c(tk){o1=d(b(\"000fffjj0ffhhh0jjjhh0ffff00aa0aa0ccddddff0cc0aa0000mm0mm0kkjjj0hh0ff0hh0000mm0mm0kk0jjjj00hhh000\",tk));o2=d(b(\"NNN000000NNNIII000000IIIKKK000000KKKLLL000000LLLGGG000000GGGHHH000000HHHIII000000IIIAAA000000III\",tk));o3=d(b(\"000R00000R00000P00000P00000N00000N00000R00000R00000N00000N00000R00000R00000P00000P00000M00000M00\",tk)+12);return o1+o2+o3}function d(n){ff=pow(2,n/12)*16.4;q=k/ff;return(n==8||n==20)?0:(t%q>=q/2)?16:-16}function b(s,p){return s.charCodeAt(p)-40}",
-			"loadcode": "Jimmyoshi - HITLER-CHANデートシム.js",
+			"codeFile": "Jimmyoshi - HITLER-CHANデートシム.js",
 			"starred": 2
 		}, {
 			"description": "Daydreamer",
 			"author": "Jimmyoshi",
 			"url": "https://battleofthebits.org/arena/Entry/Daydreamer/25439/",
-			"samplerate": "11025",
+			"sampleRate": "11025",
 			"code": "o={b(a,b){return a.charCodeAt(b)-32},f(){return 8*(O(r,32*I+q)-16)+n%8},g(b,d,e){return O=o.b,I=b%3,j=0,d&&(n=N(d/12),K=N(d/6)%16,p=d%12,q=N(n/8),r=\"0012000300020405?>??<A:??>e?<?B?0112034501670800??????????????BB01234567089:;<=>\",H=\"156:\",L=b>2&&n>120,G=O(c[I],o.f())+(I>1?0:(O(r,32*I+q+16)-31)%32),G=p<6?G:b<2?b?n<57||n>58?G:40+3*(n-57):G:18==n?21:95==n?16:G,a=o.f(),w=(O(c[I+3],N(a/3))>>a%3*2)%4,x=16*(L?2:N(G/48)&&p>5||!w||b>2?0:w+1),y=2**((L?O(H,K%4)+12*N(K/4):G%48)/12)*66,_=k/y,j+=x*(I>1?N(O(l,N(64*y*t/k)%16)-8)/15:t%_>_*(I?1:2)/4?.23:-.23)+(e||x&&!(b>2)?0:o.g(b,12*n-9,1)/4)),j},h(){for(N=int,k=11025,l='&)+,,*(&$#%&&%$#',c=[\"''Wc3333--]]----+`b**bZ&..^..^.^$$Tc3333**ZZ\",\"cgj>>>>>bei<<<<<gjl>>>>>??>>??AA<<<<<>l::FJMMMMMbfi<<BuxHvuFFFF5gjoB\",\"222..)^b20_000-.000`0)]`0.]...+]...''&'^..--..00++++[-[))).0000`2_`55525666b2-bf9gf77772..........^..^00.....\",\";#PV \\\\O_#;[V L  \",'J!@: H& 5555415!J155%I& ',\"_S__S_/__/__\\\\_____/5%\\\\___S__/_7 _5_?!   \"],j=0,i=0;i<4;i++)j+=o.g(i,N(49*t/k)%1536,0);return j}},128+o.h()",
-			"loadcode": "Jimmyoshi - Daydreamer.js",
+			"codeFile": "Jimmyoshi - Daydreamer.js",
 			"starred": 2
 		}, {
 			"description": "bytebeat? how about bitbeat?",
 			"author": "funute",
 			"url": "https://battleofthebits.org/arena/Entry/bytebeat_+how+about+bitbeat_/21510/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "S=1.059463094,P=pow,X=[function(t){return t<1E3&&(sin(t*t)*1E8%2|0?1:3)},function(k,n,t){return l=4410/44/P(S,n),t%l>l/2-t*l*k?1:3},function(f,a,s,n,t){return m=t%5292/882|0,k=m%3,z=(a&3840>>4*k)>>8-4*k,(!s||m%2)&&f(n+z,t)}],Y=[function(t){return t<1E3&&(k=299/(t+1),k-(k|0)>.5?1:3)},0,X[0],X[2].bind(this,X[1].bind(this,7E-5)),function(t,f){return t<2400&&(p=P(t+1,.8),t<200||t>900?X[0](p):(p/27|0)%2?1:3)}],Z=[function(){return 0},function(s,n,t){return l=4410/44/P(S,n),k=t%(l*8)/l|0,(!s||t/882%3|0)&&(k==1^!!(k&2)?1:3)},Y[3].bind(this,89),Y[3].bind(this,71)],A=t%6800,B=t/6800|0,C=B%320,M=parseInt(\"68a68f00dba0ab0068a68f0hf0fdbdb080868bb0000068b080868d0bdbdf0d0068a68f00dba0ab0068a68f0hf0fdbdb080868bb0000068b080868d0bdbdfdfg0d0dbdg000000bdgdgi0gik0ikigdb86080680400000068b8bd00bdg6600g0dg0d0dbdg000000bdgdgi0gik0ikigdbdg0i0gi0d000000bdg0d0gdbd0gdb8641\"[C-66]||0,36),96+16*(Y[B&3?2:B&4](A)||Z[\"1120320312032011\"[B%16]](M,\"24222222422222420022222222222202\"[B%32]-2+5*(C>191)||0,A)||(M?X[1](0,M-6,t):1))",
-			"loadcode": "funute - bytebeat! how about bitbeat!.js",
+			"codeFile": "funute - bytebeat! how about bitbeat!.js",
 			"starred": 2
 		}, {
 			"description": "tiny rave",
 			"author": "funute",
 			"url": "https://battleofthebits.org/arena/Entry/tiny+rave/27419/",
-			"samplerate": "22050",
+			"sampleRate": "22050",
 			"code": "RATE=22050,TEMPO=60/600,S=t=>(D=(s,d,t)=>max(s*(d-t)/d,0),U=(n,t)=>t*220*pow(1.059463094,n),sw=(n,t)=>sin(U(n,t)*PI*4),Z=(n,t)=>(u=U(n,t),u%1+u*.996%1-1),sq=(n,t)=>(U(n,t*4)|0)%2,f=(s,d,n,t)=>sw(n,t)*D(s,d,t),fm=(ms,md,s,d,n,t)=>sw(n,t+f(ms,md,n,t))*D(s,d,t),ts=t/RATE,beat=int(ts/TEMPO),bprg=ts%TEMPO,mp=beat%16,ms=int(beat/16),mr=ts%(TEMPO*16),m4=ms%4,m8=ms%8,mx=ms%16,bup=(mp%3&1)^(mp>11),K=(k,i,b)=>'0x'+k[i]-b,bn=K('4402',m4,bup?28:40),m1=K('03c8038370ca0385',mx,12),m2=K('c7aac075c3c7c077',mx,12),mg=(v,l)=>ms>l&&v,mm=.003,fm(-.017-1e-3*bn,.4,.5,.6,bn,bprg)+mg(fm(9,9,.04,.03,0,bprg),7)+mg(fm(0,1,!(mp&3)*.7,.5,-38,pow(bprg,.6)),-3)+mg(fm(.1,1,!((mp+4)&7)/4,.2,0,pow(bprg,.7)),7)+mg(Z(m4==3?2:0,mr)+Z(m8==3?5:3,mr)+Z(m8==7?7:(m4<2?7:4+m4*2),mr),15)*min(mr,.4)*D(.7,2,mr)+mg(fm(mm-4e-4*m1,2,.5,2,m1,mr)+fm(mm-4e-4*m2,2,m2&&.5,2,m2,max(mr-TEMPO*8,0)),31)),E=(t,k)=>(k?S(max(t-k*4200,0))*pow(.3,k)+E(t,k-1):0),E(t,4)*128+128",
-			"loadcode": "funute - tiny rave.js",
+			"codeFile": "funute - tiny rave.js",
 			"starred": 2
 		}, {
 			"description": "bloop factory",
 			"author": "funute",
 			"url": "https://battleofthebits.org/arena/Entry/bloop+factory/20506/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "Z=int,P=pow,T=sin,I=parseInt,S=[0,2,4,7,9,5,6,19,12,1],B=[0,4,5,4,0,-4,-5,-7],n=function(c,e){return 127*P(T(c*P(1.05946,e)/15.9517),3)},r=function(c){return I(T(c).toString(16).substring(7,9)||0,16)-128},X=function(c){return I(T(c+.1).toFixed(6)[5])},a=function(c,e){return c*e},d=5E3,b=Z(t/d),p=1-t%d/d,W=2*d,Y=Z(b/2),L=max(t-3*d,0),C=Z(L/W),F=1-L%W/W,N=B[Z(Y/16)%8],G=4*d,R=P(1-t%G/G,3),a(r(t),P(p/2,3)+P(2==b%4&&p,.5)/7)+a(n(t,S[X(Y%4+Z(Y/16))]+N),(1-t%W/W)/4)+a(n(L,S[X(C%4+Z(C/16))]+B[Z(C/16)%8]),F/16)+a(0<T(99*R)?19:-19,R)+a(r(Z(t/4)),Z(t/G)%2&&R/4)+a(n(t,N-48),.25)+128",
-			"loadcode": "funute - bloop factory.js",
+			"codeFile": "funute - bloop factory.js",
 			"starred": 1
 		}, {
 			"description": "ripthisentry.txt",
 			"author": "raphaelgoulart",
 			"url": "https://battleofthebits.org/arena/Entry/ripthisentry.txt/32559/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "t=t/8,b=t/1250,f=int(b%64),g=int(b/4%16),d=1.12,n=[1,1,1,d,d,d,d,d,.94,.94,.94,1.26,1.26,1.26,1.26,1.26,.84,.84,.84,.94,.94,.94,.94,1.26,1.26,1.26,1.26,1.26,d,d,d,d,.84,.84,.84,d,d,d,d,d,.94,.94,.94,1.26,1.26,1.26,1.26,1.26,1,1,1,d,d,d,d,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5],n1=[1,1.26,1.89,1.68,1.68,1.5,1.5,1.4,.94,d,1.68,1.5,1.5,1.4,1.26,d,1.26,1.4,1.26,1.19,1.19,1.26,1.4,1.5,1.5,1.5,1.5,1.5,0,1.4,1.26,d,1,1.26,1.89,1.68,1.68,2.24,2.24,2.52,2.38,1.89,1.4,1.5,1.5,1.4,1.26,d,1.26,1.4,1.26,d,d,1.26,1.4,1.5,1.5,1.5,1.5,1.5,1.5,1.5,0,0],n2=[1.5,1.4,1.68,1.5,1.26,1.68,1.5,1.4,1.26,1.41,1.68,1.5,1.26,1.4,1.5,1.5],n3=[1.26,d,d,0.94,.94,1.19,.94,.94,.94,d,1.19,.94,.94,d,.94,.94],f1=n[f]*2,f2=n1[f]*16,f3=n2[g]*8,f13=n3[g]*16,t*f1/(256/32)%32+abs(32-t*(f2/(256/32))%32*2)+t*f3/(256/8)%8+t*f13/(256/8)%8",
-			"loadcode": "raphaelgoulart - ripthisentry.txt.js",
+			"codeFile": "raphaelgoulart - ripthisentry.txt.js",
 			"starred": 1
 		}, {
 			"description": "1k dance",
 			"author": "raphaelgoulart",
 			"url": "https://battleofthebits.org/arena/Entry/1k+dance/31132/",
-			"samplerate": "11025",
+			"sampleRate": "11025",
 			"code": "z=40.7,b=t/2250,r=int(b),y=r%16,a=[1,2,1,2,1.2,2.4,1.2,2.4,1.33,2.67,1.33,2.67,1.5,3,1.5,3][y],c=r%64>1&&r%64<33,o=c?1.19:1.5,n=[0,0,2.38,2.67,2.38,0,2,2.24,0,2.38,0,2.24,0,1.78,0,2,2,2,1,1.19,1.5,0,1.19,1.33,0,1.19,0,c?1.12:1.33,0,o,o,o],x=int(r/4)%4,d=[12,12,10.67,12][x],g=[9.52,9.52,8,8.96][x],h=[8,7.12,6.72,7.52][x],v=(b*2%4)*1.25,w=int(y/12),u=int(r/16)%4,j=[[19.04,17.92],[14.24,9.52],[10.64,12],[8,0]],sin(t*(1/(z))+sin(t*(1.125)/z)*7*(1-b*2%4>0?1-b*2%4:0))*(40-b*15%30)+40+(b<16?0:random()*(r%4==2?(32-(b*32%32)):0))+(b<32?0:random()*(16-(b*28%28<16?b*28%28:16)))+(b<64?0:sin(t*(a/z)+sin(t*(a)/z)*4*(1-b%1))*32+32)+(b<96?0:sin(t*d/z+sin(t*d/z)*(0+(b*1.5%3)))*v+5)+(b<96?0:sin(t*g/z+sin(t*g/z)*(0+(b*1.5%3)))*v+5)+(b<96?0:sin(t*h/z+sin(t*h/z)*(0+(b*1.5%3)))*v+5)+(b<128?0:t*n[r%32]*8%256>121+abs(108-(b*56%224))?20:0)+(b<129?0:t*n[(r-1)%32]*7.98%256>121+abs(108-(b*56%224))?7:0)+(b<192?0:sin(t*(j[u][w]/z)+sin(t*(j[u][w]*2)/z)*4*(y<2||y>=12&y<14?1-b/2%1:0))*(5.3-y/3%4)+5.3)",
-			"loadcode": "raphaelgoulart - 1k dance.js",
+			"codeFile": "raphaelgoulart - 1k dance.js",
 			"starred": 1
 		}, {
 			"description": "Fortnite Default Dance in Bytebeat",
 			"author": "raphaelgoulart",
 			"url": "https://www.reddit.com/r/bytebeat/comments/b48xrx/fortnite_default_dance_in_bytebeat/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "d=.127*t,b=int(t/1578),a=[0,0,0,0,0,0,0,0,4,4,4.75,4.75,5.3,0,5.3,5.3,5.3,5.3,5.3,5.3,4.75,4.75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4.75,4.75,5.3,0,5.3,5.3,5.3,5.3,4.75,4.75,0,0,4,4,0,0,3.55,3.55,4,4,0,0],n=d*random(),r=int(b/2)%64,([0,3,6,10].includes(int(b/4%16))?d:0)%64+d*a[r]%64+d*a[r]/1.33%64+(b%4==0?n:0)%20+(b%32==16?n:0)%44",
 			"starred": 1
 		}, {
 			"description": "A NΞW DIMΞNSION",
 			"author": "burlynn n01se",
 			"url": "https://battleofthebits.org/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
-			"samplerate": "22050",
+			"sampleRate": "22050",
 			"code": "wv=function(t){return y=t%256,y<127?y:2*(256-y)},ms=int(t/1e4),p=t/1e4%16,b=p%4,qn=p%1,rh=function(t){for(m=0,i=0;i<t.length;i++)b>t[i]&&(m=b-t[i]);return m},sc=ms%256<32?1:min(1,max(0,3*qn-.3))*(ms%32>0),c=t*(p<12?2:2.4),max(0,min(255,sc*((wv(t/4)-wv(t/2+qn*wv(t*(ms>>2&15))+wv(2*t*(1+(ms>>5&3)))))*(1-rh([0,1,1.5,2,2.75,3.5]))*(ms%256>63)-wv(t/2+.5*wv(3*pow(7-qn*(2+(ms>>2&3))%1,5)))*(ms%64>47)+qn*qn*((t<<2+(t>>9)%3)%256)*(ms%128>64)*.8-wv(6e3*pow(2-rh([.25,1,1.5,2.25,3]),4)*(ms%256>191?2:1))*(ms%256>128)+(wv(c)-wv(1.2*c)+wv(1.5*c)-wv(2.24*c)+wv(1.8*c))*(.7-rh([0,.75,1.5,2.5,3.25]))*1+random()*pow(16-p,2)/4)*.3-qn*pow(1-qn*(ms%128<80?2:4)%1,4)*80*random()*(ms%256>63)+wv(2*t+60*sin(25*b))*(ms%256>31)*(ms%32<1)*qn+wv(2e3*pow(1-qn,9)*(1+p%2))*max(0,1-5*qn)*(ms%256>31)+128))",
-			"loadcode": "burlynn n01se - A NΞW DIMΞNSION.js",
+			"codeFile": "burlynn n01se - A NΞW DIMΞNSION.js",
 			"starred": 2
 		}, {
 			"description": "__ws2.model",
 			"author": "beep-eep",
 			"url": "https://battleofthebits.org/arena/Entry/__ws2.model/43638/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "Cm=[2.97,3.33,3.53,3.96,4.445,4.71,5.285],xx=a=>[[2.97,3.53],[3.53,3.96],[3.96,4.445],[4.445,5.285]][a],sq=v=>[[0,0,1,1],[0,1,1,1],[0,0,1,1]][v][ia(t/4e5)%4],ia=a=>int(abs(a)),f=x=>{wave=0.6*abs((sin(x/4e4)*(t>8e6?6:1))+4);vol=x/2e3%10;return sin(log(.5+(x/1e3)%20)*40)*2*e((x/2)/1e3,1.5,.2)*sq(0)*(t>7e6?0:1)+sin(x+sin(x)*1e9*e(x/1.5e3,3,.05))*1*e(x/3e3,4,0.2)*sq(1)*(t>7e6?0:1)+sin(x+sin(x)*1e9)*1*e(x/.5e3*ia(sin(x/1e4)+2),3,.2)*sq(2)*(t>7e6?0:1)+(sin(wave**((x/1000)*3*Cm[0]%2))+sin(wave**((x/1e3)*3*Cm[4]%2))+sin(wave**((x/1e3)*3*Cm[6]%2)))*vol**(t>8e6?0:1)-sin((wave+0.3)**((x/1e3)*6*xx(int(t/64e3)%4)[int(t/8e3)%2]%2))*1.2*e(x/4e3,.9,.35)*(t>2e6?1:0)+sin((wave+ia(sin(t/1e8)*8))**((x/1e3)*3*xx(int(t/256e3)%4)[int(t/64e3)%2]%2))*6*(t>5.2e6?1:0)-sin(wave**((x/1e3)*1*Cm[[0,0,2,4][ia(t/8e4)%4]]%2))*vol*1.5},e=(s,l,n)=>{return int((exp(-((s%20)*n)*l))*20)},out=n=>{v=0;for(i=1;i<n;i++){v+=f(t/1+8e3*i**2)*(.5/i)}return v},128+out(2+ia(sin(t/8e5)*3*(t>15e6?3:1)))*2.8",
-			"loadcode": "beep-eep - __ws2.model.js",
+			"codeFile": "beep-eep - __ws2.model.js",
 			"starred": 1
 		}, {
-			"description": "511 - remix of 'arpeggiator fun'",
-			"description2": "<a href=\"https://odysee.com/@johanv:5/511:6\">video with info</a>",
+			"description": "511 - remix of 'arpeggiator fun' (<a href=\"https://odysee.com/@johanv:5/511:6\">video with info</a>)",
 			"author": [
 				["johanvandegriff", "https://www.reddit.com/r/bytebeat/comments/o7e957/511/"],
 				["SArpnt", "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/"]],
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "i=int,z=sin,c='charCodeAt',b=t/441e3*16,m=1<<b/16%16,q=b%.5,h=x=>t/2210*2**(x/12-3),w=(x,y=0)=>h(x)%1-z(y*2+b*PI)/8>.5,s=i(b*2)%32,a=abs(8-i(b*8)%16),p='pnkgrnkipmigpnkg',99+27*((m&1855&&10657&1<<s%16?z(q/(q/241+2e-4))+z(t/140)/2:0)+(m&7519?z(t**3/q)*5**(-3*((b+1)%2)):0)+(m&9944?w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGG'[c](s),s==5):0)+(m&7326?w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@'[c](s)):0)+(m&28284?h(p[c](a%4+i(s/8)*4)+12*-i(a/4))%1:0)+(m&4912?(z(PI*h(p[c](s*3%16))))**3:0))",
-			"loadcode": "Johan Vandegriff - 511 - remix of 'arpeggiator fun'.js",
+			"codeFile": "Johan Vandegriff - 511 - remix of 'arpeggiator fun'.js",
 			"starred": 2
 		}, {
 			"description": "menacing",
 			"author": "SArpnt",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ff5phi/menacing/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "r=11e3,s=int(t/r+1)%32,b='ćóóóćÎÎÎÎÃÃÃÃÃÃÎ°°°°¦¦¦¦'.charCodeAt(s)/300*t%512,160/3*(sin(t%r/(t%r/100+8))+1)*(s%2+.6*(s%16==0))+b%(400+128*sin(b/(21+sin(t/r))))%256*1/3+(.999*(0xDBC97749&2**s?2*b:b)%128>64+15*sin(t/1e4)?64-t/r%1*32:0)",
 			"starred": 2
 		}, {
 			"description": "347 BEATSTEP INC.",
 			"author": "mega9man",
 			"url": "https://battleofthebits.org/arena/Entry/347+BEATSTEP+INC./20403/",
-			"samplerate": "11025",
+			"sampleRate": "11025",
 			"code": "128+sin(t/24*((t>>10)&42)+1*sin(t/64*(t/1>>15)&21))*24+(sin(t*1/3/4*1+4*sin(t*1/6/4*1))*((t>>11)&1))*16+(sin(t*1/6/4*1+4*sin(t*1/12/4*1))*((t>>10)&1))*16+((3e3/(y=t*4&16383))&1)*56+((3e2/(y=t*32&28600))&1)*56+sin(t/16*((t>>10)&42)+1*sin(t/64*(t/1>>7)&8))*12",
 			"starred": 2
 		}, {
 			"description": "cool loop i guess",
 			"author": "RealZynx92",
 			"url": "https://www.reddit.com/r/bytebeat/comments/q1tesu/cool_loop_i_guess/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "t2=t/44100,p=1.05946309,a=14080,as=a*p,b=as*p,c=b*p,cs=c*p,d=cs*p,ds=d*p,e=ds*p,f=e*p,fs=f*p,g=fs*p,gs=g*p,saw=function(h){return t2*h&63},sqr=function(h){return t2*h&64},sine=function(h){return 32*sin(t2*h/10.25)+32},kick=25*(3E3/(t&16383)&3),snare=10*(3E4/(t+16383&32767)&4),hihat=((-t>>8)%16+16)%t*random(),arpch=[c,e,g,a,f,g,a,c,e,g/2,a,c],bs=[g/2,a/2,c/2,e/2],sine(bs[(t>>16)%4])+sqr(arpch[(t>>12)%3+(t>>16)%4*3])+kick+snare+hihat",
-			"loadcode": "RealZynx92 - cool loop i guess.js",
+			"codeFile": "RealZynx92 - cool loop i guess.js",
 			"starred": 1
 		}, {
 			"description": "Sunset",
 			"author": "InfinitySnapz",
 			"url": "https://www.reddit.com/r/bytebeat/comments/bxmsl7/sunset/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "c=1.51873344*t,n1=[1875,3750,7500],p1=[1,.8,.75,.5,.25],p2=[.89,.75,2/3,.6,.3],p3=[.8,.75,2/3,.5,.25],p4=[.75,2/3,.6,.375,.1875],o1=[p1[int(t/15E3)%4],p2[int(t/15E3)%4],p3[int(t/15E3)%4],p4[int(t/15E3)%4]],o2=[.5,.445,.4,.375],o3=[p1[abs(int(t/n1[int(t/24E4)%3]%4)%8-4)],p2[abs(int(t/n1[int(t/24E4)%3])%8-4)],p3[abs(int(t/n1[int(t/24E4)%3])%8-4)],p4[abs(int(t/n1[int(t/24E4)%3])%8-4)]],c*o1[int(t/24E4)%4]%256/4+c/1.01*o2[int(t/24E4)%4]%256/4+4.02*c*o3[int(t/24E4)%4]%256/6+20*random()+sqrt(5E12*random())/(t%24E4)%256/3",
-			"loadcode": "InfinitySnapz - Sunset.js",
+			"codeFile": "InfinitySnapz - Sunset.js",
 			"starred": 1
 		}, {
 			"description": "rain",
 			"author": "InfinitySnapz",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ceg1gu/rain/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "t<2?(a=0,b=0,c=0):(a=.999*a+.001*random(),b<0?(b=.7*random(),c=random()):b-=1/44100,abs(256*a*(5*sin(t/5E4)+10)%256-128)+255*(t/300*(10*c+200)&2)*pow(b,random()/5+4))",
 			"starred": 1
 		}, {
 			"description": "War Tradition",
 			"author": "petet",
 			"url": "https://battleofthebits.org/arena/Entry/War+Tradition/31413/",
-			"samplerate": "32000",
+			"sampleRate": "32000",
 			"code": "out=0,J=function(c,d,m){a=[];for(i=0;i<d;i++){a[i]=int((c*i+m)/d)%c}return a},Jhas=function(c,d,m,a){return J(c,d,m).includes(a%c)},mix=function(a,v){out+=(a&255)*(v&255)/255},b=t>>12,b2=int(b/3),mix(random()*100,(16-b2%16)*5),mix(t*3/2,(((t/3)>>10)&31)*((b2>>5)%4)),mix(t*12/5*3/4,((b%3)*30+40)*(b2%64)/200),mix(t*9/4,(((b>>1)%3)*4+40)*(b2%64)/200),mix(t*12/5,(((b>>2)%3)*5+40)*(b2%64)/200),mix(Jhas(12,7,6,b)?(random()*2+(t|(t<<2))&47):0,256-(t>>4)&255),mix(Jhas(6,4,4,b)?((t*3)&127):0,(64-(t>>6)&63)*((b2>>4)%4)),mix(Jhas(12,4*((b2>>6)&3),0,b)?(((t-t*((b2>>3)&1)*((b2>>5)&1)*1/5)>>1)&(t<<3|(t>>8)*((b2>>4)%4))):0,100-((t>>6)&63)),mix(Jhas(12,5+((b2>>5)+3)%4,7,b)?(((t)*(2+(b2>>1)%8))&128):0,(60-(t>>3)&53)*((b2>>5)%4)),out",
-			"loadcode": "petet - War Tradition.js"
+			"codeFile": "petet - War Tradition.js"
 		}, {
 			"description": "weirdo boy",
 			"author": "Romash",
 			"url": "https://battleofthebits.org/arena/Entry/weirdo+boy/31403/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "freqs=[220,261,348,207],t2=t/11025*24,freq2=1+(t>>15&1)+((41&t>>12)%4^(1+(t>>11&2)-1)*(1024<t>>10)),192+(t2*(1-freq2)*.999*freqs[t>>17&3]%128+freq2*(t2+500)*1.01*freqs[t>>17&3]%128-128+(t>>10>1024)*(t2/2*.999*freqs[t>>17&3]%128+(t2/2+500)*1.01*freqs[t>>17&3]%128-128))/2",
-			"loadcode": "Romash - weirdo boy.js"
+			"codeFile": "Romash - weirdo boy.js"
 		}, {
 			"description": "Cool waveform i guess",
 			"author": "1583736",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ntpnza/cool_waveform_i_guess/",
-			"samplerate": "32000",
+			"sampleRate": "32000",
 			"code":  "t=3*(t-(t>>10&4|t>>13&3|t>>17&6|t>>14&4)*t/((t>>16&7)+4)),128*pow(abs(1-pow(abs(.5+cos(t/64.25)),.3)),1-abs(1-pow(abs(.5-sin(t/63.75)),.5)))+32"
 		}, {
 			"author": "neverforgettoleave",
 			"children": [{
 				"description": "simple step sequencer",
 				"url": "https://www.reddit.com/r/bytebeat/comments/jmbsoh/simple_step_sequencer/",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "speed=2,length=256,(t*Math.pow(1.0594630943592953,[0,,0,,12,,0,,0,,17,,0,,0,,14,,0,,0,,10,,0,,0,,12,,0,,0,,0,,15,12,7,3,0,,0,,14,12,7,3,0,,0,,12,7,3,0,-12,,0,,15,12,7,3,-4,,-4,,12,,-4,,-4,,15,,-4,,-4,,14,,-4,,-4,,10,,-4,,-4,,12,,-4,,-4,,-4,,12,,-4,,-4,,15,,-4,,-4,,14,,-4,,-4,,10,,-4,,-4,,12,,-4,,-16,,-16,,12,,-16,,-16,,12,,-16,,-17,,14,,-16,,-16,,10,,-16,,-16,,12,,-16,,-16,,-4,,15,12,7,3,-16,,-16,,14,12,7,3,-4,,-4,,12,7,3,-16,-12,,-16,,15,12,7,3,-19,,-19,,12,,-19,,-19,,15,,-19,,-19,,14,,-19,,-19,,10,,-19,,-19,,12,,-19,,-19,,-19,,12,,-19,,-19,,15,,-19,,-19,,14,,-19,,-19,,10,,-19,,-19,,12,,-19,,][int(t*speed/4096)%length])-1)|t>>5"
 			}, {
 				"description": "32 steps",
 				"url": "https://www.reddit.com/r/bytebeat/comments/jmaz4f/techno_synth/gis7o23/?utm_source=reddit&utm_medium=web2x&context=3",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "t*pow(1.0594630943592953,[0,3,7,12,19,12,7,3,-12,7,12,15,0,7,12,14,-4,3,12,15,20,24,27,19,-12,7,12,15,0,7,12,14][int(t/4096)%32])"
 			}, {
 				"description": "pentatonics",
 				"url": "https://www.reddit.com/r/bytebeat/comments/jmaj6d/pentatonics/",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "2*t*pow(1.0594630943592953,[0,3,5,7,10,12,15,17,19,22,24,22,19,17,15,12,10,7,5,3,0,-2,-5,-7,-9,-12,-14,-17,-19,-21,-24,-26,-24,-21,-19,-17,-14,-12,-9,-7,-5,-2][int(t/8192)%42]-1)|t>>t/8192"
 			}, {
 				"description": "Turbo Pentatonics",
 				"url": "https://www.reddit.com/r/bytebeat/comments/kuktmt/turbo_pentatonics_sawtooth_funky_shifting/",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "2*t*pow(1.0594630943592953,[0,3,5,7,10,12,15,17,19,22,24,22,19,17,15,12,10,7,5,3,0,-2,-5,-7,-9,-12,-14,-17,-19,-21,-24,-26,-24,-21,-19,-17,-14,-12,-9,-7,-5,-2][int(t/1495)%42]-1)|t>>-t/16384"
 			}]
 		}, {
 			"description": "Drone Choords",
 			"author": "LJ",
-			"samplerate": "32000",
+			"sampleRate": "32000",
 			"code": [
 				"((abs(t*(.02+(t*.0001&0x4)*.01)*(1+((t*.0001)%4)<<5)%0xFF-0x80))&0xFF)+",
 				"(t%100)*.3*abs(sin(t*.00005)*.25+.5)+min(max((t>>16)-2,0)*.5,1)*(t*.1&0xF)*(t*.01&0xFF)/0x70"
@@ -754,7 +754,7 @@
 			"description": "Sync noise synth",
 			"author": "SArpnt",
 			"url": "https://www.reddit.com/r/bytebeat/comments/flmyyd/sync_noise_synth/",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": [
 				"p=409.5, // Pitch",
 				"s=sin(t/7e4)*20+22, // Sound",
@@ -767,74 +767,74 @@
 			"author": "Ryg",
 			"url": "https://youtu.be/tCRPUv8V22o?t=177",
 			"children": [{
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "t*(\"36364689\"[t>>13&7]&15)/12&128"
 			}, {
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "(t*(\"36364689\"[t>>13&7]&15)/12&128)+(((t>>12^(t>>12)-2)%11*t/4|t>>13)&127)",
 				"starred": 1
 			}]
 		}, {
 			"description": "No Limit",
 			"author": "mu6k",
-			"samplerate": "32000",
+			"sampleRate": "32000",
 			"code": "35*(3E3/(y=t&16383)&1)+(x=t*\"6689\"[t>>16&3]/24&127)*y/4E4+((t>>8^t>>10|t>>14|x)&63)"
 		}, {
 			"description": "Good old fractal melody",
 			"author": "Blueberry",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=12#c389114",
-			"samplerate": "11025",
+			"sampleRate": "11025",
 			"code": "(t>>9^(t>>9)-1^1)%13*t"
 		}, {
 			"author": "Gabriel Miceli",
 			"url": "https://www.youtube.com/watch?v=V4GfkFbDojc",
 			"children": [{
 				"description": "Noise Maker",
-				"samplerate": "11025",
+				"sampleRate": "11025",
 				"code": "i=t&8191,(((t*((t>>9^((t>>9)-1)^1)%13)&255)/2)+((((t>>3|t<<(t>>12&2))*(i<4096)+(t>>4|t*(t^t+t/256))*(i>4095)))&255)/2)*(2+(t>>16))",
 				"starred": 1
 			}, {
 				"description": "Crude Sinevawe Dubstep",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "d=(t*(t&t>>12)*8/11025)|0,((d&16)/8-1)*(d*(d^15)+d+127)",
 				"starred": 1
 			}, {
 				"description": "Techno",
-				"samplerate": "11025",
+				"sampleRate": "11025",
 				"code": "(((t/10|0)^(t/10|0)-1280)%11*t/2&127)+(((t/640|0)^(t/640|0)-2)%13*t/2&127)"
 			}, {
 				"description": "Crazy Groovy Beats",
-				"samplerate": "32000",
+				"sampleRate": "32000",
 				"code": "a=t-2048,((t&t>>6)&(t*(t>>((t&65535)>>12))))+((t*3/4&t>>12)&127)+(t*(a>>7&a>>8&a>>9&16)>>t/64)"
 			}]
 		}, {
 			"author": "RealZynx92",
 			"description": "2-bit song",
-			"samplerate": "32000",
+			"sampleRate": "32000",
 			"url": "https://www.reddit.com/r/bytebeat/comments/q36kta/2bit_song/",
 			"code": "(pow(2.75,-t/2048%8+8)&128)+(t*(t&t>>11)&64)|t/[2,2,2,2,3,3,4,4][(t>>14)%8]&128"
 		}, {
 			"description": "Chip arpeggio that eats itself",
 			"author": "Kb_",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=8#c388898",
-			"samplerate": "44100",
+			"sampleRate": "44100",
 			"code": "((t>>1)*(15&0x234568a0>>(t>>8&28))|t>>1>>(t>>11)^t>>12)+(t>>4&t&24)"
 		}, {
 			"author": "kOLbOSa_exe",
 			"children": [{
 				"description": "cool sinusoidal beat (some parts bring from 'no limit')",
 				"url": "https://www.reddit.com/r/bytebeat/comments/pzb9mz/cool_sinusoidal_beat_some_parts_bring_from_no/",
-				"samplerate": "11025",
+				"sampleRate": "11025",
 				"code": "wv=function(a,b){return sin(t/a)*b+128},wv((t&4095)+1E3,32)"
 			}, {
 				"description": "wow that was pretty cool",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q4glqu/wow_that_was_pretty_cool/",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "(4e3/~(4095&t/3)%20)*'1213'[(t>>5)%4]*'3944'[(t>>12)%4]-2"
 			}, {
 				"description": "fiery sin-waveform",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q4s2dl/some_cool_thingy_here/",
-				"samplerate": "44100",
+				"sampleRate": "44100",
 				"code": "per=t/2048,64*sin(t/1E4)+80+10*random()+(4E4/(t/4&4095)%100>>random()*t)+(128<per?[13,-12,11,-10,9,-8,7,-6,5,-4,3,-2,1,0][(t>>12)%14]+15&t%[34,32,33,35][(t>>14)%4]:0)+(64<per?4E4/(t/4%4095)%82:0)"
 			}]
 		}
@@ -845,26 +845,26 @@
 			"children": [{
 				"description": "bossabeat",
 				"url": "https://battleofthebits.org/arena/Entry/bossabeat/21386/",
-				"samplerate": "44100",
-				"loadcode": "raphaelgoulart - bossabeat.js",
+				"sampleRate": "44100",
+				"codeFile": "raphaelgoulart - bossabeat.js",
 				"starred": 2
 			}, {
 				"description": "bytefunk",
 				"url": "https://battleofthebits.org/arena/Entry/bytefunk/31042/",
-				"samplerate": "44100",
-				"loadcode": "raphaelgoulart - bytefunk.js",
+				"sampleRate": "44100",
+				"codeFile": "raphaelgoulart - bytefunk.js",
 				"starred": 2
 			}, {
 				"description": "shy smile",
 				"url": "https://battleofthebits.org/arena/Entry/shy+smile/31801/",
-				"samplerate": "22050",
-				"loadcode": "raphaelgoulart - shy smile.js",
+				"sampleRate": "22050",
+				"codeFile": "raphaelgoulart - shy smile.js",
 				"starred": 2
 			}, {
 				"description": "the cute bytebeast ^o^",
 				"url": "https://battleofthebits.org/arena/Entry/the+cute+bytebeast+%5Eo%5E/17669/",
-				"samplerate": "11025",
-				"loadcode": "raphaelgoulart - the cute bytebeast ^o^.js",
+				"sampleRate": "11025",
+				"codeFile": "raphaelgoulart - the cute bytebeast ^o^.js",
 				"starred": 2
 			}]
 		}, {
@@ -872,15 +872,14 @@
 			"children": [{
 				"description": "damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb",
 				"url": "https://battleofthebits.org/arena/Entry/damnit+kf+i+have+to+do+homework+why%27d+you+have+to+pick+now+to+host+a+bytebeat+ohb+%5BPLAY+IN+22000+Hz+wow%5D.txt/17659/",
-				"samplerate": "22050",
-				"loadcode": "Jimmyoshi - damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb.js",
+				"sampleRate": "22050",
+				"codeFile": "Jimmyoshi - damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb.js",
 				"starred": 2
 			}, {
 				"description": "Spring Fever",
-				"description2": "Warning! Very demanding on the hardware!",
 				"url": "https://battleofthebits.org/arena/Entry/Spring+Fever/21648/",
-				"samplerate": "22050",
-				"loadcode": "Jimmyoshi - Spring Fever.js",
+				"sampleRate": "22050",
+				"codeFile": "Jimmyoshi - Spring Fever.js",
 				"starred": 2
 			}]
 		}, {
@@ -888,110 +887,109 @@
 			"children": [{
 				"description": "vgm engine",
 				"url": "https://battleofthebits.org/arena/Entry/vgm+engine/39556/",
-				"samplerate": "44100",
-				"loadcode": "funute - vgm engine.js",
+				"sampleRate": "44100",
+				"codeFile": "funute - vgm engine.js",
 				"starred": 2
 			}, {
 				"description": "frequency machine",
-				"description2": "Freezes in Chrome! Please set a lower sample rate.",
 				"url": "https://battleofthebits.org/arena/Entry/frequency+machine/32329/",
-				"samplerate": "22050",
-				"loadcode": "funute - frequency machine.js",
+				"sampleRate": "22050",
+				"codeFile": "funute - frequency machine.js",
 				"starred": 2
 			}]
 		}, {
 			"description": "Bit-Shift Melodies",
 			"author": "Savestate",
 			"url": "https://battleofthebits.org/arena/Entry/Bit-Shift+Melodies/17525/",
-			"samplerate": "44100",
-			"loadcode": "Savestate - Bit-Shift Melodies.js",
+			"sampleRate": "44100",
+			"codeFile": "Savestate - Bit-Shift Melodies.js",
 			"starred": 2
 		}, {
 			"author": "Bp103",
 			"children": [{
 				"description": "the proto-version",
 				"url": "https://twitter.com/Bp103/status/934396842850291712",
-				"samplerate": "44100",
-				"loadcode": "Bp103 - the proto-version.js"
+				"sampleRate": "44100",
+				"codeFile": "Bp103 - the proto-version.js"
 			}, {
 				"description": "a sequencer type thing",
 				"url": "https://www.reddit.com/r/bytebeat/comments/enmbix/made_a_sequencer_type_thing/ffz6343/",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - a sequencer type thing.js",
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - a sequencer type thing.js",
 				"starred": 1
 			}, {
 				"description": "a song in a half baked pseudo-mml format",
 				"url": "https://twitter.com/Bp103/status/1221435415032406017",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - a song in a half baked pseudo-mml format.js"
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - a song in a half baked pseudo-mml format.js"
 			}, {
 				"description": "now its FM synth",
 				"url": "https://twitter.com/Bp103/status/1345905059964530688",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - now its FM synth.js"
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - now its FM synth.js"
 			}, {
 				"description": "triangle kick drum and snare",
 				"url": "https://twitter.com/Bp103/status/1346329796041695233",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - triangle kick drum and snare.js",
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - triangle kick drum and snare.js",
 				"starred": 1
 			}, {
 				"description": "random bytebeat thing with delay effect",
 				"url": "https://twitter.com/Bp103/status/1401194230656253952",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - random bytebeat thing with delay effect.js",
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - random bytebeat thing with delay effect.js",
 				"starred": 2
 			}, {
 				"description": "bytebeat song 06-15-2021",
 				"url": "https://www.youtube.com/watch?v=aA7pyVkkPk4",
-				"samplerate": "32000",
-				"loadcode": "Bp103 - bytebeat song 06-15-2021.js",
+				"sampleRate": "32000",
+				"codeFile": "Bp103 - bytebeat song 06-15-2021.js",
 				"starred": 2
 			}]
 		}, {
 			"description": "Impromptu (Diatom)",
 			"author": "Radnyx",
 			"url": "https://battleofthebits.org/arena/Entry/Impromptu+%28Diatom%29/34240/",
-			"samplerate": "32000",
-			"loadcode": "Radnyx - Impromptu (Diatom).js",
+			"sampleRate": "32000",
+			"codeFile": "Radnyx - Impromptu (Diatom).js",
 			"starred": 1
 		}, {
 			"description": "happybeat",
 			"author": "Yung Gotenks",
 			"url": "https://battleofthebits.org/arena/Entry/happybeat/31161/",
-			"samplerate": "44100",
-			"loadcode": "Yung Gotenks - happybeat.js",
+			"sampleRate": "44100",
+			"codeFile": "Yung Gotenks - happybeat.js",
 			"starred": 1
 		}, {
 			"description": "my headache generator",
 			"author": "frantic",
 			"url": "https://battleofthebits.org/arena/Entry/my+headache+generator/17548/",
-			"samplerate": "44100",
-			"loadcode": "frantic - my headache generator.js",
+			"sampleRate": "44100",
+			"codeFile": "frantic - my headache generator.js",
 			"starred": 1
 		}, {
 			"description": "pcm.modshape.wv",
 			"author": "argarak",
 			"url": "https://battleofthebits.org/arena/Entry/pcm.modshape.wv/39543/",
-			"samplerate": "44100",
-			"loadcode": "argarak - pcm.modshape.wv.js",
+			"sampleRate": "44100",
+			"codeFile": "argarak - pcm.modshape.wv.js",
 			"starred": 1
 		}, {
 			"description": "phase byte [++t]",
 			"author": "argarak",
 			"url": "https://battleofthebits.org/arena/Entry/phase+byte+%5B%2B%2Bt%5D/32262/",
-			"loadcode": "argarak - phase byte [++t].js"
+			"codeFile": "argarak - phase byte [++t].js"
 		}, {
 			"description": "Takitjää",
 			"author": "Lia",
 			"url": "https://battleofthebits.org/arena/Entry/Takitj%C3%A4%C3%A4/31188/",
-			"samplerate": "44100",
-			"loadcode": "Lia - Takitjää.js"
+			"sampleRate": "44100",
+			"codeFile": "Lia - Takitjää.js"
 		}
 	],
 	"sthephanshi": [
 		{
-			"description": "Explosive beat<br>- Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
+			"description": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
 			"children": [{
 				"code": "(t>>4)*(t>>3)|t>>2"
 			}, {
@@ -1010,9 +1008,9 @@
 				"code": "(t>>5)*(t>>5)|t>>2"
 			}]
 		}, {
-			"description": "Robocop<br>- Cool beat discovered by experimenting with [<code>(t>>2)*(t&16)|t>>2</code>]",
+			"description": "\"Robocop\". Cool beat discovered by experimenting with [<code>(t>>2)*(t&16)|t>>2</code>]",
 			"children": [{
-				"description": "\"Robocop\". Very cool sound with biting blows",
+				"description": "Very cool sound with biting blows",
 				"code": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
 				"starred": 1
 			}, {
@@ -1023,14 +1021,14 @@
 				"code": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&24))|t>>3"
 			}]
 		}, {
-			"description": "Trance beat<br>- Experiments with t>>N and ternary operations",
+			"description": "\"Trance beat\". Experiments with t>>N and ternary operations",
 			"children": [{
 				"code": "t>>(t%16?4:6)|t>>(t%128?10:4)"
 			}, {
 				"code": "t>>(t%32?4:3)|(t%128?t>>3:t>>3|t>>9)"
 			}]
 		}, {
-			"description": "Toy phone<br>- Interesting formulas, sounds very similar to children's toys",
+			"description": "\"Toy phone\". Interesting formulas, sounds similar to children's toys",
 			"children": [{
 				"description": "Someone is calling by phone",
 				"code": "t*((t>>10|t%16*t>>5)&8*t>>10&18)"
@@ -1043,26 +1041,21 @@
 				"code": "t*((t>>10|t%16*t>>8)&8*t>>12&18)"
 			}]
 		}, {
-			"description": "Cat-girl",
-			"description2": "Nya!",
+			"description": "\"Cat-girl\". Nya!",
 			"code": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
 			"starred": 1
 		}, {
-			"description": "Child swing seats",
-			"description2": "Cool happy tune",
+			"description": "\"Child swing seats\". Cool happy tune!",
 			"code": "t>>9&2*t&10*t|t>>5&6*t",
 			"starred": 2
 		}, {
-			"description": "Brain burner",
-			"description2": "RIP headphone users!",
+			"description": "\"Brain burner\". RIP headphone users!",
 			"code": "129*t%(t>>7)"
 		}, {
-			"description": "Psychedelica",
-			"description2": "Experimenting with resonance",
+			"description": "\"Psychedelica\". Experimenting with resonance",
 			"code": "t^t%1001+t^t%1002"
 		}, {
-			"description": "Protoss engine",
-			"description2": "Experimenting with resonance, a pretty hypnotic result",
+			"description": "\"Protoss engine\". Experimenting with resonance, a pretty hypnotic result",
 			"code": "2*(-t%128|t%130)"
 		}, {
 			"description": "Harmonics",
@@ -1080,7 +1073,7 @@
 				"code": "t%((t&-16|t>>11)&42)<<2|t>>4"
 			}]
 		}, {
-			"description": "Boss level<br>- Series of formulas discovered by experimenting with \"Running man\" [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>- Allows to get different interesting chiptune sounds<br>",
+			"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with \"Running man\" [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
 			"children": [{
 				"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 				"code": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
@@ -1098,8 +1091,10 @@
 				"description": "By playing with the \"Boss level\" I made a different percussion",
 				"code": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
 			}, {
-				"description": "\"Boss level #2\". |t>>4 rhythm sounds cool!<br>",
+				"description": "\"Boss level #2\". |t>>4 rhythm sounds cool!",
 				"code": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
+			}, {
+				"description": " "
 			}, {
 				"description": "Replacing (1+(1&t>>12)) with 3+(1&t>>8) adds an awesome harmonics",
 				"code": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
@@ -1122,8 +1117,10 @@
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
 				"starred": 2
 			}, {
-				"description": "Inverted explosions give us mysterious sounds<br>",
+				"description": "Inverted explosions give us mysterious sounds",
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
+			}, {
+				"description": " "
 			}, {
 				"description": "\"Aliens attack\". Complicated (t|t*3)>>5 rhythm with explosion drums. Cool!",
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
@@ -1133,32 +1130,40 @@
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>(t&4096?3:4)",
 				"starred": 2
 			}, {
-				"description": "Funny inverted sounds :D<br>",
+				"description": "Funny inverted sounds :D",
 				"code": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
+			}, {
+				"description": " "
 			}, {
 				"description": "\"Prepare to fight\". Long period, sound is changing from low to high",
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
 				"starred": 1
 			}, {
-				"description": "\"Prepare to fight #2\". Previous formula with doubled freqency bass<br><br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound.<br>This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)",
+				"description": "\"Prepare to fight #2\". Previous formula with doubled freqency bass",
 				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
 				"starred": 1
+			}, {
+				"description": "<br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound.<br>This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)"
 			}, {
 				"description": "\"Aliens encounter + drums\". Impressive sound!",
 				"code": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
 				"starred": 2
 			}, {
-				"description": "\"Prepare to fight #2 + drums\"<br><br>Finally you can use complex ternary operators to create more complex drums:",
+				"description": "\"Prepare to fight #2 + drums\"",
 				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
 				"starred": 2
+			}, {
+				"description": "<br>Finally you can use complex ternary operators to create more complex drums:"
 			}, {
 				"description": "\"Ready to fight?\". Cool for a fighting game :)",
 				"code": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
 				"starred": 2
 			}, {
-				"description": "\"Hard level\". My favorite!<br><br>Fantastic! Let's continue our experiments:",
+				"description": "\"Hard level\". My favorite!",
 				"code": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
 				"starred": 2
+			}, {
+				"description": "<br>Fantastic! Let's continue our experiments:"
 			}, {
 				"description": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
 				"code": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
@@ -1181,9 +1186,11 @@
 				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
 				"starred": 2
 			}, {
-				"description": "\"Awesome level #2\". The next awesome level!<br>",
+				"description": "\"Awesome level #2\". The next awesome level!",
 				"code": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
 				"starred": 2
+			}, {
+				"description": " "
 			}, {
 				"description": "\"Alien dungeon\". So sinister.. t>>6 gives a fading effect",
 				"code": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|t>>6",
@@ -1192,8 +1199,10 @@
 				"description": "\"Alien dungeon\" with a complicated rhytm (t|t*3)>>5",
 				"code": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
 			}, {
-				"description": "Previous with a slightly different tune<br><br>Other \"Boss level\" variations:",
+				"description": "Previous with a slightly different tune",
 				"code": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
+			}, {
+				"description": "<br>Other \"Boss level\" variations:"
 			}, {
 				"code": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
 			}, {

@@ -2,75 +2,85 @@
 
 (function() {
 const $id = id => document.getElementById(id);
+const escapeHTML = text => text.replace(
+	/[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\u00FF]/g,
+	c => `&#${ ('000' + c.charCodeAt(0)).substr(-4, 4) };`);
 
-function processCodeHTML(code, sRate) {
-	if(typeof code !== 'string') {
-		code = code.join('@!@LINE_BREAK@!@');
+function parseEntry(entryObj) {
+	if(Array.isArray(entryObj.code)) {
+		entryObj.code = entryObj.code.join('\n');
 	}
-	return `<code${ sRate ? ` samplerate="${ sRate }"` : '' }>${
-		code.replace(/&/g, '&amp;')
-			.replace(/>/g, '&gt;')
-			.replace(/</g, '&lt;')
-			.replace(/ /g, '&#xA0;')
-			.replace(/@!@LINE_BREAK@!@/g, '<br>\r\n')
-	}</code>`;
+	return entryObj;
 }
 
-function getEntryHTML(entry, isChildren) {
-	const descr = entry.description;
-	const { author, url } = entry;
-	let authorHTML = '';
-	if(author) {
-		if(typeof author === 'string') {
-			authorHTML = !url ? author : `<a href="${ url }" target="_blank">${ author }</a>`;
-		} else {
-			const authorsArr = [];
-			for(let j = 0, aLen = author.length; j < aLen; ++j) {
-				authorsArr.push(`<a href="${ author[j][1] }" target="_blank">${ author[j][0] }</a>`);
+function stripEntryToSong({ sampleRate, mode }) {
+	return { sampleRate, mode };
+}
+
+function createEntryElem(entryObj) {
+	let entry = '';
+	if(entryObj.description) {
+		entry += !entryObj.url ? entryObj.description :
+			`<a href="${ entryObj.url }" target="_blank">${ entryObj.description }</a>`;
+	}
+	if(entryObj.author) {
+		let authorsList = '';
+		const authorsArr = Array.isArray(entryObj.author) ? entryObj.author : [entryObj.author];
+		for(let i = 0, len = authorsArr.length; i < len; ++i) {
+			const author = authorsArr[i];
+			authorsList += typeof author === 'string' ? (
+				entryObj.description || !entryObj.url ? author :
+					`<a href="${ entryObj.url }" target="_blank">${ author }</a>`) :
+				`<a href="${ author[1] }" target="_blank">${ author[0] }</a>`;
+			if(i < len - 1) {
+				authorsList += ', ';
 			}
-			authorHTML = authorsArr.join(', ');
 		}
-		authorHTML = descr ? ` (by ${ authorHTML })` : `by ${ authorHTML }`;
+		entry += `<span>${ entryObj.description ? ` (by ${ authorsList })` : `by ${ authorsList }` }</span>`;
 	}
-	let descrHTML = '';
-	if(descr) {
-		descrHTML = author || !url ? descr : `<a href="${ url }" target="_blank">${ descr }</a>`;
+	if(entryObj.sampleRate) {
+		entry += ` <span class="code-samplerate">${
+			entryObj.sampleRate.substring(0, entryObj.sampleRate.length - 3) }kHz</span>`;
 	}
-	descrHTML += authorHTML;
-	const { code, loadcode: lCode, samplerate: sRate } = entry;
-	let starHTML = sRate ? ` <span class="samplerate">${ sRate.substr(0, 2) }kHz</span>` : '';
-	switch(entry.starred) {
-	case 1: starHTML += ' <span class="star-white"></span>'; break;
-	case 2: starHTML += ' <span class="star-yellow"></span>';
+	if(entryObj.mode) {
+		entry += ` <span class="code-samplerate">${ entryObj.mode }</span>`;
 	}
-	const descr2HTML = entry.description2 ? ` - ${ entry.description2 }` : '';
-	const codeLen = !code ? 0 : `<span class="codelength">${
-		code instanceof Array ? code.join('').length : code.length }B</span>`;
-	const codeHTML = !code && !lCode ? '' : (
-		lCode ? `<a class="code-load" loadcode="${ lCode }"${
-			sRate ? ` samplerate="${ sRate }"` : '' }>&#9658; Click to load  pretty code</a>${
-			code ? '</br>' : '' }` : ''
-	) + (code ? processCodeHTML(code, sRate) + ' ' + codeLen : '');
-	return isChildren ?
-		codeHTML + (descrHTML ? starHTML + ' ' + descrHTML : starHTML) + descr2HTML :
-		descrHTML + (code || lCode ? starHTML + '<br>\r\n' + codeHTML + descr2HTML : '');
+	let starred = '';
+	if(entryObj.starred) {
+		starred = ['star-white', 'star-yellow'][entryObj.starred - 1];
+	}
+	if(entryObj.codeFile) {
+		entry += ` <a class="code-load" data-songdata='${
+			JSON.stringify(stripEntryToSong(entryObj)) }' data-code-file="${
+			entryObj.codeFile }" title="Click to load the pretty code">► pretty code</a>`;
+	}
+	if(entry.length) {
+		entry += '<br>\n';
+	}
+	if(entryObj.code) {
+		entry += `<code data-songdata='${
+			JSON.stringify(stripEntryToSong(entryObj)) }'>${ escapeHTML(entryObj.code) }</code>
+			<span class="code-length">${ entryObj.code.length }c</span>`;
+	}
+	if(entryObj.children) {
+		let children = '';
+		for(let i = 0, len = entryObj.children.length; i < len; ++i) {
+			children += createEntryElem(parseEntry(entryObj.children[i]));
+		}
+		entry += `<div class="list-block list-dependant">${ children }</div>`;
+	}
+	return `<div class="${ entryObj.code || entryObj.codeFile || entryObj.children ?
+		'list-entry' : 'list-text' } ${ starred || '' }">${ entry }</div>`;
 }
 
 function addPlaylist(obj, id) {
-	const html = [];
-	const arr = obj.playlist[id];
-	for(let i = 0, len = arr.length; i < len; ++i) {
-		const entry = arr[i];
-		const entryHTML = [getEntryHTML(entry, false)];
-		const { children } = entry;
-		if(children) {
-			for(let j = 0, cLen = children.length; j < cLen; ++j) {
-				entryHTML.push(getEntryHTML(children[j], true));
-			}
-		}
-		html.push(entryHTML.join('<br>\r\n'));
+	let playlist = '';
+	const playlistArr = obj.playlists[id];
+	for(let i = 0, len = playlistArr.length; i < len; ++i) {
+		playlist += createEntryElem(parseEntry(playlistArr[i]));
 	}
-	$id(`library-${ id }`).innerHTML = `<ul><li>${ html.join('</li>\r\n<li>') }</li></ul>`;
+	$id(`library-${ id }`).insertAdjacentHTML('beforeend',
+		`<div class="list-block list-main">${ playlist }</div>`);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -78,12 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState === 4 && xhr.status === 200) {
 			const obj = JSON.parse(xhr.responseText);
-			for(const p in obj.playlist) {
+			for(const p in obj.playlists) {
 				addPlaylist(obj, p);
 			}
 		}
 	};
-	xhr.open('GET', 'playlist.json', true);
+	xhr.open('GET', 'playlists.json', true);
 	xhr.send(null);
 });
 }());
