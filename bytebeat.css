@@ -123,8 +123,7 @@ code {
 }
 
 #control-counter {
-	font-size: 1em;
-	line-height: 1.6em;
+	align-self: center;
 	cursor: pointer;
 }
 
