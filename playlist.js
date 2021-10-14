@@ -31,10 +31,12 @@ function createEntryElem(entryObj) {
 		const authorsArr = Array.isArray(entryObj.author) ? entryObj.author : [entryObj.author];
 		for(let i = 0, len = authorsArr.length; i < len; ++i) {
 			const author = authorsArr[i];
-			authorsList += typeof author === 'string' ?
-				entryObj.description || !entryObj.url ? author :
-					`<a href="${ entryObj.url }" target="_blank">${ author }</a>` :
-				`<a href="${ author[1] }" target="_blank">${ author[0] }</a>`;
+			if(typeof author === 'string') {
+				authorsList += entryObj.description || !entryObj.url ? author :
+					`<a href="${ entryObj.url }" target="_blank">${ author }</a>`;
+			} else {
+				authorsList += `<a href="${ author[1] }" target="_blank">${ author[0] }</a>`;
+			}
 			if(i < len - 1) {
 				authorsList += ', ';
 			}
