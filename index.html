@@ -17,6 +17,7 @@
 	<div class="content">
 		<div class="container-fixed">
 			<textarea id="input-code" spellcheck="false">t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3</textarea>
+			<div id="error"></div>
 			<div class="controls">
 				<button id="control-toggleplay" class="control-button" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">&#9654;</button>
 				<button id="control-scaledown" class="control-button" onclick="bytebeat.changeScale(-1);">+</button>
@@ -27,7 +28,7 @@
 					<option value="Signed Bytebeat">Signed Bytebeat</option>
 					<option value="Floatbeat">Floatbeat</option>
 				</select>
-				<select id="control-samplerate" class="control-select" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value); bytebeat.refeshCalc();">
+				<select id="control-samplerate" class="control-select" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value);">
 					<option value="8000" selected>8000Hz</option>
 					<option value="11025">11025Hz</option>
 					<option value="16000">16000Hz</option>
@@ -40,7 +41,6 @@
 				--><span id="control-counter-value">0</span>
 				</div>
 			</div>
-			<div id="error"></div>
 			<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>

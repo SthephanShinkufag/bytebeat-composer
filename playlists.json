@@ -435,13 +435,13 @@
 			"description": "Constructivist",
 			"author": "A1k0n",
 			"url": "https://news.ycombinator.com/item?id=3064980",
-			"code": "SS=function(s,o,r,p){var c=s.charCodeAt((t>>r)%p);return c==95?0:31&t*pow(2,c/12-o)},3*SS(\"0_0_____7_7_____037:<<\",6,10,32)+5*(t&4096?SS(\"037\",4,8,3)*(4096-(t&4095))>>12:0)",
+			"code": "SS=function(s,o,r,p){c=s.charCodeAt((t>>r)%p);return c==32?0:31&t*Math.pow(2,c/12-o)},3*SS(\"0 0     7 7     037:<<\",6,10,32)+5*(t&4096?SS(\"037\",4,8,3)*(4096-(t&4095))>>12:0)",
 			"starred": 2
 		}, {
 			"description": "I could not explain this to the IT dept",
 			"author": "radian",
 			"url": "https://battleofthebits.org/arena/Entry/I+could+not+explain+this+to+the+IT+dept./17673/",
-			"code": "S=function(c,o,r,p){var c=c.charCodeAt((t>>r)%p);return c==32?0:31&t*pow(2,c/12-o)},C=function(){if(t%8)return t&8096?S(\"047\",4,8,3)*(4096-(t&4095))>>12:0;return t&8096?S(\"259049\",4,8,6)*(4096-(t&4095))>>13:0},S(\"20-0-0-034-4-0-047-259:<<\",7,10,32)+C()+(t&4096?S(\"047\",3,8,3)*(4096-(t&4095))>>12:0)+(t&4096?S(\"0407\",5,16,4)*(4096-(t&4095))>>12:0)+(800/(t&16383)&2)*35",
+			"code": "S=function(c,o,r,p){var c=c.charCodeAt((t>>r)%p);return c==32?0:31&t*pow(2,c/12-o)},C=function(){if(t%8)return t&8096?S(\"047\",4,8,3)*(4096-(t&4095))>>12:0;return t&8096?S(\"259049\",4,8,6)*(4096-(t&4095))>>13:0},S(\"20 0 0 034 4 0 047 259:<<\",7,10,32)+C()+(t&4096?S(\"047\",3,8,3)*(4096-(t&4095))>>12:0)+(t&4096?S(\"0407\",5,16,4)*(4096-(t&4095))>>12:0)+(800/(t&16383)&2)*35",
 			"starred": 1
 		}, {
 			"author": "mu6k",
@@ -898,13 +898,6 @@
 				"starred": 2
 			}]
 		}, {
-			"description": "Bit-Shift Melodies",
-			"author": "Savestate",
-			"url": "https://battleofthebits.org/arena/Entry/Bit-Shift+Melodies/17525/",
-			"sampleRate": "44100",
-			"codeFile": "Savestate - Bit-Shift Melodies.js",
-			"starred": 2
-		}, {
 			"author": "Bp103",
 			"children": [{
 				"description": "the proto-version",
@@ -946,6 +939,13 @@
 				"codeFile": "Bp103 - bytebeat song 06-15-2021.js",
 				"starred": 2
 			}]
+		}, {
+			"description": "Bit-Shift Melodies",
+			"author": "Savestate",
+			"url": "https://battleofthebits.org/arena/Entry/Bit-Shift+Melodies/17525/",
+			"sampleRate": "44100",
+			"codeFile": "Savestate - Bit-Shift Melodies.js",
+			"starred": 2
 		}, {
 			"description": "Impromptu (Diatom)",
 			"author": "Radnyx",

@@ -10,40 +10,40 @@ function $toggle(el) {
 	}
 }
 
-function BytebeatClass() {
-	this.audioCtx = null;
-	this.audioGain = null;
-	this.audioRecorder = null;
-	this.audioSample = 0;
-	this.bufferSize = 2048;
-	this.byteSample = 0;
-	this.canvasCtx = null;
-	this.canvasElem = null;
-	this.drawScale = 5;
-	this.drawXpos = 0;
-	this.errorElem = null;
-	this.fnRemover = null;
-	this.inputElem = null;
-	this.isPlaying = false;
-	this.isRecording = false;
-	this.lastByteValue = NaN;
-	this.lastFlooredTime = -1;
-	this.lastValue = NaN;
-	this.mode = 'Bytebeat';
-	this.recordChunks = [];
-	this.sampleRate = 8000;
-	this.sampleRatio = 1;
-	document.addEventListener('DOMContentLoaded', () => {
-		this.initLibrary();
-		this.initCodeInput();
-		this.initControls();
-		this.initCanvas();
-		this.refreshCalc();
-		this.initAudioContext();
-	});
-}
-
-BytebeatClass.prototype = {
+const bytebeat = new class Bytebeat {
+	constructor() {
+		this.audioCtx = null;
+		this.audioGain = null;
+		this.audioRecorder = null;
+		this.audioSample = 0;
+		this.bufferSize = 2048;
+		this.byteSample = 0;
+		this.canvasCtx = null;
+		this.canvasElem = null;
+		this.drawScale = 5;
+		this.drawXpos = 0;
+		this.errorElem = null;
+		this.fnRemover = null;
+		this.func = () => 0;
+		this.inputElem = null;
+		this.isPlaying = false;
+		this.isRecording = false;
+		this.lastByteValue = NaN;
+		this.lastFlooredTime = -1;
+		this.lastValue = NaN;
+		this.mode = 'Bytebeat';
+		this.recordChunks = [];
+		this.sampleRate = 8000;
+		this.sampleRatio = 1;
+		document.addEventListener('DOMContentLoaded', () => {
+			this.initLibrary();
+			this.initCodeInput();
+			this.initControls();
+			this.initCanvas();
+			this.refreshCalc();
+			this.initAudioContext();
+		});
+	}
 	get saveData() {
 		const a = document.createElement('a');
 		document.body.appendChild(a);
@@ -57,14 +57,14 @@ BytebeatClass.prototype = {
 		};
 		Object.defineProperty(this, 'saveData', { value: fn });
 		return fn;
-	},
+	}
 	applySampleRate(rate) {
 		this.setSampleRate(rate);
 		$id('control-samplerate').value = rate;
-	},
+	}
 	applyMode(mode) {
 		this.mode = $id('control-mode').value = mode;
-	},
+	}
 	changeScale(amount) {
 		if(!amount) {
 			return;
@@ -76,17 +76,17 @@ BytebeatClass.prototype = {
 		} else {
 			this.controlScaleDown.removeAttribute('disabled');
 		}
-	},
+	}
 	changeVolume(el) {
 		const fraction = parseInt(el.value) / parseInt(el.max);
 		// Let's use an x * x curve (x-squared) instead of simple linear (x)
 		this.audioGain.gain.value = fraction * fraction;
-	},
+	}
 	clearCanvas() {
 		const { width, height } = this.canvasElem;
 		this.canvasCtx.clearRect(0, 0, width, height);
 		this.imageData = this.canvasCtx.getImageData(0, 0, width, height);
-	},
+	}
 	drawGraphics(buffer) {
 		const drawArea = buffer.length;
 		if(!drawArea) {
@@ -128,10 +128,7 @@ BytebeatClass.prototype = {
 		} else {
 			this.timeCursor.style.display = 'none';
 		}
-	},
-	func() {
-		return 0;
-	},
+	}
 	initAudioContext() {
 		this.audioCtx = new (window.AudioContext || window.webkitAudioContext ||
 			window.mozAudioContext || window.oAudioContext || window.msAudioContext)();
@@ -211,7 +208,7 @@ BytebeatClass.prototype = {
 			this.saveData(new Blob(this.recordChunks, { type }), file);
 		}.bind(this);
 		audioGain.connect(mediaDest);
-	},
+	}
 	initCodeInput() {
 		this.errorElem = $id('error');
 		this.inputElem = $id('input-code');
@@ -251,12 +248,12 @@ BytebeatClass.prototype = {
 			}
 			this.loadCode(pData, false);
 		}
-	},
+	}
 	initCanvas() {
 		this.timeCursor = $id('canvas-timecursor');
 		this.canvasElem = $id('canvas-main');
 		this.canvasCtx = this.canvasElem.getContext('2d');
-	},
+	}
 	initControls() {
 		this.canvasTogglePlay = $id('canvas-toggleplay');
 		this.controlTogglePlay = $id('control-toggleplay');
@@ -264,7 +261,7 @@ BytebeatClass.prototype = {
 		this.controlScaleDown = $id('control-scaledown');
 		this.controlCounter = $id('control-counter-value');
 		this.controlVolume = $id('control-volume');
-	},
+	}
 	initLibrary() {
 		Array.prototype.forEach.call($Q('.library-header'), el =>
 			(el.onclick = () => $toggle(el.nextElementSibling)));
@@ -292,7 +289,7 @@ BytebeatClass.prototype = {
 				el.title = 'Click to play this code';
 			}
 		};
-	},
+	}
 	loadCode({ code, sampleRate, mode }, start = true) {
 		this.inputElem.value = code;
 		this.applySampleRate(+sampleRate || 8000);
@@ -302,7 +299,7 @@ BytebeatClass.prototype = {
 			this.resetTime();
 			this.togglePlay(true);
 		}
-	},
+	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {
 			this.audioRecorder.start();
@@ -312,7 +309,7 @@ BytebeatClass.prototype = {
 				this.togglePlay(true);
 			}
 		}
-	},
+	}
 	refreshCalc() {
 		const oldFunc = this.func;
 		const codeText = this.inputElem.value;
@@ -329,12 +326,12 @@ BytebeatClass.prototype = {
 			return `let ${ Object.keys(keys).sort().join(',\n') }`;
 		}());
 		try {
-			bytebeat.func = Function(...params, 't', `${ this.fnRemover }; return 0, ${ codeText || 0 } \n;`)
+			this.func = new Function(...params, 't', `${ this.fnRemover }; return 0, ${ codeText || 0 } \n;`)
 				.bind(window, ...values);
-			bytebeat.func(0);
+			this.func(0);
 		} catch(err) {
-			bytebeat.func = oldFunc;
-			bytebeat.errorElem.innerText = err.toString();
+			this.func = oldFunc;
+			this.errorElem.innerText = err.toString();
 			return;
 		}
 		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
@@ -352,7 +349,7 @@ BytebeatClass.prototype = {
 		}
 		pData = JSON.stringify(pData);
 		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
-	},
+	}
 	resetTime() {
 		this.setTime(0);
 		this.clearCanvas();
@@ -360,7 +357,7 @@ BytebeatClass.prototype = {
 		if(!this.isPlaying) {
 			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
 		}
-	},
+	}
 	setTime(value, resetAudio = true) {
 		this.controlCounter.textContent = this.byteSample = value;
 		if(resetAudio) {
@@ -369,11 +366,11 @@ BytebeatClass.prototype = {
 			this.lastValue = NaN;
 			this.lastByteValue = NaN;
 		}
-	},
+	}
 	setSampleRate(rate) {
 		this.sampleRate = rate;
 		this.updateSampleRatio();
-	},
+	}
 	togglePlay(isPlay) {
 		this.controlTogglePlay.innerHTML = isPlay ? '&#9632;' : '&#9654;';
 		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
@@ -394,7 +391,7 @@ BytebeatClass.prototype = {
 			this.isRecording = false;
 		}
 		this.isPlaying = false;
-	},
+	}
 	updateSampleRatio() {
 		if(this.audioCtx) {
 			const flooredTimeOffset = this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);
@@ -403,6 +400,4 @@ BytebeatClass.prototype = {
 			return this.sampleRatio;
 		}
 	}
-};
-
-const bytebeat = new BytebeatClass();
+}();

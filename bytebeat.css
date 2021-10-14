@@ -17,14 +17,6 @@ a:hover, code:hover {
 	color: #ed88fb !important;
 }
 
-a.link-home {
-	text-decoration: none;
-}
-
-a.link-home:not(:hover) {
-	color: #fff;
-}
-
 #canvas-container {
 	display: flex;
 	position: relative;
@@ -51,7 +43,7 @@ a.link-home:not(:hover) {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	border-left: 2px solid #98c9ff;
+	border-left: 2px solid #7a9dc4;
 	box-shadow: 0 0 8px #6ab2ff, 0 0 15px #fff;
 	left: 0;
 }
@@ -97,7 +89,8 @@ code {
 
 .code-load {
 	padding: 0 5px !important;
-	color: #c4aa6f;
+	color: #dfe5ee;
+	font-weight: unset !important;
 	white-space: nowrap;
 }
 
@@ -153,7 +146,7 @@ code {
 	height: 20px;
 	width: 10px;
 	border-radius: 4px;
-	background: #fff;
+	background: #d3d8df;
 	cursor: pointer;
 }
 
@@ -162,7 +155,7 @@ code {
 	height: 20px;
 	width: 10px;
 	border-radius: 4px;
-	background: #fff;
+	background: #d3d8df;
 	cursor: pointer;
 }
 
@@ -249,7 +242,7 @@ code {
 }
 
 .list-main > .list-entry:not(:first-child) {
-    border-top: 1px solid #404040;
+	border-top: 1px solid #404040;
 	padding-top: 3px;
 }
 

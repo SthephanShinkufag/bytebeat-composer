@@ -2,9 +2,12 @@
 
 (function() {
 const $id = id => document.getElementById(id);
-const escapeHTML = text => text.replace(
-	/[\u0000-\u002F\u003A-\u0040\u005B-\u0060\u007B-\u00FF]/g,
-	c => `&#${ ('000' + c.charCodeAt(0)).substr(-4, 4) };`);
+
+let cachedElemParent, cachedTextNode;
+function escapeHTML(text) {
+	cachedTextNode.nodeValue = text;
+	return cachedElemParent.innerHTML;
+}
 
 function parseEntry(entryObj) {
 	if(Array.isArray(entryObj.code)) {
@@ -28,9 +31,9 @@ function createEntryElem(entryObj) {
 		const authorsArr = Array.isArray(entryObj.author) ? entryObj.author : [entryObj.author];
 		for(let i = 0, len = authorsArr.length; i < len; ++i) {
 			const author = authorsArr[i];
-			authorsList += typeof author === 'string' ? (
+			authorsList += typeof author === 'string' ?
 				entryObj.description || !entryObj.url ? author :
-					`<a href="${ entryObj.url }" target="_blank">${ author }</a>`) :
+					`<a href="${ entryObj.url }" target="_blank">${ author }</a>` :
 				`<a href="${ author[1] }" target="_blank">${ author[0] }</a>`;
 			if(i < len - 1) {
 				authorsList += ', ';
@@ -84,6 +87,9 @@ function addPlaylist(obj, id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	cachedElemParent = document.createElement('div');
+	cachedTextNode = document.createTextNode('');
+	cachedElemParent.appendChild(cachedTextNode);
 	const xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState === 4 && xhr.status === 200) {
