@@ -182,7 +182,7 @@ const bytebeat = new class Bytebeat {
 			if(this.isPlaying) {
 				this.audioSample += chData.length;
 				this.drawGraphics(drawBuffer);
-				this.setTime(byteSample, false);
+				this.setByteSample(byteSample, false);
 			}
 		};
 		const audioGain = this.audioGain = this.audioCtx.createGain();
@@ -192,10 +192,8 @@ const bytebeat = new class Bytebeat {
 
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
-		audioRecorder.ondataavailable = function(e) {
-			this.recordChunks.push(e.data);
-		}.bind(this);
-		audioRecorder.onstop = function(e) {
+		audioRecorder.ondataavailable = e => this.recordChunks.push(e.data);
+		audioRecorder.onstop = e => {
 			let file, type;
 			const types = ['audio/webm', 'audio/ogg'];
 			const files = ['track.webm', 'track.ogg'];
@@ -206,23 +204,23 @@ const bytebeat = new class Bytebeat {
 				}
 			}
 			this.saveData(new Blob(this.recordChunks, { type }), file);
-		}.bind(this);
+		};
 		audioGain.connect(mediaDest);
 	}
 	initCodeInput() {
 		this.errorElem = $id('error');
 		this.inputElem = $id('input-code');
-		this.inputElem.addEventListener('onchange', this.refreshCalc.bind(this));
-		this.inputElem.addEventListener('onkeyup', this.refreshCalc.bind(this));
-		this.inputElem.addEventListener('input', this.refreshCalc.bind(this));
+		this.inputElem.addEventListener('onchange', () => this.refreshCalc());
+		this.inputElem.addEventListener('onkeyup', () => this.refreshCalc());
+		this.inputElem.addEventListener('input', () => this.refreshCalc());
 		this.inputElem.addEventListener('keydown', e => {
-			if(e.keyCode === 9 /* TAB */ && !e.shiftKey) {
+			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
 				e.preventDefault();
 				const el = e.target;
-				const { value } = el;
-				const selStart = el.selectionStart;
-				el.value = value.slice(0, selStart) + '\t' + value.slice(el.selectionEnd);
-				el.setSelectionRange(selStart + 1, selStart + 1);
+				const { value, selectionStart } = el;
+				el.value = value.slice(0, selectionStart) + '\t' + value.slice(el.selectionEnd);
+				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
+				this.refreshCalc();
 			}
 		});
 		/* global pako */
@@ -263,27 +261,26 @@ const bytebeat = new class Bytebeat {
 		this.controlVolume = $id('control-volume');
 	}
 	initLibrary() {
-		Array.prototype.forEach.call($Q('.library-header'), el =>
-			(el.onclick = () => $toggle(el.nextElementSibling)));
+		$Q('.library-header').forEach(el => (el.onclick = () => $toggle(el.nextElementSibling)));
 		const libraryElem = $q('.container-scroll');
-		libraryElem.onclick = function(e) {
+		libraryElem.onclick = e => {
 			const el = e.target;
 			if(el.tagName === 'CODE') {
 				this.loadCode(Object.assign({ code: el.innerText },
 					el.hasAttribute('data-songdata') ? JSON.parse(el.dataset.songdata) : {}));
 			} else if(el.classList.contains('code-load')) {
 				const xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function() {
+				xhr.onreadystatechange = () => {
 					if(xhr.readyState === 4 && xhr.status === 200) {
 						this.loadCode(Object.assign(JSON.parse(el.dataset.songdata),
 							{ code: xhr.responseText }));
 					}
-				}.bind(this);
+				};
 				xhr.open('GET', 'library/' + el.dataset.codeFile, true);
 				xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 				xhr.send(null);
 			}
-		}.bind(this);
+		};
 		libraryElem.onmouseover = function(e) {
 			const el = e.target;
 			if(el.tagName === 'CODE') {
@@ -314,11 +311,13 @@ const bytebeat = new class Bytebeat {
 	refreshCalc() {
 		const oldFunc = this.func;
 		const codeText = this.inputElem.value;
+
 		// Create shortened Math functions
 		const params = Object.getOwnPropertyNames(Math);
 		const values = params.map(k => Math[k]);
 		params.push('int');
 		values.push(Math.floor);
+
 		// Remove functions to prevent XSS
 		this.fnRemover = this.fnRemover || (function() {
 			const keys = {};
@@ -326,6 +325,8 @@ const bytebeat = new class Bytebeat {
 			['console', 'escape', 'Math', 'parseInt', 'window'].forEach(key => delete keys[key]);
 			return `let ${ Object.keys(keys).sort().join(',\n') }`;
 		}());
+
+		// Test bytebeat code
 		try {
 			this.func = new Function(...params, 't', `${ this.fnRemover }; return 0, ${ codeText || 0 } \n;`)
 				.bind(window, ...values);
@@ -335,12 +336,15 @@ const bytebeat = new class Bytebeat {
 			this.errorElem.innerText = err.toString();
 			return;
 		}
+		this.errorElem.innerText = '';
+
 		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
 		for(let i = 0; i < 26; ++i) {
 			delete window[String.fromCharCode(65 + i)];
 			delete window[String.fromCharCode(97 + i)];
 		}
-		this.errorElem.innerText = '';
+
+		// Generate url
 		let pData = { code: codeText };
 		if(this.sampleRate !== 8000) {
 			pData.sampleRate = this.sampleRate;
@@ -352,14 +356,14 @@ const bytebeat = new class Bytebeat {
 		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
 	}
 	resetTime() {
-		this.setTime(0);
+		this.setByteSample(0);
 		this.clearCanvas();
-		this.timeCursor.style.cssText = 'display: none; left: 0px;';
+		this.timeCursor.style.display = 'none';
 		if(!this.isPlaying) {
 			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
 		}
 	}
-	setTime(value, resetAudio = true) {
+	setByteSample(value, resetAudio = true) {
 		this.controlCounter.textContent = this.byteSample = value;
 		if(resetAudio) {
 			this.audioSample = 0;
