@@ -36,12 +36,17 @@ const bytebeat = new class Bytebeat {
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
 		this.timeCursor = null;
-		this.timeCursorDisabled = false;
 		document.addEventListener('DOMContentLoaded', () => {
-			this.initCanvas();
+			this.canvasElem = $id('canvas-main');
+			this.canvasCtx = this.canvasElem.getContext('2d');
+			this.canvasTogglePlay = $id('canvas-toggleplay');
+			this.controlCounter = $id('control-counter-value');
+			this.controlScaleDown = $id('control-scaledown');
+			this.controlTogglePlay = $id('control-toggleplay');
+			this.controlVolume = $id('control-volume');
+			this.timeCursor = $id('canvas-timecursor');
 			this.initLibrary();
 			this.initCodeInput();
-			this.initControls();
 			this.refreshCalc();
 			this.initAudioContext();
 		});
@@ -260,19 +265,6 @@ const bytebeat = new class Bytebeat {
 			console.error('Unrecognized url data');
 		}
 	}
-	initCanvas() {
-		this.timeCursor = $id('canvas-timecursor');
-		this.canvasElem = $id('canvas-main');
-		this.canvasCtx = this.canvasElem.getContext('2d');
-	}
-	initControls() {
-		this.canvasTogglePlay = $id('canvas-toggleplay');
-		this.controlTogglePlay = $id('control-toggleplay');
-		this.controlScaleUp = $id('control-scaleup');
-		this.controlScaleDown = $id('control-scaledown');
-		this.controlCounter = $id('control-counter-value');
-		this.controlVolume = $id('control-volume');
-	}
 	initLibrary() {
 		$Q('.library-header').forEach(el => (el.onclick = () => $toggle(el.nextElementSibling)));
 		const libraryElem = $q('.container-scroll');
@@ -371,7 +363,7 @@ const bytebeat = new class Bytebeat {
 	resetTime() {
 		this.setByteSample(0);
 		this.clearCanvas();
-		this.timeCursor.classList.add('disabled');
+		this.timeCursor.style.left = 0;
 		if(!this.isPlaying) {
 			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
 		}
