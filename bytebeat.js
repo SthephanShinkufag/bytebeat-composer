@@ -21,16 +21,16 @@ const bytebeat = new class Bytebeat {
 		this.canvasCtx = null;
 		this.canvasElem = null;
 		this.drawScale = 5;
-		this.drawXpos = 0;
 		this.errorElem = null;
 		this.fnRemover = null;
 		this.func = () => 0;
 		this.inputElem = null;
 		this.isPlaying = false;
 		this.isRecording = false;
-		this.lastByteValue = NaN;
+		this.lastByteValue = 0;
 		this.lastFlooredTime = -1;
-		this.lastValue = NaN;
+		this.lastFuncValue = -1;
+		this.lastValue = 0;
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
@@ -48,15 +48,15 @@ const bytebeat = new class Bytebeat {
 		const a = document.createElement('a');
 		document.body.appendChild(a);
 		a.style.display = 'none';
-		const fn = function(blob, fileName) {
+		const saveData = function(blob, fileName) {
 			const url = URL.createObjectURL(blob);
 			a.href = url;
 			a.download = fileName;
 			a.click();
 			setTimeout(() => window.URL.revokeObjectURL(url));
 		};
-		Object.defineProperty(this, 'saveData', { value: fn });
-		return fn;
+		Object.defineProperty(this, 'saveData', { value: saveData });
+		return saveData;
 	}
 	applySampleRate(rate) {
 		this.setSampleRate(rate);
@@ -71,7 +71,7 @@ const bytebeat = new class Bytebeat {
 		}
 		this.drawScale = Math.max(this.drawScale + amount, 0);
 		this.clearCanvas();
-		if(this.drawScale === 0) {
+		if(this.drawScale <= 0) {
 			this.controlScaleDown.setAttribute('disabled', true);
 		} else {
 			this.controlScaleDown.removeAttribute('disabled');
@@ -79,13 +79,10 @@ const bytebeat = new class Bytebeat {
 	}
 	changeVolume(el) {
 		const fraction = parseInt(el.value) / parseInt(el.max);
-		// Let's use an x * x curve (x-squared) instead of simple linear (x)
 		this.audioGain.gain.value = fraction * fraction;
 	}
 	clearCanvas() {
-		const { width, height } = this.canvasElem;
-		this.canvasCtx.clearRect(0, 0, width, height);
-		this.imageData = this.canvasCtx.getImageData(0, 0, width, height);
+		this.canvasCtx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height);
 	}
 	drawGraphics(buffer) {
 		const drawArea = buffer.length;
@@ -102,14 +99,15 @@ const bytebeat = new class Bytebeat {
 		} else {
 			const startX = drawX();
 			const endX = startX + drawLen(drawArea);
+			const ceiledEndx = Math.ceil(endX);
 			this.canvasCtx.clearRect(
 				Math.ceil(startX),
 				0,
-				endX >= 0 && endX < width ? Math.ceil(endX) - Math.ceil(startX) : width - Math.floor(startX),
+				endX >= 0 && endX < width ? ceiledEndx - Math.ceil(startX) : width - Math.floor(startX),
 				height
 			);
 			if(endX < 0 || endX >= width) {
-				this.canvasCtx.clearRect(0, 0, Math.floor(mod(Math.ceil(endX), width)), height);
+				this.canvasCtx.clearRect(0, 0, Math.floor(mod(ceiledEndx, width)), height);
 			}
 		}
 
@@ -123,8 +121,8 @@ const bytebeat = new class Bytebeat {
 
 		// Cursor
 		if(this.sampleRate >> this.drawScale < 3950) {
-			this.timeCursor.style.left = Math.ceil(drawX(drawArea)) / width * 100 + '%';
-			this.timeCursor.style.display = 'block';
+			this.timeCursor.style.cssText =
+				`display: block; left: ${ Math.ceil(drawX(drawArea)) / width * 100 }%;`;
 		} else {
 			this.timeCursor.style.display = 'none';
 		}
@@ -145,8 +143,12 @@ const bytebeat = new class Bytebeat {
 		const processor = this.audioCtx.createScriptProcessor(this.bufferSize, 1, 1);
 		processor.onaudioprocess = e => {
 			const chData = e.outputBuffer.getChannelData(0);
-			const dataLen = chData.length;
-			if(!dataLen) {
+			const chDataLen = chData.length;
+			if(!chDataLen) {
+				return;
+			}
+			if(!this.isPlaying) {
+				chData.fill(0);
 				return;
 			}
 			let time = this.sampleRatio * this.audioSample;
@@ -155,32 +157,39 @@ const bytebeat = new class Bytebeat {
 			const startFlooredTime = this.lastFlooredTime;
 			const isBytebeat = this.mode === 'Bytebeat';
 			const isFloatbeat = this.mode === 'Floatbeat';
-			for(let i = 0; i < dataLen; ++i) {
+			for(let i = 0; i < chDataLen; ++i) {
 				time += this.sampleRatio;
 				const flooredTime = Math.floor(time);
-				if(!this.isPlaying) {
-					this.lastValue = 0;
-				} else if(this.lastFlooredTime !== flooredTime) {
-					const roundSample = Math.floor(byteSample);
-					if(isBytebeat) {
-						this.lastByteValue = this.func(roundSample) & 255;
-						this.lastValue = this.lastByteValue / 127.5 - 1;
-					} else if(isFloatbeat) {
-						this.lastValue = this.func(roundSample);
-						this.lastByteValue = Math.round((this.lastValue + 1) * 127.5);
-					} else { // "Signed Byteveat"
-						this.lastByteValue = (this.func(roundSample) + 128) & 255;
-						this.lastValue = this.lastByteValue / 127.5 - 1;
+				if(this.lastFlooredTime !== flooredTime) {
+					let funcValue = 0;
+					let noErrors = true;
+					try {
+						funcValue = this.func(Math.floor(byteSample));
+					} catch(err) {
+						noErrors = false;
+					}
+					if(funcValue !== this.lastFuncValue && noErrors) {
+						if(isBytebeat) {
+							this.lastByteValue = funcValue & 255;
+							this.lastValue = this.lastByteValue / 127.5 - 1;
+						} else if(isFloatbeat) {
+							this.lastValue = funcValue;
+							this.lastByteValue = Math.round((this.lastValue + 1) * 127.5);
+						} else { // "Signed Byteveat"
+							this.lastByteValue = (funcValue + 128) & 255;
+							this.lastValue = this.lastByteValue / 127.5 - 1;
+						}
 					}
 					drawBuffer.length = Math.abs(flooredTime - startFlooredTime);
 					drawBuffer.fill(this.lastByteValue, Math.abs(this.lastFlooredTime - startFlooredTime));
 					byteSample += flooredTime - this.lastFlooredTime;
+					this.lastFuncValue = funcValue;
 					this.lastFlooredTime = flooredTime;
 				}
 				chData[i] = this.lastValue;
 			}
 			if(this.isPlaying) {
-				this.audioSample += chData.length;
+				this.audioSample += chDataLen;
 				this.drawGraphics(drawBuffer);
 				this.setByteSample(byteSample, false);
 			}
@@ -210,8 +219,6 @@ const bytebeat = new class Bytebeat {
 	initCodeInput() {
 		this.errorElem = $id('error');
 		this.inputElem = $id('input-code');
-		this.inputElem.addEventListener('onchange', () => this.refreshCalc());
-		this.inputElem.addEventListener('onkeyup', () => this.refreshCalc());
 		this.inputElem.addEventListener('input', () => this.refreshCalc());
 		this.inputElem.addEventListener('keydown', e => {
 			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
@@ -224,11 +231,11 @@ const bytebeat = new class Bytebeat {
 			}
 		});
 		/* global pako */
-		if(window.location.hash.indexOf('#b64') === 0) { // XXX: old format
+		if(window.location.hash.startsWith('#b64')) { // XXX: old format
 			this.inputElem.value = pako.inflateRaw(
 				atob(decodeURIComponent(window.location.hash.substr(4))), { to: 'string' }
 			) + ';';
-		} else if(window.location.hash.indexOf('#v3b64') === 0) {
+		} else if(window.location.hash.startsWith('#v3b64')) {
 			let pData = pako.inflateRaw(
 				atob(decodeURIComponent(window.location.hash.substr(6))), { to: 'string' }
 			);
@@ -242,9 +249,14 @@ const bytebeat = new class Bytebeat {
 					}
 				} catch(err) {
 					console.error("Couldn't load data from url:", err);
+					pData = null;
 				}
 			}
-			this.loadCode(pData, false);
+			if(pData !== null) {
+				this.loadCode(pData, false);
+			}
+		} else if(window.location.hash) {
+			console.error('Unrecognized url data');
 		}
 	}
 	initCanvas() {
@@ -366,10 +378,8 @@ const bytebeat = new class Bytebeat {
 	setByteSample(value, resetAudio = true) {
 		this.controlCounter.textContent = this.byteSample = value;
 		if(resetAudio) {
-			this.audioSample = 0;
-			this.lastFlooredTime = -1;
-			this.lastValue = NaN;
-			this.lastByteValue = NaN;
+			this.audioSample = this.lastByteValue = this.lastValue = 0;
+			this.lastFlooredTime = this.lastFuncValue = -1;
 		}
 	}
 	setSampleRate(rate) {
@@ -380,22 +390,15 @@ const bytebeat = new class Bytebeat {
 		this.controlTogglePlay.innerHTML = isPlay ? '&#9632;' : '&#9654;';
 		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
 		if(isPlay) {
-			// Play
 			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
 			}
-			if(!this.isPlaying) {
-				this.isPlaying = true;
-			}
-			return;
-		}
-		// Stop
-		if(this.isRecording) {
+		} else if(this.isRecording) {
 			this.audioRecorder.stop();
 			this.isRecording = false;
 		}
-		this.isPlaying = false;
+		this.isPlaying = isPlay;
 	}
 	updateSampleRatio() {
 		if(this.audioCtx) {
