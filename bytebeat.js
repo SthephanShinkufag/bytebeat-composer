@@ -35,11 +35,13 @@ const bytebeat = new class Bytebeat {
 		this.recordChunks = [];
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
+		this.timeCursor = null;
+		this.timeCursorDisabled = false;
 		document.addEventListener('DOMContentLoaded', () => {
+			this.initCanvas();
 			this.initLibrary();
 			this.initCodeInput();
 			this.initControls();
-			this.initCanvas();
 			this.refreshCalc();
 			this.initAudioContext();
 		});
@@ -71,6 +73,7 @@ const bytebeat = new class Bytebeat {
 		}
 		this.drawScale = Math.max(this.drawScale + amount, 0);
 		this.clearCanvas();
+		this.toggleTimeCursor();
 		if(this.drawScale <= 0) {
 			this.controlScaleDown.setAttribute('disabled', true);
 		} else {
@@ -93,6 +96,7 @@ const bytebeat = new class Bytebeat {
 		const mod = (a, b) => ((a % b) + b) % b;
 		const drawX = (i = 0, j = 0) => mod(((this.byteSample + i) / (1 << this.drawScale)) + j, width);
 		const drawLen = (i = 0, j = 0) => i / (1 << this.drawScale) + j;
+
 		// Clear canvas
 		if(drawArea >> this.drawScale > width) {
 			this.canvasCtx.clearRect(0, 0, width, height);
@@ -120,11 +124,8 @@ const bytebeat = new class Bytebeat {
 		this.canvasCtx.putImageData(imageData, 0, 0);
 
 		// Cursor
-		if(this.sampleRate >> this.drawScale < 3950) {
-			this.timeCursor.style.cssText =
-				`display: block; left: ${ Math.ceil(drawX(drawArea)) / width * 100 }%;`;
-		} else {
-			this.timeCursor.style.display = 'none';
+		if(this.timeCursorEnabled()) {
+			this.timeCursor.style.left = Math.ceil(drawX(drawArea)) / width * 100 + '%';
 		}
 	}
 	initAudioContext() {
@@ -370,7 +371,7 @@ const bytebeat = new class Bytebeat {
 	resetTime() {
 		this.setByteSample(0);
 		this.clearCanvas();
-		this.timeCursor.style.display = 'none';
+		this.timeCursor.classList.add('disabled');
 		if(!this.isPlaying) {
 			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
 		}
@@ -385,6 +386,10 @@ const bytebeat = new class Bytebeat {
 	setSampleRate(rate) {
 		this.sampleRate = rate;
 		this.updateSampleRatio();
+		this.toggleTimeCursor();
+	}
+	timeCursorEnabled() {
+		return this.sampleRate >> this.drawScale < 3950;
 	}
 	togglePlay(isPlay) {
 		this.controlTogglePlay.innerHTML = isPlay ? '&#9632;' : '&#9654;';
@@ -399,6 +404,9 @@ const bytebeat = new class Bytebeat {
 			this.isRecording = false;
 		}
 		this.isPlaying = isPlay;
+	}
+	toggleTimeCursor() {
+		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled());
 	}
 	updateSampleRatio() {
 		if(this.audioCtx) {

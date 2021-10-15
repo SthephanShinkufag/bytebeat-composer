@@ -39,7 +39,6 @@ a:hover, code:hover {
 }
 
 #canvas-timecursor {
-	display: none;
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -162,6 +161,10 @@ code {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 2px 0;
+}
+
+.disabled {
+	display: none;
 }
 
 #error {
