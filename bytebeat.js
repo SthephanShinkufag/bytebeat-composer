@@ -29,6 +29,8 @@ const bytebeat = new class Bytebeat {
 			this.canvasCtx = this.canvasElem.getContext('2d');
 			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
 			this.controlCounter = document.getElementById('control-counter-value');
+			this.controlMode = document.getElementById('control-mode');
+			this.controlSampleRate = document.getElementById('control-samplerate');
 			this.controlScaleDown = document.getElementById('control-scaledown');
 			this.controlTogglePlay = document.getElementById('control-toggleplay');
 			this.controlVolume = document.getElementById('control-volume');
@@ -52,12 +54,8 @@ const bytebeat = new class Bytebeat {
 		Object.defineProperty(this, 'saveData', { value: saveData });
 		return saveData;
 	}
-	applySampleRate(rate) {
-		this.setSampleRate(rate);
-		document.getElementById('control-samplerate').value = rate;
-	}
-	applyMode(mode) {
-		this.mode = document.getElementById('control-mode').value = mode;
+	get timeCursorEnabled() {
+		return this.sampleRate >> this.drawScale < 3950;
 	}
 	changeScale(amount) {
 		if(!amount) {
@@ -116,7 +114,7 @@ const bytebeat = new class Bytebeat {
 		this.canvasCtx.putImageData(imageData, 0, 0);
 
 		// Cursor
-		if(this.timeCursorEnabled()) {
+		if(this.timeCursorEnabled) {
 			this.timeCursor.style.left = Math.ceil(drawX(drawArea)) / width * 100 + '%';
 		}
 	}
@@ -283,8 +281,8 @@ const bytebeat = new class Bytebeat {
 	}
 	loadCode({ code, sampleRate, mode }, start = true) {
 		this.inputElem.value = code;
-		this.applySampleRate(+sampleRate || 8000);
-		this.applyMode(mode || 'Bytebeat');
+		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000);
+		this.mode = this.controlMode.value = mode || 'Bytebeat';
 		if(start) {
 			this.refreshCalc();
 			this.resetTime();
@@ -369,9 +367,6 @@ const bytebeat = new class Bytebeat {
 		this.updateSampleRatio();
 		this.toggleTimeCursor();
 	}
-	timeCursorEnabled() {
-		return this.sampleRate >> this.drawScale < 3950;
-	}
 	togglePlay(isPlay) {
 		this.controlTogglePlay.innerHTML = isPlay ? '&#9632;' : '&#9654;';
 		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
@@ -387,7 +382,7 @@ const bytebeat = new class Bytebeat {
 		this.isPlaying = isPlay;
 	}
 	toggleTimeCursor() {
-		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled());
+		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
 	}
 	updateSampleRatio() {
 		if(this.audioCtx) {
