@@ -14,10 +14,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min.js"></script>
 </head>
 <body>
-	<div class="content">
-		<div class="container-fixed">
-			<textarea id="input-code" spellcheck="false">t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3</textarea>
-			<div id="error"></div>
+	<div id="content">
+		<div id="container-fixed">
+			<textarea id="editor" spellcheck="false">t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3</textarea>
 			<div class="controls">
 				<button id="control-toggleplay" class="control-button" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">&#9654;</button>
 				<button id="control-stop" class="control-button" title="Stop and clear" onclick="bytebeat.stopPlay()">&#9632;</button>
@@ -41,14 +40,17 @@
 				<div id="control-counter" onclick="bytebeat.resetTime();" title="Click to set t = 0">t=<!--
 				--><span id="control-counter-value">0</span>
 				</div>
+				<div id="control-filler">&nbsp;</div>
+				<div id="control-expand" title="Expand code editor" onclick="bytebeat.expandEditor()">&#x26F6;</div>
 			</div>
+			<div id="error"></div>
 			<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>
 				<div id="canvas-toggleplay" class="canvas-toggleplay-show"></div>
 			</div>
 		</div>
-		<div class="container-scroll">
+		<div id="container-scroll">
 			<div class="library-content">
 				<div class="library-header toggle">[Info] &mdash; about bytebeat</div>
 				<div id="info" class="library-container disabled">

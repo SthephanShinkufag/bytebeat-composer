@@ -10,10 +10,10 @@ const bytebeat = new class Bytebeat {
 		this.canvasCtx = null;
 		this.canvasElem = null;
 		this.drawScale = 5;
+		this.editorElem = null;
 		this.errorElem = null;
 		this.fnRemover = null;
 		this.func = () => 0;
-		this.inputElem = null;
 		this.isPlaying = false;
 		this.isRecording = false;
 		this.lastByteValue = 0;
@@ -29,6 +29,7 @@ const bytebeat = new class Bytebeat {
 			this.canvasElem = document.getElementById('canvas-main');
 			this.canvasCtx = this.canvasElem.getContext('2d');
 			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
+			this.containerFixed = document.getElementById('container-fixed');
 			this.controlCounter = document.getElementById('control-counter-value');
 			this.controlMode = document.getElementById('control-mode');
 			this.controlSampleRate = document.getElementById('control-samplerate');
@@ -37,7 +38,7 @@ const bytebeat = new class Bytebeat {
 			this.controlVolume = document.getElementById('control-volume');
 			this.timeCursor = document.getElementById('canvas-timecursor');
 			this.initLibrary();
-			this.initCodeInput();
+			this.initEditor();
 			this.refreshCalc();
 			this.initAudioContext();
 		});
@@ -118,6 +119,9 @@ const bytebeat = new class Bytebeat {
 		if(this.timeCursorEnabled) {
 			this.timeCursor.style.left = Math.ceil(drawX(drawArea)) / width * 100 + '%';
 		}
+	}
+	expandEditor() {
+		this.containerFixed.classList.toggle('container-expanded');
 	}
 	initAudioContext() {
 		this.audioCtx = new (window.AudioContext || window.webkitAudioContext ||
@@ -208,11 +212,11 @@ const bytebeat = new class Bytebeat {
 		};
 		audioGain.connect(mediaDest);
 	}
-	initCodeInput() {
+	initEditor() {
 		this.errorElem = document.getElementById('error');
-		this.inputElem = document.getElementById('input-code');
-		this.inputElem.addEventListener('input', () => this.refreshCalc());
-		this.inputElem.addEventListener('keydown', e => {
+		this.editorElem = document.getElementById('editor');
+		this.editorElem.addEventListener('input', () => this.refreshCalc());
+		this.editorElem.addEventListener('keydown', e => {
 			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
 				e.preventDefault();
 				const el = e.target;
@@ -224,7 +228,7 @@ const bytebeat = new class Bytebeat {
 		});
 		/* global pako */
 		if(window.location.hash.startsWith('#b64')) { // XXX: old format
-			this.inputElem.value = pako.inflateRaw(
+			this.editorElem.value = pako.inflateRaw(
 				atob(decodeURIComponent(window.location.hash.substr(4))), { to: 'string' }
 			) + ';';
 		} else if(window.location.hash.startsWith('#v3b64')) {
@@ -254,7 +258,7 @@ const bytebeat = new class Bytebeat {
 	initLibrary() {
 		document.body.querySelectorAll('.library-header').forEach(el =>
 			(el.onclick = () => el.nextElementSibling.classList.toggle('disabled')));
-		const libraryElem = document.body.querySelector('.container-scroll');
+		const libraryElem = document.getElementById('container-scroll');
 		libraryElem.onclick = e => {
 			const el = e.target;
 			if(el.tagName === 'CODE') {
@@ -281,7 +285,7 @@ const bytebeat = new class Bytebeat {
 		};
 	}
 	loadCode({ code, sampleRate, mode }, start = true) {
-		this.inputElem.value = code;
+		this.editorElem.value = code;
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000);
 		this.mode = this.controlMode.value = mode || 'Bytebeat';
 		if(start) {
@@ -302,7 +306,7 @@ const bytebeat = new class Bytebeat {
 	}
 	refreshCalc() {
 		const oldFunc = this.func;
-		const codeText = this.inputElem.value;
+		const codeText = this.editorElem.value;
 
 		// Create shortened Math functions
 		const params = Object.getOwnPropertyNames(Math);
@@ -321,8 +325,8 @@ const bytebeat = new class Bytebeat {
 
 		// Test bytebeat code
 		try {
-			this.func = new Function(...params, 't', `${ this.fnRemover }; return 0, ${ codeText || 0 } \n;`)
-				.bind(window, ...values);
+			this.func = new Function(...params, 't',
+				`${ this.fnRemover }; return 0, ${ codeText.trim() || 0 };`).bind(window, ...values);
 			this.func(0);
 		} catch(err) {
 			this.func = oldFunc;

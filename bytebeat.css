@@ -93,20 +93,32 @@ code {
 	white-space: nowrap;
 }
 
-.container-fixed {
+.container-expanded {
+	height: 100%;
+}
+
+.container-expanded > #editor {
+	flex: auto;
+}
+
+.container-expanded + #container-scroll {
+	display: none;
+}
+
+#container-fixed {
 	display: flex;
 	flex-direction: column;
 	max-height: 100vh;
 }
 
-.container-scroll {
+#container-scroll {
 	max-width: 1028px;
 	width: 100%;
 	margin-top: 4px;
 	overflow-y: auto;
 }
 
-.content {
+#content {
 	display: flex;
 	flex-flow: column;
 	align-items: center;
@@ -126,6 +138,21 @@ code {
 	cursor: pointer;
 }
 
+#control-expand {
+	margin-right: 4px;
+	font-size: 1.2em;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#control-expand:hover {
+	color: #a0ceff;
+}
+
+#control-filler {
+	flex: auto;
+}
+
 .control-select {
 	height: 2em;
 	margin-right: 3px;
@@ -136,7 +163,7 @@ code {
 	background-color: #555e74;
 	height: 8px;
 	width: 13em;
-	margin: 10px 6px 7px 4px;
+	margin: 10px 6px 9px 4px;
 	border-radius: 15px;
 	align-self: center;
 }
@@ -168,11 +195,7 @@ code {
 	display: none;
 }
 
-#error {
-	color: #f92672;
-}
-
-#input-code {
+#editor {
 	height: 200px;
 	padding: 0 5px;
 	border: 2px solid white;
@@ -185,6 +208,10 @@ code {
 	word-break: break-all;
 	outline: none;
 	resize: vertical;
+}
+
+#error {
+	color: #f92672;
 }
 
 .library-container {
