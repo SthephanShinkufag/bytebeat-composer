@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const bytebeat = new class Bytebeat {
 	constructor() {
 		this.audioCtx = null;
@@ -70,8 +71,8 @@ const bytebeat = new class Bytebeat {
 			this.controlScaleDown.removeAttribute('disabled');
 		}
 	}
-	changeVolume(el) {
-		const fraction = parseInt(el.value) / parseInt(el.max);
+	changeVolume({ value, max }) {
+		const fraction = parseInt(value) / parseInt(max);
 		this.audioGain.gain.value = fraction * fraction;
 	}
 	clearCanvas() {
@@ -367,8 +368,12 @@ const bytebeat = new class Bytebeat {
 		this.updateSampleRatio();
 		this.toggleTimeCursor();
 	}
+	stopPlay() {
+		this.togglePlay(false);
+		this.resetTime();
+	}
 	togglePlay(isPlay) {
-		this.controlTogglePlay.innerHTML = isPlay ? '&#9632;' : '&#9654;';
+		this.controlTogglePlay.innerHTML = isPlay ? '&#10074;&#10074;' : '&#9654;';
 		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
 		if(isPlay) {
 			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');

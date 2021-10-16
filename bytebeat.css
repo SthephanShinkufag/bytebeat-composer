@@ -127,6 +127,7 @@ code {
 }
 
 .control-select {
+	height: 2em;
 	margin-right: 3px;
 }
 
@@ -135,7 +136,7 @@ code {
 	background-color: #555e74;
 	height: 8px;
 	width: 13em;
-	margin: 0 5px 0 4px;
+	margin: 10px 6px 7px 4px;
 	border-radius: 15px;
 	align-self: center;
 }

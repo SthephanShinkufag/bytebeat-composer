@@ -57,11 +57,11 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 			escapeHTML(code) }</code> <span class="code-length">${ code.length }c</span>`;
 	}
 	if(children) {
-		let children = '';
+		let childrenStr = '';
 		for(let i = 0, len = children.length; i < len; ++i) {
-			children += createEntryElem(children[i]);
+			childrenStr += createEntryElem(children[i]);
 		}
-		entry += `<div class="list-block list-dependant">${ children }</div>`;
+		entry += `<div class="list-block list-dependant">${ childrenStr }</div>`;
 	}
 	return `<div class="${ code || codeFile || children ? 'list-entry' : 'list-text' } ${
 		starClass || '' }">${ entry }</div>`;

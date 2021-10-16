@@ -50,6 +50,7 @@
 			"ignoreEOLComments": true,
 			"exceptions": { "VariableDeclarator": true }
 		}],
+		"no-new-func": "off",
 		"no-extra-parens": ["error", "all", {
 			"conditionalAssign": false,
 			"nestedBinaryExpressions": false,
