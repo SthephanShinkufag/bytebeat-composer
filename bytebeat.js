@@ -374,6 +374,7 @@ const bytebeat = new class Bytebeat {
 	}
 	togglePlay(isPlay) {
 		this.controlTogglePlay.innerHTML = isPlay ? '&#10074;&#10074;' : '&#9654;';
+		this.controlTogglePlay.title = isPlay ? 'Pause' : 'Play';
 		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
 		if(isPlay) {
 			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');

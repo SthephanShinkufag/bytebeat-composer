@@ -19,17 +19,17 @@
 			<textarea id="input-code" spellcheck="false">t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3</textarea>
 			<div id="error"></div>
 			<div class="controls">
-				<button id="control-toggleplay" class="control-button" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">&#9654;</button>
-				<button id="control-stop" class="control-button" onclick="bytebeat.stopPlay()">&#9632;</button>
-				<button id="control-scaledown" class="control-button" onclick="bytebeat.changeScale(-1);">&#10133;</button>
-				<button id="control-scaleup" class="control-button" onclick="bytebeat.changeScale(1);">&#10134;</button>
-				<button id="control-rec" class="control-button" onclick="bytebeat.rec()">&#11044;</button>
-				<select id="control-mode" class="control-select" onchange="bytebeat.mode = this.selectedOptions[0].value;">
+				<button id="control-toggleplay" class="control-button" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">&#9654;</button>
+				<button id="control-stop" class="control-button" title="Stop and clear" onclick="bytebeat.stopPlay()">&#9632;</button>
+				<button id="control-scaledown" class="control-button" title="Zoom in" onclick="bytebeat.changeScale(-1);">&#10133;</button>
+				<button id="control-scaleup" class="control-button" title="Zoom out" onclick="bytebeat.changeScale(1);">&#10134;</button>
+				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec()">&#11044;</button>
+				<select id="control-mode" class="control-select" title="Mode" onchange="bytebeat.mode = this.selectedOptions[0].value;">
 					<option value="Bytebeat" selected>Bytebeat</option>
 					<option value="Signed Bytebeat">Signed Bytebeat</option>
 					<option value="Floatbeat">Floatbeat</option>
 				</select>
-				<select id="control-samplerate" class="control-select" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value);">
+				<select id="control-samplerate" class="control-select" title="Sample rate" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value);">
 					<option value="8000" selected>8000Hz</option>
 					<option value="11025">11025Hz</option>
 					<option value="16000">16000Hz</option>
@@ -37,7 +37,7 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
-				<input id="control-volume" type="range" min="0" max="100" value="35" oninput="bytebeat.changeVolume(this);">
+				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.changeVolume(this);">
 				<div id="control-counter" onclick="bytebeat.resetTime();" title="Click to set t = 0">t=<!--
 				--><span id="control-counter-value">0</span>
 				</div>
