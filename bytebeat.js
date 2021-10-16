@@ -1,22 +1,10 @@
-const $q = (path, root = document.body) => root.querySelector(path);
-const $Q = (path, root = document.body) => root.querySelectorAll(path);
-const $id = id => document.getElementById(id);
-
-function $toggle(el) {
-	if(el.style.display) {
-		el.style.removeProperty('display');
-	} else {
-		el.style.display = 'none';
-	}
-}
-
 const bytebeat = new class Bytebeat {
 	constructor() {
 		this.audioCtx = null;
 		this.audioGain = null;
 		this.audioRecorder = null;
 		this.audioSample = 0;
-		this.bufferSize = 2048;
+		this.bufferSize = 1024;
 		this.byteSample = 0;
 		this.canvasCtx = null;
 		this.canvasElem = null;
@@ -37,14 +25,14 @@ const bytebeat = new class Bytebeat {
 		this.sampleRatio = 1;
 		this.timeCursor = null;
 		document.addEventListener('DOMContentLoaded', () => {
-			this.canvasElem = $id('canvas-main');
+			this.canvasElem = document.getElementById('canvas-main');
 			this.canvasCtx = this.canvasElem.getContext('2d');
-			this.canvasTogglePlay = $id('canvas-toggleplay');
-			this.controlCounter = $id('control-counter-value');
-			this.controlScaleDown = $id('control-scaledown');
-			this.controlTogglePlay = $id('control-toggleplay');
-			this.controlVolume = $id('control-volume');
-			this.timeCursor = $id('canvas-timecursor');
+			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
+			this.controlCounter = document.getElementById('control-counter-value');
+			this.controlScaleDown = document.getElementById('control-scaledown');
+			this.controlTogglePlay = document.getElementById('control-toggleplay');
+			this.controlVolume = document.getElementById('control-volume');
+			this.timeCursor = document.getElementById('canvas-timecursor');
 			this.initLibrary();
 			this.initCodeInput();
 			this.refreshCalc();
@@ -52,8 +40,7 @@ const bytebeat = new class Bytebeat {
 		});
 	}
 	get saveData() {
-		const a = document.createElement('a');
-		document.body.appendChild(a);
+		const a = document.body.appendChild(document.createElement('a'));
 		a.style.display = 'none';
 		const saveData = function(blob, fileName) {
 			const url = URL.createObjectURL(blob);
@@ -67,10 +54,10 @@ const bytebeat = new class Bytebeat {
 	}
 	applySampleRate(rate) {
 		this.setSampleRate(rate);
-		$id('control-samplerate').value = rate;
+		document.getElementById('control-samplerate').value = rate;
 	}
 	applyMode(mode) {
-		this.mode = $id('control-mode').value = mode;
+		this.mode = document.getElementById('control-mode').value = mode;
 	}
 	changeScale(amount) {
 		if(!amount) {
@@ -223,8 +210,8 @@ const bytebeat = new class Bytebeat {
 		audioGain.connect(mediaDest);
 	}
 	initCodeInput() {
-		this.errorElem = $id('error');
-		this.inputElem = $id('input-code');
+		this.errorElem = document.getElementById('error');
+		this.inputElem = document.getElementById('input-code');
 		this.inputElem.addEventListener('input', () => this.refreshCalc());
 		this.inputElem.addEventListener('keydown', e => {
 			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
@@ -266,8 +253,9 @@ const bytebeat = new class Bytebeat {
 		}
 	}
 	initLibrary() {
-		$Q('.library-header').forEach(el => (el.onclick = () => $toggle(el.nextElementSibling)));
-		const libraryElem = $q('.container-scroll');
+		document.body.querySelectorAll('.library-header').forEach(el =>
+			(el.onclick = () => el.nextElementSibling.classList.toggle('disabled')));
+		const libraryElem = document.body.querySelector('.container-scroll');
 		libraryElem.onclick = e => {
 			const el = e.target;
 			if(el.tagName === 'CODE') {
@@ -327,7 +315,8 @@ const bytebeat = new class Bytebeat {
 		this.fnRemover = this.fnRemover || (function() {
 			const keys = {};
 			Object.getOwnPropertyNames(globalThis).forEach(key => (keys[key] = true));
-			['console', 'escape', 'Math', 'parseInt', 'window'].forEach(key => delete keys[key]);
+			['Array', 'console', 'escape', 'Math', 'Object', 'parseInt', 'String', 'window']
+				.forEach(key => delete keys[key]);
 			return `let ${ Object.keys(keys).sort().join(',\n') }`;
 		}());
 

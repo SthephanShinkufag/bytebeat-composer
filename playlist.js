@@ -1,8 +1,6 @@
 /* eslint indent: ["error", "tab", { "outerIIFEBody": 0 }] */
 
 (function() {
-const $id = id => document.getElementById(id);
-
 let cachedElemParent, cachedTextNode;
 function escapeHTML(text) {
 	cachedTextNode.nodeValue = text;
@@ -84,7 +82,7 @@ function addPlaylist(obj, id) {
 	for(let i = 0, len = playlistArr.length; i < len; ++i) {
 		playlist += createEntryElem(parseEntry(playlistArr[i]));
 	}
-	$id(`library-${ id }`).insertAdjacentHTML('beforeend',
+	document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend',
 		`<div class="list-block list-main">${ playlist }</div>`);
 }
 
