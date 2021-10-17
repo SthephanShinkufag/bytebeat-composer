@@ -39,7 +39,7 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 	}
 	let starClass = '';
 	if(starred) {
-		starClass = ['star-white', 'star-yellow'][starred - 1];
+		starClass = ' ' + ['star-white', 'star-yellow'][starred - 1];
 	}
 	if(code && Array.isArray(code)) {
 		code = code.join('\n');
@@ -61,20 +61,19 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 		for(let i = 0, len = children.length; i < len; ++i) {
 			childrenStr += createEntryElem(children[i]);
 		}
-		entry += `<div class="list-block list-dependant">${ childrenStr }</div>`;
+		entry += `<div class="entry-children">${ childrenStr }</div>`;
 	}
-	return `<div class="${ code || codeFile || children ? 'list-entry' : 'list-text' } ${
-		starClass || '' }">${ entry }</div>`;
+	return `<div class="${ code || codeFile || children ? 'entry' : 'entry-text' }${ starClass || '' }">${
+		entry }</div>`;
 }
 
 function addPlaylist({ playlists }, id) {
 	let playlist = '';
 	const playlistArr = playlists[id];
 	for(let i = 0, len = playlistArr.length; i < len; ++i) {
-		playlist += createEntryElem(playlistArr[i]);
+		playlist += `<div class="entry-top">${ createEntryElem(playlistArr[i]) }</div>`;
 	}
-	document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend',
-		`<div class="list-block list-main">${ playlist }</div>`);
+	document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend', playlist);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
