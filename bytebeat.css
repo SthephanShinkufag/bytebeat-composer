@@ -23,6 +23,7 @@ a:hover, code:hover {
 	cursor: pointer;
 	box-sizing: border-box;
 	border: 2px solid #bf8e31;
+	overflow: hidden;
 }
 
 #canvas-container:hover > #canvas-toggleplay::after {
@@ -43,7 +44,7 @@ a:hover, code:hover {
 	top: 0;
 	bottom: 0;
 	border-left: 2px solid #7a9dc4;
-	box-shadow: 0 0 8px #6ab2ff, 0 0 15px #fff;
+	box-shadow: 0 0 8px #6ab2ff, 0 0 16px #fff;
 	left: 0;
 }
 
@@ -215,7 +216,7 @@ code {
 }
 
 .entry-children > .entry:not(:last-child) {
-	margin-bottom: 3px;
+	margin-bottom: 4px;
 }
 
 .entry-children > .entry::before {

@@ -261,7 +261,7 @@
 			"description": "8-bit Atari inspired sounds (simplified version)",
 			"author": "Visy",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250",
-			"code": "t%25+(t>>2|15*t)+t>>3"
+			"code": "t%25-(t>>2|15*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048)"
 		}, {
 			"author": "Ola",
 			"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318368575135#c8615755234789420078",

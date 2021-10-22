@@ -4,28 +4,29 @@ const bytebeat = new class Bytebeat {
 		this.audioCtx = null;
 		this.audioGain = null;
 		this.audioRecorder = null;
-		this.audioSample = 0;
-		this.bufferSize = 1024;
+		this.audioWorkletNode = null;
 		this.byteSample = 0;
 		this.canvasCtx = null;
 		this.canvasElem = null;
+		this.canvasTogglePlay = null;
+		this.containerFixed = null;
+		this.controlCounter = null;
+		this.controlMode = null;
+		this.controlSampleRate = null;
+		this.controlScaleDown = null;
+		this.controlTogglePlay = null;
+		this.controlVolume = null;
+		this.drawBuffer = [];
 		this.drawScale = 5;
 		this.editorElem = null;
 		this.errorElem = null;
-		this.fnRemover = null;
-		this.func = () => 0;
 		this.isPlaying = false;
 		this.isRecording = false;
-		this.lastByteValue = 0;
-		this.lastFlooredTime = -1;
-		this.lastFuncValue = -1;
-		this.lastValue = 0;
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
-		this.sampleRatio = 1;
 		this.timeCursor = null;
-		document.addEventListener('DOMContentLoaded', () => {
+		document.addEventListener('DOMContentLoaded', async () => {
 			this.canvasElem = document.getElementById('canvas-main');
 			this.canvasCtx = this.canvasElem.getContext('2d');
 			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
@@ -37,10 +38,9 @@ const bytebeat = new class Bytebeat {
 			this.controlTogglePlay = document.getElementById('control-toggleplay');
 			this.controlVolume = document.getElementById('control-volume');
 			this.timeCursor = document.getElementById('canvas-timecursor');
-			this.initLibrary();
+			await this.initAudioContext();
+			this.initLibraryEvents();
 			this.initEditor();
-			this.refreshCalc();
-			this.initAudioContext();
 		});
 	}
 	get saveData() {
@@ -59,142 +59,67 @@ const bytebeat = new class Bytebeat {
 	get timeCursorEnabled() {
 		return this.sampleRate >> this.drawScale < 3950;
 	}
-	changeScale(amount) {
-		if(!amount) {
-			return;
-		}
-		this.drawScale = Math.max(this.drawScale + amount, 0);
-		this.clearCanvas();
-		this.toggleTimeCursor();
-		if(this.drawScale <= 0) {
-			this.controlScaleDown.setAttribute('disabled', true);
-		} else {
-			this.controlScaleDown.removeAttribute('disabled');
-		}
-	}
-	changeVolume({ value, max }) {
-		const fraction = parseInt(value) / parseInt(max);
-		this.audioGain.gain.value = fraction * fraction;
+	animationFrame() {
+		this.drawGraphics(this.byteSample);
+		window.requestAnimationFrame(() => this.animationFrame());
 	}
 	clearCanvas() {
 		this.canvasCtx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height);
 	}
-	drawGraphics(buffer) {
-		const drawArea = buffer.length;
-		if(!drawArea) {
+	drawGraphics(endTime) {
+		const buffer = this.drawBuffer;
+		const bufferLen = buffer.length;
+		if(!bufferLen) {
 			return;
 		}
 		const { width, height } = this.canvasElem;
+		const startTime = buffer[0].t;
 		const mod = (a, b) => ((a % b) + b) % b;
-		const drawX = (i = 0, j = 0) => mod(((this.byteSample + i) / (1 << this.drawScale)) + j, width);
-		const drawLen = (i = 0, j = 0) => i / (1 << this.drawScale) + j;
-
-		// Clear canvas
-		if(drawArea >> this.drawScale > width) {
-			this.canvasCtx.clearRect(0, 0, width, height);
-		} else {
-			const startX = drawX();
-			const endX = startX + drawLen(drawArea);
-			const ceiledEndx = Math.ceil(endX);
-			this.canvasCtx.clearRect(
-				Math.ceil(startX),
-				0,
-				endX >= 0 && endX < width ? ceiledEndx - Math.ceil(startX) : width - Math.floor(startX),
-				height
-			);
-			if(endX < 0 || endX >= width) {
-				this.canvasCtx.clearRect(0, 0, Math.floor(mod(ceiledEndx, width)), height);
+		const getX = t => t / (1 << this.drawScale);
+		let startX = mod(getX(startTime), width);
+		const endX = Math.floor(startX + getX(endTime - startTime));
+		startX = Math.floor(startX);
+		const drawWidth = Math.abs(endX - startX) + 1;
+		// Drawing on a segment
+		const imageData = this.canvasCtx.createImageData(drawWidth, height);
+		for(let i = 0; i < bufferLen; ++i) {
+			const { t, value } = buffer[i];
+			const nextElem = buffer[i + 1];
+			const currentX = mod(Math.floor(getX(t)) - startX, width);
+			const nextX = mod(Math.ceil(getX(nextElem ? nextElem.t : endTime)) - startX, width);
+			for(let x = currentX; x !== nextX; x = mod(x + 1, width)) {
+				let pos = (drawWidth * (255 - value) + Math.floor(x)) << 2;
+				imageData.data[pos++] = imageData.data[pos++] =
+				imageData.data[pos++] = imageData.data[pos] = 255;
 			}
 		}
-
-		// Draw
-		const imageData = this.canvasCtx.getImageData(0, 0, width, height);
-		for(let i = 0; i < drawArea; ++i) {
-			let pos = (width * (255 - buffer[i]) + drawX(i)) << 2;
-			imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos] = 255;
+		// Placing a segment on the canvas
+		this.canvasCtx.putImageData(imageData, startX, 0);
+		if(endX > width) {
+			this.canvasCtx.putImageData(imageData, startX - width, 0);
 		}
-		this.canvasCtx.putImageData(imageData, 0, 0);
-
-		// Cursor
+		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
-			this.timeCursor.style.left = Math.ceil(drawX(drawArea)) / width * 100 + '%';
+			this.timeCursor.style.left = endX / width * 100 + '%';
 		}
+		// Clear buffer
+		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
 	}
-	initAudioContext() {
-		this.audioCtx = new (window.AudioContext || window.webkitAudioContext ||
-			window.mozAudioContext || window.oAudioContext || window.msAudioContext)();
+	async initAudioContext() {
+		this.audioCtx = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)();
+		await this.audioCtx.audioWorklet.addModule('audioProcessor.js');
 		if(!this.audioCtx.createGain) {
 			this.audioCtx.createGain = this.audioCtx.createGainNode;
 		}
-		if(!this.audioCtx.createDelay) {
-			this.audioCtx.createDelay = this.audioCtx.createDelayNode;
-		}
-		if(!this.audioCtx.createScriptProcessor) {
-			this.audioCtx.createScriptProcessor = this.audioCtx.createJavaScriptNode;
-		}
-		this.updateSampleRatio();
-		const processor = this.audioCtx.createScriptProcessor(this.bufferSize, 1, 1);
-		processor.onaudioprocess = e => {
-			const chData = e.outputBuffer.getChannelData(0);
-			const chDataLen = chData.length;
-			if(!chDataLen) {
-				return;
-			}
-			if(!this.isPlaying) {
-				chData.fill(0);
-				return;
-			}
-			let time = this.sampleRatio * this.audioSample;
-			let { byteSample } = this;
-			const drawBuffer = [];
-			const startFlooredTime = this.lastFlooredTime;
-			const isBytebeat = this.mode === 'Bytebeat';
-			const isFloatbeat = this.mode === 'Floatbeat';
-			for(let i = 0; i < chDataLen; ++i) {
-				time += this.sampleRatio;
-				const flooredTime = Math.floor(time);
-				if(this.lastFlooredTime !== flooredTime) {
-					let funcValue = 0;
-					let noErrors = true;
-					try {
-						funcValue = this.func(Math.floor(byteSample));
-					} catch(err) {
-						noErrors = false;
-					}
-					if(funcValue !== this.lastFuncValue && noErrors) {
-						if(isBytebeat) {
-							this.lastByteValue = funcValue & 255;
-							this.lastValue = this.lastByteValue / 127.5 - 1;
-						} else if(isFloatbeat) {
-							this.lastValue = funcValue;
-							this.lastByteValue = Math.round((this.lastValue + 1) * 127.5);
-						} else { // "Signed Byteveat"
-							this.lastByteValue = (funcValue + 128) & 255;
-							this.lastValue = this.lastByteValue / 127.5 - 1;
-						}
-					}
-					drawBuffer.length = Math.abs(flooredTime - startFlooredTime);
-					drawBuffer.fill(this.lastByteValue, Math.abs(this.lastFlooredTime - startFlooredTime));
-					byteSample += flooredTime - this.lastFlooredTime;
-					this.lastFuncValue = funcValue;
-					this.lastFlooredTime = flooredTime;
-				}
-				chData[i] = this.lastValue;
-			}
-			if(this.isPlaying) {
-				this.audioSample += chDataLen;
-				this.drawGraphics(drawBuffer);
-				this.setByteSample(byteSample, false);
-			}
-		};
-		const audioGain = this.audioGain = this.audioCtx.createGain();
-		this.changeVolume(this.controlVolume);
-		processor.connect(audioGain);
-		audioGain.connect(this.audioCtx.destination);
-
+		this.audioGain = this.audioCtx.createGain();
+		this.setVolume(this.controlVolume);
+		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
+		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
+		this.audioWorkletNode.connect(this.audioGain);
+		this.audioGain.connect(this.audioCtx.destination);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
 		audioRecorder.ondataavailable = e => this.recordChunks.push(e.data);
@@ -210,12 +135,12 @@ const bytebeat = new class Bytebeat {
 			}
 			this.saveData(new Blob(this.recordChunks, { type }), file);
 		};
-		audioGain.connect(mediaDest);
+		this.audioGain.connect(mediaDest);
 	}
 	initEditor() {
 		this.errorElem = document.getElementById('error');
 		this.editorElem = document.getElementById('editor');
-		this.editorElem.addEventListener('input', () => this.refreshCalc());
+		this.editorElem.addEventListener('input', () => this.setFunction());
 		this.editorElem.addEventListener('keydown', e => {
 			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
 				e.preventDefault();
@@ -223,39 +148,40 @@ const bytebeat = new class Bytebeat {
 				const { value, selectionStart } = el;
 				el.value = value.slice(0, selectionStart) + '\t' + value.slice(el.selectionEnd);
 				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
-				this.refreshCalc();
+				this.setFunction();
 			}
 		});
 		/* global pako */
-		if(window.location.hash.startsWith('#b64')) { // XXX: old format
-			this.editorElem.value = pako.inflateRaw(
-				atob(decodeURIComponent(window.location.hash.substr(4))), { to: 'string' }
-			) + ';';
-		} else if(window.location.hash.startsWith('#v3b64')) {
-			let pData = pako.inflateRaw(
-				atob(decodeURIComponent(window.location.hash.substr(6))), { to: 'string' }
-			);
-			if(!pData.startsWith('{')) { // XXX: old format
-				pData = { code: pData, sampleRate: 8000, mode: 'Bytebeat' };
-			} else {
-				try {
-					pData = JSON.parse(pData);
-					if(pData.formula) { // XXX: old format
-						pData.code = pData.formula;
-					}
-				} catch(err) {
-					console.error("Couldn't load data from url:", err);
-					pData = null;
-				}
-			}
-			if(pData !== null) {
-				this.loadCode(pData, false);
-			}
-		} else if(window.location.hash) {
+		let { hash } = window.location;
+		if(!hash) {
+			this.updateLocation();
+			({ hash } = window.location);
+		}
+		if(!hash.startsWith('#v3b64')) {
 			console.error('Unrecognized url data');
+			return;
+		}
+		let pData = pako.inflateRaw(
+			atob(decodeURIComponent(hash.substr(6))), { to: 'string' }
+		);
+		if(!pData.startsWith('{')) { // XXX: old format
+			pData = { code: pData, sampleRate: 8000, mode: 'Bytebeat' };
+		} else {
+			try {
+				pData = JSON.parse(pData);
+				if(pData.formula) { // XXX: old format
+					pData.code = pData.formula;
+				}
+			} catch(err) {
+				console.error("Couldn't load data from url:", err);
+				pData = null;
+			}
+		}
+		if(pData !== null) {
+			this.loadCode(pData, false);
 		}
 	}
-	initLibrary() {
+	initLibraryEvents() {
 		document.body.querySelectorAll('.library-header').forEach(el =>
 			(el.onclick = () => el.nextElementSibling.classList.toggle('disabled')));
 		const libraryElem = document.getElementById('container-scroll');
@@ -284,15 +210,18 @@ const bytebeat = new class Bytebeat {
 			}
 		};
 	}
-	loadCode({ code, sampleRate, mode }, start = true) {
+	loadCode({ code, sampleRate, mode }, isPlay = true) {
+		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
 		this.editorElem.value = code;
-		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000);
-		this.mode = this.controlMode.value = mode || 'Bytebeat';
-		if(start) {
-			this.refreshCalc();
-			this.resetTime();
-			this.togglePlay(true);
+		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
+		const sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
+		const data = { mode, sampleRatio, setFunction: code };
+		if(isPlay) {
+			this.togglePlay(true, false);
+			data.isPlaying = isPlay;
+			data.resetTime = true;
 		}
+		this.sendData(data);
 	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {
@@ -304,102 +233,103 @@ const bytebeat = new class Bytebeat {
 			}
 		}
 	}
-	refreshCalc() {
-		const oldFunc = this.func;
-		const codeText = this.editorElem.value;
-
-		// Create shortened Math functions
-		const params = Object.getOwnPropertyNames(Math);
-		const values = params.map(k => Math[k]);
-		params.push('int');
-		values.push(Math.floor);
-
-		// Remove functions to prevent XSS
-		this.fnRemover = this.fnRemover || (function() {
-			const keys = {};
-			Object.getOwnPropertyNames(globalThis).forEach(key => (keys[key] = true));
-			['Array', 'console', 'escape', 'Math', 'Object', 'parseInt', 'String', 'window']
-				.forEach(key => delete keys[key]);
-			return `let ${ Object.keys(keys).sort().join(',\n') }`;
-		}());
-
-		// Test bytebeat code
-		try {
-			this.func = new Function(...params, 't',
-				`${ this.fnRemover }; return 0, ${ codeText.trim() || 0 };`).bind(window, ...values);
-			this.func(0);
-		} catch(err) {
-			this.func = oldFunc;
-			this.errorElem.innerText = err.toString();
+	receiveData(data) {
+		if(data.byteSample !== undefined) {
+			this.setByteSample(data.byteSample);
+		}
+		if(data.drawBuffer !== undefined) {
+			this.drawBuffer = this.drawBuffer.concat(data.drawBuffer);
+		}
+		if(data.error !== undefined) {
+			this.errorElem.innerText = data.error;
+		}
+		if(data.updateLocation === true) {
+			this.updateLocation();
+		}
+	}
+	resetTime() {
+		this.sendData({ resetTime: true });
+	}
+	sendData(data) {
+		this.audioWorkletNode.port.postMessage(data);
+	}
+	setByteSample(value) {
+		this.controlCounter.textContent = this.byteSample = value;
+		if(value === 0) {
+			this.drawBuffer = [];
+			this.clearCanvas();
+			this.timeCursor.style.left = 0;
+			if(!this.isPlaying) {
+				this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
+			}
+		}
+	}
+	setFunction() {
+		this.sendData({ setFunction: this.editorElem.value });
+	}
+	setMode(mode) {
+		this.mode = mode;
+		this.updateLocation();
+		this.sendData({ mode });
+	}
+	setSampleRate(sampleRate, isSendData = true) {
+		this.sampleRate = sampleRate;
+		this.toggleTimeCursor();
+		if(isSendData) {
+			this.sendData({ sampleRatio: this.sampleRate / this.audioCtx.sampleRate });
+		}
+	}
+	setScale(amount) {
+		if(!amount) {
 			return;
 		}
-		this.errorElem.innerText = '';
-
-		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
-		for(let i = 0; i < 26; ++i) {
-			delete window[String.fromCharCode(65 + i)];
-			delete window[String.fromCharCode(97 + i)];
+		this.drawScale = Math.max(this.drawScale + amount, 0);
+		this.clearCanvas();
+		this.toggleTimeCursor();
+		if(this.drawScale <= 0) {
+			this.controlScaleDown.setAttribute('disabled', true);
+		} else {
+			this.controlScaleDown.removeAttribute('disabled');
 		}
-
-		// Generate url
-		let pData = { code: codeText };
+	}
+	setVolume({ value, max }) {
+		const fraction = parseInt(value) / parseInt(max);
+		this.audioGain.gain.value = fraction * fraction;
+	}
+	stopPlay() {
+		this.togglePlay(false, false);
+		this.sendData({ isPlaying: false, resetTime: true });
+	}
+	togglePlay(isPlaying, isSendData = true) {
+		this.controlTogglePlay.innerHTML = isPlaying ? '&#10074;&#10074;' : '&#9654;';
+		this.controlTogglePlay.title = isPlaying ? 'Pause' : 'Play';
+		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlaying);
+		if(isPlaying) {
+			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');
+			if(this.audioCtx.resume) {
+				this.audioCtx.resume();
+				window.requestAnimationFrame(() => this.animationFrame());
+			}
+		} else if(this.isRecording) {
+			this.audioRecorder.stop();
+			this.isRecording = false;
+		}
+		this.isPlaying = isPlaying;
+		if(isSendData) {
+			this.sendData({ isPlaying });
+		}
+	}
+	toggleTimeCursor() {
+		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
+	}
+	updateLocation() {
+		const pData = { code: this.editorElem.value };
 		if(this.sampleRate !== 8000) {
 			pData.sampleRate = this.sampleRate;
 		}
 		if(this.mode !== 'Bytebeat') {
 			pData.mode = this.mode;
 		}
-		pData = JSON.stringify(pData);
-		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(pData, { to: 'string' }));
-	}
-	resetTime() {
-		this.setByteSample(0);
-		this.clearCanvas();
-		this.timeCursor.style.left = 0;
-		if(!this.isPlaying) {
-			this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
-		}
-	}
-	setByteSample(value, resetAudio = true) {
-		this.controlCounter.textContent = this.byteSample = value;
-		if(resetAudio) {
-			this.audioSample = this.lastByteValue = this.lastValue = 0;
-			this.lastFlooredTime = this.lastFuncValue = -1;
-		}
-	}
-	setSampleRate(rate) {
-		this.sampleRate = rate;
-		this.updateSampleRatio();
-		this.toggleTimeCursor();
-	}
-	stopPlay() {
-		this.togglePlay(false);
-		this.resetTime();
-	}
-	togglePlay(isPlay) {
-		this.controlTogglePlay.innerHTML = isPlay ? '&#10074;&#10074;' : '&#9654;';
-		this.controlTogglePlay.title = isPlay ? 'Pause' : 'Play';
-		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlay);
-		if(isPlay) {
-			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');
-			if(this.audioCtx.resume) {
-				this.audioCtx.resume();
-			}
-		} else if(this.isRecording) {
-			this.audioRecorder.stop();
-			this.isRecording = false;
-		}
-		this.isPlaying = isPlay;
-	}
-	toggleTimeCursor() {
-		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
-	}
-	updateSampleRatio() {
-		if(this.audioCtx) {
-			const flooredTimeOffset = this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);
-			this.sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
-			this.lastFlooredTime = Math.floor(this.sampleRatio * this.audioSample) - flooredTimeOffset;
-			return this.sampleRatio;
-		}
+		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(JSON.stringify(pData), { to: 'string' }));
 	}
 }();
