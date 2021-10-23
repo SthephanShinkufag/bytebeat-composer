@@ -6,31 +6,41 @@
 			"code": "(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))",
 			"starred": 2
 		}, {
-			"description": "viznut-like",
+			"author": "viznut",
 			"children": [{
-				"author": "viznut",
-				"url": "https://youtu.be/qlrs2Vorw2Y?t=15s",
-				"code": "10*(t>>6|t|t>>(t>>16))+(7&t>>11)",
-				"starred": 1
-			}, {
-				"author": "viznut, xpansive, varjohukka",
+				"description": "combining findings of xpansive & varjohukka",
 				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m31s",
 				"code": "10*(t>>6|t|t>>7)+4*(t&t>>13|t>>6)",
 				"starred": 2
 			}, {
-				"description": "Frere Jacques",
-				"author": "Lord Graga",
-				"url": "http://www.pouet.net/topic.php?which=8357&page=7#c388764",
-				"code": "10*(t>>7|3*t|t>>(t>>15))+(t>>8&5)"
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=15s",
+				"code": "10*(t>>6|t|t>>(t>>16))+(7&t>>11)",
+				"starred": 1
+			}, {
+				"description": "#countercomplex \"moon scanner generalization\", based on jaffa's formula",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+				"code": "2*(t>>5&t)-(t>>5)+t*(t>>14&14)",
+				"starred": 1
+			}, {
+				"description": "Another attempt at melody construction",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930",
+				"code": "t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)",
+				"starred": 2
 			}]
 		}, {
+			"description": "Frere Jacques",
+			"author": "Lord Graga",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=7#c388764",
+			"code": "10*(t>>7|3*t|t>>(t>>15))+(t>>8&5)"
+		}, {
 			"author": "bear @ celephais",
-			"url": "https://github.com/bnewbold/bytetunes/blob/master/tunes/all.txt#L168",
 			"children": [{
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 				"code": "t>>6^t&37|t+(t^t>>11)-t*((t%24?2:6)&t>>11)^t<<1&(t&598?t>>4:t>>10)",
 				"starred": 1
 			}, {
 				"description": "Computing...",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 				"code": "t+(t&t^t>>6)-t*(t>>9&(t%16?2:6)&t>>9)"
 			}]
 		}, {
@@ -73,19 +83,6 @@
 			"code": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&t>>4",
 			"starred": 1
 		}, {
-			"author": "viznut",
-			"children": [{
-				"description": "Running man",
-				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930",
-				"code": "t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)",
-				"starred": 2
-			}, {
-				"description": "Moon scanner",
-				"author": "viznut & Jaffa",
-				"code": "2*(t>>5&t)-(t>>5)+t*(t>>14&14)",
-				"starred": 1
-			}]
-		}, {
 			"description": "Sierpinski harmony",
 			"children": [{
 				"author": "miiro",
@@ -110,8 +107,8 @@
 				"code": "9*t&t>>4|5*t&t>>7|(3*t&t>>10)-1"
 			}, {
 				"description": "minimal sierpinski harmony",
-				"author": "bnewbold",
-				"url": "https://github.com/bnewbold/bytetunes/blob/master/tunes/all.txt#L7",
+				"author": "viznut",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 				"code": "t&t>>8"
 			}]
 		}, {
@@ -137,6 +134,7 @@
 			"author": "tejeez",
 			"children": [{
 				"description": "Bassline",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 				"code": "(-t>>2)*((127&t*(7&t>>10))<(245&t*(2+(5&t>>14))))",
 				"starred": 1
 			}, {
@@ -188,7 +186,7 @@
 		}, {
 			"author": "216",
 			"children": [{
-				"description": "Fractal trees",
+				"description": "\"fractal trees\", 216's version",
 				"author": "Danharaj & 216",
 				"url": "http://www.reddit.com/r/programming/comments/kyj77/algorithmic_symphonies_from_one_line_of_code_how/",
 				"code": "t|t%255|t%257"
@@ -209,6 +207,11 @@
 				"code": "t>>5|t<<4|t&1023^1981|t-67>>4"
 			}]
 		}, {
+			"description": "ass kicking vocals (starting properly after 50s or so)",
+			"author": "Tundrah",
+			"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107",
+			"code": "t>>5|t>>4|(t%42*(t>>4)|357052691-(t>>4))/(t>>16)^(t|t>>4)"
+		}, {
 			"description": "Zemfira",
 			"author": "Anonymous",
 			"code": "430*(5*t>>11|5*t>>1)",
@@ -219,9 +222,8 @@
 			"url": "http://www.pouet.net/topic.php?which=8357&page=5#c388569",
 			"code": "t/8>>(t>>9)*t/((t>>14&3)+4)"
 		}, {
-			"description": "The 42 melody",
-			"author": "several people on irc etc",
-			"url": "https://github.com/bnewbold/bytetunes/blob/master/tunes/all.txt#L11",
+			"description": "\"the 42 melody\", separately discovered by several people on irc etc",
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 			"code": "t*(42&t>>10)"
 		}, {
 			"description": "New Sawtooth Music",
@@ -261,6 +263,7 @@
 			"description": "Modem melody",
 			"children": [{
 				"author": "krcko",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 				"code": "(t&t>>12)*(t>>4|t>>8)",
 				"starred": 1
 			}, {
@@ -340,6 +343,7 @@
 			"code": "t*t%(t/3.33)"
 		}, {
 			"author": "harism",
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 			"code": "3*((t>>1)+20)*t>>14*t>>18"
 		}, {
 			"author": "SArpnt",
@@ -1185,7 +1189,7 @@
 				"code": "t%((t&-16|t>>11)&42)<<2|t>>4"
 			}]
 		}, {
-			"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with \"Running man\" [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
+			"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href=\"http://www.pouet.net/topic.php?which=8357&page=9#c388930\" target=\"_blank\">viznut's code</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
 			"children": [{
 				"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 				"code": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"

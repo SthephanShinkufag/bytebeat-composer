@@ -30,6 +30,9 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 		}
 		entry += `<span>${ description ? ` (by ${ authorsList })` : `by ${ authorsList }` }</span>`;
 	}
+	if(url && !description && !author) {
+		entry += `(<a href="${ url }" target="_blank">source</a>)`;
+	}
 	if(sampleRate) {
 		entry += ` <span class="code-samplerate">${
 			sampleRate.substring(0, sampleRate.length - 3) }kHz</span>`;

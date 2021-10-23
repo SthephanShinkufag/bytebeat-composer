@@ -216,7 +216,7 @@ code {
 }
 
 .entry-children > .entry:not(:last-child) {
-	margin-bottom: 4px;
+	margin-bottom: 3px;
 }
 
 .entry-children > .entry::before {
