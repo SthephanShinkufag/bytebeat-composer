@@ -2,7 +2,7 @@
 	"classic8khz": [
 		{
 			"author": "stimmer",
-			"url": "http://rcarduino.blogspot.com/2012/09/algorithmic-music-on-arduino.html",
+			"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409",
 			"code": "(128&t*(4|7&t>>13)>>(1&-t>>11))+(127&t*(t>>11&t>>13)*(3&-t>>9))",
 			"starred": 2
 		}, {
@@ -933,7 +933,7 @@
 		}, {
 			"author": "kOLbOSa_exe",
 			"children": [{
-				"description": "fiery sin-waveform",
+				"description": "fiery sine waveform",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q4s2dl/some_cool_thingy_here/",
 				"sampleRate": "44100",
 				"code": "per=t/2048,64*sin(t/1E4)+80+10*random()+(4E4/(t/4&4095)%100>>random()*t)+(128<per?[13,-12,11,-10,9,-8,7,-6,5,-4,3,-2,1,0][(t>>12)%14]+15&t%[34,32,33,35][(t>>14)%4]:0)+(64<per?4E4/(t/4%4095)%82:0)"
@@ -1302,6 +1302,12 @@
 				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
 				"starred": 2
 			}, {
+				"description": "Slower rhythm...",
+				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>3",
+				"starred": 1
+			}, {
+				"code": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(2&t>>9)|t>>3"
+			}, {
 				"description": "\"Awesome level #2\". The next awesome level!",
 				"code": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
 				"starred": 2
@@ -1328,6 +1334,20 @@
 				"description": "Previous tune with a ternary magic",
 				"code": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
 				"starred": 1
+			}, {
+				"description": " "
+			}, {
+				"description": "The time is running out!",
+				"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
+				"starred": 2,
+				"children": [{
+					"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3",
+					"sampleRate": "11025"
+				}, {
+					"description": "More complicated drums",
+					"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>3",
+					"sampleRate": "11025"
+				}]
 			}]
 		}
 	]
