@@ -260,7 +260,7 @@ const bytebeat = new class Bytebeat {
 			this.clearCanvas();
 			this.timeCursor.style.left = 0;
 			if(!this.isPlaying) {
-				this.canvasTogglePlay.classList.add('canvas-toggleplay-show');
+				this.canvasTogglePlay.classList.add('canvas-initial');
 			}
 		}
 	}
@@ -301,12 +301,13 @@ const bytebeat = new class Bytebeat {
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
 	togglePlay(isPlaying, isSendData = true) {
+		this.controlTogglePlay.title = isPlaying ? 'Pause' : 'Play';
 		this.controlTogglePlay.classList.toggle('control-play', !isPlaying);
 		this.controlTogglePlay.classList.toggle('control-pause', isPlaying);
-		this.controlTogglePlay.title = isPlaying ? 'Pause' : 'Play';
-		this.canvasTogglePlay.classList.toggle('canvas-toggleplay-stop', isPlaying);
+		this.canvasTogglePlay.classList.toggle('canvas-play', !isPlaying);
+		this.canvasTogglePlay.classList.toggle('canvas-pause', isPlaying);
 		if(isPlaying) {
-			this.canvasTogglePlay.classList.remove('canvas-toggleplay-show');
+			this.canvasTogglePlay.classList.remove('canvas-initial');
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
 				window.requestAnimationFrame(() => this.animationFrame());

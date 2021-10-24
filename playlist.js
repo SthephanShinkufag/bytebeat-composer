@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 	xhr.open('GET', 'playlists.json', true);
+	xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 	xhr.send(null);
 });
 }());

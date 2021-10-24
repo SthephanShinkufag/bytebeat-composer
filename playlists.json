@@ -79,9 +79,16 @@
 			"code": "10*(t&5*t|t>>6|(t&32768?-6*t/7:(t&65536?-9*t&100:-9*(t&100))/11))",
 			"starred": 2
 		}, {
-			"description": "Electrohouse",
-			"code": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&t>>4",
-			"starred": 1
+			"author": "Anonymous from russian imageboards",
+			"children": [{
+				"description": "Electrohouse",
+				"code": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&t>>4",
+				"starred": 1
+			}, {
+				"description": "Zemfira",
+				"code": "430*(5*t>>11|5*t>>1)",
+				"starred": 1
+			}]
 		}, {
 			"description": "Sierpinski harmony",
 			"children": [{
@@ -211,11 +218,6 @@
 			"author": "Tundrah",
 			"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107",
 			"code": "t>>5|t>>4|(t%42*(t>>4)|357052691-(t>>4))/(t>>16)^(t|t>>4)"
-		}, {
-			"description": "Zemfira",
-			"author": "Anonymous",
-			"code": "430*(5*t>>11|5*t>>1)",
-			"starred": 1
 		}, {
 			"description": "mr. arpeggiator playing a solo",
 			"author": "tonic",
