@@ -57,4 +57,4 @@ snare = ((q * 4) & 3) > 1 ? (q * (8e3 >> q * 64) % 2 << 5 << (((q * 2e5) >> 5 * 
 hihat = ((q * 64) % 8) < 1 ? ((q * 7040) % 2) << 4 : 0,
 
 // Output channels
-(((na << 4) + (nb << 3) + (nc << 4) + (nd << 2) + kick + snare + hihat) / 2) + 20;
+(((na << 4) + (nb << 3) + (nc << 4) + (nd << 2) + kick + snare + hihat) / 2) + 20

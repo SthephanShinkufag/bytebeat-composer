@@ -713,41 +713,18 @@
 				"starred": 1
 			}]
 		}, {
-			"description": "A NΞW DIMΞNSION",
-			"author": "burlynn n01se",
-			"url": "https://battleofthebits.org/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
-			"sampleRate": "22050",
-			"code": "wv=function(t){return y=t%256,y<127?y:2*(256-y)},ms=int(t/1e4),p=t/1e4%16,b=p%4,qn=p%1,rh=function(t){for(m=0,i=0;i<t.length;i++)b>t[i]&&(m=b-t[i]);return m},sc=ms%256<32?1:min(1,max(0,3*qn-.3))*(ms%32>0),c=t*(p<12?2:2.4),max(0,min(255,sc*((wv(t/4)-wv(t/2+qn*wv(t*(ms>>2&15))+wv(2*t*(1+(ms>>5&3)))))*(1-rh([0,1,1.5,2,2.75,3.5]))*(ms%256>63)-wv(t/2+.5*wv(3*pow(7-qn*(2+(ms>>2&3))%1,5)))*(ms%64>47)+qn*qn*((t<<2+(t>>9)%3)%256)*(ms%128>64)*.8-wv(6e3*pow(2-rh([.25,1,1.5,2.25,3]),4)*(ms%256>191?2:1))*(ms%256>128)+(wv(c)-wv(1.2*c)+wv(1.5*c)-wv(2.24*c)+wv(1.8*c))*(.7-rh([0,.75,1.5,2.5,3.25]))*1+random()*pow(16-p,2)/4)*.3-qn*pow(1-qn*(ms%128<80?2:4)%1,4)*80*random()*(ms%256>63)+wv(2*t+60*sin(25*b))*(ms%256>31)*(ms%32<1)*qn+wv(2e3*pow(1-qn,9)*(1+p%2))*max(0,1-5*qn)*(ms%256>31)+128))",
-			"codeFile": "burlynn n01se - A NΞW DIMΞNSION.js",
-			"starred": 2
-		}, {
-			"description": "__ws2.model",
-			"author": "beep-eep",
-			"url": "https://battleofthebits.org/arena/Entry/__ws2.model/43638/",
-			"sampleRate": "44100",
-			"code": "Cm=[2.97,3.33,3.53,3.96,4.445,4.71,5.285],xx=a=>[[2.97,3.53],[3.53,3.96],[3.96,4.445],[4.445,5.285]][a],sq=v=>[[0,0,1,1],[0,1,1,1],[0,0,1,1]][v][ia(t/4e5)%4],ia=a=>int(abs(a)),f=x=>{wave=0.6*abs((sin(x/4e4)*(t>8e6?6:1))+4);vol=x/2e3%10;return sin(log(.5+(x/1e3)%20)*40)*2*e((x/2)/1e3,1.5,.2)*sq(0)*(t>7e6?0:1)+sin(x+sin(x)*1e9*e(x/1.5e3,3,.05))*1*e(x/3e3,4,0.2)*sq(1)*(t>7e6?0:1)+sin(x+sin(x)*1e9)*1*e(x/.5e3*ia(sin(x/1e4)+2),3,.2)*sq(2)*(t>7e6?0:1)+(sin(wave**((x/1000)*3*Cm[0]%2))+sin(wave**((x/1e3)*3*Cm[4]%2))+sin(wave**((x/1e3)*3*Cm[6]%2)))*vol**(t>8e6?0:1)-sin((wave+0.3)**((x/1e3)*6*xx(int(t/64e3)%4)[int(t/8e3)%2]%2))*1.2*e(x/4e3,.9,.35)*(t>2e6?1:0)+sin((wave+ia(sin(t/1e8)*8))**((x/1e3)*3*xx(int(t/256e3)%4)[int(t/64e3)%2]%2))*6*(t>5.2e6?1:0)-sin(wave**((x/1e3)*1*Cm[[0,0,2,4][ia(t/8e4)%4]]%2))*vol*1.5},e=(s,l,n)=>{return int((exp(-((s%20)*n)*l))*20)},out=n=>{v=0;for(i=1;i<n;i++){v+=f(t/1+8e3*i**2)*(.5/i)}return v},128+out(2+ia(sin(t/8e5)*3*(t>15e6?3:1)))*2.8",
-			"codeFile": "beep-eep - __ws2.model.js",
-			"starred": 1
-		}, {
-			"description": "347 BEATSTEP INC.",
-			"author": "mega9man",
-			"url": "https://battleofthebits.org/arena/Entry/347+BEATSTEP+INC./20403/",
-			"sampleRate": "11025",
-			"code": "128+sin(t/24*((t>>10)&42)+1*sin(t/64*(t/1>>15)&21))*24+(sin(t*1/3/4*1+4*sin(t*1/6/4*1))*((t>>11)&1))*16+(sin(t*1/6/4*1+4*sin(t*1/12/4*1))*((t>>10)&1))*16+((3e3/(y=t*4&16383))&1)*56+((3e2/(y=t*32&28600))&1)*56+sin(t/16*((t>>10)&42)+1*sin(t/64*(t/1>>7)&8))*12",
-			"starred": 2
-		}, {
 			"author": "SArpnt",
 			"children": [{
-				"description": "arpeggiator fun",
-				"url": "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/",
-				"sampleRate": "44100",
-				"code": "i=int,c='charCodeAt',b=t/441e3*16,q=b%.5,h=x=>t/2210*2**((x-36)/12)%1,w=(x,y=0)=>(h(x)-sin(y*2+b*PI)/8>.5)*30,s=i(b*2)%32,a=abs(8-i(b*8)%16),t==0&&(v=.5),v=3.65*v*(1-v),sin(q/(q/100+3e-4))*40*!(54878&1<<s%16)+(v-.5)*70*max(0,1-((b+1)%2)*.77)+w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGGGG'[c](s),s==5)+w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@@@'[c](s))+h('pnkgrnkipmigpnkg'[c](a%4+i(s/8)*4)+12*-i(a/4))*27+99",
-				"starred": 2
-			}, {
 				"description": "menacing",
 				"url": "https://www.reddit.com/r/bytebeat/comments/ff5phi/menacing/",
 				"sampleRate": "44100",
 				"code": "r=11e3,s=int(t/r+1)%32,b='ćóóóćÎÎÎÎÃÃÃÃÃÃÎ°°°°¦¦¦¦'.charCodeAt(s)/300*t%512,160/3*(sin(t%r/(t%r/100+8))+1)*(s%2+.6*(s%16==0))+b%(400+128*sin(b/(21+sin(t/r))))%256*1/3+(.999*(0xDBC97749&2**s?2*b:b)%128>64+15*sin(t/1e4)?64-t/r%1*32:0)",
+				"starred": 2
+			}, {
+				"description": "arpeggiator fun",
+				"url": "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/",
+				"sampleRate": "44100",
+				"code": "i=int,c='charCodeAt',b=t/441e3*16,q=b%.5,h=x=>t/2210*2**((x-36)/12)%1,w=(x,y=0)=>(h(x)-sin(y*2+b*PI)/8>.5)*30,s=i(b*2)%32,a=abs(8-i(b*8)%16),t==0&&(v=.5),v=3.65*v*(1-v),sin(q/(q/100+3e-4))*40*!(54878&1<<s%16)+(v-.5)*70*max(0,1-((b+1)%2)*.77)+w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGGGG'[c](s),s==5)+w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@@@'[c](s))+h('pnkgrnkipmigpnkg'[c](a%4+i(s/8)*4)+12*-i(a/4))*27+99",
 				"starred": 2
 			}]
 		}, {
@@ -759,6 +736,41 @@
 			"code": "i=int,z=sin,c='charCodeAt',b=t/441e3*16,m=1<<b/16%16,q=b%.5,h=x=>t/2210*2**(x/12-3),w=(x,y=0)=>h(x)%1-z(y*2+b*PI)/8>.5,s=i(b*2)%32,a=abs(8-i(b*8)%16),p='pnkgrnkipmigpnkg',99+27*((m&1855&&10657&1<<s%16?z(q/(q/241+2e-4))+z(t/140)/2:0)+(m&7519?z(t**3/q)*5**(-3*((b+1)%2)):0)+(m&9944?w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGG'[c](s),s==5):0)+(m&7326?w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@'[c](s)):0)+(m&28284?h(p[c](a%4+i(s/8)*4)+12*-i(a/4))%1:0)+(m&4912?(z(PI*h(p[c](s*3%16))))**3:0))",
 			"codeFile": "Johan Vandegriff - 511 - remix of 'arpeggiator fun'.js",
 			"starred": 2
+		}, {
+			"author": "Bp103",
+			"children": [{
+				"description": "the proto-version",
+				"url": "https://twitter.com/Bp103/status/934396842850291712",
+				"sampleRate": "44100",
+				"code": "q=t/44100,a=[[261.63,329.63,392],[261.63,392,349.23],[293.66,440,349.23],[329.63,392,523.25]],b=int(.75*q%4),chord=.05<q*a[b][0]%1-q*a[b][1]%1-(q*a[b][2]&1),lead=.05<q*[174.61,196,164.81,130.81,146.83,164.81,146.83,130.81][int(4.5*q%8)]%.5,16*(lead>chord)+128",
+				"codeFile": "Bp103 - the proto-version.js"
+			}, {
+				"description": "a sequencer type thing",
+				"url": "https://www.reddit.com/r/bytebeat/comments/enmbix/made_a_sequencer_type_thing/ffz6343/",
+				"sampleRate": "32000",
+				"code": "q=t/32E3,r=1.05946309,a=880,as=a*r,b=as*r,c=b*r,cs=c*r,d=cs*r,ds=d*r,e=ds*r,f=e*r,fs=f*r,g=fs*r,gs=g*r,na=q*[a,c,e,a,d,f,a,c,f,c,e,g,g,b,d,f,a,c,a,c,g,g,b,d][int(1*q)%8*3+int(32*q)%3]%2,nb=q*[a,b,c,e,c,b,a,0][int(4*q)%8]%2,nc=q*([a,a<<1,a,0,a,0,a,0,g>>1,g,g>>1,0,e>>1,0,c>>1,c][int(4*q)%16]>>2)%4,kick=q*(512>>64*q)%2<<6,snare=1<(4*q&3)?q*(8E3>>64*q)%2<<5<<(2E5*sin(2E5*q>>5)*q<<64*q):0,hihat=1>64*q%8?7040*q%2<<4:0,(na<<4)+(nb<<4)+(nc<<4)+kick+snare+hihat",
+				"codeFile": "Bp103 - a sequencer type thing.js",
+				"starred": 1
+			}, {
+				"description": "a song in a half baked pseudo-mml format",
+				"url": "https://twitter.com/Bp103/status/1221435415032406017",
+				"sampleRate": "32000",
+				"code": "q=t/32E3,r=1.05946309,a=880,as=a*r,b=as*r,c=b*r,cs=c*r,d=cs*r,ds=d*r,e=ds*r,f=e*r,fs=f*r,g=fs*r,gs=g*r,na=q*[a,c,e,a,d,f,a,c,f,c,e,g,g,b,d,f,a,c,a,c,g,g,b,d][int(1*q)%8*3+int(32*q)%3]%2,tr=64>int(4*q)%128?0:1,nb=q*[a<<tr,c,e<<tr,c<<(tr<<1),a<<tr,d<<(tr<<1),f<<tr,d,a<<tr,c,f<<tr,a<<(tr<<1),c<<tr,e<<(tr<<1),g<<tr,e,g<<tr,b,d<<tr,b,f<<tr,a<<(tr<<1),c<<tr,a<<(tr<<1),a<<tr,c,g<<tr,c,g<<tr,b<<(tr<<1),d<<tr,b<<(tr<<1)][int(4*q%32)]&2,nc=q*[a,b,c,e,c,b,a,0][int(4*q)%8]%2,nd=q*[a,a<<1,a,0,a,0,a,0,g>>1,g,g>>1,0,e>>1,0,c>>1,c][int(4*q)%16]&11,kick=q*(512>>64*q)%2<<6,snare=1<(4*q&3)?q*(8E3>>64*q)%2<<5<<(2E5*q>>1E6*q<<64*q)&127:0,hihat=1>64*q%8?7040*q%2<<4:0,((na<<4)+(nb<<3)+(nc<<4)+(nd<<2)+kick+snare+hihat)/2+20",
+				"codeFile": "Bp103 - a song in a half baked pseudo-mml format.js"
+			}, {
+				"description": "now its FM synth",
+				"url": "https://twitter.com/Bp103/status/1345905059964530688",
+				"sampleRate": "32000",
+				"code": "q=t/32E3,r=1.05946309,a=880,as=a*r,b=as*r,c=b*r,cs=c*r,d=cs*r,ds=d*r,e=ds*r,f=e*r,fs=f*r,g=fs*r,gs=g*r,na=q*[a,c,e,a,d,f,a,c,f,c,e,g,g,b,d,f,a,c,a,c,g,g,b,d][int(1*q)%8*3+int(32*q)%3],tr=64>int(4*q)%128?0:1,nb=q*[a<<tr,c,e<<tr,c<<(tr<<1),a<<tr,d<<(tr<<1),f<<tr,d,a<<tr,c,f<<tr,a<<(tr<<1),c<<tr,e<<(tr<<1),g<<tr,e,g<<tr,b,d<<tr,b,f<<tr,a<<(tr<<1),c<<tr,a<<(tr<<1),a<<tr,c,g<<tr,c,g<<tr,b<<(tr<<1),d<<tr,b<<(tr<<1)][int(4*q%32)]/2,nc=q*[a,b,c,e,c,b,a,0][int(4*q)%8],nd=q*[a,a<<1,a,0,a,0,a,0,g>>1,g,g>>1,0,e>>1,0,c>>1,c][int(4*q)%16]/4,kick=q*(512>>64*q)%2<<6,snare=1<(4*q&3)?q*(8E3>>64*q)%2<<5<<(2E5*q>>1E6*q<<64*q)&127:0,hihat=1>64*q%8?7040*q%2<<4:0,(kick+snare+hihat)/2+12*sin(1*nc)*sin(4*nc)*2*sin(1.02*nc)/2+3*(tan(sin(nd/2)*tan(1.03*cos(1.5*nd)))+4)+4.5*(sin(4*na)<cos(6*q))+tan(1.5*sin(2*nb))/2.39*3*sin(3*nb)*2*cos(1.013*nb)/2+96",
+				"codeFile": "Bp103 - now its FM synth.js"
+			}, {
+				"description": "triangle kick drum and snare",
+				"url": "https://twitter.com/Bp103/status/1346329796041695233",
+				"sampleRate": "32000",
+				"code": "q=t/32E3,r=1.05946309,a=880,as=a*r,b=as*r,c=b*r,cs=c*r,d=cs*r,ds=d*r,e=ds*r,f=e*r,fs=f*r,g=fs*r,gs=g*r,z=63<int(2*q)%128?r*r*r:1,tr=63<int(4*q)%128,n=[a,c,e,c,a,d,f,d,a,c,f,a,c,e,g,e,g,b,d,b,f,a,c,a,a,c,g,c,g,b,d,b],os=[1,0,1,2,1,2,1,0,1,0,1,2,1,2,1,0,1,0,1,0,1,2,1,2,1,0,1,0,1,2,1,2],na=q*n[int(1*q)%8*4+int(64*q)%3]*(int(4*q%2)/2)*z,nb=q*(n[int(4*q%32)]<<tr*os[int(4*q%32)])/2*z,nc=q*[a,b,c,e,c,b,a,0][int(4*q)%8]*z,nd=q*[a,a<<1,a,0,a,0,a,0,g>>1,g,g>>1,0,e>>1,0,c>>1,c][int(4*q)%16]/4*z,kick=32*tan(sin(32/(64*q%32)))*(2.5>16*q%8&.2<16*q%8)*(2-16*q%4)*(1>8*q%8),snare=80*(7.9<16*q%16&8.75>16*q%16)*(q*(f>>2)&1)+(8*random()>>2)*((28-64*q%32)/2.8)*(int(4*q)%4)/1.5,hihat=(2>64*q%8)*(7*random()<<6>>4)+(1>64*q%8)*(7040*q%2<<3),((kick+snare+hihat)/2+4.5*(sin(4*na)<cos(4*q))*1.3*(4-32*q%4)+tan(1.5*sin(2*nb))/2.39*3*sin(3*nb)*2*cos(1.013*nb)/2*((8-32*q%8*.9-3)/1.7))/1.3+12*sin(1*nc)*sin(4*nc)*2*sin(1.02*nc)/2+3*(tan(sin(nd/2)*tan(1.03*cos(1.5*nd)))+4)+110",
+				"codeFile": "Bp103 - triangle kick drum and snare.js",
+				"starred": 1
+			}]
 		}, {
 			"author": "RealZynx92",
 			"children": [{
@@ -815,12 +827,42 @@
 				"starred": 1
 			}]
 		}, {
+			"description": "347 BEATSTEP INC.",
+			"author": "mega9man",
+			"url": "https://battleofthebits.org/arena/Entry/347+BEATSTEP+INC./20403/",
+			"sampleRate": "11025",
+			"code": "128+sin(t/24*((t>>10)&42)+1*sin(t/64*(t/1>>15)&21))*24+(sin(t*1/3/4*1+4*sin(t*1/6/4*1))*((t>>11)&1))*16+(sin(t*1/6/4*1+4*sin(t*1/12/4*1))*((t>>10)&1))*16+((3e3/(y=t*4&16383))&1)*56+((3e2/(y=t*32&28600))&1)*56+sin(t/16*((t>>10)&42)+1*sin(t/64*(t/1>>7)&8))*12",
+			"starred": 2
+		}, {
+			"description": "A NΞW DIMΞNSION",
+			"author": "burlynn n01se",
+			"url": "https://battleofthebits.org/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
+			"sampleRate": "22050",
+			"code": "wv=function(t){return y=t%256,y<127?y:2*(256-y)},ms=int(t/1e4),p=t/1e4%16,b=p%4,qn=p%1,rh=function(t){for(m=0,i=0;i<t.length;i++)b>t[i]&&(m=b-t[i]);return m},sc=ms%256<32?1:min(1,max(0,3*qn-.3))*(ms%32>0),c=t*(p<12?2:2.4),max(0,min(255,sc*((wv(t/4)-wv(t/2+qn*wv(t*(ms>>2&15))+wv(2*t*(1+(ms>>5&3)))))*(1-rh([0,1,1.5,2,2.75,3.5]))*(ms%256>63)-wv(t/2+.5*wv(3*pow(7-qn*(2+(ms>>2&3))%1,5)))*(ms%64>47)+qn*qn*((t<<2+(t>>9)%3)%256)*(ms%128>64)*.8-wv(6e3*pow(2-rh([.25,1,1.5,2.25,3]),4)*(ms%256>191?2:1))*(ms%256>128)+(wv(c)-wv(1.2*c)+wv(1.5*c)-wv(2.24*c)+wv(1.8*c))*(.7-rh([0,.75,1.5,2.5,3.25]))*1+random()*pow(16-p,2)/4)*.3-qn*pow(1-qn*(ms%128<80?2:4)%1,4)*80*random()*(ms%256>63)+wv(2*t+60*sin(25*b))*(ms%256>31)*(ms%32<1)*qn+wv(2e3*pow(1-qn,9)*(1+p%2))*max(0,1-5*qn)*(ms%256>31)+128))",
+			"codeFile": "burlynn n01se - A NΞW DIMΞNSION.js",
+			"starred": 2
+		}, {
+			"description": "__ws2.model",
+			"author": "beep-eep",
+			"url": "https://battleofthebits.org/arena/Entry/__ws2.model/43638/",
+			"sampleRate": "44100",
+			"code": "Cm=[2.97,3.33,3.53,3.96,4.445,4.71,5.285],xx=a=>[[2.97,3.53],[3.53,3.96],[3.96,4.445],[4.445,5.285]][a],sq=v=>[[0,0,1,1],[0,1,1,1],[0,0,1,1]][v][ia(t/4e5)%4],ia=a=>int(abs(a)),f=x=>{wave=0.6*abs((sin(x/4e4)*(t>8e6?6:1))+4);vol=x/2e3%10;return sin(log(.5+(x/1e3)%20)*40)*2*e((x/2)/1e3,1.5,.2)*sq(0)*(t>7e6?0:1)+sin(x+sin(x)*1e9*e(x/1.5e3,3,.05))*1*e(x/3e3,4,0.2)*sq(1)*(t>7e6?0:1)+sin(x+sin(x)*1e9)*1*e(x/.5e3*ia(sin(x/1e4)+2),3,.2)*sq(2)*(t>7e6?0:1)+(sin(wave**((x/1000)*3*Cm[0]%2))+sin(wave**((x/1e3)*3*Cm[4]%2))+sin(wave**((x/1e3)*3*Cm[6]%2)))*vol**(t>8e6?0:1)-sin((wave+0.3)**((x/1e3)*6*xx(int(t/64e3)%4)[int(t/8e3)%2]%2))*1.2*e(x/4e3,.9,.35)*(t>2e6?1:0)+sin((wave+ia(sin(t/1e8)*8))**((x/1e3)*3*xx(int(t/256e3)%4)[int(t/64e3)%2]%2))*6*(t>5.2e6?1:0)-sin(wave**((x/1e3)*1*Cm[[0,0,2,4][ia(t/8e4)%4]]%2))*vol*1.5},e=(s,l,n)=>{return int((exp(-((s%20)*n)*l))*20)},out=n=>{v=0;for(i=1;i<n;i++){v+=f(t/1+8e3*i**2)*(.5/i)}return v},128+out(2+ia(sin(t/8e5)*3*(t>15e6?3:1)))*2.8",
+			"codeFile": "beep-eep - __ws2.model.js",
+			"starred": 1
+		}, {
 			"description": "War Tradition",
 			"author": "petet",
 			"url": "https://battleofthebits.org/arena/Entry/War+Tradition/31413/",
 			"sampleRate": "32000",
 			"code": "out=0,J=function(c,d,m){a=[];for(i=0;i<d;i++){a[i]=int((c*i+m)/d)%c}return a},Jhas=function(c,d,m,a){return J(c,d,m).includes(a%c)},mix=function(a,v){out+=(a&255)*(v&255)/255},b=t>>12,b2=int(b/3),mix(random()*100,(16-b2%16)*5),mix(t*3/2,(((t/3)>>10)&31)*((b2>>5)%4)),mix(t*12/5*3/4,((b%3)*30+40)*(b2%64)/200),mix(t*9/4,(((b>>1)%3)*4+40)*(b2%64)/200),mix(t*12/5,(((b>>2)%3)*5+40)*(b2%64)/200),mix(Jhas(12,7,6,b)?(random()*2+(t|(t<<2))&47):0,256-(t>>4)&255),mix(Jhas(6,4,4,b)?((t*3)&127):0,(64-(t>>6)&63)*((b2>>4)%4)),mix(Jhas(12,4*((b2>>6)&3),0,b)?(((t-t*((b2>>3)&1)*((b2>>5)&1)*1/5)>>1)&(t<<3|(t>>8)*((b2>>4)%4))):0,100-((t>>6)&63)),mix(Jhas(12,5+((b2>>5)+3)%4,7,b)?(((t)*(2+(b2>>1)%8))&128):0,(60-(t>>3)&53)*((b2>>5)%4)),out",
 			"codeFile": "petet - War Tradition.js"
+		}, {
+			"description": "Takitjää",
+			"author": "Lia",
+			"url": "https://battleofthebits.org/arena/Entry/Takitj%C3%A4%C3%A4/31188/",
+			"sampleRate": "44100",
+			"code": "max(0,min(255,128+100*(.6*(round(max(-1,min(1,10*sin(.07444*t/((39<round(t/48E3+7)%48?1:2)*(47<round(t/48E3+7)%64?1:.5))*pow(2,(int(max(0,min(7,2*round(abs(int(8+t/12E3)%16-8))-4-(5<=int(t/12E3)%16&&12>int(t/12E3)%16))))-7)/12))+4.9*sin(t/14051)*sin(t/39004)))*(100+80*sin(t/20499)))/(100+80*sin(t/20499))*(5<int(t/1500-.5)%8||int(t/12E3-2)%8>(4>int(t/48E3-1)%8?6==int(t/12E3-2)%8?6:4:6)?.1:6E3<t%12E3?.3:.6+.1*sin(t/4190))+(.25+.12*cos(t/2E4))*round(max(-1,min(1,10*sin(.0743*t/((47<round(t/48E3+7)%56?1:2)*(55<round(t/48E3+7)%80?1:.5))*pow(2,(max(-1,min(4,int(5>int(t/12E3+2)%16?0:2*round(abs(int(8+t/12E3)%16-8))-8)))-7)/12))+4.9*sin(t/24051)*sin(t/39504)))*(22+11*sin(t/21499))*(1==int(t/6E3)%4?.5:1))/(22+11*sin(t/21499)))+(24E3>t?.1:.7+.2*sin(t/12345))*sin(max(-.3,min(.3,sin(.07444*t/4*pow(2,(6>int(t/24E3+1)%8?int(7+7*sin((1547167+int(t/6E3)%4)*sin((1547167+int(t/6E3)%4)/4129))):int(5+6*sin((4664+int(t/6E3)%4)*sin(4664+int(t/6E3)%4))))/12+int(t/6E3)%2))*(8+4*sin(t/25210))+3.7*sin(t/50040)))+1*sin(t/4191)))))",
+			"codeFile": "Lia - Takitjää.js"
 		}, {
 			"description": "weirdo boy",
 			"author": "Romash",
@@ -1018,33 +1060,6 @@
 		}, {
 			"author": "Bp103",
 			"children": [{
-				"description": "the proto-version",
-				"url": "https://twitter.com/Bp103/status/934396842850291712",
-				"sampleRate": "44100",
-				"codeFile": "Bp103 - the proto-version.js"
-			}, {
-				"description": "a sequencer type thing",
-				"url": "https://www.reddit.com/r/bytebeat/comments/enmbix/made_a_sequencer_type_thing/ffz6343/",
-				"sampleRate": "32000",
-				"codeFile": "Bp103 - a sequencer type thing.js",
-				"starred": 1
-			}, {
-				"description": "a song in a half baked pseudo-mml format",
-				"url": "https://twitter.com/Bp103/status/1221435415032406017",
-				"sampleRate": "32000",
-				"codeFile": "Bp103 - a song in a half baked pseudo-mml format.js"
-			}, {
-				"description": "now its FM synth",
-				"url": "https://twitter.com/Bp103/status/1345905059964530688",
-				"sampleRate": "32000",
-				"codeFile": "Bp103 - now its FM synth.js"
-			}, {
-				"description": "triangle kick drum and snare",
-				"url": "https://twitter.com/Bp103/status/1346329796041695233",
-				"sampleRate": "32000",
-				"codeFile": "Bp103 - triangle kick drum and snare.js",
-				"starred": 1
-			}, {
 				"description": "random bytebeat thing with delay effect",
 				"url": "https://twitter.com/Bp103/status/1401194230656253952",
 				"sampleRate": "32000",
@@ -1086,23 +1101,18 @@
 			"codeFile": "frantic - my headache generator.js",
 			"starred": 1
 		}, {
-			"description": "pcm.modshape.wv",
 			"author": "argarak",
-			"url": "https://battleofthebits.org/arena/Entry/pcm.modshape.wv/39543/",
-			"sampleRate": "44100",
-			"codeFile": "argarak - pcm.modshape.wv.js",
-			"starred": 1
-		}, {
-			"description": "phase byte [++t]",
-			"author": "argarak",
-			"url": "https://battleofthebits.org/arena/Entry/phase+byte+%5B%2B%2Bt%5D/32262/",
-			"codeFile": "argarak - phase byte [++t].js"
-		}, {
-			"description": "Takitjää",
-			"author": "Lia",
-			"url": "https://battleofthebits.org/arena/Entry/Takitj%C3%A4%C3%A4/31188/",
-			"sampleRate": "44100",
-			"codeFile": "Lia - Takitjää.js"
+			"children": [{
+				"description": "pcm.modshape.wv",
+				"url": "https://battleofthebits.org/arena/Entry/pcm.modshape.wv/39543/",
+				"sampleRate": "44100",
+				"codeFile": "argarak - pcm.modshape.wv.js",
+				"starred": 1
+			}, {
+				"description": "phase byte [++t]",
+				"url": "https://battleofthebits.org/arena/Entry/phase+byte+%5B%2B%2Bt%5D/32262/",
+				"codeFile": "argarak - phase byte [++t].js"
+			}]
 		}
 	],
 	"sthephanshi": [
