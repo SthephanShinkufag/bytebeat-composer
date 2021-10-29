@@ -31,7 +31,7 @@ const bytebeat = new class Bytebeat {
 			this.canvasCtx = this.canvasElem.getContext('2d');
 			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
 			this.containerFixed = document.getElementById('container-fixed');
-			this.controlCounter = document.getElementById('control-counter-value');
+			this.controlCounter = document.getElementById('control-counter');
 			this.controlMode = document.getElementById('control-mode');
 			this.controlSampleRate = document.getElementById('control-samplerate');
 			this.controlScaleDown = document.getElementById('control-scaledown');
@@ -41,6 +41,16 @@ const bytebeat = new class Bytebeat {
 			await this.initAudioContext();
 			this.initLibraryEvents();
 			this.initEditor();
+			this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
+				if(e.keyCode === 13 /* ENTER */) {
+					this.controlCounter.blur();
+					this.togglePlay(true);
+					return;
+				}
+				const byteSample = this.controlCounter.value;
+				this.setByteSample(byteSample);
+				this.sendData({ byteSample });
+			};
 		});
 	}
 	get saveData() {
@@ -140,8 +150,8 @@ const bytebeat = new class Bytebeat {
 	initEditor() {
 		this.errorElem = document.getElementById('error');
 		this.editorElem = document.getElementById('editor');
-		this.editorElem.addEventListener('input', () => this.setFunction());
-		this.editorElem.addEventListener('keydown', e => {
+		this.editorElem.oninput = () => this.setFunction();
+		this.editorElem.onkeydown = e => {
 			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
 				e.preventDefault();
 				const el = e.target;
@@ -150,7 +160,7 @@ const bytebeat = new class Bytebeat {
 				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
 				this.setFunction();
 			}
-		});
+		};
 		/* global pako */
 		let { hash } = window.location;
 		if(!hash) {
@@ -235,6 +245,7 @@ const bytebeat = new class Bytebeat {
 	}
 	receiveData(data) {
 		if(data.byteSample !== undefined) {
+			this.controlCounter.value = data.byteSample;
 			this.setByteSample(data.byteSample);
 		}
 		if(data.drawBuffer !== undefined) {
@@ -254,7 +265,7 @@ const bytebeat = new class Bytebeat {
 		this.audioWorkletNode.port.postMessage(data);
 	}
 	setByteSample(value) {
-		this.controlCounter.textContent = this.byteSample = value;
+		this.byteSample = +value || 0;
 		if(value === 0) {
 			this.drawBuffer = [];
 			this.clearCanvas();

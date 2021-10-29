@@ -269,7 +269,17 @@ code {
 
 #control-counter {
 	align-self: center;
-	cursor: pointer;
+	width: 80px;
+	height: 30px;
+	padding: 0 6px;
+	margin: 1px 2px;
+	color: #fff;
+	background: linear-gradient(to top, #474e60, #12151c);
+	border: none;
+	border-radius: 4px;
+	font-weight: bold;
+	outline: none;
+	box-shadow: inset 0px 0px 12px rgba(202, 202, 202, 0.5);
 }
 
 #control-expand {

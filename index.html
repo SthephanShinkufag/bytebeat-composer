@@ -30,6 +30,9 @@
 				<div id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.stopPlay();">
 					<svg><use xlink:href="#symbol-stop"></use></svg>
 				</div>
+				<div id="control-reset" class="control-button" title="Reset (t) to 0" onclick="bytebeat.resetTime();">
+					<svg><use xlink:href="#symbol-reset"></use></svg>
+				</div>
 				<div id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1);">
 					<svg><use xlink:href="#symbol-scaledown"></use></svg>
 				</div>
@@ -52,10 +55,8 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
+				<input type="text" id="control-counter" value="0" title="Set (t) to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
 				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
-				<div id="control-counter" onclick="bytebeat.resetTime();" title="Click to set t = 0">t=<!--
-				--><span id="control-counter-value">0</span>
-				</div>
 				<div id="control-filler">&nbsp;</div>
 				<div id="control-expand" title="Expand code editor" onclick="bytebeat.expandEditor()">&#x26F6;</div>
 			</div>
@@ -146,6 +147,10 @@
 			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-stop">
 				<path d="M20.3,22.3h-8.5c-1.1,0-2-0.9-2-2v-8.5c0-1.1,0.9-2,2-2h8.5c1.1,0,2,0.9,2,2v8.5C22.3,21.4,21.4,22.3,20.3,22.3z"/>
+			</symbol>
+			<symbol viewBox="0 0 32 32" id="symbol-reset">
+				<path d="M11.8,22.3L11.8,22.3c-1.1,0-2-0.9-2-2v-8.5c0-1.1,0.9-2,2-2h0c1.1,0,2,0.9,2,2v8.5C13.8,21.4,12.9,22.3,11.8,22.3z"/>
+				<path d="M22.3,11.7v8.6c0,1.7-2,2.6-3.3,1.6l-5.3-4.3c-1-0.8-1-2.3,0-3.1l5.3-4.3C20.3,9.1,22.3,10,22.3,11.7z"/>
 			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-scaledown">
 				<path d="M16.5,24h-1c-1.1,0-2-0.9-2-2V10c0-1.1,0.9-2,2-2h1c1.1,0,2,0.9,2,2v12C18.5,23.1,17.6,24,16.5,24z"/>

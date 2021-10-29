@@ -360,7 +360,7 @@
 				"url": "https://www.reddit.com/r/bytebeat/comments/pz264e/remix_of_i_hear_the_long_meowing_of_a_cat/",
 				"code": "t*((t/2>>10|t%16*t>>8)&8*t>>12&18)|-(t/16)+64"
 			}, {
-				"description": "remix of stephanshi's \"trance beat\"",
+				"description": "remix of SthephanShi's \"trance beat\"",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q834xu/i_remixed_stephanshis_trance_beat/",
 				"code": "((t>>(t%16?6:5)|t>>(t%128?11:3))&200)+(3E4/(t&4095)&64)"
 			}, {
@@ -840,11 +840,17 @@
 				"sampleRate": "44100",
 				"code": "(t&64/(t&t>>12?t&t>>14?1:2:4))+(t/[1,2,8,2,4,3,2,3][(t>>13)%8]&64)+(sqrt(1E3*(t&16383))&64)+(t*(t&t>>12)&32)"
 			}, {
-				"description": "remix of \"The time is running out!\" by StephanShi",
+				"description": "remix of \"The time is running out!\" by SthephanShi",
 				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/",
 				"sampleRate": "11025",
 				"code": "((t*(t&16384?7:5)*(3-(3&-t>>9)+(3&t>>8))>>(2&t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)/2&127)+(3E4/(t&4095)&128)+(random()*(((-t>>5)%64)+64))",
 				"starred": 1
+			}, {
+				"description": "remix of SthephanShi's remix",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/",
+				"sampleRate": "44100",
+				"code": "t/=4,((t/2*(t&16384?7:5)*(t&512?0.5:(t&256?1:2))*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t%(t&8192?4096:3072))&128-64)+(random()*(((-t>>(t&4096?5:(t&2048?3:4)))%64)+64))",
+				"starred": 2
 			}]
 		}, {
 			"author": "InfinitySnapz",

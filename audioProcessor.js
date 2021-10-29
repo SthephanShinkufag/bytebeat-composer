@@ -69,6 +69,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		return true;
 	}
 	receiveData(data) {
+		if(data.byteSample !== undefined) {
+			this.byteSample = +data.byteSample || 0;
+			this.resetValues();
+		}
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
 		}
@@ -79,7 +83,9 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.setFunction(data.setFunction);
 		}
 		if(data.resetTime === true) {
-			this.resetTime();
+			this.byteSample = 0;
+			this.resetValues();
+			this.sendData({ byteSample: 0 });
 		}
 		if(data.sampleRatio !== undefined) {
 			this.setSampleRatio(data.sampleRatio);
@@ -88,11 +94,10 @@ class audioProcessor extends AudioWorkletProcessor {
 	sendData(data) {
 		this.port.postMessage(data);
 	}
-	resetTime() {
-		this.audioSample = this.byteSample = this.lastValue = 0;
+	resetValues() {
+		this.audioSample = this.lastValue = 0;
 		this.lastByteValue = this.lastFuncValue = NaN;
 		this.lastFlooredTime = -1;
-		this.sendData({ byteSample: 0 });
 	}
 	setFunction(codeText) {
 		const oldFunc = this.func;
