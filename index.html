@@ -23,6 +23,7 @@
 		<div id="container-fixed">
 			<textarea id="editor" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
 			<div class="controls">
+				<input type="text" id="control-counter" value="0" title="Set (t) to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
 				<div id="control-toggleplay" class="control-button control-play" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying);">
 					<svg id="svg-control-play"><use xlink:href="#symbol-play"></use></svg>
 					<svg id="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
@@ -33,14 +34,14 @@
 				<div id="control-reset" class="control-button" title="Reset (t) to 0" onclick="bytebeat.resetTime();">
 					<svg><use xlink:href="#symbol-reset"></use></svg>
 				</div>
+				<div id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
+					<svg><use xlink:href="#symbol-rec"></use></svg>
+				</div>
 				<div id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1);">
 					<svg><use xlink:href="#symbol-scaledown"></use></svg>
 				</div>
 				<div id="control-scaleup" class="control-button" title="Zoom out the scope" onclick="bytebeat.setScale(1);">
 					<svg><use xlink:href="#symbol-scaleup"></use></svg>
-				</div>
-				<div id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
-					<svg><use xlink:href="#symbol-rec"></use></svg>
 				</div>
 				<select id="control-mode" class="control-select" title="Mode" onchange="bytebeat.setMode(this.selectedOptions[0].value);">
 					<option value="Bytebeat" selected>Bytebeat</option>
@@ -55,9 +56,8 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
-				<input type="text" id="control-counter" value="0" title="Set (t) to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
 				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
-				<div id="control-filler">&nbsp;</div>
+				<div id="control-filler"></div>
 				<div id="control-expand" title="Expand code editor" onclick="bytebeat.expandEditor()">&#x26F6;</div>
 			</div>
 			<div id="error"></div>
@@ -152,15 +152,15 @@
 				<path d="M11.8,22.3L11.8,22.3c-1.1,0-2-0.9-2-2v-8.5c0-1.1,0.9-2,2-2h0c1.1,0,2,0.9,2,2v8.5C13.8,21.4,12.9,22.3,11.8,22.3z"/>
 				<path d="M22.3,11.7v8.6c0,1.7-2,2.6-3.3,1.6l-5.3-4.3c-1-0.8-1-2.3,0-3.1l5.3-4.3C20.3,9.1,22.3,10,22.3,11.7z"/>
 			</symbol>
+			<symbol viewBox="0 0 32 32" id="symbol-rec">
+				<circle cx="16" cy="16" r="6.3"/>
+			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-scaledown">
 				<path d="M16.5,24h-1c-1.1,0-2-0.9-2-2V10c0-1.1,0.9-2,2-2h1c1.1,0,2,0.9,2,2v12C18.5,23.1,17.6,24,16.5,24z"/>
 				<path d="M8,16.5v-1c0-1.1,0.9-2,2-2h12c1.1,0,2,0.9,2,2v1c0,1.1-0.9,2-2,2H10C8.9,18.5,8,17.6,8,16.5z"/>
 			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-scaleup">
 				<path d="M8,16.5v-1c0-1.1,0.9-2,2-2h12c1.1,0,2,0.9,2,2v1c0,1.1-0.9,2-2,2H10C8.9,18.5,8,17.6,8,16.5z"/>
-			</symbol>
-			<symbol viewBox="0 0 32 32" id="symbol-rec">
-				<circle cx="16" cy="16" r="6.3"/>
 			</symbol>
 		</svg>
 	</div>

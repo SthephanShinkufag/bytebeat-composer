@@ -268,13 +268,12 @@ code {
 }
 
 #control-counter {
-	align-self: center;
 	width: 80px;
-	height: 30px;
+	height: 32px;
 	padding: 0 6px;
 	margin: 1px 2px;
-	color: #fff;
-	background: linear-gradient(to top, #474e60, #12151c);
+	color: #e3e3e3;
+	background: linear-gradient(to top, #3a445e, #12151c);
 	border: none;
 	border-radius: 4px;
 	font-weight: bold;
@@ -283,9 +282,11 @@ code {
 }
 
 #control-expand {
+	align-self: center;
 	margin-right: 4px;
 	font-size: 1.2em;
 	font-weight: bold;
+	line-height: 0;
 	cursor: pointer;
 }
 
@@ -323,9 +324,9 @@ code {
 #control-volume {
 	appearance: none;
 	background-color: #575a60;
-	width: 170px;
+	width: 150px;
 	height: 8px;
-	margin: 10px 6px 9px 4px;
+	margin: 10px 0 9px 4px;
 	border-radius: 15px;
 	align-self: center;
 }
