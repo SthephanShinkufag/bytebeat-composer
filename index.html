@@ -43,7 +43,7 @@
 				<div id="control-scaleup" class="control-button" title="Zoom out the scope" onclick="bytebeat.setScale(1);">
 					<svg><use xlink:href="#symbol-scaleup"></use></svg>
 				</div>
-				<select id="control-mode" class="control-select" title="Mode" onchange="bytebeat.setMode(this.selectedOptions[0].value);">
+				<select id="control-mode" class="control-select" title="Sound mode" onchange="bytebeat.setMode(this.selectedOptions[0].value);">
 					<option value="Bytebeat" selected>Bytebeat</option>
 					<option value="Signed Bytebeat">Signed Bytebeat</option>
 					<option value="Floatbeat">Floatbeat</option>
@@ -55,6 +55,10 @@
 					<option value="22050">22050Hz</option>
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
+				</select>
+				<select id="control-drawmode" class="control-select" title="Drawing mode" onchange="bytebeat.drawMode = this.selectedOptions[0].value;">
+					<option value="Values only" selected>Values only</option>
+					<option value="Continuous">Continuous</option>
 				</select>
 				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
 				<div id="control-filler"></div>

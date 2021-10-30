@@ -17,6 +17,7 @@ const bytebeat = new class Bytebeat {
 		this.controlTogglePlay = null;
 		this.controlVolume = null;
 		this.drawBuffer = [];
+		this.drawMode = 'Values only';
 		this.drawScale = 5;
 		this.editorElem = null;
 		this.errorElem = null;
@@ -32,6 +33,7 @@ const bytebeat = new class Bytebeat {
 			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
 			this.containerFixed = document.getElementById('container-fixed');
 			this.controlCounter = document.getElementById('control-counter');
+			this.controlDrawMode = document.getElementById('control-drawmode');
 			this.controlMode = document.getElementById('control-mode');
 			this.controlSampleRate = document.getElementById('control-samplerate');
 			this.controlScaleDown = document.getElementById('control-scaledown');
@@ -41,6 +43,7 @@ const bytebeat = new class Bytebeat {
 			await this.initAudioContext();
 			this.initLibraryEvents();
 			this.initEditor();
+			this.drawMode = this.controlDrawMode.value;
 			this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
 				if(e.keyCode === 13 /* ENTER */) {
 					this.controlCounter.blur();
@@ -91,16 +94,23 @@ const bytebeat = new class Bytebeat {
 		startX = Math.floor(startX);
 		const drawWidth = Math.abs(endX - startX) + 1;
 		// Drawing on a segment
+		const isContMode = this.drawMode === 'Continuous';
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
+		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
-			const { t, value } = buffer[i];
+			const { t, value: curY } = buffer[i];
+			const curX = mod(Math.floor(getX(t)) - startX, width);
+			if(isContMode && curY !== prevY) {
+				const flooredCurX = Math.floor(curX);
+				for(let y = prevY, dy = prevY < curY ? 1 : -1; y !== curY; y += dy) {
+					this.drawPoint(imageData, drawWidth, flooredCurX, y);
+				}
+				prevY = curY;
+			}
 			const nextElem = buffer[i + 1];
-			const currentX = mod(Math.floor(getX(t)) - startX, width);
 			const nextX = mod(Math.ceil(getX(nextElem ? nextElem.t : endTime)) - startX, width);
-			for(let x = currentX; x !== nextX; x = mod(x + 1, width)) {
-				let pos = (drawWidth * (255 - value) + Math.floor(x)) << 2;
-				imageData.data[pos++] = imageData.data[pos++] =
-				imageData.data[pos++] = imageData.data[pos] = 255;
+			for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
+				this.drawPoint(imageData, drawWidth, Math.floor(x), curY);
 			}
 		}
 		// Placing a segment on the canvas
@@ -114,6 +124,10 @@ const bytebeat = new class Bytebeat {
 		}
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+	}
+	drawPoint(imageData, width, x, y) {
+		let pos = (width * (255 - y) + x) << 2;
+		imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos] = 255;
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
