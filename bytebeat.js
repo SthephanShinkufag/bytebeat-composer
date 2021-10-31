@@ -17,8 +17,6 @@ const bytebeat = new class Bytebeat {
 		this.controlTogglePlay = null;
 		this.controlVolume = null;
 		this.drawBuffer = [];
-		this.drawMode = 'Values only';
-		this.drawScale = 5;
 		this.editorElem = null;
 		this.errorElem = null;
 		this.isPlaying = false;
@@ -26,6 +24,7 @@ const bytebeat = new class Bytebeat {
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
+		this.settings = { drawMode: 'Points', drawScale: 5 };
 		this.timeCursor = null;
 		document.addEventListener('DOMContentLoaded', async () => {
 			this.canvasElem = document.getElementById('canvas-main');
@@ -43,7 +42,13 @@ const bytebeat = new class Bytebeat {
 			await this.initAudioContext();
 			this.initLibraryEvents();
 			this.initEditor();
-			this.drawMode = this.controlDrawMode.value;
+			try {
+				this.settings = JSON.parse(localStorage.settings);
+			} catch(err) {
+				localStorage.settings = JSON.stringify(this.settings);
+			}
+			this.setScale(0);
+			this.controlDrawMode.value = this.settings.drawMode;
 			this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
 				if(e.keyCode === 13 /* ENTER */) {
 					this.controlCounter.blur();
@@ -70,7 +75,7 @@ const bytebeat = new class Bytebeat {
 		return saveData;
 	}
 	get timeCursorEnabled() {
-		return this.sampleRate >> this.drawScale < 3950;
+		return this.sampleRate >> this.settings.drawScale < 3950;
 	}
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
@@ -88,13 +93,13 @@ const bytebeat = new class Bytebeat {
 		const { width, height } = this.canvasElem;
 		const startTime = buffer[0].t;
 		const mod = (a, b) => ((a % b) + b) % b;
-		const getX = t => t / (1 << this.drawScale);
+		const getX = t => t / (1 << this.settings.drawScale);
 		let startX = mod(getX(startTime), width);
 		const endX = Math.floor(startX + getX(endTime - startTime));
 		startX = Math.floor(startX);
-		const drawWidth = Math.abs(endX - startX) + 1;
+		const drawWidth = Math.min(Math.abs(endX - startX) + 1, 1024);
 		// Drawing on a segment
-		const isContMode = this.drawMode === 'Continuous';
+		const isContMode = this.settings.drawMode === 'Waveform';
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
@@ -289,6 +294,10 @@ const bytebeat = new class Bytebeat {
 			}
 		}
 	}
+	setDrawMode() {
+		this.settings.drawMode = this.controlDrawMode.value;
+		localStorage.settings = JSON.stringify(this.settings);
+	}
 	setFunction() {
 		this.sendData({ setFunction: this.editorElem.value });
 	}
@@ -305,13 +314,11 @@ const bytebeat = new class Bytebeat {
 		}
 	}
 	setScale(amount) {
-		if(!amount) {
-			return;
-		}
-		this.drawScale = Math.max(this.drawScale + amount, 0);
+		this.settings.drawScale = Math.max(this.settings.drawScale + amount, 0);
+		localStorage.settings = JSON.stringify(this.settings);
 		this.clearCanvas();
 		this.toggleTimeCursor();
-		if(this.drawScale <= 0) {
+		if(this.settings.drawScale <= 0) {
 			this.controlScaleDown.setAttribute('disabled', true);
 		} else {
 			this.controlScaleDown.removeAttribute('disabled');

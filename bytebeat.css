@@ -314,6 +314,7 @@ code {
 	padding-left: 4px;
 	border: none;
 	font-weight: bold;
+	outline: none;
 }
 
 .control-select > option {
