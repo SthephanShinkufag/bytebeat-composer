@@ -17,10 +17,13 @@ const bytebeat = new class Bytebeat {
 		this.controlTogglePlay = null;
 		this.controlVolume = null;
 		this.drawBuffer = [];
+		this.drawEndBuffer = [];
 		this.editorElem = null;
 		this.errorElem = null;
+		this.getX = t => t / (1 << this.settings.drawScale);
 		this.isPlaying = false;
 		this.isRecording = false;
+		this.mod = (a, b) => ((a % b) + b) % b;
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
@@ -79,7 +82,9 @@ const bytebeat = new class Bytebeat {
 	}
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
-		window.requestAnimationFrame(() => this.animationFrame());
+		if(this.isPlaying) {
+			window.requestAnimationFrame(() => this.animationFrame());
+		}
 	}
 	clearCanvas() {
 		this.canvasCtx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height);
@@ -90,38 +95,41 @@ const bytebeat = new class Bytebeat {
 		if(!bufferLen) {
 			return;
 		}
-		const { width, height } = this.canvasElem;
 		const startTime = buffer[0].t;
-		const mod = (a, b) => ((a % b) + b) % b;
-		const getX = t => t / (1 << this.settings.drawScale);
-		let startX = mod(getX(startTime), width);
-		const endX = Math.floor(startX + getX(endTime - startTime));
+		const { width, height } = this.canvasElem;
+		let startX = this.mod(this.getX(startTime), width);
+		const endX = Math.floor(startX + this.getX(endTime - startTime));
 		startX = Math.floor(startX);
 		const drawWidth = Math.min(Math.abs(endX - startX) + 1, 1024);
 		// Drawing on a segment
-		const isContMode = this.settings.drawMode === 'Waveform';
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
+		for(let y = 0; y < height; ++y) {
+			this.drawPoint(imageData, drawWidth, 0, y, this.drawEndBuffer[y]);
+		}
+		const isWaveform = this.settings.drawMode === 'Waveform';
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
 			const { t, value: curY } = buffer[i];
-			const curX = mod(Math.floor(getX(t)) - startX, width);
-			if(isContMode && curY !== prevY) {
-				const flooredCurX = Math.floor(curX);
+			const curX = this.mod(Math.floor(this.getX(t)) - startX, width);
+			if(isWaveform && curY !== prevY) {
 				for(let y = prevY, dy = prevY < curY ? 1 : -1; y !== curY; y += dy) {
-					this.drawPoint(imageData, drawWidth, flooredCurX, y);
+					this.drawPoint(imageData, drawWidth, curX, y, 255);
 				}
 				prevY = curY;
 			}
 			const nextElem = buffer[i + 1];
-			const nextX = mod(Math.ceil(getX(nextElem ? nextElem.t : endTime)) - startX, width);
-			for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
-				this.drawPoint(imageData, drawWidth, Math.floor(x), curY);
+			const nextX = this.mod(Math.ceil(this.getX(nextElem ? nextElem.t : endTime)) - startX, width);
+			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
+				this.drawPoint(imageData, drawWidth, x, curY, 255);
 			}
 		}
 		// Placing a segment on the canvas
 		this.canvasCtx.putImageData(imageData, startX, 0);
 		if(endX > width) {
 			this.canvasCtx.putImageData(imageData, startX - width, 0);
+		}
+		for(let y = 0; y < height; ++y) {
+			this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + drawWidth - 1) << 2];
 		}
 		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
@@ -130,9 +138,9 @@ const bytebeat = new class Bytebeat {
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
 	}
-	drawPoint(imageData, width, x, y) {
-		let pos = (width * (255 - y) + x) << 2;
-		imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos++] = imageData.data[pos] = 255;
+	drawPoint(imageData, width, x, y, value) {
+		let idx = (width * (255 - y) + x) << 2;
+		imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = value;
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
