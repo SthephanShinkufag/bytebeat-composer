@@ -23,7 +23,8 @@
 		<div id="container-fixed">
 			<textarea id="editor" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
 			<div class="controls">
-				<input type="text" id="control-counter" value="0" title="Set (t) to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
+				<div id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</div>
+				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
 				<div id="control-toggleplay" class="control-button control-play" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying);">
 					<svg id="svg-control-play"><use xlink:href="#symbol-play"></use></svg>
 					<svg id="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
@@ -31,7 +32,7 @@
 				<div id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.stopPlay();">
 					<svg><use xlink:href="#symbol-stop"></use></svg>
 				</div>
-				<div id="control-reset" class="control-button" title="Reset (t) to 0" onclick="bytebeat.resetTime();">
+				<div id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
 					<svg><use xlink:href="#symbol-reset"></use></svg>
 				</div>
 				<div id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">

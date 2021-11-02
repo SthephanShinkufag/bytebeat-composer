@@ -28,7 +28,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		let time = this.sampleRatio * this.audioSample;
 		let { byteSample } = this;
-		const drawBuffer = [];
+		let drawBuffer = [];
 		const isBytebeat = this.mode === 'Bytebeat';
 		const isFloatbeat = this.mode === 'Floatbeat';
 		for(let i = 0; i < chDataLen; ++i) {
@@ -63,6 +63,10 @@ class audioProcessor extends AudioWorkletProcessor {
 			}
 			chData[i] = this.lastValue;
 		}
+		if(Math.abs(byteSample) > Number.MAX_SAFE_INTEGER) {
+			this.resetTime();
+			return true;
+		}
 		this.audioSample += chDataLen;
 		this.byteSample = byteSample;
 		this.sendData({ drawBuffer, byteSample });
@@ -83,9 +87,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.setFunction(data.setFunction);
 		}
 		if(data.resetTime === true) {
-			this.byteSample = 0;
-			this.resetValues();
-			this.sendData({ byteSample: 0 });
+			this.resetTime();
 		}
 		if(data.sampleRatio !== undefined) {
 			this.setSampleRatio(data.sampleRatio);
@@ -93,6 +95,11 @@ class audioProcessor extends AudioWorkletProcessor {
 	}
 	sendData(data) {
 		this.port.postMessage(data);
+	}
+	resetTime() {
+		this.byteSample = 0;
+		this.resetValues();
+		this.sendData({ byteSample: 0 });
 	}
 	resetValues() {
 		this.audioSample = this.lastValue = 0;

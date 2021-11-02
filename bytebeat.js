@@ -27,41 +27,14 @@ const bytebeat = new class Bytebeat {
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
-		this.settings = { drawMode: 'Points', drawScale: 5 };
+		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false };
 		this.timeCursor = null;
 		document.addEventListener('DOMContentLoaded', async () => {
-			this.canvasElem = document.getElementById('canvas-main');
-			this.canvasCtx = this.canvasElem.getContext('2d');
-			this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
-			this.containerFixed = document.getElementById('container-fixed');
-			this.controlCounter = document.getElementById('control-counter');
-			this.controlDrawMode = document.getElementById('control-drawmode');
-			this.controlMode = document.getElementById('control-mode');
-			this.controlSampleRate = document.getElementById('control-samplerate');
-			this.controlScaleDown = document.getElementById('control-scaledown');
-			this.controlTogglePlay = document.getElementById('control-toggleplay');
-			this.controlVolume = document.getElementById('control-volume');
-			this.timeCursor = document.getElementById('canvas-timecursor');
+			this.initControls();
+			this.initSettings();
 			await this.initAudioContext();
 			this.initLibraryEvents();
 			this.initEditor();
-			try {
-				this.settings = JSON.parse(localStorage.settings);
-			} catch(err) {
-				localStorage.settings = JSON.stringify(this.settings);
-			}
-			this.setScale(0);
-			this.controlDrawMode.value = this.settings.drawMode;
-			this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
-				if(e.keyCode === 13 /* ENTER */) {
-					this.controlCounter.blur();
-					this.togglePlay(true);
-					return;
-				}
-				const byteSample = this.controlCounter.value;
-				this.setByteSample(byteSample);
-				this.sendData({ byteSample });
-			};
 		});
 	}
 	get saveData() {
@@ -90,22 +63,29 @@ const bytebeat = new class Bytebeat {
 		this.canvasCtx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height);
 	}
 	drawGraphics(endTime) {
+		if(!isFinite(endTime)) {
+			this.resetTime();
+			return;
+		}
 		const buffer = this.drawBuffer;
 		const bufferLen = buffer.length;
 		if(!bufferLen) {
 			return;
 		}
-		const startTime = buffer[0].t;
 		const { width, height } = this.canvasElem;
+		const startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
 		const endX = Math.floor(startX + this.getX(endTime - startTime));
 		startX = Math.floor(startX);
 		const drawWidth = Math.min(Math.abs(endX - startX) + 1, 1024);
-		// Drawing on a segment
+		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
-		for(let y = 0; y < height; ++y) {
-			this.drawPoint(imageData, drawWidth, 0, y, this.drawEndBuffer[y]);
+		if(this.settings.drawScale) {
+			for(let y = 0; y < height; ++y) {
+				this.drawPoint(imageData, drawWidth, 0, y, this.drawEndBuffer[y]);
+			}
 		}
+		// Drawing on a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
@@ -123,13 +103,16 @@ const bytebeat = new class Bytebeat {
 				this.drawPoint(imageData, drawWidth, x, curY, 255);
 			}
 		}
+		// Saving the last points of a segment
+		if(this.settings.drawScale) {
+			for(let y = 0; y < height; ++y) {
+				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + drawWidth - 1) << 2];
+			}
+		}
 		// Placing a segment on the canvas
 		this.canvasCtx.putImageData(imageData, startX, 0);
 		if(endX > width) {
 			this.canvasCtx.putImageData(imageData, startX - width, 0);
-		}
-		for(let y = 0; y < height; ++y) {
-			this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + drawWidth - 1) << 2];
 		}
 		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
@@ -173,6 +156,32 @@ const bytebeat = new class Bytebeat {
 			this.saveData(new Blob(this.recordChunks, { type }), file);
 		};
 		this.audioGain.connect(mediaDest);
+	}
+	initControls() {
+		this.canvasElem = document.getElementById('canvas-main');
+		this.canvasCtx = this.canvasElem.getContext('2d');
+		this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
+		this.containerFixed = document.getElementById('container-fixed');
+		this.controlCounter = document.getElementById('control-counter');
+		this.controlCounterUnits = document.getElementById('control-counter-units');
+		this.controlDrawMode = document.getElementById('control-drawmode');
+		this.controlMode = document.getElementById('control-mode');
+		this.controlSampleRate = document.getElementById('control-samplerate');
+		this.controlScaleDown = document.getElementById('control-scaledown');
+		this.controlTogglePlay = document.getElementById('control-toggleplay');
+		this.controlVolume = document.getElementById('control-volume');
+		this.timeCursor = document.getElementById('canvas-timecursor');
+		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
+			if(e.keyCode === 13 /* ENTER */) {
+				this.controlCounter.blur();
+				this.togglePlay(true);
+				return;
+			}
+			const { value } = this.controlCounter;
+			const byteSample = this.settings.isSeconds ? Math.round(value * this.sampleRate) : value;
+			this.setByteSample(byteSample);
+			this.sendData({ byteSample });
+		};
 	}
 	initEditor() {
 		this.errorElem = document.getElementById('error');
@@ -247,6 +256,16 @@ const bytebeat = new class Bytebeat {
 			}
 		};
 	}
+	initSettings() {
+		try {
+			this.settings = JSON.parse(localStorage.settings);
+		} catch(err) {
+			this.saveSettings();
+		}
+		this.setScale(0);
+		this.setCounterUnits();
+		this.controlDrawMode.value = this.settings.drawMode;
+	}
 	loadCode({ code, sampleRate, mode }, isPlay = true) {
 		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
 		this.editorElem.value = code;
@@ -271,9 +290,10 @@ const bytebeat = new class Bytebeat {
 		}
 	}
 	receiveData(data) {
-		if(data.byteSample !== undefined) {
-			this.controlCounter.value = data.byteSample;
-			this.setByteSample(data.byteSample);
+		const { byteSample } = data;
+		if(byteSample !== undefined) {
+			this.setCounterValue(byteSample);
+			this.setByteSample(byteSample);
 		}
 		if(data.drawBuffer !== undefined) {
 			this.drawBuffer = this.drawBuffer.concat(data.drawBuffer);
@@ -287,6 +307,9 @@ const bytebeat = new class Bytebeat {
 	}
 	resetTime() {
 		this.sendData({ resetTime: true });
+	}
+	saveSettings() {
+		localStorage.settings = JSON.stringify(this.settings);
 	}
 	sendData(data) {
 		this.audioWorkletNode.port.postMessage(data);
@@ -302,9 +325,16 @@ const bytebeat = new class Bytebeat {
 			}
 		}
 	}
+	setCounterUnits() {
+		this.controlCounterUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
+		this.setCounterValue(this.byteSample);
+	}
+	setCounterValue(value) {
+		this.controlCounter.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
+	}
 	setDrawMode() {
 		this.settings.drawMode = this.controlDrawMode.value;
-		localStorage.settings = JSON.stringify(this.settings);
+		this.saveSettings();
 	}
 	setFunction() {
 		this.sendData({ setFunction: this.editorElem.value });
@@ -323,7 +353,7 @@ const bytebeat = new class Bytebeat {
 	}
 	setScale(amount) {
 		this.settings.drawScale = Math.max(this.settings.drawScale + amount, 0);
-		localStorage.settings = JSON.stringify(this.settings);
+		this.saveSettings();
 		this.clearCanvas();
 		this.toggleTimeCursor();
 		if(this.settings.drawScale <= 0) {
@@ -339,6 +369,11 @@ const bytebeat = new class Bytebeat {
 	stopPlay() {
 		this.togglePlay(false, false);
 		this.sendData({ isPlaying: false, resetTime: true });
+	}
+	toggleCounterUnits() {
+		this.settings.isSeconds = !this.settings.isSeconds;
+		this.saveSettings();
+		this.setCounterUnits();
 	}
 	togglePlay(isPlaying, isSendData = true) {
 		this.controlTogglePlay.title = isPlaying ? 'Pause' : 'Play';
