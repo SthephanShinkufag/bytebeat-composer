@@ -36,6 +36,7 @@ a:hover, code:hover {
 #container-fixed {
 	display: flex;
 	flex-direction: column;
+	width: 1028px;
 	max-height: 100vh;
 }
 
@@ -122,14 +123,12 @@ a:hover, code:hover {
 
 #editor {
 	height: 200px;
-	padding: 0 5px;
+	padding: 0 2px 0 5px;
 	border: 2px solid white;
 	box-sizing: border-box;
 	color: #fff;
 	background-color: #000;
 	font: 14px/14px Monospace;
-	white-space: pre-wrap;
-	word-wrap: break-word;
 	word-break: break-all;
 	outline: none;
 	resize: vertical;
@@ -137,6 +136,7 @@ a:hover, code:hover {
 
 #error {
 	color: #f92672;
+	word-break: break-all;
 }
 
 /* ==[ Library ] ========================================================================================== */
