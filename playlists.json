@@ -740,7 +740,7 @@
 				"starred": 2
 			}]
 		}, {
-			"description": "511 - remix of \"arpeggiator fun\" (<a href=\"https://odysee.com/@johanv:5/511:6\">video with info</a>)",
+			"description": "511 - remix of \"arpeggiator fun\" (<a href=\"https://odysee.com/@johanv:5/511:6\" target=\"_blank\">video with info</a>)",
 			"author": [
 				["johanvandegriff", "https://www.reddit.com/r/bytebeat/comments/o7e957/511/"],
 				["SArpnt", "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/"]],
@@ -1167,6 +1167,81 @@
 			}]
 		}
 	],
+	"floatbeat": [
+		{
+			"author": "Wiebe-Marten Wijnja",
+			"url": "http://wmmusic.nl/",
+			"children": [{
+				"description": "Cover of 'Focus' from SuperHexagon",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "Wiebe-Marten Wijnja - Cover of 'Focus' from SuperHexagon.js",
+				"starred": 2
+			}, {
+				"description": "Cover of 'Please Exist' from Knytt Underground",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "Wiebe-Marten Wijnja - Cover of 'Please Exist' from Knytt Underground.js",
+				"starred": 2
+			}, {
+				"description": "Cover of 'Predestined Fate' from VVVVVV",
+				"mode": "Floatbeat",
+				"codeFile": "Wiebe-Marten Wijnja - Cover of 'Predestined Fate' from VVVVVV.js",
+				"starred": 1
+			}, {
+				"description": "Game of Thrones theme",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "Wiebe-Marten Wijnja - Game of Thrones theme.js",
+				"starred": 1
+			}]
+		}, {
+			"author": "lehandsomeguy",
+			"url": "https://www.reddit.com/r/bytebeat/comments/48r00a/floatbeat_test/",
+			"children": [{
+				"description": "Floatbeat test",
+				"mode": "Floatbeat",
+				"sampleRate": "32000",
+				"codeFile": "lehandsomeguy - Floatbeat test.js"
+			}, {
+				"description": "Melody with array",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "lehandsomeguy - Melody with array.js"
+			}, {
+				"description": "Melody with array 2",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "lehandsomeguy - Melody with array 2.js",
+				"starred": 1
+			}, {
+				"description": "Drone",
+				"mode": "Floatbeat",
+				"sampleRate": "11025",
+				"codeFile": "lehandsomeguy - Drone.js",
+				"starred": 1
+			}, {
+				"description": "Trippy test",
+				"mode": "Floatbeat",
+				"sampleRate": "44100",
+				"codeFile": "lehandsomeguy - Trippy test.js"
+			}, {
+				"description": "Random melody with array",
+				"mode": "Floatbeat",
+				"sampleRate": "22050",
+				"codeFile": "lehandsomeguy - Random melody with array.js"
+			}, {
+				"description": "Floatbeat to bytebeat",
+				"sampleRate": "32000",
+				"codeFile": "lehandsomeguy - Floatbeat to bytebeat.js"
+			}, {
+				"description": "Pretentious Ryoji Ikeda",
+				"mode": "Floatbeat",
+				"sampleRate": "32000",
+				"codeFile": "lehandsomeguy - Pretentious Ryoji Ikeda.js"
+			}]
+		}
+	],
 	"sthephanshi": [
 		{
 			"description": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
@@ -1389,33 +1464,41 @@
 				"code": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5",
 				"starred": 1
 			}, {
-				"description": "<br>Other \"Boss level\" variations:"
-			}, {
+				"description": "Other \"Boss level\" variation",
 				"code": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
-			}, {
-				"code": "t*(16+(1&t>>14))>>(3&t>>8)|t>>4"
 			}, {
 				"description": "Previous tune with a ternary magic",
 				"code": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
 				"starred": 1
+			}]
+		}, {
+			"description": "The time is running out!",
+			"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
+			"starred": 2,
+			"children": [{
+				"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3",
+				"sampleRate": "11025"
 			}, {
-				"description": " "
+				"description": "More complicated drums",
+				"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>3",
+				"sampleRate": "11025"
 			}, {
-				"description": "The time is running out!",
-				"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
-				"starred": 2,
-				"children": [{
-					"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3",
-					"sampleRate": "11025"
-				}, {
-					"description": "More complicated drums",
-					"code": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>3",
-					"sampleRate": "11025"
-				}, {
-					"description": "Remix of <a href=\"https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/\">remix by RealZynx92</a>",
-					"code": "((.5*t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t&4095)&128-64)+(random()*(((-t>>(t&4096?6:5))%64)+64))",
-					"sampleRate": "11025"
-				}]
+				"description": "Remix of <a href=\"https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/\" target=\"_blank\">\"remix by RealZynx92\"</a>",
+				"code": "((.5*t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t&4095)&128-64)+(random()*(((-t>>(t&4096?6:5))%64)+64))",
+				"sampleRate": "11025"
+			}]
+		}, {
+			"description": "Death chase",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
+			"starred": 2,
+			"children": [{
+				"description": "As a basis is taken modified <a href=\"https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/\" target=\"_blank\">\"The time is running out!\"</a> and <a href=\"https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/\" target=\"_blank\">\"remix by RealZynx92\"</a> songs. Used the idea of selecting notes and rhythm through an array.",
+				"code": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>([5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32]))&127)+(3E5/(t&4095)&128-64)+(random()*(((-t>>([6,5,4,5,5,5,4,5][(t>>12)%8]))%64)+64))",
+				"sampleRate": "44100"
+			}, {
+				"description": "\"90's eurodance\" variation",
+				"code": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>([5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%16]))&127)+(3E5/(t&4095)&128-64)+(random()*(((-t>>([6,5,5,5,4,5,5,5][(t>>12)%8]))%64)+64))",
+				"sampleRate": "44100"
 			}]
 		}
 	]

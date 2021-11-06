@@ -90,8 +90,11 @@ const bytebeat = new class Bytebeat {
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
 			const { t, value: curY } = buffer[i];
+			if(isNaN(curY)) {
+				continue;
+			}
 			const curX = this.mod(Math.floor(this.getX(t)) - startX, width);
-			if(isWaveform && curY !== prevY && !isNaN(curY)) {
+			if(isWaveform && curY !== prevY && !isNaN(prevY)) {
 				for(let y = prevY, dy = prevY < curY ? 1 : -1; y !== curY; y += dy) {
 					this.drawPoint(imageData, drawWidth, curX, y, 255);
 				}

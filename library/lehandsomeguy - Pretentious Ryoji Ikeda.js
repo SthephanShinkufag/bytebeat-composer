@@ -1,0 +1,30 @@
+time = t / 32000,
+fract = function(x) {
+  return ((x % 1) + 1) % 1;
+},
+puls = function(x) {
+  return (floor(sin(x)) + 0.5) * 2.;
+},
+hash = function(x) {
+  return fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23);
+},
+music1 = function(time) {
+  time *= .93 + ((sin(time) * .01) / time);
+  a = sin(time * 99000) * pow(1 - fract(time * .5), 100);
+  a += sin(time * 300) * [1, 1, 0, 0, 1, 0, 0, 0, 1][floor(time) % 9] * .5;
+  a += sin(time * 200) * [0, 0, 0, 0, 0, 0, 1, 1][floor(time) % 8] * .5;
+  a += puls(time * 80000) * [1, 1, 0, 0, 1, 0, 0, 0, 1][floor(time * 2) % 9] * pow(1 - fract(time * 8), 90);
+  a += puls(time * 80000) *
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1][floor(time * 2) % 15] * pow(1 - fract(time * 16), 90);
+  for (i = 0; i < 5; i++) {
+    a += sin(time * (200 + ((1 + hash(i + .3 + floor(time * .25))) * 1100))) * .02;
+  }
+  a += sin(pow(1 - fract(time * 32), 5) * 20) *
+    [0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0][floor(time * 4) % 16] * .06;
+  a += (sin(time * 9000) + sin(time * 9060)) * pow(1 - fract(time * .125), 100) * .2;
+  return a * .8;
+},
+main = function(x) {
+  return music1(time);
+},
+main(time)
