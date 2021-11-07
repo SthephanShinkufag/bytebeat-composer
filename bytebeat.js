@@ -37,9 +37,7 @@ const bytebeat = new class Bytebeat {
 			this.initLibraryEvents();
 			this.initEditor();
 		});
-		document.addEventListener('visibilitychange', () => {
-			this.isActiveTab = !document.hidden;
-		});
+		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
 	}
 	get saveData() {
 		const a = document.body.appendChild(document.createElement('a'));
@@ -365,7 +363,10 @@ const bytebeat = new class Bytebeat {
 			this.sendData({ sampleRatio: this.sampleRate / this.audioCtx.sampleRate });
 		}
 	}
-	setScale(amount) {
+	setScale(amount, buttonElem) {
+		if(buttonElem && buttonElem.getAttribute('disabled')) {
+			return;
+		}
 		this.settings.drawScale = Math.max(this.settings.drawScale + amount, 0);
 		this.saveSettings();
 		this.clearCanvas();

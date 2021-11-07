@@ -318,6 +318,7 @@ code {
 
 #control-scaledown[disabled] {
 	opacity: 0.5;
+	cursor: default;
 }
 
 .control-select {
