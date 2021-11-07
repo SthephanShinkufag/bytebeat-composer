@@ -21,6 +21,7 @@ const bytebeat = new class Bytebeat {
 		this.editorElem = null;
 		this.errorElem = null;
 		this.getX = t => t / (1 << this.settings.drawScale);
+		this.isActiveTab = true;
 		this.isPlaying = false;
 		this.isRecording = false;
 		this.mod = (a, b) => ((a % b) + b) % b;
@@ -35,6 +36,9 @@ const bytebeat = new class Bytebeat {
 			await this.initAudioContext();
 			this.initLibraryEvents();
 			this.initEditor();
+		});
+		document.addEventListener('visibilitychange', () => {
+			this.isActiveTab = !document.hidden;
 		});
 	}
 	get saveData() {
@@ -56,7 +60,7 @@ const bytebeat = new class Bytebeat {
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
 		if(this.isPlaying) {
-			window.requestAnimationFrame(() => this.animationFrame());
+			this.requestAnimationFrame();
 		}
 	}
 	clearCanvas() {
@@ -300,6 +304,10 @@ const bytebeat = new class Bytebeat {
 		}
 		if(data.drawBuffer !== undefined) {
 			this.drawBuffer = this.drawBuffer.concat(data.drawBuffer);
+			if(!this.isActiveTab) {
+				this.drawBuffer = this.drawBuffer.slice(
+					-this.canvasElem.width * (1 << this.settings.drawScale));
+			}
 		}
 		if(data.error !== undefined) {
 			this.errorElem.innerText = data.error;
@@ -307,6 +315,9 @@ const bytebeat = new class Bytebeat {
 		if(data.updateLocation === true) {
 			this.updateLocation();
 		}
+	}
+	requestAnimationFrame() {
+		window.requestAnimationFrame(() => this.animationFrame());
 	}
 	resetTime() {
 		this.sendData({ resetTime: true });
@@ -388,7 +399,7 @@ const bytebeat = new class Bytebeat {
 			this.canvasTogglePlay.classList.remove('canvas-initial');
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
-				window.requestAnimationFrame(() => this.animationFrame());
+				this.requestAnimationFrame();
 			}
 		} else if(this.isRecording) {
 			this.audioRecorder.stop();
