@@ -322,29 +322,39 @@ code {
 
 #control-volume {
 	appearance: none;
-	background-color: #575a60;
+	background-color: #2e3239;
 	width: 150px;
-	height: 12px;
+	height: 14px;
 	margin: 10px 0 10px 4px;
 	border-radius: 15px;
 	align-self: center;
 }
 
 #control-volume::-moz-range-thumb {
-	width: 10px;
-	height: 24px;
+	width: 12px;
+	height: 28px;
+	border: none;
 	border-radius: 4px;
-	background-color: #d3d8df;
+	background-image: linear-gradient(to bottom, #aeaeae, #484c55);
 	cursor: pointer;
+}
+
+#control-volume::-moz-range-thumb:hover {
+	background-image: linear-gradient(to bottom, #90a7d7, #3f4c71);
 }
 
 #control-volume::-webkit-slider-thumb {
 	appearance: none;
 	width: 10px;
-	height: 20px;
+	height: 28px;
+	border: none;
 	border-radius: 4px;
-	background-color: #d3d8df;
+	background-image: linear-gradient(to bottom, #aeaeae, #484c55);
 	cursor: pointer;
+}
+
+#control-volume::-webkit-slider-thumb:hover {
+	background-image: linear-gradient(to bottom, #90a7d7, #3f4c71);
 }
 
 .controls {
