@@ -245,6 +245,7 @@ code {
 }
 
 .control-button, .control-select {
+	height: 32px;
 	margin: 1px 2px;
 	border-radius: 6px;
 	color: #e3e3e3;
@@ -292,20 +293,7 @@ code {
 }
 
 #control-expand {
-	align-self: center;
-	margin-right: 4px;
-	font-size: 1.2em;
-	font-weight: bold;
-	line-height: 0;
-	cursor: pointer;
-}
-
-#control-expand:hover {
-	color: #a0ceff;
-}
-
-#control-filler {
-	flex: auto;
+	margin-left: auto;
 }
 
 .control-pause > #svg-control-play, .control-play > #svg-control-pause {
@@ -336,15 +324,15 @@ code {
 	appearance: none;
 	background-color: #575a60;
 	width: 150px;
-	height: 8px;
-	margin: 10px 0 9px 4px;
+	height: 12px;
+	margin: 10px 0 10px 4px;
 	border-radius: 15px;
 	align-self: center;
 }
 
 #control-volume::-moz-range-thumb {
 	width: 10px;
-	height: 20px;
+	height: 24px;
 	border-radius: 4px;
 	background-color: #d3d8df;
 	cursor: pointer;
