@@ -43,4 +43,4 @@ arpch = [
 bs = [g / 2, a / 2, c / 2, e / 2],
 
 // Output
-sine(bs[(t >> 16) % 4]) + sqr(arpch[((t >> 12) % 3) + ((t >> 16) % 4) * 3]) + kick + snare + hihat
+sine(bs[(t >> 16) % 4]) + sqr(arpch[((t >> 12) % 3) + ((t >> 16) % 4) * 3]) + kick + snare + hihat;

@@ -841,7 +841,7 @@ window.channels = t > 0 ? window.channels : [
   }, { // Channel 4: Kick
     ndx: 0,
     amp: 14,
-    pulse: function(tick) {
+    pulse(tick) {
       return 50;
     },
     notes: [
@@ -2259,7 +2259,7 @@ window.channels = t > 0 ? window.channels : [
   }, { // Channel 7: Lead square 1
     ndx: 0,
     amp: 10,
-    pulse: function(tick) {
+    pulse(tick) {
       return ((tick + 96) % 192) / 2.15 + 5;
     },
     notes: [
@@ -2359,7 +2359,7 @@ window.channels = t > 0 ? window.channels : [
   }, { // Channel 8: Lead square 2
     ndx: 0,
     amp: 6,
-    pulse: function(tick) {
+    pulse(tick) {
       return 12;
     },
     notes: [
@@ -2538,7 +2538,7 @@ window.channels = t > 0 ? window.channels : [
   }, { // Channel 10: Lead square echo 1
     ndx: 0,
     amp: 2.5,
-    pulse: function(tick) {
+    pulse(tick) {
       return ((tick + 96) % 192) / 2.15 + 5;
     },
     delay: 13,
@@ -2546,7 +2546,7 @@ window.channels = t > 0 ? window.channels : [
   }, { // Channel 11: Lead square echo 2
     ndx: 0,
     amp: 1.5,
-    pulse: function(tick) {
+    pulse(tick) {
       return 12;
     },
     delay: 13,
@@ -2554,16 +2554,16 @@ window.channels = t > 0 ? window.channels : [
   }
 ],
 
-window.channels.forEach(function(chan) {
-  var ndx = chan.ndx;
-  var note = chan.notes[ndx];
+window.channels.forEach(chan => {
+  let { ndx } = chan;
+  let note = chan.notes[ndx];
   if(!note) {
-    return
+    return;
   }
-  var localTick = tick - (chan.delay || 0);
-  while (localTick >= note.end) {
+  const localTick = tick - (chan.delay || 0);
+  while(localTick >= note.end) {
     ++ndx;
-    if (ndx >= chan.notes.length) {
+    if(ndx >= chan.notes.length) {
       ndx = 0;
       break;
     }
@@ -2612,4 +2612,4 @@ ch = window.channels[0],
   // Lead square echo 1
   square(window.channels[10], 1.0125) +
   // Lead square echo 2
-  square(window.channels[11], 1.0125)
+  square(window.channels[11], 1.0125);

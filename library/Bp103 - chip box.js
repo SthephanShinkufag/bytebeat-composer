@@ -28,21 +28,21 @@ function p(tt, vol) {
   aa = sin(int(q *
       (n[xy((q + tt) * 0.5 % 8, (q + tt) * 32 % 3)] - 1) *
       (2 + os[int(((q + tt) * 0.5) % 32)]))) *
-    (vol / ((sin(q * .07) * 2.5) + 3.5));
+    (vol / ((sin(q * 0.07) * 2.5) + 3.5));
   bb = tri(q * n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] * 2) * vol;
   cc = cos(int(q *
       (n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] - 1.5) *
       (2 + os[int(((q + tt) * 4) % 32)]))) *
-    (vol / ((sin(q * 0.37) * .8) + 1.5));
+    (vol / ((sin(q * 0.37) * 0.8) + 1.5));
   return aa + bb + cc;
 }
 
 function delay() {
   tt = 0,
-  to = .25,
+  to = 0.25,
   voll = 2;
   out = p(tt, 2);
-  for (var i = 0; i < 8; i++) {
+  for(let i = 0; i < 8; i++) {
     out -= p(tt, i + voll);
     tt = tt + to;
   }

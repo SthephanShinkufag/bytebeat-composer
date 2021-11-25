@@ -24,7 +24,7 @@ chan1_freq =
   (tick >= 168 && tick < 180) * EE * 2 + (tick >= 192 && tick < 216) * Eb * 2 +
   (tick >= 216 && tick < 228) * EE * 2 + (tick >= 240 && tick < 252) * F * 2 +
   (tick >= 264 && tick < 278) * Gb * 2,
-chan1_amp = (32),
+chan1_amp = 32,
 chan1_pulse = 50,
 
 tick -= 24, // delay
@@ -37,7 +37,7 @@ chan2_freq =
   (tick >= 168 && tick < 180) * EE * 2 + (tick >= 192 && tick < 216) * Eb * 2 +
   (tick >= 216 && tick < 228) * EE * 2 + (tick >= 240 && tick < 252) * F * 2 +
   (tick >= 264 && tick < 278) * Gb * 2,
-chan2_amp = (4),
+chan2_amp = 4,
 chan2_pulse = 50,
 
 tick += 24, // un-delay
@@ -50,7 +50,7 @@ chan3_freq =
   (tick >= 228 && tick < 252) * B / 4 + (tick >= 262 && tick < 274) * Gb / 4 +
   (tick >= 286 && tick < 298) * A / 8 + (tick >= 310 && tick < 322) * A / 8 +
   (tick >= 334 && tick < 346) * A / 8 + (tick >= 358 && tick < 370) * A / 8,
-chan3_amp = (32),
+chan3_amp = 32,
 
 chan4_freq = (tick >= 312 && tick < 324) * Gb * 2 + (tick >= 336 && tick < 360) * Gb * 2,
 chan4_amp = (tick >= 312 && tick < 324) * 24 + (tick >= 336 && tick < 360) * 24,
@@ -77,4 +77,4 @@ noiseFreq = int(t * (chan7_freq * 44100 / SAMPLE_RATE) / 440),
   chan4_amp * 2 * (int(chan4_freq * t / SAMPLE_RATE * 256) % 256 <= chan4_pulse * 256 / 100) - chan4_amp +
   chan5_amp * 2 * (int(chan5_freq * t / SAMPLE_RATE * 256) % 256 <= chan5_pulse * 256 / 100) - chan5_amp +
   chan6_amp * 2 * (int(chan6_freq * t / SAMPLE_RATE * 256) % 256 <= chan6_pulse * 256 / 100) - chan6_amp +
-  (chan7_amp / 128) * (int(65536 * sin(noiseFreq * noiseFreq)) & 255) - chan7_amp
+  (chan7_amp / 128) * (int(65536 * sin(noiseFreq * noiseFreq)) & 255) - chan7_amp;

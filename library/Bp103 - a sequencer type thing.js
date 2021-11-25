@@ -23,22 +23,23 @@ na = (q * [
   g, b, d,
   f, a, c,
   a, c, g,
-  g, b, d,
+  g, b, d
 ][(int(q * 1) % 8) * 3 + (int(q * 32) % 3)]) % 2,
 
-nb = (q * [
+nb = q * [
   // Lead
   a, b, c, e, c, b, a, 0
-][int(q * 4) % 8] % 2),
+][int(q * 4) % 8] % 2,
 
-nc = (q * ([
+nc = q * ([
   // BASS
   a, a << 1, a, 0, a, 0, a, 0, g >> 1, g, g >> 1, 0, e >> 1, 0, c >> 1, c
-][int(q * 4) % 16] >> 2) % 4),
+][int(q * 4) % 16] >> 2) % 4,
 
 kick = ((q * (512 >> (q * 64))) % 2) << 6,
-snare = ((q * 4) & 3) > 1 ? q * (8e3 >> q * 64) % 2 << 5 << ((sin((q * 2e5) >> 5) * (q * 2e5)) << (q * 64)) : 0,
+snare = ((q * 4) & 3) > 1 ?
+  q * (8e3 >> q * 64) % 2 << 5 << ((sin((q * 2e5) >> 5) * (q * 2e5)) << (q * 64)) : 0,
 hihat = ((q * 64) % 8) < 1 ? ((q * 7040) % 2) << 4 : 0,
 
 // Output channels
-(na << 4) + (nb << 4) + (nc << 4) + kick + snare + hihat
+(na << 4) + (nb << 4) + (nc << 4) + kick + snare + hihat;

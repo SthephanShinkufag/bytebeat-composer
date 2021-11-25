@@ -1,14 +1,14 @@
 /*
-  _____  _      ______           _____ ______   ________   _______  _____ _______ 
+  _____  _      ______           _____ ______   ________   _______  _____ _______
  |  __ \| |    |  ____|   /\    / ____|  ____| |  ____\ \ / /_   _|/ ____|__   __|
- | |__) | |    | |__     /  \  | (___ | |__    | |__   \ V /  | | | (___    | |   
- |  ___/| |    |  __|   / /\ \  \___ \|  __|   |  __|   > <   | |  \___ \   | |   
- | |    | |____| |____ / ____ \ ____) | |____  | |____ / . \ _| |_ ____) |  | |   
- |_|    |______|______/_/    \_\_____/|______| |______/_/ \_\_____|_____/   |_|   
-                                                                                  
+ | |__) | |    | |__     /  \  | (___ | |__    | |__   \ V /  | | | (___    | |
+ |  ___/| |    |  __|   / /\ \  \___ \|  __|   |  __|   > <   | |  \___ \   | |
+ | |    | |____| |____ / ____ \ ____) | |____  | |____ / . \ _| |_ ____) |  | |
+ |_|    |______|______/_/    \_\_____/|______| |______/_/ \_\_____|_____/   |_|
+
                                         ┬ ,┌┬┐  ┌─┐┌─┐┌─┐┬─┐┌─┐┌─┐┬┌─┐┌┬┐┌─┐  ┬┌┬┐
-                                        │   ││  ├─┤├─┘├─┘├┬┘├┤ │  │├─┤ │ ├┤   │ │ 
-                                        ┴  ─┴┘  ┴ ┴┴  ┴  ┴└─└─┘└─┘┴┴ ┴ ┴ └─┘  ┴ ┴ 
+                                        │   ││  ├─┤├─┘├─┘├┬┘├┤ │  │├─┤ │ ├┤   │ │
+                                        ┴  ─┴┘  ┴ ┴┴  ┴  ┴└─└─┘└─┘┴┴ ┴ ┴ └─┘  ┴ ┴
 
 __________________________________________________________________________________
 
@@ -30,11 +30,9 @@ Features:
 - A fake delay-like effect used on the arpeggios and drums.
 - Multiple sophisticated sine based drum sounds.
 
-
 To be done:
 - Making it smaller
 - Making it faster
-
 
 WHAT IS THIS?
 Bytebeat is making music using only code. Each sample, a function is run.
@@ -84,7 +82,7 @@ t %= 800e4,
 // The ASCII code (see http://asciitable.com ) of this symbol will be used as semitone height.
 gm = function(oc, z, m) {
   p = m.charCodeAt(z);
-  return p < 33 ? 0 : t * pow(2, (p || 0) / 12 - oc)
+  return p < 33 ? 0 : t * pow(2, (p || 0) / 12 - oc);
 },
 
 // BELL
@@ -96,8 +94,8 @@ m = '5 38',
 y = PI * gm(9, (t / d) % 4, m),
 // By detuning them slightly, one gets a bell-like sound.
 // See: http://computermusicresource.com/Simple.bell.tutorial.html
-x = (sin(y * .5) + sin(y * 2) + sin(y * 3) + sin(y * 4.2) + sin(y * 5.4)) * .2 *
-  (pow(1 - (t % 16e4 / (16e4)), 2)),
+x = (sin(y * 0.5) + sin(y * 2) + sin(y * 3) + sin(y * 4.2) + sin(y * 5.4)) * 0.2 *
+  pow(1 - (t % 16e4 / 16e4), 2),
 
 // CHOIR
 // Triangle waves on multiple octaves.
@@ -109,12 +107,12 @@ s = (
   abs((gm(3, (t / 4e4) % 1, o) % 128) / 64 - 1) +
   abs((gm(4, (t / 4e4) % 1, o) % 128) / 64 - 1) +
   abs((gm(5, (t / 4e4) % 1, o) % 128) / 64 - 1)
-) * .01,
+) * 0.01,
 
-//PERCUSSION
+// PERCUSSION
 // Snare
 sn = function(t) {
-  return sin((t >> 2) * sin((t >> 4))) * pow(1 - (t % 5e3) / 5e3, 8) * .01
+  return sin((t >> 2) * sin(t >> 4)) * pow(1 - (t % 5e3) / 5e3, 8) * 0.01;
 },
 // This is "00000000000011110000000000000111" in reverse binary notation.
 // As I don't need melody height info, I can use a binary code, and save space that way.
@@ -123,14 +121,14 @@ m = 983047,
 z = ((m >> (t / 5e3) % 32) & 1 ? sn(t) * 8 : 0) + ((m >> ((t - 15e3) / 5e3) % 32) & 1 ? sn(t) * 4 : 0),
 // Base drum
 bm = (30 - 15) * pow(1 - (t % 15e3) / 15e3, 10) - 80,
-bm2 = int("001111000111", 2),
+bm2 = int('001111000111', 2),
 bd = (bm2 >> (t / 15e3) % 12) & 1 ?
-  sin((PI * (t % 15e3) * pow(2, bm / 12 - 1))) * pow(1 - (t % 15e3) / 15e3, 10) * .5 : 0,
+  sin(PI * (t % 15e3) * pow(2, bm / 12 - 1)) * pow(1 - (t % 15e3) / 15e3, 10) * 0.5 : 0,
 // Floor tom
 fm = (30 - 20) * pow(1 - (t % 15e3) / 15e3, 10) - 73,
-fm2 = int("000000001000", 2),
+fm2 = int('000000001000', 2),
 ft = (fm2 >> (t / 15e3) % 12) & 1 ?
-  sin((PI * (t % 15e3) * pow(2, fm / 12 - 1))) * pow(1 - (t % 15e3) / 15e3, 10) * .5 : 0,
+  sin(PI * (t % 15e3) * pow(2, fm / 12 - 1)) * pow(1 - (t % 15e3) / 15e3, 10) * 0.5 : 0,
 // Add the different parts together
 perc = z + bd + ft,
 
@@ -139,7 +137,7 @@ perc = z + bd + ft,
 a = '.13:=AF',
 w = abs((gm(4, (t / 1e4) % 7, a) % 128) / 64 - 1) +
 // echo (faking a delay effect)
-  abs((gm(4, ((t - 15000) / 1e4) % 7, a) % 128) / 64 - 1) * .5,
+  abs((gm(4, ((t - 15000) / 1e4) % 7, a) % 128) / 64 - 1) * 0.5,
 
 // BASS
 // A blend of square and triangle waves.
@@ -154,39 +152,38 @@ h = '8A?<55558A?<5588',
 n = '5538',
 // Bass, first part is attack, second part is sustain.
 z = (
-  (((gm(5, (t / 4e4) % 16, g) & 128) / 64 - 1) * .1) * (1 - (t % k / (k))) + 
+  (((gm(5, (t / 4e4) % 16, g) & 128) / 64 - 1) * 0.1) * (1 - (t % k / k)) +
   abs((gm(6, (t / 4e4) % 16, g) % 128) / 64 - 1) +
-  (((gm(5, (t / 4e4) % 16, h) & 128) / 64 - 1) * .1) * (1 - (t % k / (k))) +
+  (((gm(5, (t / 4e4) % 16, h) & 128) / 64 - 1) * 0.1) * (1 - (t % k / k)) +
   abs((gm(6, (t / 4e4) % 16, h) % 128) / 64 - 1) +
-  (((gm(5, (t / 4e4) % 16, i) & 128) / 64 - 1) * .1) * (1 - (t % k / (k))) +
+  (((gm(5, (t / 4e4) % 16, i) & 128) / 64 - 1) * 0.1) * (1 - (t % k / k)) +
   abs((gm(6, (t / 4e4) % 16, i) % 128) / 64 - 1) +
-  (((gm(4, (t / 4e4) % 16, g) & 128) / 64 - 1) * .1) * (1 - (t % k / (k))) +
+  (((gm(4, (t / 4e4) % 16, g) & 128) / 64 - 1) * 0.1) * (1 - (t % k / k)) +
   abs((gm(5, (t / 4e4) % 16, g) % 128) / 64 - 1)
-) * .2,
+) * 0.2,
 // Bass2
-u = ((((gm(5, (t / 16e4) % 16, g) & 128) / 64 - 1) * .1) * (1 - (t % k / (k))) +
-  abs((gm(6, (t / 16e4) % 4, g) % 128) / 64 - 1)) * .3,
+u = ((((gm(5, (t / 16e4) % 16, g) & 128) / 64 - 1) * 0.1) * (1 - (t % k / k)) +
+  abs((gm(6, (t / 16e4) % 4, g) % 128) / 64 - 1)) * 0.3,
 
 // PUT TOGETHER SONG
 // Bass, play during first 128000 samples, fade out during next 128000 samples, dont play afterwards.
-(t < 256e4 ? z * (t < 32e4 ? ((t % 32e4) / 32e4) :
-    (t > 128e4 ? (1 - (t - 128e4) / 128e4) : 1)) : 0) +
+(t < 256e4 ? z * (t < 32e4 ? (t % 32e4) / 32e4 : t > 128e4 ? 1 - (t - 128e4) / 128e4 : 1) : 0) +
   // Arpeggio, fading in and out using a LFO (low-frequency oscillator)
-  (t > 128e4 && t < 448e4 ? (sin((t - 128e4) * pow(2, -19)) * w * .2) : 0) +
+  (t > 128e4 && t < 448e4 ? sin((t - 128e4) * pow(2, -19)) * w * 0.2 : 0) +
   // Bells, play between 128000 and 5760000
-  (t > 128e4 && t < 592e4 ? x * .1 : 0) +
+  (t > 128e4 && t < 592e4 ? x * 0.1 : 0) +
   // Bass2, start 320000 and fade in until full volume at 448000.
   // Fade out starting at 512000 until tacet from 5760000 onwards
   (t > 320e4 && t < 592e4 ?
-    u * (t < 448e4 ? (t - 320e4) / 128e4 : t < 592e4 ? (1 - (t - 468e4) / 128e4) : 1) : 0) +
+    u * (t < 448e4 ? (t - 320e4) / 128e4 : t < 592e4 ? 1 - (t - 468e4) / 128e4 : 1) : 0) +
   // Percussion, start at 3200000 and fade in until full volume at 448000.
   // Fade out starting at 512000 until tacet from 5760000
   (t > 320e4 && t < 640e4 ?
-    perc * (t < 448e4 ? (t - 320e4) / 128e4 : t < 640e4 ? (1 - (t - 512e4) / 128e4) : 1) : 0) +
+    perc * (t < 448e4 ? (t - 320e4) / 128e4 : t < 640e4 ? 1 - (t - 512e4) / 128e4 : 1) : 0) +
   // Choir, start at 3840000 and fade in until full volume at 5760000.
   // Fade out starting 7040000 until tacet from 7680000.
   (t > 384e4 && t < 768e4 ?
-    s * (t < 576e4 ? (t - 384e4) / 64e4 : t < 768e4 ? (1 - (t - 704e4) / 64e4) : 1) : 0) +
-  // Extra noise to ensure that person keeps listening in the quiet part when the song loops. 
+    s * (t < 576e4 ? (t - 384e4) / 64e4 : t < 768e4 ? 1 - (t - 704e4) / 64e4 : 1) : 0) +
+  // Extra noise to ensure that person keeps listening in the quiet part when the song loops.
   // Ambient noise is very Nifflas-ish. (see: http://www.youtube.com/watch?v=qvsoxmJqBww )
-  random() * .002
+  random() * 0.002;

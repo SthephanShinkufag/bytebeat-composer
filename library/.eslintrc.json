@@ -10,7 +10,6 @@
 		"ecmaVersion": 2018,
 		"sourceType": "module"
 	},
-	"root": true,
 	"rules": {
 		"multiline-ternary": "off",
 		"array-bracket-spacing": ["error", "never"],
@@ -19,7 +18,7 @@
 		"camelcase": "off",
 		"computed-property-spacing": ["error", "never"],
 		"dot-notation": "error",
-		"indent": ["error", "tab", { "flatTernaryExpressions": true }],
+		"indent": ["error", 2, { "flatTernaryExpressions": true }],
 		"key-spacing": ["error", {
 			"multiLine": {
 				"beforeColon": false,
@@ -54,7 +53,10 @@
 		}],
 		"no-extra-semi": "error",
 		"no-new": "off",
+		"no-sequences": "off",
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
+		"no-undef": "off",
+		"no-unused-expressions": "off",
 		"no-unreachable-loop": "off",
 		"no-useless-concat": "error",
 		"no-var": "error",

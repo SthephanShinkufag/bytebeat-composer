@@ -30,7 +30,7 @@ window.channels = t > 0 ? window.channels : [
       { v: 4, a: 0, d: 0, s: 0, s2: 0, mult: 2, r: 0, cv: 0, at: 0, dt: 0, st: 0, rt: 0, state: 4, f: 0 },
       // 3 Carrier
       { v: 5, a: 0, d: 2e4, s: 1.5, s2: 1e5, mult: 60, r: 0, cv: 0, at: 0, dt: 0, st: 0, rt: 0, state: 4, f: 0 }
-    ], 
+    ],
     notes: [
       { start: 0, end: 168 },
       { start: 168, end: 384 },
@@ -59,7 +59,7 @@ window.channels = t > 0 ? window.channels : [
       { v: 12, a: 0, d: 1e3, s: 2, s2: 4e4, mult: 0.5, r: 0, cv: 0, at: 0, dt: 0, st: 0, rt: 0, state: 4, f: 0 },
       // 3 Carrier
       { v: 12, a: 0, d: 1e3, s: 2, s2: 4e4, mult: 0.5, r: 0, cv: 0, at: 0, dt: 0, st: 0, rt: 0, state: 4, f: 0 }
-    ], 
+    ],
     notes: [
       { start: 0, end: 168 },
       { start: 168, end: 384 },
@@ -3220,16 +3220,16 @@ window.channels = t > 0 ? window.channels : [
   }
 ],
 
-window.channels.forEach(function(chan) {
-  var ndx = chan.ndx;
-  var note = chan.notes[ndx];
+window.channels.forEach(chan => {
+  let { ndx } = chan;
+  let note = chan.notes[ndx];
   if(!note) {
-    return
+    return;
   }
-  var localTick = tick - (chan.delay || 0);
-  while (localTick >= note.end) {
+  const localTick = tick - (chan.delay || 0);
+  while(localTick >= note.end) {
     ++ndx;
-    if (ndx >= chan.notes.length) {
+    if(ndx >= chan.notes.length) {
       ndx = 0;
       break;
     }
@@ -3238,23 +3238,23 @@ window.channels.forEach(function(chan) {
   chan.ndx = ndx;
   note = chan.notes[ndx];
   chan.freq = localTick >= note.start && localTick < note.end ?
-    note.note || C : (chan.fm ? chan.freq : 0);
-  if (!chan.fm) {
+    note.note || C : chan.fm ? chan.freq : 0;
+  if(!chan.fm) {
     return;
   }
-  chan.fm.forEach(function(op) {
+  chan.fm.forEach(op => {
     op.f = chan.freq * op.mult;
-    if (localTick === note.start && !note.portamento) {
+    if(localTick === note.start && !note.portamento) {
       op.state = 0;
       op.cv = 0;
       op.at = localTick;
-    } else if ((localTick < note.start || localTick >= note.end) && op.state < 3) {
+    } else if((localTick < note.start || localTick >= note.end) && op.state < 3) {
       op.state = 3;
       op.rt = localTick;
     }
-    switch (op.state) {
+    switch(op.state) {
     case 0: // Attack
-      if (op.cv >= op.v || op.a === 0) {
+      if(op.cv >= op.v || op.a === 0) {
         op.cv = op.v;
         op.state = 1;
         op.dt = localTick;
@@ -3263,26 +3263,26 @@ window.channels.forEach(function(chan) {
       }
       break;
     case 1: // Decay
-      if (op.cv <= op.s || op.d === 0) {
+      if(op.cv <= op.s || op.d === 0) {
         op.cv = op.s === 0 ? op.v : op.s;
         op.state = 2;
-        op.st = localTick
+        op.st = localTick;
       } else {
         op.cv -= (localTick - op.dt) / op.d;
       }
       break;
     case 2: // Sustain
-      if (op.cv <= 0) {
+      if(op.cv <= 0) {
         op.cv = 0;
         op.state = 4;
-      } else if (op.s2 === 0) {
+      } else if(op.s2 === 0) {
         op.cv = op.s === 0 ? op.v : op.s;
       } else {
         op.cv -= (localTick - op.st) / op.s2;
       }
       break;
     case 3: // Release
-      if (op.cv <= 0 || op.r === 0) {
+      if(op.cv <= 0 || op.r === 0) {
         op.cv = 0;
         op.state = 4;
       } else {
@@ -3366,4 +3366,4 @@ ch = window.channels[0],
   square(window.channels[22], 1.9979) +
   // Lead square echo 2
   square(window.channels[23], 1.9979)
-)
+);

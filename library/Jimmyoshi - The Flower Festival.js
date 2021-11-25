@@ -83,4 +83,4 @@ noiseFreq = int(t * (freq7 * 44100 / SAMPLE_RATE) / 440),
   vol8d / 4 * 2 * (int(freq8d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol8d / 4 +
   vol9d / 4 * 2 * (int(freq9d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol9d / 4 +
   vol10d / 4 * 2 * (int(freq10d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol10d / 4 +
-  (vol11d / 64) / 4 * (abs(((255 * freq11d * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64)
+  (vol11d / 64) / 4 * (abs(((255 * freq11d * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64);

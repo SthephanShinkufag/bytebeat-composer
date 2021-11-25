@@ -1,9 +1,9 @@
 time = t / 44000,
 fract = function(x) {
-  return x % 1
+  return x % 1;
 },
 puls = function(x) {
-  return (floor(sin(x)) + 0.5) * 2.;
+  return (floor(sin(x)) + 0.5) * 2;
 },
 main = function(time) {
   speed = 2;
@@ -14,10 +14,13 @@ main = function(time) {
     [-22, -19, -22, -19, -22, -19, -22, -19, -26, -22, -26, -22, -26, -22, -24, -20]
   ];
   melody = 0;
-  for (i = 0; i < melody_notes.length; i++) {
-    melody_tune = pow(pow(2, 1 / 12), (melody_notes[i][floor(time * speed) % melody_notes[i].length] + pitch) - 49) * 44000;
+  for(i = 0; i < melody_notes.length; i++) {
+    melody_tune = pow(
+      pow(2, 1 / 12),
+      (melody_notes[i][floor(time * speed) % melody_notes[i].length] + pitch) - 49
+    ) * 44000;
     melody += puls(time * melody_tune) * (1 - fract(time * speed));
   }
-  return (melody / melody_notes.length);
+  return melody / melody_notes.length;
 },
-main(time)
+main(time);

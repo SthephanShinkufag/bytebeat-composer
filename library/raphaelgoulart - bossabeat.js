@@ -254,7 +254,7 @@ window.channels = t > 0 ? window.channels : [
       { start: 2904, end: 2928, note: D },
       { start: 2976, end: 3000, note: D },
       { start: 3024, end: 3048, note: D }
-    ],
+    ]
   }, { // Channel 3: Chords 2/3
     ndx: 0,
     amp: 8,
@@ -360,9 +360,9 @@ window.channels = t > 0 ? window.channels : [
       { start: 1920, end: 2304, note: B / 2 },
       { start: 2304, end: 2688, note: C },
       { start: 2688, end: 3071, note: B / 2 }
-    ],
+    ]
   }, { // Channel 6: Pad 2/4
-    ndx: 0, 
+    ndx: 0,
     amp: 4,
     pulse: 1,
     notes: [
@@ -378,7 +378,7 @@ window.channels = t > 0 ? window.channels : [
       { start: 2304, end: 2472, note: EE },
       { start: 2472, end: 2688, note: Eb },
       { start: 2688, end: 3071, note: D }
-    ],
+    ]
   }, { // Channel 7: Pad 3/4
     ndx: 0,
     amp: 4,
@@ -396,7 +396,7 @@ window.channels = t > 0 ? window.channels : [
       { start: 2304, end: 2472, note: A },
       { start: 2472, end: 2688, note: G },
       { start: 2688, end: 3071, note: Gb }
-    ],
+    ]
   }, { // Channel 8: Pad 4/4
     ndx: 0,
     amp: 4,
@@ -629,18 +629,18 @@ window.channels = t > 0 ? window.channels : [
       { start: 2808, end: 2814, note: F },
       { start: 2814, end: 2820, note: Eb },
       { start: 2820, end: 2826, note: Db },
-      { start: 2826, end: 2832, note: B / 2 }, // Pattern 3
+      { start: 2826, end: 2832, note: B / 2 } // Pattern 3
     ]
   }
 ],
 
-window.channels.forEach(function(chan) {
-  var ndx = chan.ndx;
-  var note = chan.notes[ndx];
-  var localTick = tick - (chan.delay || 0);
-  while (localTick >= note.end) {
+window.channels.forEach(chan => {
+  let { ndx } = chan;
+  let note = chan.notes[ndx];
+  const localTick = tick - (chan.delay || 0);
+  while(localTick >= note.end) {
     ++ndx;
-    if (ndx >= chan.notes.length) {
+    if(ndx >= chan.notes.length) {
       ndx = 0;
       break;
     }
@@ -697,4 +697,4 @@ noiseAmp = (tick % 192 < 3) * 24 + ((tick + 189) % 192 < 3) * 12 +
   // Lead echo
   triangle(window.channels[10], 0.99) +
   // Noise drums
-  noiseAmp * ((int(65536 * sin(noiseFreq * noiseFreq)) & 255) / 128 - 1)
+  noiseAmp * ((int(65536 * sin(noiseFreq * noiseFreq)) & 255) / 128 - 1);

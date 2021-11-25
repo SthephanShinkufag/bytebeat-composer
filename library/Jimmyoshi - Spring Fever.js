@@ -1,9 +1,11 @@
 init(),
 
-window.data = (t > 10 && window.data) ? window.data : {
+window.data = t > 10 && window.data ? window.data : {
   wavetables: [
-    [96, 80, 64, 48, 48, 32, 32, 32, 32, 48, 48, 64, 80, 80, 96, 112, 128, 128, 144, 160, 176, 192, 192, 208, 224, 208, 192, 176, 160, 144, 128, 112],
-    [128, 144, 160, 176, 192, 208, 224, 240, 255, 240, 224, 208, 192, 176, 160, 144, 128, 112, 96, 80, 64, 48, 32, 16, 0, 16, 32, 48, 64, 80, 96, 112]
+    [96, 80, 64, 48, 48, 32, 32, 32, 32, 48, 48, 64, 80, 80, 96, 112, 128, 128, 144, 160, 176, 192, 192, 208,
+      224, 208, 192, 176, 160, 144, 128, 112],
+    [128, 144, 160, 176, 192, 208, 224, 240, 255, 240, 224, 208, 192, 176, 160, 144, 128, 112, 96, 80, 64, 48,
+      32, 16, 0, 16, 32, 48, 64, 80, 96, 112]
   ],
 
   NUM_CHANNELS: 13,
@@ -20465,100 +20467,91 @@ function init() {
 }
 
 function calc_tick(tt) {
-  var tick = int(tt / ticklength);
-  return (tick < 32 ? tick : (tick - 32) % (1568 - 32) + 32);
+  const tick = int(tt / ticklength);
+  return tick < 32 ? tick : (tick - 32) % (1568 - 32) + 32;
 }
 
 function bytebeat() {
   song = window.data;
-  var tick = calc_tick(t);
-  var delayTick = calc_tick(t - 14 * ticklength);
-  var out1 = 0;
-  var delayout = 0;
-  for (var i = 0; i < song.NUM_CHANNELS; i++) {
-    if (song.enabled[i]) {
-      var note = song.channels[i][tick][0];
-      var octave = song.channels[i][tick][1];
-      var amp = round(song.globalvol[i] * ((song.channels[i][tick][2] * song.channels[i][tick][2]) / 128) / 128);
-      var ins = song.channels[i][tick][3];
+  const tick = calc_tick(t);
+  const delayTick = calc_tick(t - 14 * ticklength);
+  let out1 = 0;
+  let delayout = 0;
+  for(let i = 0; i < song.NUM_CHANNELS; i++) {
+    if(song.enabled[i]) {
+      const note = song.channels[i][tick][0];
+      const octave = song.channels[i][tick][1];
+      const amp = round(song.globalvol[i] *
+        ((song.channels[i][tick][2] * song.channels[i][tick][2]) / 128) / 128);
+      const ins = song.channels[i][tick][3];
 
-      var note2 = song.channels[i][max(0, delayTick)][0];
-      var octave2 = song.channels[i][max(0, delayTick)][1];
-      var amp2 = round(song.globalvol[i] * ((song.channels[i][max(0, delayTick)][2] * song.channels[i][max(0, delayTick)][2]) / 128) / 128);
-      var ins2 = song.channels[i][max(0, delayTick)][3];
+      const note2 = song.channels[i][max(0, delayTick)][0];
+      const octave2 = song.channels[i][max(0, delayTick)][1];
+      const amp2 = round(song.globalvol[i] *
+        ((song.channels[i][max(0, delayTick)][2] * song.channels[i][max(0, delayTick)][2]) / 128) / 128);
+      const ins2 = song.channels[i][max(0, delayTick)][3];
 
       out1 += instrument(ins, fr(note, octave), amp);
-      delayout += (song.delayflags[i] && delayTick >= 0) * instrument(ins2, fr(note2, octave2) * DETUNE, amp2);
+      delayout += (song.delayflags[i] && delayTick >= 0) *
+        instrument(ins2, fr(note2, octave2) * DETUNE, amp2);
     }
   }
-  var out = out1 + 0.2 * delayout;
+  const out = out1 + 0.2 * delayout;
   return 128 + out;
 }
 
 function vib_algo(freq, strength) {
-  return freq * (1 + strength * sin((t % (round(freq / VIB) * SAMPLE_RATE / freq)) * 2 * pi * (freq / SAMPLE_RATE) / round(freq / 8)));
+  return freq * (1 + strength * sin(
+    (t % (round(freq / VIB) * SAMPLE_RATE / freq)) * 2 * pi * (freq / SAMPLE_RATE) / round(freq / 8)
+  ));
 }
 
 function release_algo(amp) {
-  return (t % (16 * ticklength) >= 12 * ticklength) ? amp * pow(1 - (t % (4 * ticklength)) / (4 * ticklength), 2) : amp;
+  return t % (16 * ticklength) >= 12 * ticklength ?
+    amp * pow(1 - (t % (4 * ticklength)) / (4 * ticklength), 2) : amp;
 }
 
 function instrument(ins, freq, amp) {
-  var realfreq = freq * pow(1.059463, KEY);
-  switch (ins) {
-    case 0:
-      return square(t, realfreq, amp * 0.75, 18.75 + noise(SAMPLE_RATE / (4 * ticklength), 6.25, 16777216));
-    case 1:
-      return square(t, realfreq, amp * 0.9, 25) + square50(realfreq * 2, amp * 0.9) + sine(realfreq, amp * 0.5);
-    case 2:
-      return square(t, realfreq, amp * 0.80, 50);
-    case 3:
-      return square(t, realfreq, amp * 0.75, 75);
-    case 4:
-      return square(t, realfreq, amp * 0.75, 25);
-    case 5:
-      return flute(t, realfreq, amp * 2) + square(t, realfreq, amp * 0.4, 50);
-    case 6:
-      return flute(t, realfreq, amp * 2.125);
-    case 7:
-      return kick(freq, amp);
-    case 8:
-      return sweep(freq, amp);
-    case 9:
-      return noise(freq, amp, 16777216);
-    case 10:
-      return square(t, realfreq, amp * 0.70, 25);
-    case 11:
-      return square(int((t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq))), vib_algo(realfreq, 0.0023), amp * 0.70, 25);
-    case 12:
-      return square(t, realfreq, release_algo(amp * 0.75), 25);
-    case 13:
-      return square(int((t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq))), vib_algo(realfreq, 0.0023), amp * 0.75, 50);
-    case 14:
-      return triangle(t, realfreq, amp * 1.45);
-    case 15:
-      return square(t, realfreq, amp * 0.75, 75);
-    case 16:
-      return square(t, realfreq, amp * 0.70, 75);
-    case 17:
-      return square(t, realfreq, release_algo(amp * 0.75), 75);
-    case 18:
-      return flute(int((t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq))), vib_algo(realfreq, 0.0023), amp * 2.125);
-    default:
-      return sine(realfreq, amp);
+  const realfreq = freq * pow(1.059463, KEY);
+  switch(ins) {
+  case 0: return square(t, realfreq,
+    amp * 0.75, 18.75 + noise(SAMPLE_RATE / (4 * ticklength), 6.25, 16777216));
+  case 1: return square(t, realfreq,
+    amp * 0.9, 25) + square50(realfreq * 2, amp * 0.9) + sine(realfreq, amp * 0.5);
+  case 2: return square(t, realfreq, amp * 0.80, 50);
+  case 3: return square(t, realfreq, amp * 0.75, 75);
+  case 4: return square(t, realfreq, amp * 0.75, 25);
+  case 5: return flute(t, realfreq, amp * 2) + square(t, realfreq, amp * 0.4, 50);
+  case 6: return flute(t, realfreq, amp * 2.125);
+  case 7: return kick(freq, amp);
+  case 8: return sweep(freq, amp);
+  case 9: return noise(freq, amp, 16777216);
+  case 10: return square(t, realfreq, amp * 0.70, 25);
+  case 11: return square(int(t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq)),
+    vib_algo(realfreq, 0.0023), amp * 0.70, 25);
+  case 12: return square(t, realfreq, release_algo(amp * 0.75), 25);
+  case 13: return square(int(t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq)),
+    vib_algo(realfreq, 0.0023), amp * 0.75, 50);
+  case 14: return triangle(t, realfreq, amp * 1.45);
+  case 15: return square(t, realfreq, amp * 0.75, 75);
+  case 16: return square(t, realfreq, amp * 0.70, 75);
+  case 17: return square(t, realfreq, release_algo(amp * 0.75), 75);
+  case 18: return flute(int(t % (round(realfreq / VIB) * SAMPLE_RATE / realfreq)),
+    vib_algo(realfreq, 0.0023), amp * 2.125);
+  default: return sine(realfreq, amp);
   }
 }
 
 function square50(freq, amp) {
-  var out = 0;
-  for (var i = 0; i < 8; i++)
+  let out = 0;
+  for(let i = 0; i < 8; i++) {
     out += sine((2 * i + 1) * freq, amp / (2 * i + 1));
+  }
   return out;
-  //return wavetable(1, freq, amp);
 }
 
 function square(tt, freq, amp, pulse) {
-  return amp * (((freq * tt / SAMPLE_RATE) % 1.0 <= pulse / 100) ? 1 : -1);
+  return amp * ((freq * tt / SAMPLE_RATE) % 1.0 <= pulse / 100 ? 1 : -1);
 }
 
 function sine(freq, amp) {
@@ -20570,12 +20563,13 @@ function kick(freq, amp) {
 }
 
 function noise(freq, amp, modulo) {
-  var noiseFreq = int((t % modulo) * (freq * 44100 / SAMPLE_RATE) / 44100);
+  const noiseFreq = int((t % modulo) * (freq * 44100 / SAMPLE_RATE) / 44100);
   return amp / 128 * (int(65536 * sin(noiseFreq * noiseFreq)) & 255) - amp;
 }
 
 function sweep(freq, amp) {
-  return noise(freq / C_ * (A_ + 99 * A_ * pow((t % (32 * ticklength)) / (32 * ticklength), 3)), amp, 32 * ticklength);
+  return noise(freq / C_ * (A_ + 99 * A_ * pow((t % (32 * ticklength)) / (32 * ticklength), 3)),
+    amp, 32 * ticklength);
 }
 
 function flute(tt, freq, amp) {
@@ -20587,11 +20581,11 @@ function triangle(tt, freq, amp) {
 }
 
 function wavetable(tt, index, interpolation, freq, amp) {
-  var s = 32 * freq * tt / SAMPLE_RATE;
-  if (interpolation) {
-    var s1 = int(s) % 32;
-    var s2 = (s1 + 1) % 32;
-    var p = s - int(s);
+  const s = 32 * freq * tt / SAMPLE_RATE;
+  if(interpolation) {
+    const s1 = int(s) % 32;
+    const s2 = (s1 + 1) % 32;
+    const p = s - int(s);
     return round(amp / 127 * (((1 - p) * song.wavetables[index][s1] + p * song.wavetables[index][s2]) - 128));
   } else {
     return round(amp / 127 * (song.wavetables[index][int(s) % 32] - 128));
@@ -20599,6 +20593,6 @@ function wavetable(tt, index, interpolation, freq, amp) {
 }
 
 function fr(note, oct) {
-  var oct0 = note / 16;
+  const oct0 = note / 16;
   return oct0 * pow(2, oct);
 }

@@ -44,9 +44,6 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 	if(starred) {
 		starClass = ' ' + ['star-white', 'star-yellow'][starred - 1];
 	}
-	if(code && Array.isArray(code)) {
-		code = code.join('\n');
-	}
 	const songData = code || codeFile ? JSON.stringify({ sampleRate, mode }) : '';
 	if(codeFile) {
 		entry += ` <a class="code-load" data-songdata='${ songData }' data-code-file="${
