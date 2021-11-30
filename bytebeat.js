@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const bytebeat = new class Bytebeat {
+const bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
 		this.audioGain = null;
@@ -30,14 +30,14 @@ const bytebeat = new class Bytebeat {
 		this.sampleRate = 8000;
 		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false };
 		this.timeCursor = null;
-		document.addEventListener('DOMContentLoaded', async () => {
-			this.initControls();
-			this.initSettings();
-			await this.initAudioContext();
-			this.initLibraryEvents();
-			this.initEditor();
-		});
 		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
+		if(window.location.hostname.includes(unescape('%64%6f%6c%6c%63%68%61%6e%2e%6e%65%74'))) {
+			if(document.readyState !== 'loading') {
+				this.init();
+				return;
+			}
+			document.addEventListener('DOMContentLoaded', () => this.init());
+		}
 	}
 	get saveData() {
 		const a = document.body.appendChild(document.createElement('a'));
@@ -132,6 +132,13 @@ const bytebeat = new class Bytebeat {
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
+	}
+	async init() {
+		this.initControls();
+		this.initSettings();
+		await this.initAudioContext();
+		this.initLibraryEvents();
+		this.initEditor();
 	}
 	async initAudioContext() {
 		this.audioCtx = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)();

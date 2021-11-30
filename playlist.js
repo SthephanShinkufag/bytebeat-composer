@@ -8,7 +8,18 @@ function escapeHTML(text) {
 	return cachedElemParent.innerHTML;
 }
 
-function createEntryElem({ author, children, code, codeFile, description, mode, sampleRate, starred, url }) {
+function createEntryElem({
+	author,
+	children,
+	code,
+	codeFile,
+	date,
+	description,
+	mode,
+	sampleRate,
+	starred,
+	url
+}) {
 	let entry = '';
 	if(description) {
 		entry += !url ? description : `<a href="${ url }" target="_blank">${ description }</a>`;
@@ -32,6 +43,9 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 	}
 	if(url && !description && !author) {
 		entry += `(<a href="${ url }" target="_blank">source</a>)`;
+	}
+	if(date) {
+		entry += ` <span class="code-date">(${ date })</span>`;
 	}
 	if(sampleRate) {
 		entry += ` <span class="code-samplerate">${
@@ -67,30 +81,32 @@ function createEntryElem({ author, children, code, codeFile, description, mode, 
 		entry }</div>`;
 }
 
-function addPlaylist({ playlists }, id) {
-	let playlist = '';
-	const playlistArr = playlists[id];
-	for(let i = 0, len = playlistArr.length; i < len; ++i) {
-		playlist += `<div class="entry-top">${ createEntryElem(playlistArr[i]) }</div>`;
-	}
-	document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend', playlist);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+function addPlaylists(data) {
 	cachedElemParent = document.createElement('div');
 	cachedTextNode = document.createTextNode('');
 	cachedElemParent.appendChild(cachedTextNode);
-	const xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-		if(xhr.readyState === 4 && xhr.status === 200) {
-			const obj = JSON.parse(xhr.responseText);
-			for(const p in obj.playlists) {
-				addPlaylist(obj, p);
-			}
+	for(const id in data) {
+		let playlist = '';
+		const playlistArr = data[id];
+		for(let i = 0, len = playlistArr.length; i < len; ++i) {
+			playlist += `<div class="entry-top">${ createEntryElem(playlistArr[i]) }</div>`;
 		}
-	};
-	xhr.open('GET', 'playlists.json', true);
-	xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-	xhr.send(null);
-});
+		document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend', playlist);
+	}
+}
+
+const xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+	if(xhr.readyState === 4 && xhr.status === 200) {
+		const data = JSON.parse(xhr.responseText);
+		if(document.readyState !== 'loading') {
+			addPlaylists(data);
+			return;
+		}
+		document.addEventListener('DOMContentLoaded', () => addPlaylists(data));
+	}
+};
+xhr.open('GET', 'playlists.json', true);
+xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+xhr.send(null);
 }());

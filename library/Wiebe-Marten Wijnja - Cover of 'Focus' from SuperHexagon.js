@@ -68,7 +68,7 @@ t = t % (8 << 20),
 
 // Pseudo random number generation using trigonometry
 rand = function(t) {
-  return Math.cos(t * Math.cos(t));
+  return cos(t * cos(t));
 },
 
 // Used for Hihat and Snare
@@ -78,25 +78,25 @@ noise = function(ocshift, envelope, espeed, eshiftspeed, emod, gain) {
 
 // Saw wave, used for most Bass instruments
 saw = function(melody, mspeed, mmod, ocshift, envelope, espeed, eshiftspeed, emod, gain) {
-  return (((t / factor) * Math.pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) % 255) / 127 - 1) * gain *
+  return (((t / factor) * pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) % 255) / 127 - 1) * gain *
     (envelope ? ge(envelope, espeed, eshiftspeed, emod) : 1) || 0;
 },
 
 // Triangle wave, used for most melody instruments
 tri = function(melody, mspeed, mmod, ocshift, envelope, espeed, eshiftspeed, emod, gain) {
-  return (abs((t / factor) * Math.pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) % 4 - 2) - 1) * gain *
+  return (abs((t / factor) * pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) % 4 - 2) - 1) * gain *
     (envelope ? ge(envelope, espeed, eshiftspeed, emod) : 1) || 0;
 },
 
 // Pulse wave, used for some of the instruments
 pulse = function(melody, mspeed, mmod, ocshift, envelope, espeed, eshiftspeed, emod, gain) {
-  return (((t / factor) * Math.pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) & 128) / 128) * gain *
+  return (((t / factor) * pow(2, gm(melody, mspeed, mmod) / 12 - ocshift) & 128) / 128) * gain *
     (envelope ? ge(envelope, espeed, eshiftspeed, emod) : 1) || 0;
 },
 
 // Sine wave. Actually unused right now, but I thought i'd keep it here for documentation.
 sine = function(melody, mspeed, mmod, ocshift, envelope, espeed, eshiftspeed, emod, gain) {
-  return sin((t / factor) * Math.pow(2, gm(melody, mspeed, mmod) / 12 - ocshift)) * gain *
+  return sin((t / factor) * pow(2, gm(melody, mspeed, mmod) / 12 - ocshift)) * gain *
     (envelope ? ge(envelope, espeed, eshiftspeed, emod) : 1) || 0;
 },
 
@@ -106,7 +106,7 @@ jump = function(melody, melody2, jumpspeed, mspeed, mmod, ocshift, envelope, esp
   const d = gm(melody, mspeed, mmod);
   const e = gm(melody2, mspeed, mmod);
   const g = ((e - d) * ((t % jumpspeed) / jumpspeed)) + d;
-  return sin((t % jumpspeed) * Math.pow(2, g / 12 - ocshift)) * gain *
+  return sin((t % jumpspeed) * pow(2, g / 12 - ocshift)) * gain *
     (envelope ? ge(envelope, espeed, eshiftspeed, emod) : 1) || 0;
 },
 

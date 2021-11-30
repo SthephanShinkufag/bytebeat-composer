@@ -151,7 +151,7 @@ code {
 	cursor: pointer;
 }
 
-.code-length, .code-samplerate {
+.code-date, .code-length, .code-samplerate {
 	color: gray;
 	cursor: default;
 }
