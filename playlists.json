@@ -52,8 +52,8 @@
 			"code": "t>>6^t&37|t+(t^t>>11)-t*((t%24?2:6)&t>>11)^t<<1&(t&598?t>>4:t>>10)",
 			"starred": 1
 		}, {
-			"author": "bear @ celephais",
 			"description": "Computing...",
+			"author": "bear @ celephais",
 			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 			"code": "t+(t&t^t>>6)-t*(t>>9&(t%16?2:6)&t>>9)"
 		}, {
@@ -441,12 +441,24 @@
 			"date": "2011-10-09",
 			"code": "3*((t>>1)+20)*t>>14*t>>18"
 		}, {
-			"author": "SArpnt",
 			"description": "buzzy grindy beat",
+			"author": "SArpnt",
 			"url": "https://www.reddit.com/r/bytebeat/comments/imprs9/buzzy_grindy_beat/",
 			"date": "2020-09-05",
 			"code": "t/((t>>3-(t>>14)%2)%(26>>(t>>16)%3))%1024/12<<9/((t>>5)%128)",
 			"starred": 1
+		}, {
+			"description": "non-js bytebeat thing that resembles music if you squint your ears",
+			"author": "Bp103",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qem3ip/nonjs_bytebeat_thing_that_resembles_music_if_you/",
+			"date": "2021-10-24",
+			"code": "(t%256E3<128E3?(t<<(46517>>t/512%16<<15>>15)%15)%(.6+t>>9^.4-t<<3):(t<<(43690>>t/1024%16<<15>>15)%15)-(.6+t>>9^.4-t<<3))|(t%8E3<64E3*16?(2<<((t%4096*2<<3)/(t%4096*2>>8)^t%8192<<1|4>>(t%8192>>4)))-(t%1024<<3)/(t%1024>>8):(t%4096*2<<3)/(t%4096*2>>8)^t%8192<<1)"
+		}, {
+			"description": "OUR task is infinity",
+			"author": "kOLbOSa_exe",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qi6eym/task_is_infinity/",
+			"date": "2021-10-29",
+			"code": "(t>>11&t>>12)*(t>>8&t>>16)%34*t+4E5/(t&4095)"
 		}, {
 			"author": "RealZynx92",
 			"children": [{
@@ -467,11 +479,18 @@
 				"starred": 1
 			}]
 		}, {
-			"author": "Bp103",
-			"description": "non-js bytebeat thing that resembles music if you squint your ears",
-			"url": "https://www.reddit.com/r/bytebeat/comments/qem3ip/nonjs_bytebeat_thing_that_resembles_music_if_you/",
-			"date": "2021-10-24",
-			"code": "(t%256E3<128E3?(t<<(46517>>t/512%16<<15>>15)%15)%(.6+t>>9^.4-t<<3):(t<<(43690>>t/1024%16<<15>>15)%15)-(.6+t>>9^.4-t<<3))|(t%8E3<64E3*16?(2<<((t%4096*2<<3)/(t%4096*2>>8)^t%8192<<1|4>>(t%8192>>4)))-(t%1024<<3)/(t%1024>>8):(t%4096*2<<3)/(t%4096*2>>8)^t%8192<<1)"
+			"author": "Chasyxx",
+			"children": [{
+				"description": "Welcome to robotTown (fork of Viznut's code)",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qi2our/my_new_bytebeat_codes/",
+				"date": "2021-10-29",
+				"code": "t*(2-(3^5&t>>11))*(5.5+(3&t>>15))>>(3&t>>8)|t>>7"
+			}, {
+				"description": "Electrohouse2 (fork of \"electrohouse\" by \"Anonymous from russian imageboards\")",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qi3enp/with_new_bytecodes_already_posted_here_are_all/",
+				"date": "2021-10-29",
+				"code": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&(t/9&t/7|t/5&t/3|t|3*t&5*t|7*t&9*t)>>4"
+			}]
 		}, {
 			"author": "[Deleted]",
 			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
@@ -579,16 +598,24 @@
 			}]
 		}, {
 			"description": "G minor Bach",
-			"starred": 2,
 			"children": [{
 				"author": "skurk",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=11#c389045",
 				"date": "2011-10-05",
 				"mode": "Signed Bytebeat",
-				"code": "30*cos(t*pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2&g t;*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*&g t;6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*< ;3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1; 26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92 =-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192 412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>9)/12-7))"
+				"code": "30*cos(t*pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2&g t;*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*&g t;6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*< ;3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1; 26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92 =-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192 412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>9)/12-7))",
+				"starred": 2
 			}, {
 				"description": "Non-COS version",
-				"code": "30*t*pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2>*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*>6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*<3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1;26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92=-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>9)/12-7)"
+				"code": "30*t*pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2>*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*>6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*<3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1;26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92=-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>9)/12-7)",
+				"starred": 2
+			}, {
+				"description": "\"Warpnig timeline\" [Slowed down, PWM changing version of G minor bach + noise]",
+				"author": "Chasyxx",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qi3enp/with_new_bytecodes_already_posted_here_are_all/",
+				"date": "2021-10-29",
+				"code": "a=30*t*pow(2,\"B*918/916-918/91B*918/916-918/91>*;2:1;26/;2:1;2>*;2:1;26/;2:1;2A*;291;28/;291;2A*;291;28/;291;2B*=-;,=-91=-;,=-B*=-;,=-91=-;,=-E*>6=4>692>6=4>6E*>6=4>692>6=4>6D*<3:1<380<3:1<3D*<3:1<380<3:1<3D(=4<3=481=4<3=4D(=4<3=481=4<3=4B(:18/:16.:18/:1B(:18/:16.:18/:1B&;2:1;26/;2:1;2B&;2:1;26/;2:1;2@&;,9*;,8/;,9*;,@&;,9*;,8/;,9*;,@%=-;,=-91=-;,=-@%=-;,=-91=-;,=->*=-;,=-92=-;,=->*=-;,=-92=-;,=->,8/6-8/428/6-8/>,8/6-8/428/6-8/=-412/4192412141=-412/4192412141;-6341613/634163;-6341613/634163;,8/6-8/528/6-8/;,8/6-8/528/6\".charCodeAt(t>>10)/12-7)%256,a>[abs((t>>8)%256-128)+64]?16*random():~(16*random())",
+				"starred": 2
 			}]
 		}, {
 			"description": "Rabid symphony",
@@ -740,11 +767,23 @@
 				"code": "round(t/[1,2,4,8,16,32,64,128][(t>>8)%8])%16*t/800"
 			}]
 		}, {
-			"author": "kOLbOSa_exe",
 			"description": "electric guitar",
+			"author": "kOLbOSa_exe",
 			"url": "https://www.reddit.com/r/bytebeat/comments/q8x43h/please_post_this_on_dollchamnet_pleaseeeeeeeee/",
 			"date": "2021-10-15",
 			"code": "(40*min(t^t+(t>>11))|t/8&t>>6)/4&127+(t>>4)%2^5E5/(t&4095)+2*t%32+random()*t&4E4/(t&4095)"
+		}, {
+			"description": "Drifting electricity",
+			"author": "Chasyxx",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qi3enp/with_new_bytecodes_already_posted_here_are_all/",
+			"date": "2021-10-29",
+			"code": "t>>t%(t%2?[61,51,31,41][(t>>14)%4]:34)+(t>>6)|128*cos((t>>1)/314.159)+128"
+		}, {
+			"description": "first bytebeat remixed (This was made by SthephanShi and I remixed it)",
+			"author": "NewFall2020",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qlf0op/first_bytebeat_remixed/",
+			"date": "2021-11-02",
+			"code": "(t*(t&16384?6:5)/4|t>>4)*(1+(3&t>>11))>>(3&t>>9)|t*(t&16384?6:5)*(3+(3&t>>(t&2048?334:14)))>>1+(3&t>>8)&(sin(t)*t|t>>4|t>>3)"
 		}, {
 			"description": "a new industrial chiptune",
 			"author": [
@@ -926,12 +965,40 @@
 		}, {
 			"author": "RealZynx92",
 			"children": [{
+				"description": "remix of \"The time is running out!\" by SthephanShi",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/",
+				"date": "2021-10-25",
+				"sampleRate": "11025",
+				"code": "((t*(t&16384?7:5)*(3-(3&-t>>9)+(3&t>>8))>>(2&t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)/2&127)+(3E4/(t&4095)&128)+(random()*(((-t>>5)%64)+64))",
+				"starred": 1
+			}, {
+				"description": "remix of SthephanShi's remix",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hi9r80q/?utm_source=reddit&utm_medium=web2x&context=3",
+				"date": "2021-10-27",
+				"sampleRate": "44100",
+				"code": "t/=4,((t/2*(t&16384?7:5)*(t&512?0.5:(t&256?1:2))*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t%(t&8192?4096:3072))&128-64)+(random()*(((-t>>(t&4096?5:(t&2048?3:4)))%64)+64))",
+				"starred": 2
+			}, {
+				"description": "better remix of \"The time is running out!\" by SthephanShi",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/better_remix_of_the_time_is_running_out_by/",
+				"date": "2021-11-03",
+				"sampleRate": "44100",
+				"code": "t/=4,a=t*(t&16384?7:5)*(3-(3&t>>(t&524288?10:9))+(3&t>>(t&262144?4:8)))>>(3&-t>>(59392>t%65536?t&4096?2:16:2)),(t&524288?sqrt(5E3*(t&4095))&64|t/16&64:(t>>9)%64*random()*(15==(t>>15)%32)+6E4/(t%(t&8192?3072:4096))%100)+((-t>>3)%256+256)*tan(sin(a/40.75*2)+cos(a/40.75*2))/32+50",
+				"starred": 2
+			}, {
 				"description": "probably the best song i ever made",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q8r7g4/probably_the_best_song_i_ever_made/",
 				"date": "2021-10-15",
 				"sampleRate": "44100",
 				"code": "a=t/[1.5,1.25,1.5,1][(t>>17)%4]*((t>>12)+1&1),(((a/4^.998*a/8)&63)%(t>>14)+(32*sin(t/[1,1,1,2,1.5,1.5,1.25,1.25][(t>>15)%8]/20.5)+32)*(t>>20>0))*(t>>15!=63)+t*random()%((-t>>9)%64+64)*(t>>15==63)+((3E5/(t&8191)&50)*[1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1][(t>>13)%16]+(3E6/(t&8191)&45)*[0,0,0,0,1,0,0,0][(t>>13)%8]+(t/4*(t&t>>12)&32))*(t>>20>1)",
 				"starred": 2
+			}, {
+				"description": "dubstep_thingy",
+				"author": [["Gabriel Miceli", "https://youtu.be/V4GfkFbDojc?t=148"]],
+				"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/",
+				"date": "2021-10-11",
+				"sampleRate": "44100",
+				"code": "a=t*(t&t>>12)/256,128+sin(a/20.5)*((a>>5)%32)*4"
 			}, {
 				"description": "cool dubstep song",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q6emvo/cool_dubstep_song/",
@@ -955,13 +1022,6 @@
 				"code": "a=t/[2,4,3,5,6,7,8,10][(t>>13)%8],2*a*(a&64?-1:1)+15*(3E3/(t&16383)&4)+(25*sin(t*[1.5,1.5,1.5,1.35,1.2,1.2,1,1][(t>>15)%8]/41)+25)+(t*[.5,.75,1,.8,1,1.2,.4,.6,.8,.3,.5,.6][(t>>10)%3+(t>>16)%4*3]/2&16)",
 				"starred": 1
 			}, {
-				"description": "dubstep_thingy",
-				"author": [["Gabriel Miceli", "https://youtu.be/V4GfkFbDojc?t=148"]],
-				"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/",
-				"date": "2021-10-11",
-				"sampleRate": "44100",
-				"code": "a=t*(t&t>>12)/256,128+sin(a/20.5)*((a>>5)%32)*4"
-			}, {
 				"description": "2-bit song",
 				"url": "https://www.reddit.com/r/bytebeat/comments/q36kta/2bit_song/",
 				"date": "2021-10-07",
@@ -981,19 +1041,31 @@
 				"sampleRate": "44100",
 				"code": "(t&64/(t&t>>12?t&t>>14?1:2:4))+(t/[1,2,8,2,4,3,2,3][(t>>13)%8]&64)+(sqrt(1E3*(t&16383))&64)+(t*(t&t>>12)&32)"
 			}, {
-				"description": "remix of \"The time is running out!\" by SthephanShi",
-				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/",
-				"date": "2021-10-25",
-				"sampleRate": "11025",
-				"code": "((t*(t&16384?7:5)*(3-(3&-t>>9)+(3&t>>8))>>(2&t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)/2&127)+(3E4/(t&4095)&128)+(random()*(((-t>>5)%64)+64))",
+				"description": "cool loop that only has \"t\", \"4\" and math operators in the code",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qivue0/cool_loop_that_only_has_t_4_and_math_operators_in/",
+				"date": "2021-10-30",
+				"sampleRate": "44100",
+				"code": "(t-(t&t>>4)/4-t>>4&64)+44444/(t%pow(4,7))+(t&t>>4>>4>>4&15)"
+			}, {
+				"description": "remix of 'first bytebeat remixed' by NewFall2020",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qlf0op/first_bytebeat_remixed/hj50s9a/?utm_source=reddit&utm_medium=web2x&context=3",
+				"date": "2021-11-03",
+				"sampleRate": "44100",
+				"code": "t/=5.5,64*sin(((t*(t&16384?6:5)/4|t>>4)*(1+(3&t>>11))>>(3&t>>9)|t*(t&16384?6:5)*(3+(3&t>>(t&2048?334:14)))>>1+(3&t>>8)&(sin(t)*t|t>>4|t>>3)&128)/21.5)+64+(sqrt(1E4*(t&4095))&64|t/8&64)"
+			}, {
+				"description": "fm synth, i guess...?",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qlodty/fm_synth_i_guess/",
+				"date": "2021-11-03",
+				"sampleRate": "32000",
+				"code": "a=t/1.15,c=t*1.05,d=c*1.1,e=d*1.15,f=d*1.2,b=[a,c,d,a,f,a,c,e][t>>14&7],m=[a,t,c,d,0,0,e,0][t>>12&7],i=[a,c,t,e][t>>17&3],25+4*tan(sin(b/81.5)+cos(b/81.5))+8*atan(sin(m/20.375)+cos(m/20.375))+100+sin(sin(i/40.75*4)+cos(i/40.75*4))*\"4321\"[t>>15&3]+16*sin(4E3/(t&16383)%100)+tan(sin([t,0,0,0][t>>10&3]*cos(t)))*2",
 				"starred": 1
 			}, {
-				"description": "remix of SthephanShi's remix",
-				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/",
-				"date": "2021-10-25",
-				"sampleRate": "44100",
-				"code": "t/=4,((t/2*(t&16384?7:5)*(t&512?0.5:(t&256?1:2))*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t%(t&8192?4096:3072))&128-64)+(random()*(((-t>>(t&4096?5:(t&2048?3:4)))%64)+64))",
-				"starred": 2
+				"description": "1-bit song",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qmk3k8/1bit_song/",
+				"date": "2021-11-04",
+				"sampleRate": "32000",
+				"code": "48*(random()*\"0000202020002020\"[t/1.2>>10&15]&1)+6E4/(t/1.2&4095)+t*[1,random(),random(),random(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0][(t/1.2>>10)+16&31]+(t/\"12483456\"[t/1.2>>16&7]&40)&64",
+				"starred": 1
 			}]
 		}, {
 			"author": "InfinitySnapz",
@@ -1075,6 +1147,13 @@
 			"author": "LJ",
 			"sampleRate": "32000",
 			"code": "((abs(t*(.02+(t*.0001&0x4)*.01)*(1+((t*.0001)%4)<<5)%0xFF-0x80))&0xFF)+(t%100)*.3*abs(sin(t*.00005)*.25+.5)+min(max((t>>16)-2,0)*.5,1)*(t*.1&0xF)*(t*.01&0xFF)/0x70"
+		}, {
+			"description": "When Bytebeat has a Harmony v2",
+			"author": "NewFall2020",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qqcblq/when_bytebeat_has_a_harmony_v2/",
+			"date": "2021-11-09",
+			"sampleRate": "32000",
+			"code": "t/=4,d=[1,1.5,1.75,2,2.5,4,1,3][(t>>13)%8]*t,e=[1,1.5,1.75,1.6666,2,4,1,3][(t>>13)%8]*t,f=[1,1.5,1.75,1.6,2,2.4,1,3][(t>>13)%8]*t,g=[.5,.75,.875,1,.75,.5,.25,.75,.625,.75,.875,1,.75,.5,.25,.75][(t>>13)%16]*t,h=[2,3,3.5,4,5,8,2,6][(t>>13)%8]*t,d%32+e%42.66666666+f%51.212121212121+g%64+h%16"
 		}, {
 			"description": "Sine Music v2",
 			"author": "Jay-Arnett-97104",
@@ -1217,6 +1296,30 @@
 				"date": "2021-10-01",
 				"sampleRate": "11025",
 				"code": "wv=function(a,b){return sin(t/a)*b+128},wv((t&4095)+1E3,32)"
+			}, {
+				"description": "ÿ&&",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qgqx3g/%C3%BF/",
+				"date": "2021-10-27",
+				"sampleRate": "44100",
+				"code": "(64*sin(t/20)&64*cos(t/2E4))+128"
+			}, {
+				"description": "NO ARRAY ARRAY SONG",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qjmy4v/no_array_array_song/",
+				"date": "2021-10-31",
+				"sampleRate": "44100",
+				"code": "(t/t+(t>>12)%6+(t>>16)%3)*10*t>>4"
+			}, {
+				"description": "NO ARRAY ARRAY SONG sqare ver",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qjmy4v/no_array_array_song/",
+				"date": "2021-10-31",
+				"sampleRate": "44100",
+				"code": "t/6*(t/t+(t>>12)%6+(t>>16)%3)*10&64"
+			}, {
+				"description": "NO ARRAY ARRAY SONG sin ver",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qjmy4v/no_array_array_song/",
+				"date": "2021-10-31",
+				"sampleRate": "44100",
+				"code": "sin((t/t+(t>>12)%6+(t>>16)%3)*t>>4)*32+128"
 			}]
 		}
 	],
