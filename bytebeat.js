@@ -184,7 +184,7 @@ const bytebeat = new class {
 		this.controlVolume = document.getElementById('control-volume');
 		this.timeCursor = document.getElementById('canvas-timecursor');
 		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
-			if(e.keyCode === 13 /* ENTER */) {
+			if(e.key === 'Enter') {
 				this.controlCounter.blur();
 				this.togglePlay(true);
 				return;
@@ -200,7 +200,7 @@ const bytebeat = new class {
 		this.editorElem = document.getElementById('editor');
 		this.editorElem.oninput = () => this.setFunction();
 		this.editorElem.onkeydown = e => {
-			if(e.keyCode === 9 /* TAB */ && !e.shiftKey && !e.altKey && !e.ctrlKey) {
+			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
 				e.preventDefault();
 				const el = e.target;
 				const { value, selectionStart } = el;
