@@ -45,7 +45,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				if(funcValue !== this.lastFuncValue) {
 					if(isNaN(funcValue)) {
 						this.lastByteValue = NaN;
-					} if(isBytebeat) {
+					} else if(isBytebeat) {
 						this.lastByteValue = funcValue & 255;
 						this.lastValue = this.lastByteValue / 127.5 - 1;
 					} else if(isFloatbeat) {
