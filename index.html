@@ -13,7 +13,7 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css">
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022010701">
 	<script src="bytebeat.js"></script>
 	<script src="playlist.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.3/pako.min.js"></script>
@@ -102,28 +102,22 @@
 				</div>
 			</div>
 			<div class="library-content">
-				<div id="library-header-classic8khz" class="library-header toggle">
-					[Classic 8kHz] &mdash; code with only one variable (t), no JavaScript, 8kHz sampling rate
+				<div id="library-header-non-js" class="library-header toggle">
+					[Non-JS] &mdash; code with only one variable (t), no JavaScript
 				</div>
-				<div id="library-classic8khz" class="library-container disabled"></div>
+				<div id="library-non-js" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
-				<div id="library-header-js8khz" class="library-header toggle">
-					[JS 8kHz] &mdash; JavaScript code, 8kHz sampling rate
+				<div id="library-header-compact-js" class="library-header toggle">
+					[Compat JS] &mdash; compact JavaScript code
 				</div>
-				<div id="library-js8khz" class="library-container disabled"></div>
+				<div id="library-compact-js" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
-				<div id="library-header-highrate1k" class="library-header toggle">
-					[High rate 1k] &mdash; more than 8kHz, compressed size less than 1kB
+				<div id="library-header-big-js" class="library-header toggle">
+					[Big JS] &mdash; big JavaScript code files
 				</div>
-				<div id="library-highrate1k" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div id="library-header-bigcode" class="library-header toggle">
-					[Big code] &mdash; code with size more than 1kB
-				</div>
-				<div id="library-bigcode" class="library-container disabled"></div>
+				<div id="library-big-js" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
 				<div id="library-header-floatbeat" class="library-header toggle">

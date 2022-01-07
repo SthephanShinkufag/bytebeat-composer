@@ -153,23 +153,32 @@ code {
 
 .code-date, .code-length, .code-samplerate {
 	color: gray;
+	letter-spacing: -1px;
 	cursor: default;
 }
 
-.code-load {
+.code-button {
 	display: inline-block;
-	margin: 1px 0;
-	padding: 1px 5px;
+	margin: 1px 0 1px 6px;
+	padding: 1px 4px;
 	border-radius: 3px;
-	color: #dfe5ee;
-	background-image: linear-gradient(to bottom, #4f4f4f, #11141a);
+	color: #ced5e1;
+	background-image: linear-gradient(to bottom, #424242, #171b22);
 	white-space: nowrap;
+	letter-spacing: -1px;
 	cursor: pointer;
 }
 
-.code-load:hover {
+.code-button:hover {
 	color: #c2dfff;
 	background-image: linear-gradient(to bottom, #364779, #1f2331);
+}
+
+.code-button[disabled] {
+	opacity: 0.7;
+	color: #ced5e1 !important;
+	background-image: linear-gradient(to bottom, #424242, #171b22) !important;
+	cursor: default;
 }
 
 .entry {
@@ -208,7 +217,7 @@ code {
 }
 
 .entry-top {
-	padding: 4px 4px 8px 16px;
+	padding: 6px 4px 8px 16px
 }
 
 .entry-top:not(:first-child) {

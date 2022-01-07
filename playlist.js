@@ -11,11 +11,16 @@ function escapeHTML(text) {
 function createEntryElem({
 	author,
 	children,
-	code,
-	codeFile,
+	codeMinified,
+	codeOriginal,
 	date,
 	description,
+	file,
+	fileFormatted,
+	fileMinified,
+	fileOriginal,
 	mode,
+	remixed,
 	sampleRate,
 	starred,
 	url
@@ -44,31 +49,53 @@ function createEntryElem({
 	if(url && !description && !author) {
 		entry += `(<a href="${ url }" target="_blank">source</a>)`;
 	}
+	if(remixed) {
+		entry += ` (remix of <a href="${ remixed.url }" target="_blank">${ remixed.description }</a>${
+			remixed.author ? ' by ' + remixed.author : '' })`;
+	}
 	if(date) {
 		entry += ` <span class="code-date">(${ date })</span>`;
 	}
 	if(sampleRate) {
-		entry += ` <span class="code-samplerate">${
-			sampleRate.substring(0, sampleRate.length - 3) }kHz</span>`;
+		entry += ` <span class="code-samplerate">${ (sampleRate / 1000) | 0 }kHz</span>`;
 	}
 	if(mode) {
 		entry += ` <span class="code-samplerate">${ mode }</span>`;
 	}
-	let starClass = '';
-	if(starred) {
-		starClass = ' ' + ['star-white', 'star-yellow'][starred - 1];
+	const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
+	if(file) {
+		if(fileFormatted) {
+			entry += `<a class="code-button code-load code-load-formatted" data-songdata='${ songData
+			}' data-code-file="${ file }" title="Click to load and play the formatted code">► formatted</a>`;
+		}
+		if(fileOriginal) {
+			entry += `<a class="code-button code-load code-load-original" data-songdata='${ songData
+			}' data-code-file="${ file }" title="Click to load and play the original code">► original</a>`;
+		}
+		if(fileMinified) {
+			entry += `<a class="code-button code-load code-load-minified" data-songdata='${ songData
+			}' data-code-file="${ file }" title="Click to load and play the minified code">► minified</a>`;
+		}
 	}
-	const songData = code || codeFile ? JSON.stringify({ sampleRate, mode }) : '';
-	if(codeFile) {
-		entry += ` <a class="code-load" data-songdata='${ songData }' data-code-file="${
-			codeFile }" title="Click to load the pretty code">► pretty code</a>`;
+	if(codeOriginal) {
+		if(Array.isArray(codeOriginal)) {
+			codeOriginal = codeOriginal.join('\r\n');
+		}
+		const btn = codeMinified ? '<a class="code-button code-toggle code-toggle-minified"' +
+			' title="Original version shown. Click to view the minified version.">original</a>' : '';
+		entry += `<div class="code-original ${ codeMinified ? 'disabled' : '' }">
+			<code data-songdata='${ songData }'>${ escapeHTML(codeOriginal) }</code>
+			<span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>${ btn }
+		</div>`;
 	}
-	if(entry.length) {
-		entry += '<br>\n';
-	}
-	if(code) {
-		entry += `<code data-songdata='${ songData }'>${
-			escapeHTML(code) }</code> <span class="code-length">${ code.length }c</span>`;
+	if(codeMinified) {
+		const btn = '<a class="code-button code-toggle code-toggle-original" title="Minified version shown.' +
+			` ${ codeOriginal ? 'Click to view the original version."' :
+				'No original version." disabled="1"' }>minified</a>`;
+		entry += `<div class="code-minified">
+			<code data-songdata='${ songData }'>${ escapeHTML(codeMinified) }</code>
+			<span class="code-length" title="Size in characters">${ codeMinified.length }c</span>${ btn }
+		</div>`;
 	}
 	if(children) {
 		let childrenStr = '';
@@ -77,8 +104,8 @@ function createEntryElem({
 		}
 		entry += `<div class="entry-children">${ childrenStr }</div>`;
 	}
-	return `<div class="${ code || codeFile || children ? 'entry' : 'entry-text' }${ starClass || '' }">${
-		entry }</div>`;
+	return `<div class="${ codeOriginal || codeMinified || file || children ? 'entry' : 'entry-text' }${
+		starred ? ' ' + ['star-white', 'star-yellow'][starred - 1] : '' }">${ entry }</div>`;
 }
 
 function addPlaylists(data) {

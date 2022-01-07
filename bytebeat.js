@@ -256,9 +256,21 @@ const bytebeat = new class {
 							{ code: xhr.responseText }));
 					}
 				};
-				xhr.open('GET', 'library/' + el.dataset.codeFile, true);
+				xhr.open('GET', `library/${
+					el.classList.contains('code-load-formatted') ? 'formatted' :
+					el.classList.contains('code-load-minified') ? 'minified' :
+					el.classList.contains('code-load-original') ? 'original' : ''
+				}/${ el.dataset.codeFile }`, true);
 				xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 				xhr.send(null);
+			} else if(el.classList.contains('code-toggle') && !el.getAttribute('disabled')) {
+				const parentEl = el.parentNode;
+				parentEl.classList.toggle('disabled');
+				if(el.classList.contains('code-toggle-original')) {
+					parentEl.previousElementSibling.classList.toggle('disabled');
+				} else if(el.classList.contains('code-toggle-minified')) {
+					parentEl.nextElementSibling.classList.toggle('disabled');
+				}
 			}
 		};
 		libraryElem.onmouseover = function(e) {
