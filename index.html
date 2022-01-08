@@ -95,7 +95,7 @@
 					<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
 					<br>
 					This website is a live editing bytebeats player. It has a collection of bytebeat music I found on the internet, and also the music I created.<br>
-					You can choose between bytebeat, signed bytebeat and floatbeat formats. Bytebeat expects output is an unsigned 8bit value (0 to 255). Signed bytebeat assumes output is a signed 8bit value (-127 to 128). Floatbeat assumes output is −1.0 to 1.0.<br>
+					You can choose between bytebeat, signed bytebeat and floatbeat formats. Bytebeat expects output is an unsigned 8bit value (0 to 255). Signed bytebeat assumes output is a signed 8bit value (-127 to 128). Floatbeat assumes output is -1.0 to 1.0.<br>
 					<br>
 					This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
 					Forked by SthephanShi aka Viraya.
@@ -103,31 +103,25 @@
 			</div>
 			<div class="library-content">
 				<div id="library-header-classic" class="library-header toggle">
-					[Classic] &mdash; C compatible code with only one variable (t), no JavaScript
+					[Classic] &mdash; valid C code with one variable (t)
 				</div>
 				<div id="library-classic" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
-				<div id="library-header-js-onevar" class="library-header toggle">
-					[JS one-var] &mdash; compact JavaScript code with one variable (t)
+				<div id="library-header-js-code" class="library-header toggle">
+					[JS code] &mdash; JavaScript code, not valid for C
 				</div>
-				<div id="library-js-onevar" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div id="library-header-js-compact" class="library-header toggle">
-					[Compat JS] &mdash; compact JavaScript code
-				</div>
-				<div id="library-js-compact" class="library-container disabled"></div>
+				<div id="library-js-code" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
 				<div id="library-header-js-bigcode" class="library-header toggle">
-					[Big JS] &mdash; big JavaScript code files
+					[JS big code] &mdash; big JavaScript code files
 				</div>
 				<div id="library-js-bigcode" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
 				<div id="library-header-floatbeat" class="library-header toggle">
-					[Floatbeat] &mdash; assumes output is −1.0 to 1.0
+					[Floatbeat] &mdash; assumes output is -1.0 to 1.0
 				</div>
 				<div id="library-floatbeat" class="library-container disabled"></div>
 			</div>
