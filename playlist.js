@@ -50,8 +50,9 @@ function createEntryElem({
 		entry += `(<a href="${ url }" target="_blank">source</a>)`;
 	}
 	if(remixed) {
-		entry += ` (remix of <a href="${ remixed.url }" target="_blank">${ remixed.description }</a>${
-			remixed.author ? ' by ' + remixed.author : '' })`;
+		entry += ` (remix of ${ remixed.url ?
+			`<a href="${ remixed.url }" target="_blank">${ remixed.description }</a>` :
+			`"${ remixed.description }"` }${ remixed.author ? ' by ' + remixed.author : '' })`;
 	}
 	if(date) {
 		entry += ` <span class="code-date">(${ date })</span>`;
