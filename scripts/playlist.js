@@ -51,7 +51,7 @@ function createEntryElem({
 	}
 	if(remixed) {
 		entry += ` (remix of ${ remixed.url ?
-			`<a href="${ remixed.url }" target="_blank">${ remixed.description }</a>` :
+			`<a href="${ remixed.url }" target="_blank">${ remixed.description || '(source)' }</a>` :
 			`"${ remixed.description }"` }${ remixed.author ? ' by ' + remixed.author : '' })`;
 	}
 	if(date) {
@@ -134,7 +134,7 @@ xhr.onreadystatechange = function() {
 		document.addEventListener('DOMContentLoaded', () => addPlaylists(data));
 	}
 };
-xhr.open('GET', 'playlists.json', true);
+xhr.open('GET', 'library/library.json', true);
 xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 xhr.send(null);
 }());

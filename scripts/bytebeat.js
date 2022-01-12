@@ -142,7 +142,7 @@ const bytebeat = new class {
 	}
 	async initAudioContext() {
 		this.audioCtx = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)();
-		await this.audioCtx.audioWorklet.addModule('audioProcessor.js');
+		await this.audioCtx.audioWorklet.addModule('scripts/audioProcessor.js');
 		if(!this.audioCtx.createGain) {
 			this.audioCtx.createGain = this.audioCtx.createGainNode;
 		}
