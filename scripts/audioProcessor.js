@@ -38,7 +38,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				const flooredSample = Math.floor(byteSample);
 				let funcValue;
 				try {
-					funcValue = this.func(flooredSample);
+					funcValue = +this.func(flooredSample);
 				} catch(err) {
 					funcValue = NaN;
 				}
