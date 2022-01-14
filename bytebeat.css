@@ -144,11 +144,10 @@ button[name="close"] {
 	line-height: 13px !important;
 }
 
-.cm-selectionMatch {
+.cm-matchingBracket, .cm-selectionMatch {
 	margin: -1px;
-	background-color: #ffffff2e;
-	border: 1px solid #cacaca91;
-	border-radius: 2px;
+	border: 1px solid gray;
+	border-radius: 3px;
 }
 
 .cmt-number {

@@ -1,5 +1,5 @@
 import { EditorState, basicSetup } from '@codemirror/basic-setup';
-import { indentWithTab } from '@codemirror/commands';
+import { defaultKeymap, insertTab, indentLess } from '@codemirror/commands';
 import { classHighlightStyle } from '@codemirror/highlight';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -14,7 +14,11 @@ bytebeat.editorView = new EditorView({
 			basicSetup,
 			classHighlightStyle,
 			javascript(),
-			keymap.of([indentWithTab]),
+			keymap.of([
+				...defaultKeymap,
+				{ key: 'Shift-Tab', run: indentLess },
+				{ key: 'Tab', run: insertTab }
+			]),
 			oneDark,
 			EditorView.lineWrapping,
 			EditorView.updateListener.of(view => {

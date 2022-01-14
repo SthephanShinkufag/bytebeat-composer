@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-
     // Compressed representation of the Grapheme_Cluster_Break=Extend
     // information from
     // http://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakProperty.txt.
@@ -230,7 +229,7 @@
         Return a cursor that iterates over the given range of lines,
         _without_ returning the line breaks between, and yielding empty
         strings for empty lines.
-
+        
         When `from` and `to` are given, they should be 1-based line numbers.
         */
         iterLines(from, to) {
@@ -667,16 +666,16 @@
         /**
         The position of the start of the line.
         */
-        from,
+        from, 
         /**
         The position at the end of the line (_before_ the line break,
         or at the end of document for the last line).
         */
-        to,
+        to, 
         /**
         This line's line number (1-based).
         */
-        number,
+        number, 
         /**
         The line's content.
         */
@@ -780,7 +779,7 @@
         Iterate over the ranges changed by these changes. (See
         [`ChangeSet.iterChanges`](https://codemirror.net/6/docs/ref/#state.ChangeSet.iterChanges) for a
         variant that also provides you with the inserted text.)
-
+        
         When `individual` is true, adjacent changes (which are kept
         separate for [position mapping](https://codemirror.net/6/docs/ref/#state.ChangeDesc.mapPos)) are
         reported separately.
@@ -888,7 +887,7 @@
         /**
         @internal
         */
-        constructor(sections,
+        constructor(sections, 
         /**
         @internal
         */
@@ -942,7 +941,7 @@
         applied to the document produced by applying `other`. When
         `before` is `true`, order changes as if `this` comes before
         `other`, otherwise (the default) treat `other` as coming first.
-
+        
         Given two changes `A` and `B`, `A.compose(B.map(A))` and
         `B.compose(A.map(B, true))` will produce the same document. This
         provides a basic form of [operational
@@ -953,7 +952,7 @@
         /**
         Iterate over the changed ranges in the document, calling `f` for
         each.
-
+        
         When `individual` is true, adjacent changes are reported
         separately.
         */
@@ -1317,7 +1316,7 @@
         /**
         The lower boundary of the range.
         */
-        from,
+        from, 
         /**
         The upper boundary of the range.
         */
@@ -1414,7 +1413,7 @@
         The ranges in the selection, sorted by position. Ranges cannot
         overlap (but they may touch, if they aren't empty).
         */
-        ranges,
+        ranges, 
         /**
         The index of the _main_ range in the selection (which is
         usually the range that was added last).
@@ -1562,15 +1561,15 @@
         /**
         @internal
         */
-        combine,
+        combine, 
         /**
         @internal
         */
-        compareInput,
+        compareInput, 
         /**
         @internal
         */
-        compare, isStatic,
+        compare, isStatic, 
         /**
         @internal
         */
@@ -1603,7 +1602,7 @@
         state. You must take care to declare the parts of the state that
         this value depends on, since your function is only called again
         for a new state when one of those parts changed.
-
+        
         In most cases, you'll want to use the
         [`provide`](https://codemirror.net/6/docs/ref/#state.StateField^define^config.provide) option when
         defining a field instead.
@@ -1721,7 +1720,7 @@
         /**
         @internal
         */
-        id, createF, updateF, compareF,
+        id, createF, updateF, compareF, 
         /**
         @internal
         */
@@ -2067,7 +2066,7 @@
         /**
         The annotation type.
         */
-        type,
+        type, 
         /**
         The value of this annotation.
         */
@@ -2129,7 +2128,7 @@
         /**
         @internal
         */
-        type,
+        type, 
         /**
         The value of this effect.
         */
@@ -2199,24 +2198,24 @@
         /**
         The state from which the transaction starts.
         */
-        startState,
+        startState, 
         /**
         The document changes made by this transaction.
         */
-        changes,
+        changes, 
         /**
         The selection set by this transaction, or undefined if it
         doesn't explicitly set a selection.
         */
-        selection,
+        selection, 
         /**
         The effects added to the transaction.
         */
-        effects,
+        effects, 
         /**
         @internal
         */
-        annotations,
+        annotations, 
         /**
         Whether the selection should be scrolled into view after this
         transaction is dispatched.
@@ -2533,15 +2532,15 @@
         /**
         @internal
         */
-        config,
+        config, 
         /**
         The current document.
         */
-        doc,
+        doc, 
         /**
         The current selection.
         */
-        selection,
+        selection, 
         /**
         @internal
         */
@@ -2804,7 +2803,7 @@
         Return a function that can categorize strings (expected to
         represent a single [grapheme cluster](https://codemirror.net/6/docs/ref/#text.findClusterBreak))
         into one of:
-
+        
          - Word (contains an alphanumeric character or a character
            explicitly listed in the local language's `"wordChars"`
            language data, which should be a string)
@@ -3157,11 +3156,11 @@
         /**
         The range's start position.
         */
-        from,
+        from, 
         /**
         Its end position.
         */
-        to,
+        to, 
         /**
         The value associated with this range.
         */
@@ -3175,7 +3174,7 @@
         return a.from - b.from || a.value.startSide - b.value.startSide;
     }
     class Chunk {
-        constructor(from, to, value,
+        constructor(from, to, value, 
         // Chunks are marked with the largest point that occurs
         // in them (or -1 for no points), so that scans that are
         // only interested in points (such as the
@@ -3257,15 +3256,15 @@
         /**
         @internal
         */
-        chunkPos,
+        chunkPos, 
         /**
         @internal
         */
-        chunk,
+        chunk, 
         /**
         @internal
         */
-        nextLayer = RangeSet.empty,
+        nextLayer = RangeSet.empty, 
         /**
         @internal
         */
@@ -3302,7 +3301,7 @@
         /**
         Update the range set, optionally adding new ranges or filtering
         out existing ones.
-
+        
         (The extra type parameter is just there as a kludge to work
         around TypeScript variance issues that prevented `RangeSet<X>`
         from being a subtype of `RangeSet<Y>` when `X` is a subtype of
@@ -3408,13 +3407,13 @@
         Iterate over two groups of sets, calling methods on `comparator`
         to notify it of possible differences.
         */
-        static compare(oldSets, newSets,
+        static compare(oldSets, newSets, 
         /**
         This indicates how the underlying data changed between these
         ranges, and is needed to synchronize the iteration. `from` and
         `to` are coordinates in the _new_ space, after these changes.
         */
-        textDiff, comparator,
+        textDiff, comparator, 
         /**
         Can be used to ignore all non-point ranges, and points below
         the given size. When -1, all ranges are compared.
@@ -3462,7 +3461,7 @@
         [`SpanIterator.span`](https://codemirror.net/6/docs/ref/#rangeset.SpanIterator.span)) at the end
         of the iteration.
         */
-        static spans(sets, from, to, iterator,
+        static spans(sets, from, to, iterator, 
         /**
         When given and greater than -1, only points of at least this
         size are taken into account.
@@ -5153,15 +5152,15 @@
         /**
         @internal
         */
-        startSide,
+        startSide, 
         /**
         @internal
         */
-        endSide,
+        endSide, 
         /**
         @internal
         */
-        widget,
+        widget, 
         /**
         The config object used to create this decoration. You can
         include additional properties in there to store metadata about
@@ -5748,7 +5747,7 @@
         /**
         @internal
         */
-        field,
+        field, 
         /**
         @internal
         */
@@ -5824,11 +5823,11 @@
         /**
         @internal
         */
-        id,
+        id, 
         /**
         @internal
         */
-        create,
+        create, 
         /**
         @internal
         */
@@ -5994,11 +5993,11 @@
         /**
         The editor view that the update is associated with.
         */
-        view,
+        view, 
         /**
         The new editor state.
         */
-        state,
+        state, 
         /**
         The transactions involved in the update. May be empty.
         */
@@ -6126,11 +6125,11 @@
         /**
         The start of the span (relative to the start of the line).
         */
-        from,
+        from, 
         /**
         The end of the span.
         */
-        to,
+        to, 
         /**
         The ["bidi
         level"](https://unicode.org/reports/tr9/#Basic_Display_Algorithm)
@@ -8016,20 +8015,20 @@
         /**
         The start of the element in the document.
         */
-        from,
+        from, 
         /**
         The length of the element.
         */
-        length,
+        length, 
         /**
         The top position of the element (relative to the top of the
         document).
         */
-        top,
+        top, 
         /**
         Its height.
         */
-        height,
+        height, 
         /**
         The type of element this is. When querying lines, this may be
         an array of all the blocks that make up the line.
@@ -10238,7 +10237,7 @@
         }
         /**
         Find the line or block widget at the given vertical position.
-
+        
         By default, this position is interpreted as a screen position,
         meaning `docTop` is set to the DOM top position of the editor
         content (forcing a layout). You can pass a different `docTop`
@@ -10246,7 +10245,7 @@
         position, or a precomputed document top
         (`view.contentDOM.getBoundingClientRect().top`) to limit layout
         queries.
-
+        
         *Deprecated: use `blockAtHeight` instead.*
         */
         blockAtHeight(height, docTop) {
@@ -10268,11 +10267,11 @@
         vertical position. The resulting block info might hold another
         array of block info structs in its `type` field if this line
         consists of more than one block.
-
+        
         Defaults to treating `height` as a screen position. See
         [`blockAtHeight`](https://codemirror.net/6/docs/ref/#view.EditorView.blockAtHeight) for the
         interpretation of the `docTop` parameter.
-
+        
         *Deprecated: use `lineBlockAtHeight` instead.*
         */
         visualLineAtHeight(height, docTop) {
@@ -10293,7 +10292,7 @@
         viewport. The heights of lines are reported relative to the
         given document top, which defaults to the screen position of the
         document (forcing a layout).
-
+        
         *Deprecated: use `viewportLineBlocks` instead.*
         */
         viewportLines(f, docTop) {
@@ -10314,12 +10313,12 @@
         Find the extent and height of the visual line (a range delimited
         on both sides by either non-[hidden](https://codemirror.net/6/docs/ref/#view.Decoration^range)
         line breaks, or the start/end of the document) at the given position.
-
+        
         Vertical positions are computed relative to the `docTop`
         argument, which defaults to 0 for this method. You can pass
         `view.contentDOM.getBoundingClientRect().top` here to get screen
         coordinates.
-
+        
         *Deprecated: use `lineBlockAt` instead.*
         */
         visualLineAt(pos, docTop = 0) {
@@ -10351,7 +10350,7 @@
         position was the last one on the line, the returned position
         will be across the line break. If there is no further line, the
         original position is returned.
-
+        
         By default, this method moves over a single cluster. The
         optional `by` argument can be used to move across more. It will
         be called with the first cluster as argument, and should return
@@ -10384,7 +10383,7 @@
         it defaults to moving to the next line (including wrapped
         lines). Otherwise, `distance` should provide a positive distance
         in pixels.
-
+        
         When `start` has a
         [`goalColumn`](https://codemirror.net/6/docs/ref/#state.SelectionRange.goalColumn), the vertical
         motion will use that as a target horizontal position. Otherwise,
@@ -10403,7 +10402,7 @@
         Find the DOM parent node and offset (child offset if `node` is
         an element, character offset when it is a text node) at the
         given document position.
-
+        
         Note that for positions that aren't currently in
         `visibleRanges`, the resulting DOM position isn't necessarily
         meaningful (it may just point before or after a placeholder
@@ -10549,14 +10548,14 @@
         [`style-mod`](https://github.com/marijnh/style-mod#documentation)
         style spec providing the styles for the theme. These will be
         prefixed with a generated class for the style.
-
+        
         Because the selectors will be prefixed with a scope class, rule
         that directly match the editor's [wrapper
         element](https://codemirror.net/6/docs/ref/#view.EditorView.dom)—to which the scope class will be
         added—need to be explicitly differentiated by adding an `&` to
         the selector for that element—for example
         `&.cm-focused`.
-
+        
         When `dark` is set to true, the theme will be marked as dark,
         which will cause the `&dark` rules from [base
         themes](https://codemirror.net/6/docs/ref/#view.EditorView^baseTheme) to be used (as opposed to
@@ -11660,11 +11659,11 @@
         // events before the first change, in which case a special type of
         // instance is created which doesn't hold any changes, with
         // changes == startSelection == undefined
-        changes,
+        changes, 
         // The effects associated with this event
-        effects, mapped,
+        effects, mapped, 
         // The selection before this event
-        startSelection,
+        startSelection, 
         // Stores selection changes after this event, to be used for
         // selection undo/redo.
         selectionsAfter) {
@@ -11948,12 +11947,12 @@
         /// grammar was written properly, different node types with the
         /// same name within a node set should play the same semantic
         /// role.
-        name,
+        name, 
         /// @internal
-        props,
+        props, 
         /// The id of this node in its set. Corresponds to the term ids
         /// used in the parser.
-        id,
+        id, 
         /// @internal
         flags = 0) {
             this.name = name;
@@ -12080,14 +12079,14 @@
         /// Construct a new tree. See also [`Tree.build`](#common.Tree^build).
         constructor(
         /// The type of the top node.
-        type,
+        type, 
         /// This node's child nodes.
-        children,
+        children, 
         /// The positions (offsets relative to the start of this tree) of
         /// the children.
-        positions,
+        positions, 
         /// The total length of this tree
-        length,
+        length, 
         /// Per-node [node props](#common.NodeProp) to associate with this node.
         props) {
             this.type = type;
@@ -12240,9 +12239,9 @@
         /// Create a tree buffer.
         constructor(
         /// The buffer's content.
-        buffer,
+        buffer, 
         /// The total length of the group of nodes in the buffer.
-        length,
+        length, 
         /// The node set used in this buffer.
         set) {
             this.buffer = buffer;
@@ -12352,7 +12351,7 @@
         }
     }
     class TreeNode {
-        constructor(node, _from,
+        constructor(node, _from, 
         // Index in parent node, set to -1 if the node is not a direct child of _parent.node (overlay)
         index, _parent) {
             this.node = node;
@@ -12553,7 +12552,7 @@
     /// allows you to move to adjacent nodes.
     class TreeCursor {
         /// @internal
-        constructor(node,
+        constructor(node, 
         /// @internal
         mode = 0) {
             this.mode = mode;
@@ -12972,17 +12971,17 @@
     }
     function balanceRange(
     // The type the balanced tree's inner nodes.
-    balanceType,
+    balanceType, 
     // The direct children and their positions
-    children, positions,
+    children, positions, 
     // The index range in children/positions to use
-    from, to,
+    from, to, 
     // The start position of the nodes, relative to their parent.
-    start,
+    start, 
     // Length of the outer node
-    length,
+    length, 
     // Function to build the top node of the balanced tree
-    mkTop,
+    mkTop, 
     // Function to build internal nodes for the balanced tree
     mkTree) {
         let total = 0;
@@ -13032,11 +13031,11 @@
         /// The start of the unchanged range pointed to by this fragment.
         /// This refers to an offset in the _updated_ document (as opposed
         /// to the original tree).
-        from,
+        from, 
         /// The end of the unchanged range.
-        to,
+        to, 
         /// The tree that this fragment is based on.
-        tree,
+        tree, 
         /// The offset between the fragment's tree and the document that
         /// this fragment can be used against. Add this when going from
         /// document to tree positions, subtract it to go from tree to
@@ -13177,7 +13176,7 @@
         The [language data](https://codemirror.net/6/docs/ref/#state.EditorState.languageDataAt) data
         facet used for this language.
         */
-        data, parser,
+        data, parser, 
         /**
         The node type of the top node of trees produced by this parser.
         */
@@ -13337,19 +13336,19 @@
         /**
         @internal
         */
-        constructor(parser,
+        constructor(parser, 
         /**
         The current editor state.
         */
-        state,
+        state, 
         /**
         Tree fragments that can be reused by incremental re-parses.
         */
-        fragments = [],
+        fragments = [], 
         /**
         @internal
         */
-        tree, treeLen,
+        tree, treeLen, 
         /**
         The current editor viewport (or some overapproximation
         thereof). Intended to be used for opportunistically avoiding
@@ -13358,11 +13357,11 @@
         should be called to make sure the parser is restarted when the
         skipped region becomes visible).
         */
-        viewport,
+        viewport, 
         /**
         @internal
         */
-        skipped,
+        skipped, 
         /**
         This is where skipping parsers can register a promise that,
         when resolved, will schedule a new parse. It is cleared when
@@ -13517,7 +13516,7 @@
         asynchronously loading a nested parser. It'll skip its input and
         mark it as not-really-parsed, so that the next update will parse
         it again.
-
+        
         When `until` is given, a reparse will be scheduled when that
         promise resolves.
         */
@@ -13709,7 +13708,7 @@
         /**
         The language object.
         */
-        language,
+        language, 
         /**
         An optional set of supporting extensions. When nesting a
         language in another language, the outer language is encouraged
@@ -13803,7 +13802,7 @@
         /**
         The editor state.
         */
-        state,
+        state, 
         /**
         @internal
         */
@@ -13923,11 +13922,11 @@
         /**
         @internal
         */
-        constructor(base,
+        constructor(base, 
         /**
         The position at which indentation is being computed.
         */
-        pos,
+        pos, 
         /**
         The syntax tree node to which the indentation strategy
         applies.
@@ -15731,6 +15730,17 @@
         return true;
     };
     /**
+    Insert a tab character at the cursor or, if something is selected,
+    use [`indentMore`](https://codemirror.net/6/docs/ref/#commands.indentMore) to indent the entire
+    selection.
+    */
+    const insertTab = ({ state, dispatch }) => {
+        if (state.selection.ranges.some(r => !r.empty))
+            return indentMore({ state, dispatch });
+        dispatch(state.update(state.replaceSelection("\t"), { scrollIntoView: true, userEvent: "input" }));
+        return true;
+    };
+    /**
     Array of key bindings containing the Emacs-style bindings that are
     available on macOS by default.
 
@@ -15863,13 +15873,6 @@
         { key: "Shift-Mod-k", run: deleteLine },
         { key: "Shift-Mod-\\", run: cursorMatchingBracket }
     ].concat(standardKeymap);
-    /**
-    A binding that binds Tab to [`indentMore`](https://codemirror.net/6/docs/ref/#commands.indentMore) and
-    Shift-Tab to [`indentLess`](https://codemirror.net/6/docs/ref/#commands.indentLess).
-    Please see the [Tab example](../../examples/tab/) before using
-    this.
-    */
-    const indentWithTab = { key: "Tab", run: indentMore, shift: indentLess };
 
     const defaults = {
         brackets: ["(", "[", "{", "'", '"'],
@@ -16312,12 +16315,12 @@
         /**
         Create a text cursor. The query is the search string, `from` to
         `to` provides the region to search.
-
+        
         When `normalize` is given, it will be called, on both the query
         string and the content it is matched against, before comparing.
         You can, for example, create a case-insensitive search by
         passing `s => s.toLowerCase()`.
-
+        
         Text is always normalized with
         [`.normalize("NFKD")`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize)
         (when supported).
@@ -17910,11 +17913,11 @@
         /**
         The editor state that the completion happens in.
         */
-        state,
+        state, 
         /**
         The position at which the completion is happening.
         */
-        pos,
+        pos, 
         /**
         Indicates whether completion was activated explicitly, or
         implicitly by typing. The usual way to respond to this is to
@@ -19482,12 +19485,12 @@
         The set of tags that match this tag, starting with this one
         itself, sorted in order of decreasing specificity. @internal
         */
-        set,
+        set, 
         /**
         The base unmodified tag that this one is based on, if it's
         modified @internal
         */
-        base,
+        base, 
         /**
         The modifiers applied to this.base @internal
         */
@@ -19523,7 +19526,7 @@
         same modifier to a twice tag will return the same value (`m1(t1)
         == m1(t1)`) and applying multiple modifiers will, regardless or
         order, produce the same tag (`m1(m2(t1)) == m2(m1(t1))`).
-
+        
         When multiple modifiers are applied to a given base tag, each
         smaller set of modifiers is registered as a parent, so that for
         example `m1(m2(m3(t1)))` is a subtype of `m1(m2(t1))`,
@@ -19772,7 +19775,7 @@
         that rely on external styling), or a
         [`style-mod`](https://github.com/marijnh/style-mod#documentation)-style
         set of CSS properties (which define the styling for those tags).
-
+        
         The CSS rules created for a highlighter will be emitted in the
         order of the spec's properties. That means that for elements that
         have multiple tags associated with them, styles defined further
@@ -20998,40 +21001,40 @@
         /// @internal
         constructor(
         /// The parse that this stack is part of @internal
-        p,
+        p, 
         /// Holds state, input pos, buffer index triplets for all but the
         /// top state @internal
-        stack,
+        stack, 
         /// The current parse state @internal
-        state,
+        state, 
         // The position at which the next reduce should take place. This
         // can be less than `this.pos` when skipped expressions have been
         // added to the stack (which should be moved outside of the next
         // reduction)
         /// @internal
-        reducePos,
+        reducePos, 
         /// The input position up to which this stack has parsed.
-        pos,
+        pos, 
         /// The dynamic score of the stack, including dynamic precedence
         /// and error-recovery penalties
         /// @internal
-        score,
+        score, 
         // The output buffer. Holds (type, start, end, size) quads
         // representing nodes created by the parser, where `size` is
         // amount of buffer array entries covered by this node.
         /// @internal
-        buffer,
+        buffer, 
         // The base offset of the buffer. When stacks are split, the split
         // instance shared the buffer history with its parent up to
         // `bufferBase`, which is the absolute offset (including the
         // offset of previous splits) into the buffer at which this stack
         // starts writing.
         /// @internal
-        bufferBase,
+        bufferBase, 
         /// @internal
-        curContext,
+        curContext, 
         /// @internal
-        lookAhead = 0,
+        lookAhead = 0, 
         // A parent stack from which this was split off, if any. This is
         // set up so that it always points to a stack that has some
         // additional buffer content, never to a stack with an equal
@@ -21480,7 +21483,7 @@
         /// @internal
         constructor(
         /// @internal
-        input,
+        input, 
         /// @internal
         ranges) {
             this.input = input;
@@ -22963,7 +22966,11 @@
     			basicSetup,
     			classHighlightStyle,
     			javascript(),
-    			keymap.of([indentWithTab]),
+    			keymap.of([
+    				...defaultKeymap,
+    				{ key: 'Tab', run: insertTab },
+    				{ key: 'Shift-Tab', run: indentLess }
+    			]),
     			oneDark,
     			EditorView.lineWrapping,
     			EditorView.updateListener.of(view => {
