@@ -128,6 +128,8 @@ button[name="close"] {
 #editor {
 	height: 200px;
 	border: 2px solid #bac2cc;
+	resize: vertical;
+	overflow: hidden;
 }
 
 .cm-content {

@@ -22968,8 +22968,8 @@
     			javascript(),
     			keymap.of([
     				...defaultKeymap,
-    				{ key: 'Tab', run: insertTab },
-    				{ key: 'Shift-Tab', run: indentLess }
+    				{ key: 'Shift-Tab', run: indentLess },
+    				{ key: 'Tab', run: insertTab }
     			]),
     			oneDark,
     			EditorView.lineWrapping,
