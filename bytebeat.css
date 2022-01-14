@@ -117,21 +117,53 @@ a:hover, code:hover {
 
 /* ==[ Editor ] =========================================================================================== */
 
+button[name="close"] {
+	color: #abb2bf;
+}
+
 .container-expanded > #editor {
 	flex: auto;
 }
 
 #editor {
 	height: 200px;
-	padding: 0 2px 0 5px;
 	border: 2px solid white;
-	box-sizing: border-box;
-	color: #fff;
+}
+
+.cm-content {
+	font-weight: bold;
+}
+
+.cm-editor {
+	height: 100%;
 	background-color: #000;
-	font: 14px/14px Monospace;
-	word-break: break-all;
-	outline: none;
-	resize: vertical;
+}
+
+.cm-selectionMatch {
+	margin: -1px;
+	background-color: #ffffff2e;
+	border: 1px solid #cacaca91;
+	border-radius: 2px;
+}
+
+.cmt-number {
+	color: #ff9dfe;
+}
+
+.cmt-keyword, .cmt-operator {
+	color: #96cbfe;
+}
+
+.cmt-propertyName {
+	color: #ffd2a7;
+}
+
+.cmt-punctuation, .cmt-variableName {
+	color: #c5c8c6;
+}
+
+.cmt-string {
+	color: #a8ff60;
 }
 
 #error {

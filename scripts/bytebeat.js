@@ -1,4 +1,5 @@
-// eslint-disable-next-line no-unused-vars
+/* global pako */
+/* eslint-disable-next-line no-unused-vars */
 const bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
@@ -18,7 +19,6 @@ const bytebeat = new class {
 		this.controlVolume = null;
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
-		this.editorElem = null;
 		this.errorElem = null;
 		this.getX = t => t / (1 << this.settings.drawScale);
 		this.isActiveTab = true;
@@ -197,19 +197,6 @@ const bytebeat = new class {
 	}
 	initEditor() {
 		this.errorElem = document.getElementById('error');
-		this.editorElem = document.getElementById('editor');
-		this.editorElem.oninput = () => this.setFunction();
-		this.editorElem.onkeydown = e => {
-			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
-				e.preventDefault();
-				const el = e.target;
-				const { value, selectionStart } = el;
-				el.value = value.slice(0, selectionStart) + '\t' + value.slice(el.selectionEnd);
-				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
-				this.setFunction();
-			}
-		};
-		/* global pako */
 		let { hash } = window.location;
 		if(!hash) {
 			this.updateLocation();
@@ -292,7 +279,13 @@ const bytebeat = new class {
 	}
 	loadCode({ code, sampleRate, mode }, isPlay = true) {
 		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
-		this.editorElem.value = code;
+		this.editorView.dispatch({
+			changes: {
+				from: 0,
+				to: this.editorView.state.doc.toString().length,
+				insert: code
+			}
+		});
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
 		const sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
 		const data = { mode, sampleRatio, setFunction: code };
@@ -368,7 +361,7 @@ const bytebeat = new class {
 		this.saveSettings();
 	}
 	setFunction() {
-		this.sendData({ setFunction: this.editorElem.value });
+		this.sendData({ setFunction: this.editorView.state.doc.toString() });
 	}
 	setMode(mode) {
 		this.mode = mode;
@@ -434,7 +427,7 @@ const bytebeat = new class {
 		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
 	}
 	updateLocation() {
-		const pData = { code: this.editorElem.value };
+		const pData = { code: this.editorView.state.doc.toString() };
 		if(this.sampleRate !== 8000) {
 			pData.sampleRate = this.sampleRate;
 		}
