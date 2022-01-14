@@ -2,3 +2,5 @@
 
 scripts/codemirror.js -diff
 scripts/codemirror.js linguist-generated=true
+scripts/package-lock.json -diff
+scripts/package-lock.json linguist-generated=true
