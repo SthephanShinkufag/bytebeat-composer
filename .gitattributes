@@ -1,0 +1,4 @@
+# Exclude generated files from diff
+
+scripts/codemirror.js -diff
+scripts/codemirror.js linguist-generated=true
