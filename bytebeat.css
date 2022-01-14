@@ -58,6 +58,7 @@ a:hover, code:hover {
 
 #canvas-container {
 	display: flex;
+	flex-shrink: 0;
 	position: relative;
 	cursor: pointer;
 	box-sizing: border-box;
