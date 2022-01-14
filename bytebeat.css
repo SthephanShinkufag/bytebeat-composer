@@ -134,11 +134,12 @@ button[name="close"] {
 
 .cm-content {
 	font-weight: bold;
+	caret-color: #fff !important;
 }
 
 .cm-editor {
 	height: 100%;
-	background-color: #000;
+	background-color: #1b1d20;
 	font-size: 13px;
 }
 
@@ -153,7 +154,7 @@ button[name="close"] {
 }
 
 .cmt-number {
-	color: #ffa4fe;
+	color: #ff8dfd;
 }
 
 .cmt-keyword, .cmt-operator {
