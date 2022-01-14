@@ -2,7 +2,7 @@
 
 html {
 	background-color: #000;
-	color: #fff;
+	color: #c5c8c6;
 	font-size: 15px;
 	font-family: Courier, Sans, sans-serif;
 }
@@ -61,7 +61,7 @@ a:hover, code:hover {
 	position: relative;
 	cursor: pointer;
 	box-sizing: border-box;
-	border: 2px solid #bf8e31;
+	border: 2px solid #cc9968;
 	overflow: hidden;
 }
 
@@ -101,7 +101,7 @@ a:hover, code:hover {
 	top: 50%;
 	left: 50%;
 	padding: 1px 8px;
-	color: #f0f0f0;
+	color: #c5c8c6;
 	border-radius: 16px;
 	line-height: 0;
 	-webkit-transform: translate(-50%, -50%);
@@ -127,7 +127,7 @@ button[name="close"] {
 
 #editor {
 	height: 200px;
-	border: 2px solid white;
+	border: 2px solid #bac2cc;
 }
 
 .cm-content {
@@ -152,7 +152,7 @@ button[name="close"] {
 }
 
 .cmt-number {
-	color: #ff9dfe;
+	color: #ffa4fe;
 }
 
 .cmt-keyword, .cmt-operator {
@@ -273,14 +273,14 @@ code {
 .library-header {
 	padding: 4px 5px;
 	border-radius: 3px;
-	background-image: linear-gradient(to bottom, #374157, #0b1122);
+	background-image: linear-gradient(to bottom, #202c46, #0b0d17);
 	font-weight: bold;
 	cursor: pointer;
 }
 
 .library-header:hover {
-	background-image: linear-gradient(to bottom, #3d4f79, #212b4a);
-	color: #c2dfff;
+	background-image: linear-gradient(to bottom, #32426c, #151b2b);
+	color: #94c7ff;
 }
 
 /* ==[ Controls ] ========================================================================================= */
