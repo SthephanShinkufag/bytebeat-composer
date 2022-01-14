@@ -17,10 +17,17 @@
 		"rollup": "^2.63.0"
 	},
 	"dependencies": {
-		"@codemirror/basic-setup": "^0.19.1",
+		"@codemirror/closebrackets": "^0.19.0",
 		"@codemirror/commands": "^0.19.7",
+		"@codemirror/comment": "^0.19.0",
+		"@codemirror/fold": "^0.19.2",
+		"@codemirror/gutter": "^0.19.9",
 		"@codemirror/highlight": "^0.19.7",
+		"@codemirror/history": "^0.19.2",
 		"@codemirror/lang-javascript": "^0.19.6",
+		"@codemirror/matchbrackets": "^0.19.3",
+		"@codemirror/search": "^0.19.5",
+		"@codemirror/state": "^0.19.6",
 		"@codemirror/theme-one-dark": "^0.19.1",
 		"@codemirror/view": "^0.19.39"
 	}
