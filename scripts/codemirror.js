@@ -20314,6 +20314,7 @@
     			highlightSelectionMatches(),
     			highlightSpecialChars(),
     			history(),
+    			indentUnit.of('\t'),
     			javascript(),
     			keymap.of([
     				...commentKeymap,

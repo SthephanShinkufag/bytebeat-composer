@@ -6,6 +6,7 @@ import { classHighlightStyle } from '@codemirror/highlight';
 import { lineNumbers } from '@codemirror/gutter';
 import { history, historyKeymap, redo } from '@codemirror/history';
 import { javascript } from '@codemirror/lang-javascript';
+import { indentUnit } from '@codemirror/language';
 import { bracketMatching } from '@codemirror/matchbrackets';
 import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import { EditorState } from '@codemirror/state';
@@ -32,6 +33,7 @@ bytebeat.editorView = new EditorView({
 			highlightSelectionMatches(),
 			highlightSpecialChars(),
 			history(),
+			indentUnit.of('\t'),
 			javascript(),
 			keymap.of([
 				...commentKeymap,

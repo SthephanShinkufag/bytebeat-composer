@@ -25,6 +25,7 @@
 		"@codemirror/highlight": "^0.19.7",
 		"@codemirror/history": "^0.19.2",
 		"@codemirror/lang-javascript": "^0.19.6",
+		"@codemirror/language": "^0.19.7",
 		"@codemirror/matchbrackets": "^0.19.3",
 		"@codemirror/search": "^0.19.5",
 		"@codemirror/state": "^0.19.6",
