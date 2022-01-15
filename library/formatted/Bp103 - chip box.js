@@ -21,35 +21,35 @@ os = [1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 0, 1, 2, 1, 2, 1,
 delay();
 
 function xy(x, y) {
-  return int(x) * 4 + int(y);
+	return int(x) * 4 + int(y);
 }
 
 function p(tt, vol) {
-  aa = sin(int(q *
-      (n[xy((q + tt) * 0.5 % 8, (q + tt) * 32 % 3)] - 1) *
-      (2 + os[int(((q + tt) * 0.5) % 32)]))) *
-    (vol / ((sin(q * 0.07) * 2.5) + 3.5));
-  bb = tri(q * n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] * 2) * vol;
-  cc = cos(int(q *
-      (n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] - 1.5) *
-      (2 + os[int(((q + tt) * 4) % 32)]))) *
-    (vol / ((sin(q * 0.37) * 0.8) + 1.5));
-  return aa + bb + cc;
+	aa = sin(int(q *
+			(n[xy((q + tt) * 0.5 % 8, (q + tt) * 32 % 3)] - 1) *
+			(2 + os[int(((q + tt) * 0.5) % 32)]))) *
+		(vol / ((sin(q * 0.07) * 2.5) + 3.5));
+	bb = tri(q * n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] * 2) * vol;
+	cc = cos(int(q *
+			(n[xy((q + tt) * 0.5 % 8, (q + tt) * 4 % 3)] - 1.5) *
+			(2 + os[int(((q + tt) * 4) % 32)]))) *
+		(vol / ((sin(q * 0.37) * 0.8) + 1.5));
+	return aa + bb + cc;
 }
 
 function delay() {
-  tt = 0,
-  to = 0.25,
-  voll = 2;
-  out = p(tt, 2);
-  for(let i = 0; i < 8; i++) {
-    out -= p(tt, i + voll);
-    tt = tt + to;
-  }
-  return out - 130;
+	tt = 0,
+	to = 0.25,
+	voll = 2;
+	out = p(tt, 2);
+	for(let i = 0; i < 8; i++) {
+		out -= p(tt, i + voll);
+		tt = tt + to;
+	}
+	return out - 130;
 }
 
 function tri(snd) {
-  amp = 3.12;
-  return abs(amp - snd % (amp * 2)) - (amp / 2);
+	amp = 3.12;
+	return abs(amp - snd % (amp * 2)) - (amp / 2);
 }

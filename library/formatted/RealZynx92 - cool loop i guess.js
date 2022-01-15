@@ -17,13 +17,13 @@ gs = g * p,
 
 // Functions
 saw = function(n) {
-  return (t2 * n) & 63;
+	return (t2 * n) & 63;
 },
 sqr = function(n) {
-  return (t2 * n) & 64;
+	return (t2 * n) & 64;
 },
 sine = function(n) {
-  return 32 * sin((t2 * n) / 10.25) + 32;
+	return 32 * sin((t2 * n) / 10.25) + 32;
 },
 
 // Percussion
@@ -33,10 +33,10 @@ hihat = ((-t >> 8) % 16 + 16) % t * random(),
 
 // Arp chords
 arpch = [
-  c, e, g,
-  a, f, g,
-  a, c, e,
-  g / 2, a, c
+	c, e, g,
+	a, f, g,
+	a, c, e,
+	g / 2, a, c
 ],
 
 // Bass

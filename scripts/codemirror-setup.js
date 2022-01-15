@@ -22,6 +22,7 @@ bytebeat.editorView = new EditorView({
 			bracketMatching(),
 			classHighlightStyle,
 			closeBrackets(),
+			EditorState.tabSize.of('3'),
 			EditorView.lineWrapping,
 			EditorView.updateListener.of(view => {
 				if(view.docChanged) {

@@ -18,7 +18,7 @@
 		"camelcase": "off",
 		"computed-property-spacing": ["error", "never"],
 		"dot-notation": "error",
-		"indent": ["error", 2, { "flatTernaryExpressions": true }],
+		"indent": ["error", "tab", { "flatTernaryExpressions": true }],
 		"key-spacing": ["error", {
 			"multiLine": {
 				"beforeColon": false,

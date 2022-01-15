@@ -72,30 +72,30 @@ t < 1560000 ? t > 1500000 ? mixer[7] = fade_out[int(t / 16000) % fade_out.length
 /* -- melodic -- */
 /* bass [phase mod] */
 (32 + sin(t * (key / 2) * bass_seq[int(t / 4000) % bass_seq.length] + ((32 + sin(t * 0.05)))) *
-  ((t * 0.002 ^ 3) % 8) * mixer[3]) +
+	((t * 0.002 ^ 3) % 8) * mixer[3]) +
 
 /* plinky plonky sine thing */
 (32 + sin(t * key * plinky_seq[int(t / 4000) % plinky_seq.length]) * ((t * 0.004 ^ 3) % 8) * mixer[4]) +
 
 /* pad [phase mod w/ envelope] */
 (32 + sin(
-  t * key * pad_seq[int(t / 16000) % pad_seq.length] +
-  (32 + sin(t * 0.05) * (sin(t * 0.0001) * 10))
+	t * key * pad_seq[int(t / 16000) % pad_seq.length] +
+	(32 + sin(t * 0.05) * (sin(t * 0.0001) * 10))
 ) * mixer[5]) +
 
 /* lead [phasemod w/ envelope, changes with frequency] */
 (-8 + sin(
-  t * (key / 10) * lead_seq[int(t / 4000) % lead_seq.length] +
-  (32 + sin(t * 0.1) * 0.2 * lead_seq[int(t / 4000) % lead_seq.length] * ((t * 0.0005 ^ 3) % 6))
+	t * (key / 10) * lead_seq[int(t / 4000) % lead_seq.length] +
+	(32 + sin(t * 0.1) * 0.2 * lead_seq[int(t / 4000) % lead_seq.length] * ((t * 0.0005 ^ 3) % 6))
 ) * ((t * 0.001 ^ 3) % 5) * mixer[6]) +
 
 /* fadey-in phasemod chords [sine modulation + vol envelope] */
 (4 + sin(
-  t * chord_seq[0][int(t / 16000) % chord_seq[0].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
+	t * chord_seq[0][int(t / 16000) % chord_seq[0].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
 ) * mixer[7] * ((sin(t * 0.1) * 3 * sin(t * 0.0001)))) +
 (4 + sin(
-  t * chord_seq[1][int(t / 16000) % chord_seq[1].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
+	t * chord_seq[1][int(t / 16000) % chord_seq[1].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
 ) * mixer[7] * ((sin(t * 0.1) * 3 * sin(t * 0.0001)))) +
 (4 + sin(
-  t * chord_seq[2][int(t / 16000) % chord_seq[2].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
+	t * chord_seq[2][int(t / 16000) % chord_seq[2].length] + ((32 + sin(t * 0.1) * 3 * sin(t * 0.0001)))
 ) * mixer[7] * ((sin(t * 0.1) * 3 * sin(t * 0.0001))));

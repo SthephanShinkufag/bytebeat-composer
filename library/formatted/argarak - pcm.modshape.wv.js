@@ -38,15 +38,15 @@ t > 7e5 ? mixer = [1, 0, 0, 1, 0, 0] :
 t > 0 ? mixer = [0, 0, 0, 1, 0, 0] : 0,
 
 chord_seq = [
-  [nD_ * 3, nF * 3, nG_ * 3, nC * 1],
-  [nD_ * 3, nA_ * 3, nG * 4, nC * 2]
+	[nD_ * 3, nF * 3, nG_ * 3, nC * 1],
+	[nD_ * 3, nA_ * 3, nG * 4, nC * 2]
 ],
 
 Cm_notes = [nC, nD, nD_, nF, nG, nG_, nA_],
 
 // exponential snappy envelope
 env = function(step, len, snap) {
-  return int(exp(-((step % 20) * snap) * len) * 20);
+	return int(exp(-((step % 20) * snap) * len) * 20);
 },
 
 // kick
@@ -54,29 +54,29 @@ env = function(step, len, snap) {
 
 // snare
 (
-  (((sin(t / 15) + sin(t / 20)) / 7) + random()) *
-  env(s / (7 / 4) * (1 + sin(s / 80) < 1.9 ? 1 : 7), 1 * (1 + sin(s / 40) < 1.5 ? 1 : 0.4), 0.8) * 3
+	(((sin(t / 15) + sin(t / 20)) / 7) + random()) *
+	env(s / (7 / 4) * (1 + sin(s / 80) < 1.9 ? 1 : 7), 1 * (1 + sin(s / 40) < 1.5 ? 1 : 0.4), 0.8) * 3
 ) * mixer[1] +
 
 // phasemod hihats
 (sin(s * 50 + (sin(s * 50) * 4 * env(-s, 1, 0.1))) * env(s * (1 + sin(s / 20) < 1.5 ? 2 : 4), 1, 0.5) +
-  sin(s * 20 + (sin(s * 50) * 4 * env(-s, 1, 0.01))) * env(s / (3 / 4), 1, 0.4)) * mixer[2] +
+	sin(s * 20 + (sin(s * 50) * 4 * env(-s, 1, 0.01))) * env(s / (3 / 4), 1, 0.4)) * mixer[2] +
 
 // waveshaping chords
 (
-  sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][0] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
-  sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][1] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
-  sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][2] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
-  sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][3] % 2)) * env(s / 4, 0.5, 0.2) * 0.5
+	sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][0] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
+	sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][1] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
+	sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][2] % 2)) * env(s / 4, 0.5, 0.2) * 0.5 +
+	sin(Math.E + abs(sin(s / 100) * 4) ** (s * chord_seq[chord_index][3] % 2)) * env(s / 4, 0.5, 0.2) * 0.5
 ) * mixer[3] +
 
 // arp
 sin(1 +
-  +sin(5 - abs(sin(s / 10) * 4) ** (s * 2 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 2 +
-  abs(sin(s / 10) * 4) ** (s * 1 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 1 *
+	+sin(5 - abs(sin(s / 10) * 4) ** (s * 2 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 2 +
+	abs(sin(s / 10) * 4) ** (s * 1 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 1 *
 env(s * (int((s / 80) % 2) === 0 ? 4 : 2), 0.9, 0.3) * mixer[4] +
 
 // leady lead
 sin(Math.E + abs(sin(s / 80) * 4) ** (s * 3 * Cm_notes[int(((s / 50) << 3) % 7)] % 2) +
-  sin(Math.E + abs(sin(s / 40) * int((t / 2000) % 5)) ** (s * 6 * Cm_notes[int(((s / 50) << 3) % 7)] % 2))
+	sin(Math.E + abs(sin(s / 40) * int((t / 2000) % 5)) ** (s * 6 * Cm_notes[int(((s / 50) << 3) % 7)] % 2))
 ) * 2 * env(s / (int((s / 20) % 2) === 0 ? 3 / 4 : 5 / 4), 0.5, 0.3) * mixer[5];

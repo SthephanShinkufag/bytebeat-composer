@@ -65,22 +65,22 @@ vol11d = (tick >= 0 && tick < 1) * 0 + (tick >= 1 && tick < 384) * 8 + (tick >= 
 noiseFreq = int(t * (freq7 * 44100 / SAMPLE_RATE) / 440),
 
 128 +
-  vol0 * 2 * (int(freq0 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol0 +
-  vol1 * 2 * (int(freq1 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol1 +
-  vol2 * 2 * (int(freq2 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol2 +
-  (vol2 / 64) * (abs(((255 * freq2 * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64) +
-  vol3 * 2 * (int(freq3 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol3 +
-  vol4 * 2 * (int(freq4 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol4 +
-  vol5 * 2 * (int(freq5 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol5 +
-  vol6 * 2 * (int(freq6 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol6 +
-  (vol7 / 128) * (int(65536 * sin(noiseFreq * noiseFreq)) % 256) - vol7 +
-  vol8 * 2 * (int(freq8 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol8 +
-  vol9 * 2 * (int(freq9 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol9 +
-  vol10 * 2 * (int(freq10 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol10 +
-  (vol11 / 64) * (abs(((255 * freq11 * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64) +
-  vol0d / 4 * 2 * (int(freq0d * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol0d / 4 +
-  vol1d / 4 * 2 * (int(freq1d * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol1d / 4 +
-  vol8d / 4 * 2 * (int(freq8d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol8d / 4 +
-  vol9d / 4 * 2 * (int(freq9d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol9d / 4 +
-  vol10d / 4 * 2 * (int(freq10d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol10d / 4 +
-  (vol11d / 64) / 4 * (abs(((255 * freq11d * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64);
+	vol0 * 2 * (int(freq0 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol0 +
+	vol1 * 2 * (int(freq1 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol1 +
+	vol2 * 2 * (int(freq2 * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol2 +
+	(vol2 / 64) * (abs(((255 * freq2 * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64) +
+	vol3 * 2 * (int(freq3 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol3 +
+	vol4 * 2 * (int(freq4 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol4 +
+	vol5 * 2 * (int(freq5 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol5 +
+	vol6 * 2 * (int(freq6 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol6 +
+	(vol7 / 128) * (int(65536 * sin(noiseFreq * noiseFreq)) % 256) - vol7 +
+	vol8 * 2 * (int(freq8 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol8 +
+	vol9 * 2 * (int(freq9 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol9 +
+	vol10 * 2 * (int(freq10 * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol10 +
+	(vol11 / 64) * (abs(((255 * freq11 * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64) +
+	vol0d / 4 * 2 * (int(freq0d * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol0d / 4 +
+	vol1d / 4 * 2 * (int(freq1d * t / SAMPLE_RATE * 256) % 256 <= 50 * 256 / 100) - vol1d / 4 +
+	vol8d / 4 * 2 * (int(freq8d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol8d / 4 +
+	vol9d / 4 * 2 * (int(freq9d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol9d / 4 +
+	vol10d / 4 * 2 * (int(freq10d * t / SAMPLE_RATE * 256) % 256 <= 25 * 256 / 100) - vol10d / 4 +
+	(vol11d / 64) / 4 * (abs(((255 * freq11d * 2 * t / SAMPLE_RATE + 128) % 256) - 128) - 64);
