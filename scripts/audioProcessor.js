@@ -16,6 +16,15 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.mode = 'Bytebeat';
 		this.port.onmessage = ({ data }) => this.receiveData(data);
 	}
+	static getErrorMessage(err, time) {
+		const when = time === null ? 'compilation' : 't=' + time;
+		if(err instanceof Error) {
+			return `${ when }: ${ err.message } (at line ${
+				err.lineNumber - 3 }, character ${ err.columnNumber })`;
+		} else {
+			return `${ when } thrown: ${ JSON.stringify(err) }`;
+		}
+	}
 	process(inputs, outputs, parameters) {
 		const chData = outputs[0][0];
 		const chDataLen = chData.length;
@@ -40,6 +49,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				try {
 					funcValue = +this.func(flooredSample);
 				} catch(err) {
+					this.sendData({ error: audioProcessor.getErrorMessage(err, flooredSample) });
 					funcValue = NaN;
 				}
 				if(funcValue !== this.lastFuncValue) {
@@ -113,22 +123,30 @@ class audioProcessor extends AudioWorkletProcessor {
 		const values = params.map(k => Math[k]);
 		params.push('int', 'window');
 		values.push(Math.floor, globalThis);
-		// Test bytebeat code
-		try {
-			this.func = new Function(...params, 't', `return 0, ${ codeText.trim() || 0 };`)
-				.bind(globalThis, ...values);
-			this.func(0);
-		} catch(err) {
-			this.func = oldFunc;
-			this.sendData({ error: err.toString() });
-			return;
-		}
 		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
 		for(let i = 0; i < 26; ++i) {
 			delete globalThis[String.fromCharCode(65 + i)];
 			delete globalThis[String.fromCharCode(97 + i)];
 		}
-		this.sendData({ error: '', updateLocation: true });
+		// Delete global variables
+		for(const i in globalThis) {
+			delete globalThis[i];
+		}
+		// Test bytebeat code
+		let time = null;
+		try {
+			this.func = new Function(...params, 't', `return 0,\n${ codeText.trim() || 0 };`)
+				.bind(globalThis, ...values);
+			time = 0;
+			this.func(0);
+		} catch(err) {
+			if(time === null) {
+				this.func = oldFunc;
+			}
+			this.sendData({ error: audioProcessor.getErrorMessage(err, time) });
+			return;
+		}
+		this.sendData({ error: '', updateUrl: true });
 	}
 	setSampleRatio(sampleRatio) {
 		const flooredTimeOffset = this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);

@@ -112,8 +112,8 @@ const bytebeat = new class {
 			const nextX = this.mod(Math.ceil(this.getX(nextElem ? nextElem.t : endTime)) - startX, width);
 			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 				let idx = (drawWidth * (255 - curY) + x) << 2;
-				imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = 255;
-				imageData.data[idx] = 255;
+				imageData.data[idx++] = imageData.data[idx++] =
+					imageData.data[idx++] = imageData.data[idx] = 255;
 			}
 		}
 		// Saving the last points of a segment
@@ -165,7 +165,7 @@ const bytebeat = new class {
 			const files = ['track.webm', 'track.ogg'];
 			while((file = files.pop()) && !MediaRecorder.isTypeSupported(type = types.pop())) {
 				if(types.length === 0) {
-					console.error('Saving not supported in this browser!');
+					console.error('Saving is not supported in this browser!');
 					break;
 				}
 			}
@@ -203,7 +203,7 @@ const bytebeat = new class {
 		this.errorElem = document.getElementById('error');
 		let { hash } = window.location;
 		if(!hash) {
-			this.updateLocation();
+			this.updateUrl();
 			({ hash } = window.location);
 		}
 		if(!hash.startsWith('#v3b64')) {
@@ -324,10 +324,10 @@ const bytebeat = new class {
 			}
 		}
 		if(data.error !== undefined) {
-			this.errorElem.innerText = data.error;
+			this.errorElem.innerText = data.error.toString();
 		}
-		if(data.updateLocation === true) {
-			this.updateLocation();
+		if(data.updateUrl === true) {
+			this.updateUrl();
 		}
 	}
 	requestAnimationFrame() {
@@ -369,7 +369,7 @@ const bytebeat = new class {
 	}
 	setMode(mode) {
 		this.mode = mode;
-		this.updateLocation();
+		this.updateUrl();
 		this.sendData({ mode });
 	}
 	setSampleRate(sampleRate, isSendData = true) {
@@ -430,7 +430,7 @@ const bytebeat = new class {
 	toggleTimeCursor() {
 		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
 	}
-	updateLocation() {
+	updateUrl() {
 		const pData = { code: this.editorView.state.doc.toString() };
 		if(this.sampleRate !== 8000) {
 			pData.sampleRate = this.sampleRate;
