@@ -19,7 +19,7 @@ class audioProcessor extends AudioWorkletProcessor {
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
 		if(err instanceof Error) {
-			return `${ when }: ${ err.message } (at line ${
+			return `${ when } error: ${ err.message } (at line ${
 				err.lineNumber - 3 }, character ${ err.columnNumber })`;
 		} else {
 			return `${ when } thrown: ${ JSON.stringify(err) }`;
@@ -49,7 +49,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				try {
 					funcValue = +this.func(flooredSample);
 				} catch(err) {
-					this.sendData({ error: audioProcessor.getErrorMessage(err, flooredSample) });
+					this.sendData({ error: { message: audioProcessor.getErrorMessage(err, flooredSample) } });
 					funcValue = NaN;
 				}
 				if(funcValue !== this.lastFuncValue) {
@@ -133,20 +133,26 @@ class audioProcessor extends AudioWorkletProcessor {
 			delete globalThis[i];
 		}
 		// Test bytebeat code
-		let time = null;
+		let isCompiled = false;
 		try {
 			this.func = new Function(...params, 't', `return 0,\n${ codeText.trim() || 0 };`)
 				.bind(globalThis, ...values);
-			time = 0;
+			isCompiled = true;
 			this.func(0);
 		} catch(err) {
-			if(time === null) {
+			if(!isCompiled) {
 				this.func = oldFunc;
 			}
-			this.sendData({ error: audioProcessor.getErrorMessage(err, time) });
+			this.sendData({
+				error: {
+					message: audioProcessor.getErrorMessage(err, isCompiled ? 0 : null),
+					isCompiled
+				},
+				updateUrl: isCompiled
+			});
 			return;
 		}
-		this.sendData({ error: '', updateUrl: true });
+		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
 	}
 	setSampleRatio(sampleRatio) {
 		const flooredTimeOffset = this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);

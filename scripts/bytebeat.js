@@ -22,6 +22,7 @@ const bytebeat = new class {
 		this.errorElem = null;
 		this.getX = t => t / (1 << this.settings.drawScale);
 		this.isActiveTab = true;
+		this.isCompilationError = false;
 		this.isPlaying = false;
 		this.isRecording = false;
 		this.mod = (a, b) => ((a % b) + b) % b;
@@ -311,7 +312,7 @@ const bytebeat = new class {
 		}
 	}
 	receiveData(data) {
-		const { byteSample } = data;
+		const { byteSample, error } = data;
 		if(byteSample !== undefined) {
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
@@ -323,8 +324,16 @@ const bytebeat = new class {
 					-this.canvasElem.width * (1 << this.settings.drawScale));
 			}
 		}
-		if(data.error !== undefined) {
-			this.errorElem.innerText = data.error.toString();
+		if(error !== undefined) {
+			if(error.isCompiled === false) {
+				this.isCompilationError = true;
+				this.errorElem.innerText = error.message;
+			} else if(error.isCompiled === true) {
+				this.isCompilationError = false;
+				this.errorElem.innerText = error.message;
+			} else if(error.isCompiled === undefined && !this.isCompilationError) {
+				this.errorElem.innerText = error.message;
+			}
 		}
 		if(data.updateUrl === true) {
 			this.updateUrl();
