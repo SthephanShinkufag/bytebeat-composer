@@ -8,7 +8,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSample = 0;
 		this.func = () => 0;
 		this.isPlaying = false;
-		this.sampleRatio = 1;
+		this.sampleRatio = NaN;
 		this.lastByteValue = NaN;
 		this.lastFlooredTime = -1;
 		this.lastFuncValue = NaN;
@@ -44,8 +44,8 @@ class audioProcessor extends AudioWorkletProcessor {
 			time += this.sampleRatio;
 			const flooredTime = Math.floor(time);
 			if(this.lastFlooredTime !== flooredTime) {
-				const flooredSample = Math.floor(byteSample);
 				let funcValue;
+				const flooredSample = Math.floor(byteSample);
 				try {
 					funcValue = +this.func(flooredSample);
 				} catch(err) {
@@ -155,7 +155,8 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
 	}
 	setSampleRatio(sampleRatio) {
-		const flooredTimeOffset = this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);
+		const flooredTimeOffset = isNaN(this.sampleRatio) ? 1 :
+			this.lastFlooredTime - Math.floor(this.sampleRatio * this.audioSample);
 		this.sampleRatio = sampleRatio;
 		this.lastFlooredTime = Math.floor(sampleRatio * this.audioSample) - flooredTimeOffset;
 	}
