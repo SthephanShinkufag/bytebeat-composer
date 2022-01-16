@@ -1873,6 +1873,13 @@
 				"fileFormatted": true,
 				"fileOriginal": true
 			}, {
+				"description": "tuned_phase time_modulation",
+				"url": "https://battleofthebits.org/arena/Entry/tuned_phase+time_modulation/34772/",
+				"date": "2020-05-10",
+				"sampleRate": 44100,
+				"file": "argarak - tuned_phase time_modulation.js",
+				"fileFormatted": true
+			}, {
 				"description": "pcm.modshape.wv",
 				"url": "https://battleofthebits.org/arena/Entry/pcm.modshape.wv/39543/",
 				"date": "2020-10-31",

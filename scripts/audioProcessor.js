@@ -113,7 +113,7 @@ class audioProcessor extends AudioWorkletProcessor {
 	}
 	resetValues() {
 		this.audioSample = this.lastValue = 0;
-		this.lastByteValue = this.lastFuncValue = NaN;
+		this.lastByteValue = this.lastFuncValue = this.sampleRatio = NaN;
 		this.lastFlooredTime = -1;
 	}
 	setFunction(codeText) {
