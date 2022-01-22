@@ -14307,6 +14307,13 @@
         view.dispatch({ changes, selection, scrollIntoView: true, userEvent: "delete.line" });
         return true;
     };
+    /**
+    Replace the selection with a newline.
+    */
+    const insertNewline = ({ state, dispatch }) => {
+        dispatch(state.update(state.replaceSelection(state.lineBreak), { scrollIntoView: true, userEvent: "input" }));
+        return true;
+    };
     function isBetweenBrackets(state, pos) {
         if (/\(\)|\[\]|\{\}/.test(state.sliceDoc(pos - 1, pos + 1)))
             return { from: pos, to: pos };
@@ -14435,17 +14442,6 @@
                 keep++;
             changes.push({ from: line.from + keep, to: line.from + space.length, insert: insert.slice(keep) });
         }), { userEvent: "delete.dedent" }));
-        return true;
-    };
-    /**
-    Insert a tab character at the cursor or, if something is selected,
-    use [`indentMore`](https://codemirror.net/6/docs/ref/#commands.indentMore) to indent the entire
-    selection.
-    */
-    const insertTab = ({ state, dispatch }) => {
-        if (state.selection.ranges.some(r => !r.empty))
-            return indentMore({ state, dispatch });
-        dispatch(state.update(state.replaceSelection("\t"), { scrollIntoView: true, userEvent: "input" }));
         return true;
     };
     /**
@@ -20318,13 +20314,17 @@
     			indentUnit.of('\t'),
     			javascript(),
     			keymap.of([
+    				{ key: 'Ctrl-Y', run: redo },
+    				{ key: 'Enter', run: insertNewline },
+    				{
+    					key: 'Tab',
+    					run: view => view.dispatch(view.state.replaceSelection('\t')) || true,
+    					shift: indentLess
+    				},
     				...commentKeymap,
-    				...defaultKeymap,
     				...historyKeymap,
     				...searchKeymap,
-    				{ key: 'Ctrl-Y', run: redo },
-    				{ key: 'Shift-Tab', run: indentLess },
-    				{ key: 'Tab', run: insertTab }
+    				...defaultKeymap
     			]),
     			lineNumbers(),
     			oneDark

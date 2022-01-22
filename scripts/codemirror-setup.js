@@ -1,5 +1,5 @@
 import { closeBrackets } from '@codemirror/closebrackets';
-import { defaultKeymap, insertTab, indentLess } from '@codemirror/commands';
+import { defaultKeymap, insertNewline, indentLess } from '@codemirror/commands';
 import { commentKeymap } from '@codemirror/comment';
 import { foldGutter } from '@codemirror/fold';
 import { classHighlightStyle } from '@codemirror/highlight';
@@ -37,13 +37,17 @@ bytebeat.editorView = new EditorView({
 			indentUnit.of('\t'),
 			javascript(),
 			keymap.of([
+				{ key: 'Ctrl-Y', run: redo },
+				{ key: 'Enter', run: insertNewline },
+				{
+					key: 'Tab',
+					run: view => view.dispatch(view.state.replaceSelection('\t')) || true,
+					shift: indentLess
+				},
 				...commentKeymap,
-				...defaultKeymap,
 				...historyKeymap,
 				...searchKeymap,
-				{ key: 'Ctrl-Y', run: redo },
-				{ key: 'Shift-Tab', run: indentLess },
-				{ key: 'Tab', run: insertTab }
+				...defaultKeymap
 			]),
 			lineNumbers(),
 			oneDark
