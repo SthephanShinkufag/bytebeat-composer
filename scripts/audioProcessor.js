@@ -19,10 +19,11 @@ class audioProcessor extends AudioWorkletProcessor {
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
 		if(err instanceof Error) {
-			return `${ when } error: ${ err.message } (at line ${
-				err.lineNumber - 3 }, character ${ err.columnNumber })`;
+			const { message } = err;
+			return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message)
+			} (at line ${ err.lineNumber - 3 }, character ${ +err.columnNumber })`;
 		} else {
-			return `${ when } thrown: ${ JSON.stringify(err) }`;
+			return `${ when } thrown: ${ typeof err === 'string' ? err : JSON.stringify(err) }`;
 		}
 	}
 	process(inputs, outputs, parameters) {
