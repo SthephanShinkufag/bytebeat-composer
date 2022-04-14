@@ -22,7 +22,7 @@
 	<div id="content">
 		<div id="container-fixed">
 			<div id="editor"></div>
-			<script src="scripts/codemirror.js"></script>
+			<script src="scripts/codemirror.min.js"></script>
 			<div class="controls">
 				<div id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</div>
 				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
@@ -104,19 +104,19 @@
 			</div>
 			<div class="library-content">
 				<div id="library-header-classic" class="library-header toggle">
-					[Classic] &mdash; valid C code with one variable (t)
+					[Classic] &mdash; C compatible code with one variable (t)
 				</div>
 				<div id="library-classic" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
 				<div id="library-header-js-code" class="library-header toggle">
-					[JS code] &mdash; JavaScript code, not valid for C
+					[JS code] &mdash; compact JavaScript code
 				</div>
 				<div id="library-js-code" class="library-container disabled"></div>
 			</div>
 			<div class="library-content">
 				<div id="library-header-js-bigcode" class="library-header toggle">
-					[JS big code] &mdash; big JavaScript code files
+					[JS big code] &mdash; big JavaScript code
 				</div>
 				<div id="library-js-bigcode" class="library-container disabled"></div>
 			</div>
@@ -128,7 +128,7 @@
 			</div>
 			<div class="library-content">
 				<div id="library-header-sthephanshi" class="library-header toggle">
-					[SthephanShi] &mdash; code I created
+					[SthephanShi] &mdash; code SthephanShi created
 				</div>
 				<div id="library-sthephanshi" class="library-container disabled"></div>
 			</div>
