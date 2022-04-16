@@ -13,7 +13,7 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022011500">
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022041700">
 	<script src="scripts/bytebeat.js"></script>
 	<script src="scripts/playlist.js"></script>
 	<script src="scripts/pako.min.js"></script>
@@ -62,10 +62,10 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
-				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
 				<div id="control-expand" class="control-button" title="Expand code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
 				</div>
+				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
 			</div>
 			<div id="error"></div>
 			<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">

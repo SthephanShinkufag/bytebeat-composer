@@ -199,6 +199,8 @@ const bytebeat = new class {
 			this.setByteSample(byteSample);
 			this.sendData({ byteSample });
 		};
+		this.onWindowResize();
+		document.defaultView.addEventListener('resize', () => this.onWindowResize());
 	}
 	initEditor() {
 		this.errorElem = document.getElementById('error');
@@ -300,6 +302,9 @@ const bytebeat = new class {
 			data.resetTime = true;
 		}
 		this.sendData(data);
+	}
+	onWindowResize() {
+		this.canvasElem.width = window.innerWidth > 768 ? 1024 : 512;
 	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {

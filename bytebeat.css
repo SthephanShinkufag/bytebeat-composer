@@ -341,10 +341,6 @@ code {
 	user-select: none;
 }
 
-#control-expand {
-	margin-left: auto;
-}
-
 .control-pause > #svg-control-play, .control-play > #svg-control-pause {
 	display: none;
 }
@@ -410,4 +406,5 @@ code {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 2px 0;
+	justify-content: center;
 }
