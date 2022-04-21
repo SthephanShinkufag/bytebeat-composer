@@ -1,6 +1,20 @@
-/* global pako */
-/* eslint-disable-next-line no-unused-vars */
-const bytebeat = new class {
+import { deflateRaw, inflateRaw } from './pako.esm.min.mjs';
+
+const loadScript = src => new Promise(resolve => {
+	try {
+		const scriptElem = document.createElement('script');
+		scriptElem.type = 'module';
+		scriptElem.async = true;
+		scriptElem.src = src;
+		scriptElem.onload = () => resolve();
+		scriptElem.onerror = () => console.error(`Failed to load the script ${ src }`);
+		document.head.appendChild(scriptElem);
+	} catch(err) {
+		console.error(err.message);
+	}
+});
+
+globalThis.bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
 		this.audioGain = null;
@@ -19,6 +33,7 @@ const bytebeat = new class {
 		this.controlVolume = null;
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
+		this.editorElem = null;
 		this.errorElem = null;
 		this.getX = t => t / (1 << this.settings.drawScale);
 		this.isActiveTab = true;
@@ -31,14 +46,7 @@ const bytebeat = new class {
 		this.sampleRate = 8000;
 		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false };
 		this.timeCursor = null;
-		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
-		if(window.location.hostname.includes(unescape('%64%6f%6c%6c%63%68%61%6e%2e%6e%65%74'))) {
-			if(document.readyState !== 'loading') {
-				this.init();
-				return;
-			}
-			document.addEventListener('DOMContentLoaded', () => this.init());
-		}
+		this.init();
 	}
 	get saveData() {
 		const a = document.body.appendChild(document.createElement('a'));
@@ -139,20 +147,37 @@ const bytebeat = new class {
 		this.containerFixed.classList.toggle('container-expanded');
 	}
 	async init() {
+		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
+		if(!window.location.hostname.includes(unescape('%64%6f%6c%6c%63%68%61%6e%2e%6e%65%74'))) {
+			return;
+		}
+		try {
+			this.settings = JSON.parse(localStorage.settings);
+		} catch(err) {
+			this.saveSettings();
+		}
+		await this.initAudioContext();
+		if(document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', () => this.initAfterDom());
+			return;
+		}
+		this.initAfterDom();
+	}
+	async initAfterDom() {
 		this.initControls();
 		this.initSettings();
-		await this.initAudioContext();
 		this.initLibraryEvents();
+		loadScript('./scripts/playlist.mjs');
 		this.initEditor();
+		loadScript('./scripts/codemirror.min.mjs');
 	}
 	async initAudioContext() {
 		this.audioCtx = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)();
-		await this.audioCtx.audioWorklet.addModule('scripts/audioProcessor.js');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs');
 		if(!this.audioCtx.createGain) {
 			this.audioCtx.createGain = this.audioCtx.createGainNode;
 		}
 		this.audioGain = this.audioCtx.createGain();
-		this.setVolume(this.controlVolume);
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -199,11 +224,24 @@ const bytebeat = new class {
 			this.setByteSample(byteSample);
 			this.sendData({ byteSample });
 		};
+		this.setVolume(this.controlVolume);
 		this.onWindowResize();
 		document.defaultView.addEventListener('resize', () => this.onWindowResize());
 	}
 	initEditor() {
 		this.errorElem = document.getElementById('error');
+		this.editorElem = document.getElementById('editor-default');
+		this.editorElem.oninput = () => this.setFunction();
+		this.editorElem.onkeydown = e => {
+			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
+				e.preventDefault();
+				const el = e.target;
+				const { value, selectionStart } = el;
+				el.value = value.slice(0, selectionStart) + '\t' + value.slice(el.selectionEnd);
+				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
+				this.setFunction();
+			}
+		};
 		let { hash } = window.location;
 		if(!hash) {
 			this.updateUrl();
@@ -213,24 +251,27 @@ const bytebeat = new class {
 			console.error('Unrecognized url data');
 			return;
 		}
-		let pData = pako.inflateRaw(
-			atob(decodeURIComponent(hash.substr(6))), { to: 'string' }
-		);
-		if(!pData.startsWith('{')) { // XXX: old format
-			pData = { code: pData, sampleRate: 8000, mode: 'Bytebeat' };
+		const hashString = atob(hash.substr(6));
+		const dataBuffer = new Uint8Array(hashString.length);
+		for(const i in hashString) {
+			dataBuffer[i] = hashString.charCodeAt(i);
+		}
+		let songData = inflateRaw(dataBuffer, { to: 'string' });
+		if(!songData.startsWith('{')) { // XXX: old format
+			songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
 		} else {
 			try {
-				pData = JSON.parse(pData);
-				if(pData.formula) { // XXX: old format
-					pData.code = pData.formula;
+				songData = JSON.parse(songData);
+				if(songData.formula) { // XXX: old format
+					songData.code = songData.formula;
 				}
 			} catch(err) {
 				console.error("Couldn't load data from url:", err);
-				pData = null;
+				songData = null;
 			}
 		}
-		if(pData !== null) {
-			this.loadCode(pData, false);
+		if(songData !== null) {
+			this.loadCode(songData, false);
 		}
 	}
 	initLibraryEvents() {
@@ -275,24 +316,23 @@ const bytebeat = new class {
 		};
 	}
 	initSettings() {
-		try {
-			this.settings = JSON.parse(localStorage.settings);
-		} catch(err) {
-			this.saveSettings();
-		}
 		this.setScale(0);
 		this.setCounterUnits();
 		this.controlDrawMode.value = this.settings.drawMode;
 	}
 	loadCode({ code, sampleRate, mode }, isPlay = true) {
 		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
-		this.editorView.dispatch({
-			changes: {
-				from: 0,
-				to: this.editorView.state.doc.toString().length,
-				insert: code
-			}
-		});
+		if(this.editorView) {
+			this.editorView.dispatch({
+				changes: {
+					from: 0,
+					to: this.editorView.state.doc.toString().length,
+					insert: code
+				}
+			});
+		} else {
+			this.editorElem.value = code;
+		}
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
 		const sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
 		const data = { mode, sampleRatio, setFunction: code };
@@ -379,7 +419,8 @@ const bytebeat = new class {
 		this.saveSettings();
 	}
 	setFunction() {
-		this.sendData({ setFunction: this.editorView.state.doc.toString() });
+		const setFunction = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
+		this.sendData({ setFunction });
 	}
 	setMode(mode) {
 		this.mode = mode;
@@ -445,13 +486,15 @@ const bytebeat = new class {
 		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
 	}
 	updateUrl() {
-		const pData = { code: this.editorView.state.doc.toString() };
+		const code = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
+		const songData = { code };
 		if(this.sampleRate !== 8000) {
-			pData.sampleRate = this.sampleRate;
+			songData.sampleRate = this.sampleRate;
 		}
 		if(this.mode !== 'Bytebeat') {
-			pData.mode = this.mode;
+			songData.mode = this.mode;
 		}
-		window.location.hash = '#v3b64' + btoa(pako.deflateRaw(JSON.stringify(pData), { to: 'string' }));
+		window.location.hash = `#v3b64${ btoa(String.fromCharCode.apply(undefined,
+			deflateRaw(JSON.stringify(songData)))).replaceAll('=', '') }`;
 	}
 }();

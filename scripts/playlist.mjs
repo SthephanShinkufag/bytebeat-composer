@@ -1,6 +1,3 @@
-/* eslint indent: ["error", "tab", { "outerIIFEBody": 0 }] */
-
-(function() {
 let cachedElemParent, cachedTextNode;
 
 function escapeHTML(text) {
@@ -92,7 +89,7 @@ function createEntryElem({
 	if(codeMinified) {
 		const btn = '<a class="code-button code-toggle code-toggle-original" title="Minified version shown.' +
 			` ${ codeOriginal ? 'Click to view the original version."' :
-				'No original version." disabled="1"' }>minified</a>`;
+			'No original version." disabled="1"' }>minified</a>`;
 		entry += `<div class="code-minified">
 			<code data-songdata='${ songData }'>${ escapeHTML(codeMinified) }</code>
 			<span class="code-length" title="Size in characters">${ codeMinified.length }c</span>${ btn }
@@ -126,15 +123,9 @@ function addPlaylists(data) {
 const xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
 	if(xhr.readyState === 4 && xhr.status === 200) {
-		const data = JSON.parse(xhr.responseText);
-		if(document.readyState !== 'loading') {
-			addPlaylists(data);
-			return;
-		}
-		document.addEventListener('DOMContentLoaded', () => addPlaylists(data));
+		addPlaylists(JSON.parse(xhr.responseText));
 	}
 };
-xhr.open('GET', 'library/library.json', true);
+xhr.open('GET', './library/library.json', true);
 xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 xhr.send(null);
-}());

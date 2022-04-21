@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="cache-control" content="max-age=0">
@@ -11,18 +11,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Bytebeat music is a very short single-line JS expressions generating musical output. Bytebeat composer is an algorhithmic music generator.">
 	<title>Bytebeat composer</title>
-	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
-	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022041700">
-	<script src="scripts/bytebeat.js"></script>
-	<script src="scripts/playlist.js"></script>
-	<script src="scripts/pako.min.js"></script>
+	<link rel="canonical" href="https://dollchan.net/bytebeat_/index.html"/>
+	<link rel="shortcut icon" href="./favicon.png">
+	<link rel="stylesheet" type="text/css" href="./bytebeat.css?version=2022042200">
+	<script type="module" async src="./scripts/bytebeat.mjs"></script>
 </head>
 <body>
 	<div id="content">
 		<div id="container-fixed">
-			<div id="editor"></div>
-			<script src="scripts/codemirror.min.js"></script>
+			<div id="editor-container">
+				<textarea  id="editor-default" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
+			</div>
 			<div class="controls">
 				<div id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</div>
 				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">

@@ -31,6 +31,7 @@
 		"@codemirror/search": "^0.19.5",
 		"@codemirror/state": "^0.19.6",
 		"@codemirror/theme-one-dark": "^0.19.1",
-		"@codemirror/view": "^0.19.39"
+		"@codemirror/view": "^0.19.39",
+		"pako": "^2.0.4"
 	}
 }

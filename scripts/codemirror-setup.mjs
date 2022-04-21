@@ -13,11 +13,14 @@ import { EditorState } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { highlightActiveLine, highlightSpecialChars, EditorView, keymap } from '@codemirror/view';
 
-/* global bytebeat */
-bytebeat.editorView = new EditorView({
-	parent: document.getElementById('editor'),
+const defaultEditorElem = document.getElementById('editor-default');
+const { value } = defaultEditorElem;
+defaultEditorElem.remove();
+
+globalThis.bytebeat.editorView = new EditorView({
+	parent: document.getElementById('editor-container'),
 	state: EditorState.create({
-		doc: 't*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6',
+		doc: value,
 		extensions: [
 			bracketMatching(),
 			classHighlightStyle,
@@ -26,7 +29,7 @@ bytebeat.editorView = new EditorView({
 			EditorView.lineWrapping,
 			EditorView.updateListener.of(view => {
 				if(view.docChanged) {
-					bytebeat.setFunction();
+					globalThis.bytebeat.setFunction();
 				}
 			}),
 			foldGutter(),
