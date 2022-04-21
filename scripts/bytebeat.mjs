@@ -431,6 +431,7 @@ globalThis.bytebeat = new class {
 		this.sampleRate = sampleRate;
 		this.toggleTimeCursor();
 		if(isSendData) {
+			this.updateUrl();
 			this.sendData({ sampleRatio: this.sampleRate / this.audioCtx.sampleRate });
 		}
 	}
