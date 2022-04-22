@@ -111,7 +111,7 @@ globalThis.bytebeat = new class {
 				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
 					let idx = (drawWidth * (255 - y) + curX) << 2;
 					if(imageData.data[idx] === 0) {
-						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = 144;
+						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = 160;
 						imageData.data[idx] = 255;
 					}
 				}

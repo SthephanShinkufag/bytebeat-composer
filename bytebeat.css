@@ -193,6 +193,10 @@ button[name="close"] {
 	word-break: break-all;
 }
 
+::selection {
+	background-color: #596999 !important;
+}
+
 /* ==[ Library ] ========================================================================================== */
 
 code {
