@@ -83,6 +83,7 @@ globalThis.bytebeat = new class {
 		if(!bufferLen) {
 			return;
 		}
+		const redColor = 100;
 		const { width, height } = this.canvasElem;
 		const startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
@@ -94,35 +95,50 @@ globalThis.bytebeat = new class {
 		if(this.settings.drawScale) {
 			for(let y = 0; y < height; ++y) {
 				let idx = (drawWidth * (255 - y)) << 2;
-				imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = this.drawEndBuffer[y];
-				imageData.data[idx] = 255;
+				const value = this.drawEndBuffer[y];
+				if(value === redColor) {
+					imageData.data[idx] = redColor; // Error - red color
+				} else {
+					imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = value;
+				}
+			}
+		}
+		// Filling alpha channel on segment
+		for(let x = 0; x < drawWidth; ++x) {
+			for(let y = 0; y < height; ++y) {
+				imageData.data[((drawWidth * y + x) << 2) + 3] = 255;
 			}
 		}
 		// Drawing on a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
-			const { t: curTime, value: curY } = buffer[i];
+			const curY = buffer[i].value;
+			const curX = this.mod(Math.floor(this.getX(buffer[i].t)) - startX, width);
+			const nextX = this.mod(Math.ceil(this.getX(buffer[i + 1]?.t ?? endTime)) - startX, width);
+			// Error value - filling with red color
 			if(isNaN(curY)) {
+				for(let x = curX; x < nextX; ++x) {
+					for(let y = 0; y < height; ++y) {
+						imageData.data[(drawWidth * y + x) << 2] = redColor;
+					}
+				}
 				continue;
 			}
-			const curX = this.mod(Math.floor(this.getX(curTime)) - startX, width);
+			// Drawing vertical lines in Waveform mode
 			if(isWaveform && curY !== prevY && !isNaN(prevY)) {
 				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
 					let idx = (drawWidth * (255 - y) + curX) << 2;
 					if(imageData.data[idx] === 0) {
-						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx++] = 160;
-						imageData.data[idx] = 255;
+						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 144;
 					}
 				}
 				prevY = curY;
 			}
-			const nextElem = buffer[i + 1];
-			const nextX = this.mod(Math.ceil(this.getX(nextElem?.t ?? endTime)) - startX, width);
+			// Drawing points
 			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 				let idx = (drawWidth * (255 - curY) + x) << 2;
-				imageData.data[idx++] = imageData.data[idx++] =
-					imageData.data[idx++] = imageData.data[idx] = 255;
+				imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 255;
 			}
 		}
 		// Saving the last points of a segment

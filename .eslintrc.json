@@ -32,16 +32,6 @@
 			"ignoreRegExpLiterals": true,
 			"ignoreUrls": true
 		}],
-		"new-cap": ["error", {
-			"capIsNewExceptions": [
-				"GM_getValue",
-				"GM_setValue",
-				"GM_deleteValue",
-				"GM_openInTab",
-				"GM_openInTab",
-				"GM_xmlhttpRequest"
-			]
-		}],
 		"no-case-declarations": "error",
 		"no-extra-parens": ["error", "all", {
 			"conditionalAssign": false,
