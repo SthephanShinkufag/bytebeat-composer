@@ -144,7 +144,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		// Delete global variables
 		for(const i in globalThis) {
-			delete globalThis[i];
+			if(Object.prototype.hasOwnProperty.call(globalThis, i)) {
+				delete globalThis[i];
+			}
 		}
 		// Test bytebeat code
 		let isCompiled = false;

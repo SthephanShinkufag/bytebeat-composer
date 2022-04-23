@@ -111,12 +111,14 @@ function addPlaylists(data) {
 	cachedTextNode = document.createTextNode('');
 	cachedElemParent.appendChild(cachedTextNode);
 	for(const id in data) {
-		let playlist = '';
-		const playlistArr = data[id];
-		for(let i = 0, len = playlistArr.length; i < len; ++i) {
-			playlist += `<div class="entry-top">${ createEntryElem(playlistArr[i]) }</div>`;
+		if(Object.prototype.hasOwnProperty.call(data, id)) {
+			let playlist = '';
+			const playlistArr = data[id];
+			for(let i = 0, len = playlistArr.length; i < len; ++i) {
+				playlist += `<div class="entry-top">${ createEntryElem(playlistArr[i]) }</div>`;
+			}
+			document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend', playlist);
 		}
-		document.getElementById(`library-${ id }`).insertAdjacentHTML('beforeend', playlist);
 	}
 }
 

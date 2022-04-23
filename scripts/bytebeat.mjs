@@ -118,7 +118,7 @@ globalThis.bytebeat = new class {
 				prevY = curY;
 			}
 			const nextElem = buffer[i + 1];
-			const nextX = this.mod(Math.ceil(this.getX(nextElem ? nextElem.t : endTime)) - startX, width);
+			const nextX = this.mod(Math.ceil(this.getX(nextElem?.t ?? endTime)) - startX, width);
 			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 				let idx = (drawWidth * (255 - curY) + x) << 2;
 				imageData.data[idx++] = imageData.data[idx++] =
@@ -172,16 +172,13 @@ globalThis.bytebeat = new class {
 		loadScript('./scripts/codemirror.min.mjs');
 	}
 	async initAudioContext() {
-		this.audioCtx = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)();
+		this.audioCtx = new AudioContext();
+		this.audioGain = new GainNode(this.audioCtx);
+		this.audioGain.connect(this.audioCtx.destination);
 		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs');
-		if(!this.audioCtx.createGain) {
-			this.audioCtx.createGain = this.audioCtx.createGainNode;
-		}
-		this.audioGain = this.audioCtx.createGain();
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
-		this.audioGain.connect(this.audioCtx.destination);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
 		audioRecorder.ondataavailable = e => this.recordChunks.push(e.data);
@@ -254,7 +251,9 @@ globalThis.bytebeat = new class {
 		const hashString = atob(hash.substr(6));
 		const dataBuffer = new Uint8Array(hashString.length);
 		for(const i in hashString) {
-			dataBuffer[i] = hashString.charCodeAt(i);
+			if(Object.prototype.hasOwnProperty.call(hashString, i)) {
+				dataBuffer[i] = hashString.charCodeAt(i);
+			}
 		}
 		let songData = inflateRaw(dataBuffer, { to: 'string' });
 		if(!songData.startsWith('{')) { // XXX: old format
@@ -266,7 +265,7 @@ globalThis.bytebeat = new class {
 					songData.code = songData.formula;
 				}
 			} catch(err) {
-				console.error("Couldn't load data from url:", err);
+				console.error('Couldn\'t load data from url:', err);
 				songData = null;
 			}
 		}
@@ -441,7 +440,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	setScale(amount, buttonElem) {
-		if(buttonElem && buttonElem.getAttribute('disabled')) {
+		if(buttonElem?.getAttribute('disabled')) {
 			return;
 		}
 		this.settings.drawScale = Math.max(this.settings.drawScale + amount, 0);
