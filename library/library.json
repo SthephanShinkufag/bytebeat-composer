@@ -735,6 +735,18 @@
 			"codeOriginal": "(((((t/1)/t+(t>>3)%8+(t>>3)%3)*1*t>>12)))",
 			"codeMinified": "(1+(t>>3)%8+(t>>3)%3)*t>>12"
 		}, {
+			"description": "Duck Hunt",
+			"author": "Diicorp95",
+			"remixed": {
+				"description": "Noise Maker",
+				"author": "Gabriel Miceli",
+				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/s4oi7c/11025_hz_duck_hunt/",
+			"date": "2022-01-15",
+			"sampleRate": 11025,
+			"codeOriginal": "((t>>9^(t>>9)-1^1)%13*t&31)*(2+(t>>4))"
+		}, {
 			"author": "lhphr",
 			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-14",
@@ -754,18 +766,6 @@
 				"sampleRate": 22050,
 				"codeOriginal": "t>>6^t&t>>9^t>>12|(t<<(t>>6)%4^-t&-t>>13)%128^-t>>1"
 			}]
-		}, {
-			"description": "Duck Hunt",
-			"author": "Diicorp95",
-			"remixed": {
-				"description": "Noise Maker",
-				"author": "Gabriel Miceli",
-				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
-			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/s4oi7c/11025_hz_duck_hunt/",
-			"date": "2022-01-15",
-			"sampleRate": 11025,
-			"codeOriginal": "((t>>9^(t>>9)-1^1)%13*t&31)*(2+(t>>4))"
 		}
 	],
 	"js-code": [

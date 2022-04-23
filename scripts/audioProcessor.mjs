@@ -6,6 +6,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		super(...args);
 		this.audioSample = 0;
 		this.byteSample = 0;
+		this.errorDisplayed = true;
 		this.func = () => 0;
 		this.isPlaying = false;
 		this.sampleRatio = 1;
@@ -19,9 +20,10 @@ class audioProcessor extends AudioWorkletProcessor {
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
 		if(err instanceof Error) {
-			const { message } = err;
-			return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message)
-			} (at line ${ err.lineNumber - 3 }, character ${ +err.columnNumber })`;
+			const { message, lineNumber, columnNumber } = err;
+			return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message) }${
+				typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
+					` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
 		} else {
 			return `${ when } thrown: ${ typeof err === 'string' ? err : JSON.stringify(err) }`;
 		}
@@ -50,10 +52,18 @@ class audioProcessor extends AudioWorkletProcessor {
 				try {
 					funcValue = +this.func(flooredSample);
 				} catch(err) {
-					this.sendData({ error: { message: audioProcessor.getErrorMessage(err, flooredSample) } });
+					if(this.errorDisplayed) {
+						this.errorDisplayed = false;
+						this.sendData({
+							error: {
+								message: audioProcessor.getErrorMessage(err, flooredSample),
+								isRuntime: true
+							}
+						});
+					}
 					funcValue = NaN;
 				}
-				if(funcValue !== this.lastFuncValue) {
+				if(funcValue !== this.lastFuncValue && (!isNaN(funcValue) || !isNaN(this.lastFuncValue))) {
 					if(isNaN(funcValue)) {
 						this.lastByteValue = NaN;
 					} else if(isBytebeat) {
@@ -87,6 +97,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(data.byteSample !== undefined) {
 			this.byteSample = +data.byteSample || 0;
 			this.resetValues();
+		}
+		if(data.errorDisplayed === true) {
+			this.errorDisplayed = true;
 		}
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
@@ -144,6 +157,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			if(!isCompiled) {
 				this.func = oldFunc;
 			}
+			this.errorDisplayed = false;
 			this.sendData({
 				error: {
 					message: audioProcessor.getErrorMessage(err, isCompiled ? 0 : null),
@@ -153,6 +167,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			});
 			return;
 		}
+		this.errorDisplayed = false;
 		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
 	}
 	setSampleRatio(sampleRatio) {

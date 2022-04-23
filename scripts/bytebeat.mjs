@@ -102,11 +102,11 @@ globalThis.bytebeat = new class {
 		const isWaveform = this.settings.drawMode === 'Waveform';
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
-			const { t, value: curY } = buffer[i];
+			const { t: curTime, value: curY } = buffer[i];
 			if(isNaN(curY)) {
 				continue;
 			}
-			const curX = this.mod(Math.floor(this.getX(t)) - startX, width);
+			const curX = this.mod(Math.floor(this.getX(curTime)) - startX, width);
 			if(isWaveform && curY !== prevY && !isNaN(prevY)) {
 				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
 					let idx = (drawWidth * (255 - y) + curX) << 2;
@@ -370,14 +370,19 @@ globalThis.bytebeat = new class {
 			}
 		}
 		if(error !== undefined) {
+			let isUpdate = false;
 			if(error.isCompiled === false) {
+				isUpdate = true;
 				this.isCompilationError = true;
-				this.errorElem.innerText = error.message;
 			} else if(error.isCompiled === true) {
+				isUpdate = true;
 				this.isCompilationError = false;
+			} else if(error.isRuntime === true && !this.isCompilationError) {
+				isUpdate = true;
+			}
+			if(isUpdate) {
 				this.errorElem.innerText = error.message;
-			} else if(error.isCompiled === undefined && !this.isCompilationError) {
-				this.errorElem.innerText = error.message;
+				this.sendData({ errorDisplayed: true });
 			}
 		}
 		if(data.updateUrl === true) {
