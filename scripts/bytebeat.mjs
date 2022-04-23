@@ -97,19 +97,19 @@ globalThis.bytebeat = new class {
 				let idx = (drawWidth * (255 - y)) << 2;
 				const value = this.drawEndBuffer[y];
 				if(value === redColor) {
-					imageData.data[idx] = redColor; // Error - red color
+					imageData.data[idx] = redColor;
 				} else {
 					imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = value;
 				}
 			}
 		}
-		// Filling alpha channel on segment
+		// Filling an alpha channel in a segment
 		for(let x = 0; x < drawWidth; ++x) {
 			for(let y = 0; y < height; ++y) {
 				imageData.data[((drawWidth * y + x) << 2) + 3] = 255;
 			}
 		}
-		// Drawing on a segment
+		// Drawing in a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
@@ -120,7 +120,10 @@ globalThis.bytebeat = new class {
 			if(isNaN(curY)) {
 				for(let x = curX; x < nextX; ++x) {
 					for(let y = 0; y < height; ++y) {
-						imageData.data[(drawWidth * y + x) << 2] = redColor;
+						const idx = (drawWidth * y + x) << 2;
+						if(!imageData.data[idx + 1]) {
+							imageData.data[idx] = redColor;
+						}
 					}
 				}
 				continue;
@@ -135,7 +138,7 @@ globalThis.bytebeat = new class {
 				}
 				prevY = curY;
 			}
-			// Drawing points
+			// Points drawing
 			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 				let idx = (drawWidth * (255 - curY) + x) << 2;
 				imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 255;
