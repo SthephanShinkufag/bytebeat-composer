@@ -11,9 +11,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Bytebeat music is a very short single-line JS expressions generating musical output. Bytebeat composer is an algorhithmic music generator.">
 	<title>Bytebeat composer</title>
-	<link rel="canonical" href="https://dollchan.net/bytebeat_/index.html"/>
+	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="./favicon.png">
-	<link rel="stylesheet" type="text/css" href="./bytebeat.css?version=2022042201">
+	<link rel="stylesheet" type="text/css" href="./bytebeat.css?version=2022042400">
 	<script type="module" async src="./scripts/bytebeat.mjs"></script>
 </head>
 <body>
@@ -61,7 +61,7 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
-				<div id="control-expand" class="control-button" title="Expand code editor" onclick="bytebeat.expandEditor();">
+				<div id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
 				</div>
 				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">

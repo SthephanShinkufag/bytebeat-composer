@@ -83,13 +83,13 @@ globalThis.bytebeat = new class {
 		if(!bufferLen) {
 			return;
 		}
-		const redColor = 100;
+		const redColor = 140;
 		const { width, height } = this.canvasElem;
 		const startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
 		const endX = Math.floor(startX + this.getX(endTime - startTime));
 		startX = Math.floor(startX);
-		const drawWidth = Math.min(Math.abs(endX - startX) + 1, 1024);
+		const drawWidth = Math.min(Math.abs(endX - startX) + 1, width);
 		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
 		if(this.settings.drawScale) {
@@ -220,6 +220,7 @@ globalThis.bytebeat = new class {
 		this.canvasCtx = this.canvasElem.getContext('2d');
 		this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
 		this.containerFixed = document.getElementById('container-fixed');
+		this.containerScroll = document.getElementById('container-scroll');
 		this.controlCounter = document.getElementById('control-counter');
 		this.controlCounterUnits = document.getElementById('control-counter-units');
 		this.controlDrawMode = document.getElementById('control-drawmode');
@@ -362,7 +363,10 @@ globalThis.bytebeat = new class {
 		this.sendData(data);
 	}
 	onWindowResize() {
-		this.canvasElem.width = window.innerWidth > 768 ? 1024 : 512;
+		const isNormal = window.innerWidth > 768;
+		this.canvasElem.width = isNormal ? 1024 : 512;
+		this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth =
+			(isNormal ? 1028 : 516) + 'px';
 	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {
