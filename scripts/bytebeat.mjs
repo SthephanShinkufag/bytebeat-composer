@@ -84,6 +84,7 @@ globalThis.bytebeat = new class {
 			return;
 		}
 		const redColor = 140;
+		const waveColor = 160;
 		const { width, height } = this.canvasElem;
 		const startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
@@ -133,7 +134,7 @@ globalThis.bytebeat = new class {
 				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
 					let idx = (drawWidth * (255 - y) + curX) << 2;
 					if(imageData.data[idx] === 0) {
-						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 144;
+						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = waveColor;
 					}
 				}
 				prevY = curY;
@@ -363,10 +364,18 @@ globalThis.bytebeat = new class {
 		this.sendData(data);
 	}
 	onWindowResize() {
-		const isNormal = window.innerWidth > 768;
-		this.canvasElem.width = isNormal ? 1024 : 512;
-		this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth =
-			(isNormal ? 1028 : 516) + 'px';
+		const isSmallWindow = window.innerWidth <= 768;
+		if(this.canvasElem.width === 1024) {
+			if(isSmallWindow) {
+				this.canvasElem.width = 512;
+				this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth = '516px';
+			}
+		} else {
+			if(!isSmallWindow) {
+				this.canvasElem.width = 1024;
+				this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth = '1028px';
+			}
+		}
 	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {
