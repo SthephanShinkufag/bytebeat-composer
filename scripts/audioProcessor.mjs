@@ -5,25 +5,25 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSample = 0;
 		this.errorDisplayed = true;
 		this.func = () => 0;
+		this.getByteValue = null;
 		this.isPlaying = false;
-		this.sampleRatio = 1;
 		this.lastByteValue = NaN;
 		this.lastFlooredTime = -1;
 		this.lastFuncValue = NaN;
 		this.lastValue = 0;
 		this.mode = 'Bytebeat';
+		this.sampleRatio = 1;
 		this.port.onmessage = ({ data }) => this.receiveData(data);
 	}
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
-		if(err instanceof Error) {
-			const { message, lineNumber, columnNumber } = err;
-			return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message) }${
-				typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
-					` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
-		} else {
+		if(!(err instanceof Error)) {
 			return `${ when } thrown: ${ typeof err === 'string' ? err : JSON.stringify(err) }`;
 		}
+		const { message, lineNumber, columnNumber } = err;
+		return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message) }${
+			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
+				` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
 	}
 	process(inputs, outputs, parameters) {
 		const chData = outputs[0][0];
@@ -38,8 +38,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		let time = this.sampleRatio * this.audioSample;
 		let { byteSample } = this;
 		const drawBuffer = [];
-		const isBytebeat = this.mode === 'Bytebeat';
-		const isFloatbeat = this.mode === 'Floatbeat';
 		for(let i = 0; i < chDataLen; ++i) {
 			time += this.sampleRatio;
 			const flooredTime = Math.floor(time);
@@ -60,20 +58,16 @@ class audioProcessor extends AudioWorkletProcessor {
 					}
 					funcValue = NaN;
 				}
-				if(funcValue !== this.lastFuncValue && (!isNaN(funcValue) || !isNaN(this.lastFuncValue))) {
+				if(funcValue !== this.lastFuncValue) {
 					if(isNaN(funcValue)) {
-						this.lastByteValue = NaN;
-					} else if(isBytebeat) {
-						this.lastByteValue = funcValue & 255;
-						this.lastValue = this.lastByteValue / 127.5 - 1;
-					} else if(isFloatbeat) {
-						this.lastValue = funcValue = Math.max(Math.min(funcValue, 1), -1);
-						this.lastByteValue = Math.round((funcValue + 1) * 127.5);
-					} else { // "Signed Byteveat"
-						this.lastByteValue = (funcValue + 128) & 255;
-						this.lastValue = this.lastByteValue / 127.5 - 1;
+						if(!isNaN(this.lastFuncValue)) {
+							this.lastByteValue = NaN;
+							drawBuffer.push({ t: flooredSample, value: NaN });
+						}
+					} else {
+						this.getByteValue(funcValue);
+						drawBuffer.push({ t: flooredSample, value: this.lastByteValue });
 					}
-					drawBuffer.push({ t: flooredSample, value: this.lastByteValue });
 				}
 				byteSample += flooredTime - this.lastFlooredTime;
 				this.lastFuncValue = funcValue;
@@ -103,6 +97,19 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		if(data.mode !== undefined) {
 			this.mode = data.mode;
+			this.getByteValue = this.mode === 'Bytebeat' ? funcValue => {
+				this.lastByteValue = funcValue & 255;
+				this.lastValue = this.lastByteValue / 127.5 - 1;
+			} : this.mode === 'Signed Byteveat' ? funcValue => {
+				this.lastByteValue = (funcValue + 128) & 255;
+				this.lastValue = this.lastByteValue / 127.5 - 1;
+			} : this.mode === 'Floatbeat' ? funcValue => {
+				this.lastValue = Math.max(Math.min(funcValue, 1), -1);
+				this.lastByteValue = Math.round((this.lastValue + 1) * 127.5);
+			} : funcValue => {
+				this.lastByteValue = NaN;
+				this.lastValue = 0;
+			};
 		}
 		if(data.setFunction !== undefined) {
 			this.setFunction(data.setFunction);
@@ -145,10 +152,14 @@ class audioProcessor extends AudioWorkletProcessor {
 			}
 		}
 		// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
-		codeText = unescape(escape(codeText.trim()
-			.replace(/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/, '$1')
-		).replace(/u(..)/g, '$1%'));
-		// Test bytebeat code
+		let hasEscapeCode = false;
+		codeText = codeText.trim().replace(
+			/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/,
+			...match => (hasEscapeCode = true, match[1]));
+		if(hasEscapeCode) {
+			codeText = unescape(escape(codeText).replace(/u(..)/g, '$1%'));
+		}
+		// Bytebeat code testing
 		let isCompiled = false;
 		const oldFunc = this.func;
 		try {
