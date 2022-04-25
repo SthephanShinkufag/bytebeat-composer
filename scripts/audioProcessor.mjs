@@ -13,7 +13,36 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.lastValue = 0;
 		this.mode = 'Bytebeat';
 		this.sampleRatio = 1;
+		Object.seal(this);
+		audioProcessor.deleteGlobals();
+		audioProcessor.freezeGlobals();
 		this.port.onmessage = ({ data }) => this.receiveData(data);
+	}
+	static deleteGlobals() {
+		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
+		for(let i = 0; i < 26; ++i) {
+			delete globalThis[String.fromCharCode(65 + i)];
+			delete globalThis[String.fromCharCode(97 + i)];
+		}
+		// Delete global variables
+		for(const name in globalThis) {
+			if(Object.prototype.hasOwnProperty.call(globalThis, name)) {
+				delete globalThis[name];
+			}
+		}
+	}
+	static freezeGlobals() {
+		Object.getOwnPropertyNames(globalThis).forEach(name => {
+			const prop = globalThis[name];
+			const type = typeof prop;
+			if((type === 'object' || type === 'function') && name !== 'globalThis') {
+				Object.freeze(prop);
+			}
+			if(type === 'function' && Object.prototype.hasOwnProperty.call(prop, 'prototype')) {
+				Object.freeze(prop.prototype);
+			}
+			Object.defineProperty(globalThis, name, { writable: false, configurable: false });
+		});
 	}
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
@@ -100,7 +129,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.getByteValue = this.mode === 'Bytebeat' ? funcValue => {
 				this.lastByteValue = funcValue & 255;
 				this.lastValue = this.lastByteValue / 127.5 - 1;
-			} : this.mode === 'Signed Byteveat' ? funcValue => {
+			} : this.mode === 'Signed Bytebeat' ? funcValue => {
 				this.lastByteValue = (funcValue + 128) & 255;
 				this.lastValue = this.lastByteValue / 127.5 - 1;
 			} : this.mode === 'Floatbeat' ? funcValue => {
@@ -140,25 +169,11 @@ class audioProcessor extends AudioWorkletProcessor {
 		const values = params.map(k => Math[k]);
 		params.push('int', 'window');
 		values.push(Math.floor, globalThis);
-		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
-		for(let i = 0; i < 26; ++i) {
-			delete globalThis[String.fromCharCode(65 + i)];
-			delete globalThis[String.fromCharCode(97 + i)];
-		}
-		// Delete global variables
-		for(const i in globalThis) {
-			if(Object.prototype.hasOwnProperty.call(globalThis, i)) {
-				delete globalThis[i];
-			}
-		}
+		audioProcessor.deleteGlobals();
 		// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
-		let hasEscapeCode = false;
 		codeText = codeText.trim().replace(
 			/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/,
-			(match, m1) => (hasEscapeCode = true, m1));
-		if(hasEscapeCode) {
-			codeText = unescape(escape(codeText).replace(/u(..)/g, '$1%'));
-		}
+			(match, m1) => unescape(escape(m1).replace(/u(..)/g, '$1%')));
 		// Bytebeat code testing
 		let isCompiled = false;
 		const oldFunc = this.func;

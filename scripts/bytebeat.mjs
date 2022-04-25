@@ -188,8 +188,8 @@ globalThis.bytebeat = new class {
 		this.initControls();
 		this.initSettings();
 		this.initLibraryEvents();
-		loadScript('./scripts/playlist.mjs');
 		this.initEditor();
+		loadScript('./scripts/playlist.mjs');
 		loadScript('./scripts/codemirror.min.mjs');
 	}
 	async initAudioContext() {
@@ -356,11 +356,13 @@ globalThis.bytebeat = new class {
 		}
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
 		const sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
-		const data = { mode, sampleRatio, setFunction: code };
+		const data = { mode, sampleRatio };
 		if(isPlay) {
 			this.togglePlay(true, false);
 			data.isPlaying = isPlay;
 			data.resetTime = true;
+		} else {
+			data.setFunction = code;
 		}
 		this.sendData(data);
 	}
