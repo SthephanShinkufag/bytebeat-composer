@@ -35,12 +35,10 @@ globalThis.bytebeat = new class {
 		this.drawEndBuffer = [];
 		this.editorElem = null;
 		this.errorElem = null;
-		this.getX = t => t / (1 << this.settings.drawScale);
 		this.isActiveTab = true;
 		this.isCompilationError = false;
 		this.isPlaying = false;
 		this.isRecording = false;
-		this.mod = (a, b) => ((a % b) + b) % b;
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
 		this.sampleRate = 8000;
@@ -165,6 +163,9 @@ globalThis.bytebeat = new class {
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
+	}
+	getX(t) {
+		return t / (1 << this.settings.drawScale);
 	}
 	async init() {
 		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
@@ -362,6 +363,9 @@ globalThis.bytebeat = new class {
 			data.resetTime = true;
 		}
 		this.sendData(data);
+	}
+	mod(a, b) {
+		return ((a % b) + b) % b;
 	}
 	onWindowResize() {
 		const isSmallWindow = window.innerWidth <= 768;

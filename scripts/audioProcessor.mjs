@@ -1,6 +1,3 @@
-/* eslint indent: ["error", "tab", { "outerIIFEBody": 0 }] */
-
-(function() {
 class audioProcessor extends AudioWorkletProcessor {
 	constructor(...args) {
 		super(...args);
@@ -131,7 +128,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.lastFlooredTime = -1;
 	}
 	setFunction(codeText) {
-		const oldFunc = this.func;
 		// Create shortened Math functions
 		const params = Object.getOwnPropertyNames(Math);
 		const values = params.map(k => Math[k]);
@@ -148,10 +144,15 @@ class audioProcessor extends AudioWorkletProcessor {
 				delete globalThis[i];
 			}
 		}
+		// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
+		codeText = unescape(escape(codeText.trim()
+			.replace(/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/, '$1')
+		).replace(/u(..)/g, '$1%'));
 		// Test bytebeat code
 		let isCompiled = false;
+		const oldFunc = this.func;
 		try {
-			this.func = new Function(...params, 't', `return 0,\n${ codeText.trim() || 0 };`)
+			this.func = new Function(...params, 't', `return 0,\n${ codeText || 0 };`)
 				.bind(globalThis, ...values);
 			isCompiled = true;
 			this.func(0);
@@ -180,4 +181,3 @@ class audioProcessor extends AudioWorkletProcessor {
 }
 
 registerProcessor('audioProcessor', audioProcessor);
-})();

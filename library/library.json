@@ -51,7 +51,7 @@
 				"codeOriginal": "(t>>7|t|t>>6)*10+4*(t&t>>13|t>>6)",
 				"starred": 2
 			}, {
-				"description": "Another attempt at melody construction",
+				"description": "Another attempt at melody construction (\"Running man\")",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930",
 				"date": "2011-10-04",
 				"codeOriginal": "(t*((3+(1^t>>10&5))*(5+(3&t>>14))))>>(t>>8&3)",
@@ -592,12 +592,30 @@
 				"codeOriginal": "(t&t+t/256)-t*(t>>15)&64"
 			}]
 		}, {
-			"description": "buzzy grindy beat",
 			"author": "SArpnt",
-			"url": "https://www.reddit.com/r/bytebeat/comments/imprs9/buzzy_grindy_beat/",
-			"date": "2020-09-05",
-			"codeOriginal": "t/((t>>3-(t>>14)%2)%(26>>(t>>16)%3))%1024/12<<9/((t>>5)%128)",
-			"starred": 1
+			"children": [{
+				"description": "pwm serpinski harmony",
+				"url": "https://www.reddit.com/r/bytebeat/comments/g9106h/pwm_serpinski_harmony/",
+				"date": "2020-04-27",
+				"codeOriginal": "t&(t>>7)-t&t>>8"
+			}, {
+				"description": "rhythmic thing",
+				"url": "https://www.reddit.com/r/bytebeat/comments/govfve/rhythmic_thing/",
+				"date": "2020-05-23",
+				"codeOriginal": "t*2>>(t*4.5>>4)"
+			}, {
+				"description": "buzzy grindy beat",
+				"url": "https://www.reddit.com/r/bytebeat/comments/imprs9/buzzy_grindy_beat/",
+				"date": "2020-09-04",
+				"codeOriginal": "t/((t>>3-(t>>14)%2)%(26>>(t>>16)%3))%1024/12<<9/((t>>5)%128)",
+				"codeMinified": "t/((t>>3-(t>>14)%2)%(26>>(t>>16)%3))%1024/12<<9/(t>>5&127)",
+				"starred": 1
+			}, {
+				"description": "i don't have a name for this",
+				"url": "https://www.reddit.com/r/bytebeat/comments/ns22lb/i_dont_have_a_name_for_this/",
+				"date": "2021-06-04",
+				"codeOriginal": "(t*3&t>>6)%76"
+			}]
 		}, {
 			"description": "remix of \"I hear the long meowing of a cat :)\" by SthephanShi",
 			"author": "RealZynx92",
@@ -1180,7 +1198,7 @@
 				"date": "2020-03-08",
 				"sampleRate": 44100,
 				"codeOriginal": "r=11e3,s=floor(t/r+1)%32,b='ćóóóćÎÎÎÎÃÃÃÃÃÃÎ°°°°¦¦¦¦'.charCodeAt(s)/300*t%512,160/3*(sin(t%r/(t%r/100+8))+1)*(s%2+.6*(s%16==0))+b%(400+128*sin(b/(21+sin(t/r))))%256*1/3+(.999*(0xDBC97749&2**s?2*b:b)%128>64+15*sin(t/1e4)?64-t/r%1*32:0)",
-				"codeMinified": "r=11E3,s=int(t/r+1)%32,b='ćóóóćÎÎÎÎÃÃÃÃÃÃÎ°°°°¦¦¦¦'.charCodeAt(s)/300*t%512,160/3*(sin(t%r/(t%r/100+8))+1)*(s%2+.6*(s%16==0))+b%(400+128*sin(b/(21+sin(t/r))))%256/3+(.999*(0xDBC97749&2**s?2*b:b)%128>64+15*sin(t/1E4)?64-t/r%1*32:0)",
+				"codeMinified": "r=11e3,s=int(t/r+1)%32,b='ćóóóćÎÎÎÎÃÃÃÃÃÃÎ°°°°¦¦¦¦'.charCodeAt(s)/300*t%512,160/3*(sin(t%r/(t%r/100+8))+1)*(s%2+.6*!(s%16))+b%(400+128*sin(b/(21+sin(t/r))))%256/3+(.999*(0xDBC97749&2**s?2*b:b)%128>64+15*sin(t/1e4)?64-t/r%1*32:0)",
 				"starred": 2
 			}, {
 				"description": "arpeggiator fun",
@@ -1188,20 +1206,66 @@
 				"date": "2020-03-16",
 				"sampleRate": 44100,
 				"codeOriginal": "i=int,c='charCodeAt',b=t/441e3*16,q=b%.5,h=x=>t/2210*2**((x-36)/12)%1,w=(x,y=0)=>(h(x)-sin(y*2+b*PI)/8>.5)*30,s=i(b*2)%32,a=abs(8-i(b*8)%16),t==0&&(v=.5),v=3.65*v*(1-v),sin(q/(q/100+3e-4))*40*!(54878&1<<s%16)+(v-.5)*70*max(0,1-((b+1)%2)*.77)+w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGGGG'[c](s),s==5)+w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@@@'[c](s))+h('pnkgrnkipmigpnkg'[c](a%4+i(s/8)*4)+12*-i(a/4))*27+99",
-				"codeMinified": "i=int,c='charCodeAt',b=t/441E3*16,q=b%.5,h=x=>t/2210*2**((x-36)/12)%1,w=(x,y=0)=>(h(x)-sin(2*y+PI*b)/8>.5)*30,s=i(2*b)%32,a=abs(8-i(8*b)%16),t==0&&(v=.5),v=3.65*v*(1-v),40*sin(q/(q/100+3E-4))*!(54878&1<<s%16)+70*(v-.5)*max(0,1-(b+1)%2*.77)+w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGGGG'[c](s),s==5)+w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@@@'[c](s))+27*h('pnkgrnkipmigpnkg'[c](a%4+4*i(s/8))+12*-i(a/4))+99",
+				"codeMinified": "i=int,c='charCodeAt',b=t/441e3*16,q=b%.5,h=x=>t/2210*2**((x-36)/12)%1,w=(x,y=0)=>(h(x)-sin(y*2+b*PI)/8>.5)*30,s=i(b*2)%32,a=abs(8-i(b*8)%16),t||(v=.5),v=3.65*v*(1-v),sin(q/(q/100+3e-4))*40*!(54878&1<<s%16)+(v-.5)*70*max(0,1-(b+1)%2*.77)+w(s==6&&i(b*6%6)==1?85:s==14&&q<.25?78:'SSSSSSSQOOONNOLJLLLLLNLJIIIGGGGG'[c](s),s==5)+w('@@@@@@BCEEECCBCCEEEEECEEBBB@@@@@'[c](s))+h('pnkgrnkipmigpnkg'[c](a%4+i(s/8)*4)+12*-i(a/4))*27+99",
 				"starred": 2
 			}, {
-				"description": "shredder (song, not just a terrible noise)",
-				"url": "https://www.reddit.com/r/bytebeat/comments/gfghdv/shredder_song_not_just_a_terrible_noise/",
-				"date": "2020-05-08",
-				"codeOriginal": "((~t>>max((t>>10)%16,(t>>12)%16))&t*\"H$TT`0l6\".charCodeAt((t>>11)%8)/19)*(10-(t>>16))",
-				"codeMinified": "(~t>>max((t>>10)%16,(t>>12)%16)&t*'H$TT`0l6'.charCodeAt((t>>11)%8)/19)*(10-(t>>16))"
+				"description": "Sync noise synth",
+				"url": "https://www.reddit.com/r/bytebeat/comments/flmyyd/sync_noise_synth/",
+				"date": "2020-03-20",
+				"sampleRate": 44100,
+				"codeOriginal": [
+					"p=409.5, // Pitch",
+					"s=sin(t/7e4)*20+22, // Sound",
+					"k=3, // Seed",
+					"v=50, // Volume",
+					"x=sin(int(t%p*s/p+k))*1e4,",
+					"(x-int(x))*v"
+				],
+				"codeMinified": "p=409.5,s=20*sin(t/7E4)+22,k=3,v=50,x=1E4*sin(int(t%p*s/p+k)),(x-int(x))*v"
 			}, {
-				"description": "charCodeAt",
+				"description": "shredder",
+				"url": "https://www.reddit.com/r/bytebeat/comments/gfghdv/shredder_song_not_just_a_terrible_noise/",
+				"date": "2020-05-07",
+				"codeOriginal": "((~t>>max((t>>10)%16,(t>>12)%16))&t*\"H$TT`0l6\".charCodeAt((t>>11)%8)/19)*(10-(t>>16))",
+				"codeMinified": "(~t>>max(t>>10&15,t>>12&15)&t*'H$TT`0l6'.charCodeAt(t>>11&7)/19)*(10-(t>>16))"
+			}, {
+				"description": "nose grind",
+				"url": "https://www.reddit.com/r/bytebeat/comments/ggkslh/cant_think_of_a_name_atm_but_new_thing/",
+				"date": "2020-05-09",
+				"sampleRate": 44100,
+				"codeOriginal": "h=t*[.5,.6,.57,.53][int(t/44e3)%4],((h&h*-2.5+sin(t/1e4)*100)%256*-cos(t/2e7+1.61))-10"
+			}, {
+				"description": "\"charCodeAt\"",
 				"url": "https://www.reddit.com/r/bytebeat/comments/lqkf8j/charcodeat/",
 				"date": "2021-02-23",
 				"codeOriginal": "c='charCodeAt',l=9+!(t&(1<<16)),c[c]((t>>c[c](((t>>9)%l&t>>12)%l))%l)+(t&(1<<12))*.9",
-				"codeMinified": "c='charCodeAt',l=9+!(t&65536),c[c]((t>>c[c](((t>>9)%l&t>>12)%l))%l)+.9*(t&4096)"
+				"codeMinified": "c='charCodeAt',l=9+!(t&65536),c[c]((t>>c[c](((t>>9)%l&t>>12)%l))%l)+(t&4096)*.9"
+			}, {
+				"description": "Experiment with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>] and <a href='http://www.pouet.net/topic.php?which=8357&page=4#c388494' target='_blank'>\"Street Surfer\"</a> [<code>t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t)</code>]",
+				"date": "2021-10-07",
+				"children": [{
+					"description": "Isolated and edited drums",
+					"codeOriginal": "t&4096?(t*(t^t%9)|t>>3)>>1:255"
+				}, {
+					"description": "Altered running man",
+					"codeOriginal": "t*(1+(5&t>>10))*(3+(t>>17&1?(2^2&t>>14)/3:3&(t>>13)+1))>>(3&t>>9)"
+				}, {
+					"description": "Final song",
+					"codeOriginal": "(t*(1+(5&t>>10))*(3+(t>>17&1?(2^2&t>>14)/3:3&(t>>13)+1))>>(3&t>>9))&(t&4096?(t*(t^t%9)|t>>3)>>1:255)",
+					"starred": 1
+				}]
+			}, {
+				"description": "minibake",
+				"url": "https://www.reddit.com/r/bytebeat/comments/rcykm8/minibake/",
+				"date": "2021-12-10",
+				"sampleRate": 44100,
+				"codeOriginal": "eval(unescape(escape`瑨楳⹄㼿㵁牲慹⠸㠵㤩⹦楬氨〩ⱂ㵴⼵㤰㘬爽䈥ㄬ瘽ㄭ爬洽䈾㸶ⱳ㵂┶㑼〬焽猾㸴Ɫ㵳┱㘬丽愽㹛〬ㄸⰲ〬㈲⸵ⰲ㐬㈷ⰳ〬㌲ⰳ㙝孡崪㜵⼵㘬匽⡦Ɒ㴰⤽㹳楮⠨䈪昫瀩⩐䤪㈩⼲⬮㔬吽⡦Ɒ⤽㸨砽⡂⩦⭰⤥ㄬ浩渨砬ㄭ砩⤬䌽昽㹂⩎⡦嬰嵛煝⤥ㄼ匨⸰㘩⨮㠫⸱☦㤬刽⡳Ɑ㴹攷⤽㸨獩渨猪洩⬱⤪津ㄬ渽∶㔴㐢孱崬氽猾㘱㼵㨢㘸〷≛戭ㄱ嵼籮ⱌ㴲㌲ㄹ㸾戬挽ㄳ㔱㔾㹢☱Ɐ㵛吨氽丨派㈳㼨䈼ㄵ㔲⤪㐺洼㠿氪㵌☱㩬☽䱼津㠩ⱓ⡬⤯㔩⨱㘰ⱔ⡤㵎⡳㴽㈸㼶㩳㸶ㄿ㔺戾ㄱ㼸㩮⴨Ⅲ♱㰲⤩⨲Ⱘ䈪搥ㄩ⩒⡂簰⤪ㄮ㔫⸲㔩⨨ㄭ爪⸷㔩⨴㔬匨愽丨㘴㤶㜾㹢☱☦⡢㰱㉼猾㘱㽮㨷⤩⼲ⱡ扳⡓⡡⼴⤭⸵⤪⡶⨨猽㴶㉼㄰㌷〾㹢☲⤫㈩⤪㌰ⱃ怱㈴ㅠⱣ⩃怳㔶㑠Ᵽ⩃怶㜸㙠ⱳ㴽㈶米㴽㔹簡⡳┸⤦♓⠰ⰲ⼨爫⸱㘩⤪㈷ⱳ┸㴽㐦♒⡴⼳簰⤪瘪㈷ⱳ㴽㘳簱㤵㈴㸾戦ㄦ♒⡴ⰴ〰⤪浡砨ㄭ爪ㄮ㔬〩⨲㝝⹲敤畣攨⡡ⱢⱩ⤽㹡⬨孛㈵㜬㈶ㄬ㐵㌬ㄹ㍼⡳㰶ㄩ⨲㘰嵛浝ⱸ㴵ㄱⰱ㈷㸾ㄲ⵭ⱸⱸⱛ㐴㌬㐴㌬㌬ㅝ孭┴崬ㅝ孭㸾㉝㸾椦ㄦ♢⤬〩⭄⹳桩晴⠩⼲ⱄ⹰畳栨派㈱☦漩Ɐ`.replace(/u(..)/g,\"$1%\")))",
+				"starred": 2
+			}, {
+				"description": "alright fine",
+				"url": "https://www.reddit.com/r/bytebeat/comments/rwryz6/alright_fine/",
+				"date": "2022-01-05",
+				"codeOriginal": "(t>>4&t/(\"SArpnt\".charCodeAt(t/2/\"76547698\"[t>>13&7]*(t>>10&3)%6)+t/(t>>17&1|2)%2))+(t>>12&1?-1:sin(t))"
 			}]
 		}, {
 			"description": "Cool waveform i guess",
@@ -1719,7 +1783,7 @@
 				},
 				"url": "https://www.reddit.com/r/bytebeat/comments/ry4ikf/comment/hrmh2m3/?utm_source=reddit&utm_medium=web2x&context=3",
 				"date": "2022-01-07",
-				"mode": "Sighned Bytebeat",
+				"mode": "Signed Bytebeat",
 				"sampleRate": 11025,
 				"codeOriginal": "(t>>4|t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))&96)+(64*random(t)*(1&t>>11))+(44444/(t%pow(4,(3+(2+(1)))))&128)",
 				"codeMinified": "(t>>4|t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(59392>t%65536?t&4096?2:16:2))&96)+64*random()*(1&t>>11)+(44444/(t%4096)&128)",
@@ -2770,7 +2834,7 @@
 				"codeOriginal": "t%((t&-16|t>>11)&42)<<2|t>>4"
 			}]
 		}, {
-			"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>viznut's code</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
+			"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
 			"children": [{
 				"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 				"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"

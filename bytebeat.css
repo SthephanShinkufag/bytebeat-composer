@@ -256,6 +256,10 @@ code {
 	font-size: 10px;
 }
 
+.entry-children > .entry > .entry-children {
+  margin-left: 11px;
+}
+
 .entry.star-white::before {
 	content: "\2605";
 	position: absolute;
