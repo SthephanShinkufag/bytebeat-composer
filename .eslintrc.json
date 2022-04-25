@@ -33,6 +33,7 @@
 			"ignoreUrls": true
 		}],
 		"no-case-declarations": "error",
+		"no-const-assign": "error",
 		"no-extra-parens": ["error", "all", {
 			"conditionalAssign": false,
 			"nestedBinaryExpressions": false,
@@ -48,6 +49,7 @@
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
 		"no-undef": "error",
 		"no-unsafe-optional-chaining": "error",
+		"no-use-before-define": "error",
 		"no-useless-concat": "error",
 		"object-curly-newline": ["error", { "multiline": true }],
 		"object-curly-spacing": ["error", "always"],

@@ -155,7 +155,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		let hasEscapeCode = false;
 		codeText = codeText.trim().replace(
 			/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/,
-			...match => (hasEscapeCode = true, match[1]));
+			(match, m1) => (hasEscapeCode = true, m1));
 		if(hasEscapeCode) {
 			codeText = unescape(escape(codeText).replace(/u(..)/g, '$1%'));
 		}
