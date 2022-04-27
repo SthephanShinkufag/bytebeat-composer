@@ -430,3 +430,11 @@ code {
 	margin: 2px 0;
 	justify-content: center;
 }
+
+/* ==[ Adaptive screen ] ================================================================================== */
+
+@media screen and (max-width: 768px) {
+	#container-fixed, #container-scroll {
+		max-width: 516px;
+	}
+}

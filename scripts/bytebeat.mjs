@@ -23,6 +23,8 @@ globalThis.bytebeat = new class {
 		this.byteSample = 0;
 		this.canvasCtx = null;
 		this.canvasElem = null;
+		this.canvasHeight = 256;
+		this.canvasWidth = 1024;
 		this.canvasTogglePlay = null;
 		this.containerFixed = null;
 		this.controlCounter = null;
@@ -69,7 +71,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	clearCanvas() {
-		this.canvasCtx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height);
+		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 	}
 	drawGraphics(endTime) {
 		if(!isFinite(endTime)) {
@@ -83,7 +85,8 @@ globalThis.bytebeat = new class {
 		}
 		const redColor = 140;
 		const waveColor = 160;
-		const { width, height } = this.canvasElem;
+		const width = this.canvasWidth;
+		const height = this.canvasHeight;
 		const startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
 		const endX = Math.floor(startX + this.getX(endTime - startTime));
@@ -188,7 +191,7 @@ globalThis.bytebeat = new class {
 		this.initControls();
 		this.initSettings();
 		this.initLibraryEvents();
-		this.initEditor();
+		this.parseUrl();
 		loadScript('./scripts/playlist.mjs');
 		loadScript('./scripts/codemirror.min.mjs');
 	}
@@ -231,6 +234,8 @@ globalThis.bytebeat = new class {
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.controlTogglePlay = document.getElementById('control-toggleplay');
 		this.controlVolume = document.getElementById('control-volume');
+		this.errorElem = document.getElementById('error');
+		this.editorElem = document.getElementById('editor-default');
 		this.timeCursor = document.getElementById('canvas-timecursor');
 		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
 			if(e.key === 'Enter') {
@@ -243,13 +248,6 @@ globalThis.bytebeat = new class {
 			this.setByteSample(byteSample);
 			this.sendData({ byteSample });
 		};
-		this.setVolume(this.controlVolume);
-		this.onWindowResize();
-		document.defaultView.addEventListener('resize', () => this.onWindowResize());
-	}
-	initEditor() {
-		this.errorElem = document.getElementById('error');
-		this.editorElem = document.getElementById('editor-default');
 		this.editorElem.oninput = () => this.setFunction();
 		this.editorElem.onkeydown = e => {
 			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
@@ -261,39 +259,9 @@ globalThis.bytebeat = new class {
 				this.setFunction();
 			}
 		};
-		let { hash } = window.location;
-		if(!hash) {
-			this.updateUrl();
-			({ hash } = window.location);
-		}
-		if(!hash.startsWith('#v3b64')) {
-			console.error('Unrecognized url data');
-			return;
-		}
-		const hashString = atob(hash.substr(6));
-		const dataBuffer = new Uint8Array(hashString.length);
-		for(const i in hashString) {
-			if(Object.prototype.hasOwnProperty.call(hashString, i)) {
-				dataBuffer[i] = hashString.charCodeAt(i);
-			}
-		}
-		let songData = inflateRaw(dataBuffer, { to: 'string' });
-		if(!songData.startsWith('{')) { // XXX: old format
-			songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
-		} else {
-			try {
-				songData = JSON.parse(songData);
-				if(songData.formula) { // XXX: old format
-					songData.code = songData.formula;
-				}
-			} catch(err) {
-				console.error('Couldn\'t load data from url:', err);
-				songData = null;
-			}
-		}
-		if(songData !== null) {
-			this.loadCode(songData, false);
-		}
+		this.setVolume(this.controlVolume);
+		this.onWindowResize();
+		document.defaultView.addEventListener('resize', () => this.onWindowResize());
 	}
 	initLibraryEvents() {
 		document.body.querySelectorAll('.library-header').forEach(el =>
@@ -371,16 +339,47 @@ globalThis.bytebeat = new class {
 	}
 	onWindowResize() {
 		const isSmallWindow = window.innerWidth <= 768;
-		if(this.canvasElem.width === 1024) {
+		if(this.canvasWidth === 1024) {
 			if(isSmallWindow) {
-				this.canvasElem.width = 512;
-				this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth = '516px';
+				this.canvasWidth = this.canvasElem.width = 512;
 			}
+		} else if(!isSmallWindow) {
+			this.canvasWidth = this.canvasElem.width = 1024;
+		}
+	}
+	parseUrl() {
+		let { hash } = window.location;
+		if(!hash) {
+			this.updateUrl();
+			({ hash } = window.location);
+		}
+		if(!hash.startsWith('#v3b64')) {
+			console.error('Unrecognized url data');
+			return;
+		}
+		const hashString = atob(hash.substr(6));
+		const dataBuffer = new Uint8Array(hashString.length);
+		for(const i in hashString) {
+			if(Object.prototype.hasOwnProperty.call(hashString, i)) {
+				dataBuffer[i] = hashString.charCodeAt(i);
+			}
+		}
+		let songData = inflateRaw(dataBuffer, { to: 'string' });
+		if(!songData.startsWith('{')) { // XXX: old format
+			songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
 		} else {
-			if(!isSmallWindow) {
-				this.canvasElem.width = 1024;
-				this.containerFixed.style.maxWidth = this.containerScroll.style.maxWidth = '1028px';
+			try {
+				songData = JSON.parse(songData);
+				if(songData.formula) { // XXX: old format
+					songData.code = songData.formula;
+				}
+			} catch(err) {
+				console.error('Couldn\'t load data from url:', err);
+				songData = null;
 			}
+		}
+		if(songData !== null) {
+			this.loadCode(songData, false);
 		}
 	}
 	rec() {
@@ -403,7 +402,7 @@ globalThis.bytebeat = new class {
 			this.drawBuffer = this.drawBuffer.concat(data.drawBuffer);
 			if(!this.isActiveTab) {
 				this.drawBuffer = this.drawBuffer.slice(
-					-this.canvasElem.width * (1 << this.settings.drawScale));
+					-this.canvasWidth * (1 << this.settings.drawScale));
 			}
 		}
 		if(error !== undefined) {
