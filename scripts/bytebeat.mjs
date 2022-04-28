@@ -53,7 +53,7 @@ globalThis.bytebeat = new class {
 	get saveData() {
 		const a = document.body.appendChild(document.createElement('a'));
 		a.style.display = 'none';
-		const saveData = function(blob, fileName) {
+		const saveData = (blob, fileName) => {
 			const url = URL.createObjectURL(blob);
 			a.href = url;
 			a.download = fileName;
@@ -67,7 +67,15 @@ globalThis.bytebeat = new class {
 		return this.sampleRate >> this.settings.drawScale < 3950;
 	}
 	animationFrame() {
-		const endTime = this.byteSample;
+		this.drawGraphics(this.byteSample);
+		if(this.isPlaying) {
+			this.requestAnimationFrame();
+		}
+	}
+	clearCanvas() {
+		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+	}
+	drawGraphics(endTime) {
 		if(!isFinite(endTime)) {
 			this.resetTime();
 			return;
@@ -157,14 +165,15 @@ globalThis.bytebeat = new class {
 		}
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
-		if(this.isPlaying) {
-			this.requestAnimationFrame();
-		}
 	}
-	clearCanvas() {
-		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+	escapeHTML(text) {
+		this.cachedTextNode.nodeValue = text;
+		return this.cachedElemParent.innerHTML;
 	}
-	createEntryElem({
+	expandEditor() {
+		this.containerFixed.classList.toggle('container-expanded');
+	}
+	generateLibraryEntry({
 		author,
 		children,
 		codeMinified,
@@ -260,19 +269,12 @@ globalThis.bytebeat = new class {
 		if(children) {
 			let childrenStr = '';
 			for(let i = 0, len = children.length; i < len; ++i) {
-				childrenStr += this.createEntryElem(children[i]);
+				childrenStr += this.generateLibraryEntry(children[i]);
 			}
 			entry += `<div class="entry-children">${ childrenStr }</div>`;
 		}
 		return `<div class="${ codeOriginal || codeMinified || file || children ? 'entry' : 'entry-text' }${
 			starred ? ' ' + ['star-white', 'star-yellow'][starred - 1] : '' }">${ entry }</div>`;
-	}
-	escapeHTML(text) {
-		this.cachedTextNode.nodeValue = text;
-		return this.cachedElemParent.innerHTML;
-	}
-	expandEditor() {
-		this.containerFixed.classList.toggle('container-expanded');
 	}
 	getX(t) {
 		return t / (1 << this.settings.drawScale);
@@ -435,7 +437,7 @@ globalThis.bytebeat = new class {
 	onclickCodeLoadButton(el) {
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = () => {
-			if(xhr.readyState === 4 && xhr.status === 200) {
+			if(xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 304)) {
 				this.loadCode(Object.assign(JSON.parse(el.dataset.songdata),
 					{ code: xhr.responseText }));
 			}
@@ -445,7 +447,6 @@ globalThis.bytebeat = new class {
 			el.classList.contains('code-load-minified') ? 'minified' :
 			el.classList.contains('code-load-original') ? 'original' : ''
 		}/${ el.dataset.codeFile }`, true);
-		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 		xhr.send(null);
 	}
 	onclickCodeToggleButton(el) {
@@ -468,7 +469,7 @@ globalThis.bytebeat = new class {
 		const waitEl = el.querySelector('.loading-wait');
 		waitEl.classList.remove('disabled');
 		const xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
+		xhr.onreadystatechange = () => {
 			if(xhr.readyState !== 4) {
 				return;
 			}
@@ -481,16 +482,14 @@ globalThis.bytebeat = new class {
 				return;
 			}
 			containerEl.innerHTML = '';
-			let libraryHtml = '';
+			let libraryHTML = '';
 			const libraryArr = JSON.parse(xhr.responseText);
 			for(let i = 0, len = libraryArr.length; i < len; ++i) {
-				libraryHtml += `<div class="entry-top">${
-					this.createEntryElem(libraryArr[i]) }</div>`;
+				libraryHTML += `<div class="entry-top">${ this.generateLibraryEntry(libraryArr[i]) }</div>`;
 			}
-			containerEl.insertAdjacentHTML('beforeend', libraryHtml);
+			containerEl.insertAdjacentHTML('beforeend', libraryHTML);
 		};
 		xhr.open('GET', `./library/${ containerEl.id.replace('library-', '') }.json`, true);
-		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 		xhr.send(null);
 	}
 	onresizeWindow() {
