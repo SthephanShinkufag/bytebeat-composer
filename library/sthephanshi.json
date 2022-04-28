@@ -1,0 +1,310 @@
+[
+	{
+		"description": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
+		"children": [{
+			"codeOriginal": "(t>>4)*(t>>3)|t>>2"
+		}, {
+			"codeOriginal": "(t>>4)*(t>>3)|t>>3"
+		}, {
+			"codeOriginal": "(t>>4)*(t>>3)|t>>4"
+		}, {
+			"description": "\"Explosive beat\". Obtained from combining the first two formulas",
+			"codeOriginal": "(t>>4)*(t>>3)|t>>(t&4096?3:2)",
+			"starred": 1
+		}, {
+			"description": "\"M-m-multiple explosion beat\"",
+			"codeOriginal": "(t>>4)*(t>>2)|t>>(t>>12)%4"
+		}, {
+			"description": "\"Diesel engine\"",
+			"codeOriginal": "(t>>5)*(t>>5)|t>>2"
+		}]
+	}, {
+		"description": "\"Robocop\". Cool beat discovered by experimenting with [<code>(t>>2)*(t&16)|t>>2</code>]",
+		"children": [{
+			"description": "Very cool sound with biting blows",
+			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
+			"starred": 1
+		}, {
+			"description": "Lower bass",
+			"codeOriginal": "(t>>3)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2"
+		}, {
+			"description": "Slower tempo",
+			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&24))|t>>3"
+		}]
+	}, {
+		"description": "\"Toy phone\". Interesting formulas, sounds similar to children's toys",
+		"children": [{
+			"description": "Someone is calling by phone",
+			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>10&18)"
+		}, {
+			"description": "Very funny voice :)",
+			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>12&18)",
+			"starred": 1
+		}, {
+			"description": "I hear the long mewing of a cat :)",
+			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)"
+		}]
+	}, {
+		"description": "\"Child swings\". Cool happy tune!",
+		"remixed": {
+			"description": "1) THE SWINGS",
+			"author": "Anonymous from russian imageboards",
+			"url": "http://abload.de/img/1405110021643uguil.jpg"
+		},
+		"codeOriginal": "t>>9&2*t&10*t|t>>5&6*t",
+		"starred": 2
+	}, {
+		"description": "\"Cat-girl\". Nya!",
+		"remixed": {
+			"description": "4) CAT-GIRL",
+			"author": "Anonymous from russian imageboards",
+			"url": "http://abload.de/img/1405110021643uguil.jpg"
+		},
+		"codeOriginal": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
+		"starred": 1
+	}, {
+		"description": "\"Trance beat\". Experiments with t>>N and ternary operations",
+		"remixed": {
+			"description": "11) THE HIT OF THE SEASON",
+			"author": "Anonymous from russian imageboards",
+			"url": "http://abload.de/img/1405110021643uguil.jpg"
+		},
+		"children": [{
+			"codeOriginal": "t>>(t%16?4:6)|t>>(t%128?10:4)"
+		}, {
+			"codeOriginal": "t>>(t%32?4:3)|(t%128?t>>3:t>>3|t>>9)"
+		}]
+	}, {
+		"description": "\"Brain burner\". RIP headphone users!",
+		"codeOriginal": "129*t%(t>>7)"
+	}, {
+		"description": "\"Psychedelica\". Experimenting with resonance",
+		"codeOriginal": "t^t%1001+t^t%1002"
+	}, {
+		"description": "\"Protoss engine\". Experimenting with resonance, a pretty hypnotic result",
+		"codeOriginal": "2*(-t%128|t%130)"
+	}, {
+		"description": "Harmonics",
+		"codeOriginal": "t<<2^t>>4^t<<4&t>>8|t<<1&-t>>4"
+	}, {
+		"description": "Bass beat + lead",
+		"codeOriginal": "15-t%(t&16384?26:29)&t>>4|t<<1&-t>>4"
+	}, {
+		"description": "Arabic beat",
+		"children": [{
+			"codeOriginal": "t%((t&-16|t>>10)&42)<<2|t>>4",
+			"starred": 1
+		}, {
+			"description": "Allahu akbar!",
+			"codeOriginal": "t%((t&-16|t>>11)&42)<<2|t>>4"
+		}]
+	}, {
+		"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
+		"children": [{
+			"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
+		}, {
+			"description": "And just add |t>>2... The tune became cleaner",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)|t>>2"
+		}, {
+			"description": "Replacing 3&t>>14 with 2&t>>14 changes the period and the second tone",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>2"
+		}, {
+			"description": "\"Boss level\". Slow down |t>>2 rhythm to |t>>3... Sounds dangerous!",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
+			"starred": 1
+		}, {
+			"description": "By playing with the \"Boss level\" I made a different percussion",
+			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
+		}, {
+			"description": "\"Boss level #2\". |t>>4 rhythm sounds cool!",
+			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
+		}, {
+			"description": " "
+		}, {
+			"description": "Replacing (1+(1&t>>12)) with 3+(1&t>>8) adds an awesome harmonics",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
+		}, {
+			"description": "Coefficients 4-/3-/2+/3+ can slightly change them",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>4"
+		}, {
+			"description": "We can use a ternary operation for more complicated beat",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>(t&4096?3:4)"
+		}, {
+			"description": "\"Aliens on approach\". Slow down the explosions to 3&t>>9, get a heavy chiptune beat",
+			"codeOriginal": "t*(t&16384?6:5)*(3-(1&t>>8))>>(3&t>>9)|t>>4",
+			"starred": 1
+		}, {
+			"description": "\"Aliens are close\". t>>5 rhythm",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>9)|t>>5",
+			"starred": 1
+		}, {
+			"description": "\"Aliens are here\". t>>6 rhythm - SUPER POWERFUL ECHOES",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
+			"starred": 2
+		}, {
+			"description": "Inverted explosions give us mysterious sounds",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
+		}, {
+			"description": " "
+		}, {
+			"description": "\"Aliens attack\". Complicated (t|t*3)>>5 rhythm with explosion drums. Cool!",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
+			"starred": 1
+		}, {
+			"description": "\"Aliens encounter\". Making a ternary rhythm gives an EXTRA HARD BEAT!",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>(t&4096?3:4)",
+			"starred": 2
+		}, {
+			"description": "Funny inverted sounds :D",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
+		}, {
+			"description": " "
+		}, {
+			"description": "\"Prepare to fight\". Long period, sound is changing from low to high",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
+			"starred": 1
+		}, {
+			"description": "\"Prepare to fight #2\". Previous formula with doubled freqency bass",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
+			"starred": 1
+		}, {
+			"description": "<br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound.<br>This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)"
+		}, {
+			"description": "\"Aliens encounter + drums\". Impressive sound!",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
+			"starred": 2
+		}, {
+			"description": "\"Prepare to fight #2 + drums\"",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
+			"starred": 2
+		}, {
+			"description": "<br>Finally you can use complex ternary operators to create more complex drums:"
+		}, {
+			"description": "\"Ready to fight?\". Cool for a fighting game :)",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
+			"starred": 2
+		}, {
+			"description": "\"Hard level\". My favorite!",
+			"codeOriginal": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
+			"starred": 2
+		}, {
+			"description": "<br>Fantastic! Let's continue our experiments:"
+		}, {
+			"description": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
+			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
+		}, {
+			"description": "\"Another level\". Adding a noise beat by using ternary operation",
+			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>(t&2048?4:10)))>>(3&t>>8)|t>>2",
+			"starred": 1
+		}, {
+			"description": "\"Happy level\". Previous formula with slightly changed coefficitnts",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>(t&2048?4:9)))>>(3&t>>8)|t>>2"
+		}, {
+			"description": "\"Happy level #2\". Inverted 3&-t>>8 gives a more happy tune :)",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>9))>>(3&-t>>8)|t>>4"
+		}, {
+			"description": "\"Happy level #3\". We can get an awesome harmonics with 3&-t>>9",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&-t>>9))>>(3&t>>8)|t>>4",
+			"starred": 1
+		}, {
+			"description": "\"Awesome level\". We can get a cool cartoon-game melody!",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
+			"starred": 2
+		}, {
+			"description": "Slower rhythm...",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>3",
+			"starred": 1
+		}, {
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(2&t>>9)|t>>3"
+		}, {
+			"description": "\"Awesome level #2\". The next awesome level!",
+			"codeOriginal": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
+			"starred": 2
+		}, {
+			"description": " "
+		}, {
+			"description": "\"Alien dungeon\". So sinister.. t>>6 gives a fading effect",
+			"codeOriginal": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|t>>6",
+			"starred": 1
+		}, {
+			"description": "\"Alien dungeon\" with a complicated rhytm (t|t*3)>>5",
+			"codeOriginal": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
+		}, {
+			"description": "Previous with a slightly different tune",
+			"codeOriginal": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5",
+			"starred": 1
+		}, {
+			"description": "Other \"Boss level\" variation",
+			"codeOriginal": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
+		}, {
+			"description": "Previous tune with a ternary magic",
+			"codeOriginal": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
+			"starred": 1
+		}]
+	}, {
+		"description": "The time is running out!",
+		"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
+		"starred": 2,
+		"children": [{
+			"date": "2021-10-17",
+			"sampleRate": 11025,
+			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3"
+		}, {
+			"description": "More complicated drums",
+			"date": "2021-10-17",
+			"sampleRate": 11025,
+			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>3"
+		}, {
+			"description": "Remix of RealZynx92's remix",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remixed": {
+				"description": "remix of \"The time is running out!\"",
+				"author": "RealZynx92",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/"
+			},
+			"date": "2021-10-25",
+			"sampleRate": 11025,
+			"codeOriginal": "((.5*t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t&4095)&128-64)+(random()*(((-t>>(t&4096?6:5))%64)+64))"
+		}]
+	}, {
+		"description": "Death chase",
+		"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
+		"date": "2021-10-28",
+		"starred": 2,
+		"children": [{
+			"description": "As a basis is taken modified <a href='https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/' target='_blank'>\"The time is running out!\"</a> and <a href='https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/' target='_blank'>\"remix by RealZynx92\"</a> songs. Used the idea of selecting notes and rhythm through an array.",
+			"sampleRate": 44100,
+			"codeOriginal": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>([5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32]))&127)+(3E5/(t&4095)&128-64)+(random()*(((-t>>([6,5,4,5,5,5,4,5][(t>>12)%8]))%64)+64))"
+		}, {
+			"description": "\"90's eurodance\" variation",
+			"sampleRate": 44100,
+			"codeOriginal": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>([5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%16]))&127)+(3E5/(t&4095)&128-64)+(random()*(((-t>>([6,5,5,5,4,5,5,5][(t>>12)%8]))%64)+64))"
+		}]
+	}, {
+		"description": "Neurofunk",
+		"url": "https://www.reddit.com/r/bytebeat/comments/s0laz2/neurofunk/",
+		"date": "2022-01-10",
+		"starred": 1,
+		"children": [{
+			"codeOriginal": "t*((t&4096?t%65536<59392?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2)"
+		}, {
+			"description": "Fist punch version",
+			"codeOriginal": "t*((t&4096?t%65536<59392?7:t>>6:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?4:3:2)"
+		}]
+	}, {
+		"children": [{
+			"description": "Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor... "
+		}, {
+			"description": "Frozen Planet",
+			"url": "https://battleofthebits.org/arena/Entry/Frozen+Planet/50767/",
+			"date": "2022-01-11",
+			"sampleRate": 44100,
+			"file": "SthephanShi - Frozen Planet.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}]
+	}
+]

@@ -296,6 +296,7 @@ code {
 }
 
 .library-header {
+	display: flex;
 	padding: 4px 5px;
 	border-radius: 3px;
 	background-image: linear-gradient(to bottom, #202c46, #0b0d17);
@@ -306,6 +307,22 @@ code {
 .library-header:hover {
 	background-image: linear-gradient(to bottom, #32426c, #151b2b);
 	color: #94c7ff;
+}
+
+.loading-error {
+	text-align: center;
+	color: #f92672;
+}
+
+@keyframes wait-anim {
+	to { transform: rotate(360deg); }
+}
+
+.loading-wait {
+	width: 16px;
+	height: 16px;
+	margin-left: 6px;
+	animation: wait-anim 1s linear infinite;
 }
 
 /* ==[ Controls ] ========================================================================================= */

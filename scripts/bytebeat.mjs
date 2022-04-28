@@ -21,6 +21,8 @@ globalThis.bytebeat = new class {
 		this.audioRecorder = null;
 		this.audioWorkletNode = null;
 		this.byteSample = 0;
+		this.cachedElemParent = null;
+		this.cachedTextNode = null;
 		this.canvasCtx = null;
 		this.canvasElem = null;
 		this.canvasHeight = 256;
@@ -65,15 +67,7 @@ globalThis.bytebeat = new class {
 		return this.sampleRate >> this.settings.drawScale < 3950;
 	}
 	animationFrame() {
-		this.drawGraphics(this.byteSample);
-		if(this.isPlaying) {
-			this.requestAnimationFrame();
-		}
-	}
-	clearCanvas() {
-		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-	}
-	drawGraphics(endTime) {
+		const endTime = this.byteSample;
 		if(!isFinite(endTime)) {
 			this.resetTime();
 			return;
@@ -163,12 +157,143 @@ globalThis.bytebeat = new class {
 		}
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+		if(this.isPlaying) {
+			this.requestAnimationFrame();
+		}
+	}
+	clearCanvas() {
+		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+	}
+	createEntryElem({
+		author,
+		children,
+		codeMinified,
+		codeOriginal,
+		date,
+		description,
+		file,
+		fileFormatted,
+		fileMinified,
+		fileOriginal,
+		mode,
+		remixed,
+		sampleRate,
+		starred,
+		url
+	}) {
+		let entry = '';
+		if(description) {
+			entry += !url ? description : `<a href="${ url }" target="_blank">${ description }</a>`;
+		}
+		if(author) {
+			let authorsList = '';
+			const authorsArr = Array.isArray(author) ? author : [author];
+			for(let i = 0, len = authorsArr.length; i < len; ++i) {
+				const authorElem = authorsArr[i];
+				if(typeof authorElem === 'string') {
+					authorsList += description || !url ? authorElem :
+						`<a href="${ url }" target="_blank">${ authorElem }</a>`;
+				} else {
+					authorsList += `<a href="${ authorElem[1] }" target="_blank">${ authorElem[0] }</a>`;
+				}
+				if(i < len - 1) {
+					authorsList += ', ';
+				}
+			}
+			entry += `<span>${ description ? ` (by ${ authorsList })` : `by ${ authorsList }` }</span>`;
+		}
+		if(url && !description && !author) {
+			entry += `(<a href="${ url }" target="_blank">source</a>)`;
+		}
+		if(remixed) {
+			entry += ` (remix of ${ remixed.url ?
+				`<a href="${ remixed.url }" target="_blank">${ remixed.description || '(source)' }</a>` :
+				`"${ remixed.description }"` }${ remixed.author ? ' by ' + remixed.author : '' })`;
+		}
+		if(date) {
+			entry += ` <span class="code-date">(${ date })</span>`;
+		}
+		if(sampleRate) {
+			entry += ` <span class="code-samplerate">${ (sampleRate / 1000) | 0 }kHz</span>`;
+		}
+		if(mode) {
+			entry += ` <span class="code-samplerate">${ mode }</span>`;
+		}
+		const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
+		if(file) {
+			if(fileFormatted) {
+				entry += `<a class="code-button code-load code-load-formatted" data-songdata='${
+					songData }' data-code-file="${ file
+				}" title="Click to load and play the formatted code">► formatted</a>`;
+			}
+			if(fileOriginal) {
+				entry += `<a class="code-button code-load code-load-original" data-songdata='${
+					songData }' data-code-file="${ file
+				}" title="Click to load and play the original code">► original</a>`;
+			}
+			if(fileMinified) {
+				entry += `<a class="code-button code-load code-load-minified" data-songdata='${
+					songData }' data-code-file="${ file
+				}" title="Click to load and play the minified code">► minified</a>`;
+			}
+		}
+		if(codeOriginal) {
+			if(Array.isArray(codeOriginal)) {
+				codeOriginal = codeOriginal.join('\r\n');
+			}
+			const btn = codeMinified ? '<a class="code-button code-toggle code-toggle-minified"' +
+				' title="Original version shown. Click to view the minified version.">original</a>' : '';
+			entry += `<div class="code-original ${ codeMinified ? 'disabled' : '' }">
+				<code data-songdata='${ songData }'>${ this.escapeHTML(codeOriginal) }</code>
+				<span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>${ btn }
+			</div>`;
+		}
+		if(codeMinified) {
+			const btn = '<a class="code-button code-toggle code-toggle-original"' +
+				` title="Minified version shown. ${ codeOriginal ? 'Click to view the original version."' :
+				'No original version." disabled="1"' }>minified</a>`;
+			entry += `<div class="code-minified">
+				<code data-songdata='${ songData }'>${ this.escapeHTML(codeMinified) }</code>
+				<span class="code-length" title="Size in characters">${ codeMinified.length }c</span>${ btn }
+			</div>`;
+		}
+		if(children) {
+			let childrenStr = '';
+			for(let i = 0, len = children.length; i < len; ++i) {
+				childrenStr += this.createEntryElem(children[i]);
+			}
+			entry += `<div class="entry-children">${ childrenStr }</div>`;
+		}
+		return `<div class="${ codeOriginal || codeMinified || file || children ? 'entry' : 'entry-text' }${
+			starred ? ' ' + ['star-white', 'star-yellow'][starred - 1] : '' }">${ entry }</div>`;
+	}
+	escapeHTML(text) {
+		this.cachedTextNode.nodeValue = text;
+		return this.cachedElemParent.innerHTML;
 	}
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
 	}
 	getX(t) {
 		return t / (1 << this.settings.drawScale);
+	}
+	handleEvent({ target: el, type }) {
+		if(type === 'click') {
+			if(el.tagName === 'CODE') {
+				this.loadCode(Object.assign({ code: el.innerText },
+					el.hasAttribute('data-songdata') ? JSON.parse(el.dataset.songdata) : {}));
+			} else if(el.classList.contains('code-load')) {
+				this.onclickCodeLoadButton(el);
+			} else if(el.classList.contains('code-toggle') && !el.getAttribute('disabled')) {
+				this.onclickCodeToggleButton(el);
+			} else if(el.classList.contains('library-header')) {
+				this.onclickLibraryHeader(el);
+			}
+			return;
+		}
+		if(type === 'mouseover' && el.tagName === 'CODE') {
+			el.title = 'Click to play this code';
+		}
 	}
 	async init() {
 		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
@@ -187,12 +312,9 @@ globalThis.bytebeat = new class {
 		}
 		this.initAfterDom();
 	}
-	async initAfterDom() {
-		this.initControls();
-		this.initSettings();
-		this.initLibraryEvents();
+	initAfterDom() {
+		this.initElements();
 		this.parseUrl();
-		loadScript('./scripts/playlist.mjs');
 		loadScript('./scripts/codemirror.min.mjs');
 	}
 	async initAudioContext() {
@@ -220,23 +342,41 @@ globalThis.bytebeat = new class {
 		};
 		this.audioGain.connect(mediaDest);
 	}
-	initControls() {
+	initElements() {
+		// Containers
+		this.containerFixed = document.getElementById('container-fixed');
+		this.containerScroll = document.getElementById('container-scroll');
+		this.containerScroll.addEventListener('click', this, true);
+		this.containerScroll.addEventListener('mouseover', this, true);
+		this.onresizeWindow();
+		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
+		this.cachedElemParent = document.createElement('div');
+		this.cachedTextNode = document.createTextNode('');
+		this.cachedElemParent.appendChild(this.cachedTextNode);
+
+		// Volume
+		this.controlVolume = document.getElementById('control-volume');
+		this.setVolume(this.controlVolume);
+
+		// Canvas
 		this.canvasElem = document.getElementById('canvas-main');
 		this.canvasCtx = this.canvasElem.getContext('2d');
 		this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
-		this.containerFixed = document.getElementById('container-fixed');
-		this.containerScroll = document.getElementById('container-scroll');
-		this.controlCounter = document.getElementById('control-counter');
-		this.controlCounterUnits = document.getElementById('control-counter-units');
+		this.timeCursor = document.getElementById('canvas-timecursor');
+
+		// Controls
 		this.controlDrawMode = document.getElementById('control-drawmode');
+		this.controlDrawMode.value = this.settings.drawMode;
 		this.controlMode = document.getElementById('control-mode');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.controlTogglePlay = document.getElementById('control-toggleplay');
-		this.controlVolume = document.getElementById('control-volume');
-		this.errorElem = document.getElementById('error');
-		this.editorElem = document.getElementById('editor-default');
-		this.timeCursor = document.getElementById('canvas-timecursor');
+		this.setScale(0);
+
+		// Time counter
+		this.controlCounter = document.getElementById('control-counter');
+		this.controlCounterUnits = document.getElementById('control-counter-units');
+		this.setCounterUnits();
 		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
 			if(e.key === 'Enter') {
 				this.controlCounter.blur();
@@ -248,6 +388,10 @@ globalThis.bytebeat = new class {
 			this.setByteSample(byteSample);
 			this.sendData({ byteSample });
 		};
+
+		// Editor
+		this.errorElem = document.getElementById('error');
+		this.editorElem = document.getElementById('editor-default');
 		this.editorElem.oninput = () => this.setFunction();
 		this.editorElem.onkeydown = e => {
 			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
@@ -259,55 +403,6 @@ globalThis.bytebeat = new class {
 				this.setFunction();
 			}
 		};
-		this.setVolume(this.controlVolume);
-		this.onWindowResize();
-		document.defaultView.addEventListener('resize', () => this.onWindowResize());
-	}
-	initLibraryEvents() {
-		document.body.querySelectorAll('.library-header').forEach(el =>
-			(el.onclick = () => el.nextElementSibling.classList.toggle('disabled')));
-		const libraryElem = document.getElementById('container-scroll');
-		libraryElem.onclick = e => {
-			const el = e.target;
-			if(el.tagName === 'CODE') {
-				this.loadCode(Object.assign({ code: el.innerText },
-					el.hasAttribute('data-songdata') ? JSON.parse(el.dataset.songdata) : {}));
-			} else if(el.classList.contains('code-load')) {
-				const xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = () => {
-					if(xhr.readyState === 4 && xhr.status === 200) {
-						this.loadCode(Object.assign(JSON.parse(el.dataset.songdata),
-							{ code: xhr.responseText }));
-					}
-				};
-				xhr.open('GET', `library/${
-					el.classList.contains('code-load-formatted') ? 'formatted' :
-					el.classList.contains('code-load-minified') ? 'minified' :
-					el.classList.contains('code-load-original') ? 'original' : ''
-				}/${ el.dataset.codeFile }`, true);
-				xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-				xhr.send(null);
-			} else if(el.classList.contains('code-toggle') && !el.getAttribute('disabled')) {
-				const parentEl = el.parentNode;
-				parentEl.classList.toggle('disabled');
-				if(el.classList.contains('code-toggle-original')) {
-					parentEl.previousElementSibling.classList.toggle('disabled');
-				} else if(el.classList.contains('code-toggle-minified')) {
-					parentEl.nextElementSibling.classList.toggle('disabled');
-				}
-			}
-		};
-		libraryElem.onmouseover = function(e) {
-			const el = e.target;
-			if(el.tagName === 'CODE') {
-				el.title = 'Click to play this code';
-			}
-		};
-	}
-	initSettings() {
-		this.setScale(0);
-		this.setCounterUnits();
-		this.controlDrawMode.value = this.settings.drawMode;
 	}
 	loadCode({ code, sampleRate, mode }, isPlay = true) {
 		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
@@ -337,7 +432,68 @@ globalThis.bytebeat = new class {
 	mod(a, b) {
 		return ((a % b) + b) % b;
 	}
-	onWindowResize() {
+	onclickCodeLoadButton(el) {
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = () => {
+			if(xhr.readyState === 4 && xhr.status === 200) {
+				this.loadCode(Object.assign(JSON.parse(el.dataset.songdata),
+					{ code: xhr.responseText }));
+			}
+		};
+		xhr.open('GET', `library/${
+			el.classList.contains('code-load-formatted') ? 'formatted' :
+			el.classList.contains('code-load-minified') ? 'minified' :
+			el.classList.contains('code-load-original') ? 'original' : ''
+		}/${ el.dataset.codeFile }`, true);
+		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+		xhr.send(null);
+	}
+	onclickCodeToggleButton(el) {
+		const parentEl = el.parentNode;
+		parentEl.classList.toggle('disabled');
+		if(el.classList.contains('code-toggle-original')) {
+			parentEl.previousElementSibling.classList.toggle('disabled');
+		} else if(el.classList.contains('code-toggle-minified')) {
+			parentEl.nextElementSibling.classList.toggle('disabled');
+		}
+	}
+	onclickLibraryHeader(el) {
+		const containerEl = el.nextElementSibling;
+		containerEl.classList.toggle('disabled');
+		const state = containerEl.classList;
+		if(state.contains('loaded') || state.contains('disabled')) {
+			return;
+		}
+		state.add('loaded');
+		const waitEl = el.querySelector('.loading-wait');
+		waitEl.classList.remove('disabled');
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState !== 4) {
+				return;
+			}
+			waitEl.classList.add('disabled');
+			const { status } = xhr;
+			if(status !== 200 && status !== 304) {
+				state.remove('loaded');
+				containerEl.innerHTML = `<div class="loading-error">Unable to load the library: ${
+					status } ${ xhr.statusText }</div>`;
+				return;
+			}
+			containerEl.innerHTML = '';
+			let libraryHtml = '';
+			const libraryArr = JSON.parse(xhr.responseText);
+			for(let i = 0, len = libraryArr.length; i < len; ++i) {
+				libraryHtml += `<div class="entry-top">${
+					this.createEntryElem(libraryArr[i]) }</div>`;
+			}
+			containerEl.insertAdjacentHTML('beforeend', libraryHtml);
+		};
+		xhr.open('GET', `./library/${ containerEl.id.replace('library-', '') }.json`, true);
+		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+		xhr.send(null);
+	}
+	onresizeWindow() {
 		const isSmallWindow = window.innerWidth <= 768;
 		if(this.canvasWidth === 1024) {
 			if(isSmallWindow) {
