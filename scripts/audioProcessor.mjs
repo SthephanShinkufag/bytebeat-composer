@@ -5,7 +5,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSample = 0;
 		this.errorDisplayed = true;
 		this.func = () => 0;
-		this.getByteValue = null;
+		this.getByteValue = funcValue => {
+			this.lastByteValue = NaN;
+			this.lastValue = 0;
+		};
 		this.isPlaying = false;
 		this.lastByteValue = NaN;
 		this.lastFlooredTime = -1;

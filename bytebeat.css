@@ -127,6 +127,7 @@ button[name="close"] {
 }
 
 #editor-container {
+	width: calc(100% - 4px);
 	height: 200px;
 	border: 2px solid #bac2cc;
 	resize: vertical;

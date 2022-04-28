@@ -14,6 +14,7 @@ const loadScript = src => new Promise(resolve => {
 	}
 });
 
+
 globalThis.bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
@@ -336,7 +337,7 @@ globalThis.bytebeat = new class {
 			const files = ['track.webm', 'track.ogg'];
 			while((file = files.pop()) && !MediaRecorder.isTypeSupported(type = types.pop())) {
 				if(types.length === 0) {
-					console.error('Saving is not supported in this browser!');
+					console.error('Recording is not supported in this browser!');
 					break;
 				}
 			}
@@ -350,8 +351,6 @@ globalThis.bytebeat = new class {
 		this.containerScroll = document.getElementById('container-scroll');
 		this.containerScroll.addEventListener('click', this, true);
 		this.containerScroll.addEventListener('mouseover', this, true);
-		this.onresizeWindow();
-		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
 		this.cachedElemParent = document.createElement('div');
 		this.cachedTextNode = document.createTextNode('');
 		this.cachedElemParent.appendChild(this.cachedTextNode);
@@ -362,6 +361,8 @@ globalThis.bytebeat = new class {
 
 		// Canvas
 		this.canvasElem = document.getElementById('canvas-main');
+		this.onresizeWindow();
+		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
 		this.canvasCtx = this.canvasElem.getContext('2d');
 		this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
 		this.timeCursor = document.getElementById('canvas-timecursor');
@@ -508,34 +509,33 @@ globalThis.bytebeat = new class {
 			this.updateUrl();
 			({ hash } = window.location);
 		}
-		if(!hash.startsWith('#v3b64')) {
-			console.error('Unrecognized url data');
-			return;
-		}
-		const hashString = atob(hash.substr(6));
-		const dataBuffer = new Uint8Array(hashString.length);
-		for(const i in hashString) {
-			if(Object.prototype.hasOwnProperty.call(hashString, i)) {
-				dataBuffer[i] = hashString.charCodeAt(i);
+		let songData;
+		if(hash.startsWith('#v3b64')) {
+			const hashString = atob(hash.substr(6));
+			const dataBuffer = new Uint8Array(hashString.length);
+			for(const i in hashString) {
+				if(Object.prototype.hasOwnProperty.call(hashString, i)) {
+					dataBuffer[i] = hashString.charCodeAt(i);
+				}
 			}
-		}
-		let songData = inflateRaw(dataBuffer, { to: 'string' });
-		if(!songData.startsWith('{')) { // XXX: old format
-			songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
-		} else {
 			try {
-				songData = JSON.parse(songData);
-				if(songData.formula) { // XXX: old format
-					songData.code = songData.formula;
+				songData = inflateRaw(dataBuffer, { to: 'string' });
+				if(!songData.startsWith('{')) { // XXX: old format
+					songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
+				} else {
+					songData = JSON.parse(songData);
+					if(songData.formula) { // XXX: old format
+						songData.code = songData.formula;
+					}
 				}
 			} catch(err) {
-				console.error('Couldn\'t load data from url:', err);
-				songData = null;
+				console.error(`Couldn't load data from url: ${ err }`);
 			}
+		} else {
+			console.error(`Couldn't load data from url: unrecognized url data`);
 		}
-		if(songData !== null) {
-			this.loadCode(songData, false);
-		}
+		this.loadCode(songData ||
+			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
 	rec() {
 		if(this.audioCtx && !this.isRecording) {
