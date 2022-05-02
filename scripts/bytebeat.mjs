@@ -14,7 +14,6 @@ const loadScript = src => new Promise(resolve => {
 	}
 });
 
-
 globalThis.bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
@@ -448,6 +447,7 @@ globalThis.bytebeat = new class {
 			el.classList.contains('code-load-minified') ? 'minified' :
 			el.classList.contains('code-load-original') ? 'original' : ''
 		}/${ el.dataset.codeFile }`, true);
+		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 		xhr.send(null);
 	}
 	onclickCodeToggleButton(el) {
@@ -491,6 +491,7 @@ globalThis.bytebeat = new class {
 			containerEl.insertAdjacentHTML('beforeend', libraryHTML);
 		};
 		xhr.open('GET', `./library/${ containerEl.id.replace('library-', '') }.json`, true);
+		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 		xhr.send(null);
 	}
 	onresizeWindow() {

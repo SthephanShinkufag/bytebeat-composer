@@ -294,7 +294,7 @@
 		}]
 	}, {
 		"children": [{
-			"description": "Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor... "
+			"description": "\"Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor...\""
 		}, {
 			"description": "Frozen Planet",
 			"url": "https://battleofthebits.org/arena/Entry/Frozen+Planet/50767/",
@@ -302,6 +302,19 @@
 			"sampleRate": 44100,
 			"file": "SthephanShi - Frozen Planet.js",
 			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}]
+	}, {
+		"children": [{
+			"description": "\"An endless world of snowy expanses, icebergs, and blue waters...\"<br>The instruments are the same as in \"Frozen Planet\", but the composition is based on playing with coefficients of square-wave arpeggiator and a sine modifier. A notes array is used to generate different sounds in different iterations."
+		}, {
+			"description": "Antarctica",
+			"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/",
+			"date": "2022-05-01",
+			"sampleRate": 44100,
+			"file": "SthephanShi - Antarctica.js",
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
