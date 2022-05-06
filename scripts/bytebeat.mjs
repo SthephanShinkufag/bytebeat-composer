@@ -223,48 +223,50 @@ globalThis.bytebeat = new class {
 			entry += ` <span class="code-date">(${ date })</span>`;
 		}
 		if(sampleRate) {
-			entry += ` <span class="code-samplerate">${ (sampleRate / 1000) | 0 }kHz</span>`;
+			entry += ` <span class="code-samplerate">${ sampleRate }Hz</span>`;
 		}
 		if(mode) {
 			entry += ` <span class="code-samplerate">${ mode }</span>`;
 		}
 		const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
+		if(codeMinified) {
+			if(codeOriginal) {
+				entry += ` <span class="code-length" title="Size in characters">${
+					codeMinified.length }c</span><button class="code-button code-toggle"` +
+					' title="Minified version shown. Click to view the original version.">+</button>';
+			}
+		} else if(codeOriginal) {
+			entry += ` <span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>`;
+		}
 		if(file) {
 			if(fileFormatted) {
-				entry += `<a class="code-button code-load code-load-formatted" data-songdata='${
+				entry += `<button class="code-button code-load code-load-formatted" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the formatted code">► formatted</a>`;
+				}" title="Click to load and play the formatted code">► formatted</button>`;
 			}
 			if(fileOriginal) {
-				entry += `<a class="code-button code-load code-load-original" data-songdata='${
+				entry += `<button class="code-button code-load code-load-original" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the original code">► original</a>`;
+				}" title="Click to load and play the original code">► original</button>`;
 			}
 			if(fileMinified) {
-				entry += `<a class="code-button code-load code-load-minified" data-songdata='${
+				entry += `<button class="code-button code-load code-load-minified" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the minified code">► minified</a>`;
+				}" title="Click to load and play the minified code">► minified</button>`;
 			}
 		}
 		if(codeOriginal) {
 			if(Array.isArray(codeOriginal)) {
 				codeOriginal = codeOriginal.join('\r\n');
 			}
-			const btn = codeMinified ? '<a class="code-button code-toggle code-toggle-minified"' +
-				' title="Original version shown. Click to view the minified version.">original</a>' : '';
-			entry += `<div class="code-original ${ codeMinified ? 'disabled' : '' }">
-				<code data-songdata='${ songData }'>${ this.escapeHTML(codeOriginal) }</code>
-				<span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>${ btn }
-			</div>`;
+			entry += `<br><button class="code-text code-text-original${
+				codeMinified ? ' disabled' : '' }" data-songdata='${
+				songData }' code-length="${ codeOriginal.length }">${ this.escapeHTML(codeOriginal) }</a>`;
 		}
 		if(codeMinified) {
-			const btn = '<a class="code-button code-toggle code-toggle-original"' +
-				` title="Minified version shown. ${ codeOriginal ? 'Click to view the original version."' :
-				'No original version." disabled="1"' }>minified</a>`;
-			entry += `<div class="code-minified">
-				<code data-songdata='${ songData }'>${ this.escapeHTML(codeMinified) }</code>
-				<span class="code-length" title="Size in characters">${ codeMinified.length }c</span>${ btn }
-			</div>`;
+			entry += `${ codeOriginal ? '' : '<br>' }<button class="code-text code-text-minified"` +
+				` data-songdata='${ songData }' code-length="${ codeMinified.length }">${
+					this.escapeHTML(codeMinified) }</a>`;
 		}
 		if(children) {
 			let childrenStr = '';
@@ -281,7 +283,7 @@ globalThis.bytebeat = new class {
 	}
 	handleEvent({ target: el, type }) {
 		if(type === 'click') {
-			if(el.tagName === 'CODE') {
+			if(el.classList.contains('code-text')) {
 				this.loadCode(Object.assign({ code: el.innerText },
 					el.hasAttribute('data-songdata') ? JSON.parse(el.dataset.songdata) : {}));
 			} else if(el.classList.contains('code-load')) {
@@ -290,10 +292,12 @@ globalThis.bytebeat = new class {
 				this.onclickCodeToggleButton(el);
 			} else if(el.classList.contains('library-header')) {
 				this.onclickLibraryHeader(el);
+			} else if(el.parentNode.classList.contains('library-header')) {
+				this.onclickLibraryHeader(el.parentNode);
 			}
 			return;
 		}
-		if(type === 'mouseover' && el.tagName === 'CODE') {
+		if(type === 'mouseover' && el.classList.contains('code-text')) {
 			el.title = 'Click to play this code';
 		}
 	}
@@ -348,8 +352,8 @@ globalThis.bytebeat = new class {
 		// Containers
 		this.containerFixed = document.getElementById('container-fixed');
 		this.containerScroll = document.getElementById('container-scroll');
-		this.containerScroll.addEventListener('click', this, true);
-		this.containerScroll.addEventListener('mouseover', this, true);
+		this.containerScroll.addEventListener('click', this);
+		this.containerScroll.addEventListener('mouseover', this);
 		this.cachedElemParent = document.createElement('div');
 		this.cachedTextNode = document.createTextNode('');
 		this.cachedElemParent.appendChild(this.cachedTextNode);
@@ -452,18 +456,21 @@ globalThis.bytebeat = new class {
 	}
 	onclickCodeToggleButton(el) {
 		const parentEl = el.parentNode;
-		parentEl.classList.toggle('disabled');
-		if(el.classList.contains('code-toggle-original')) {
-			parentEl.previousElementSibling.classList.toggle('disabled');
-		} else if(el.classList.contains('code-toggle-minified')) {
-			parentEl.nextElementSibling.classList.toggle('disabled');
-		}
+		const origEl = parentEl.querySelector('.code-text-original');
+		const minEl = parentEl.querySelector('.code-text-minified');
+		origEl?.classList.toggle('disabled');
+		minEl?.classList.toggle('disabled');
+		const isMinified = el.textContent === '–';
+		parentEl.querySelector('.code-length').textContent =
+			`${ (isMinified ? minEl : origEl).getAttribute('code-length') }c`;
+		el.title = isMinified ? 'Minified version shown. Click to view the original version.' :
+			'Original version shown. Click to view the minified version.';
+		el.textContent = isMinified ? '+' : '–';
 	}
 	onclickLibraryHeader(el) {
 		const containerEl = el.nextElementSibling;
-		containerEl.classList.toggle('disabled');
 		const state = containerEl.classList;
-		if(state.contains('loaded') || state.contains('disabled')) {
+		if(state.contains('loaded') || el.parentNode.open) {
 			return;
 		}
 		state.add('loaded');
@@ -533,7 +540,7 @@ globalThis.bytebeat = new class {
 				console.error(`Couldn't load data from url: ${ err }`);
 			}
 		} else {
-			console.error(`Couldn't load data from url: unrecognized url data`);
+			console.error('Couldn\'t load data from url: unrecognized url data');
 		}
 		this.loadCode(songData ||
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);

@@ -453,7 +453,7 @@
 			"codeOriginal": "c='charCodeAt',l=9+!(t&(1<<16)),c[c]((t>>c[c](((t>>9)%l&t>>12)%l))%l)+(t&(1<<12))*.9",
 			"codeMinified": "c='charCodeAt',l=9+!(t&65536),c[c]((t>>c[c](((t>>9)%l&t>>12)%l))%l)+(t&4096)*.9"
 		}, {
-			"description": "Experiment with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>] and <a href='http://www.pouet.net/topic.php?which=8357&page=4#c388494' target='_blank'>\"Street Surfer\"</a> [<code>t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t)</code>]",
+			"description": "Experiment with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class=\"code-text\">t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button> and <a href='http://www.pouet.net/topic.php?which=8357&page=4#c388494' target='_blank'>\"Street Surfer\"</a> <button class=\"code-text\">t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t)</button>",
 			"date": "2021-10-07",
 			"children": [{
 				"description": "Isolated and edited drums",
@@ -1351,6 +1351,3 @@
 		}]
 	}
 ]
-
-
-

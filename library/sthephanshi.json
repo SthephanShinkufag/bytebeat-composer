@@ -1,6 +1,6 @@
 [
 	{
-		"description": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" [<code>(t>>2)*(t>>5)|t>>5</code>]",
+		"description": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" <button class=\"code-text\">(t>>2)*(t>>5)|t>>5</button>",
 		"children": [{
 			"codeOriginal": "(t>>4)*(t>>3)|t>>2"
 		}, {
@@ -19,7 +19,7 @@
 			"codeOriginal": "(t>>5)*(t>>5)|t>>2"
 		}]
 	}, {
-		"description": "\"Robocop\". Cool beat discovered by experimenting with [<code>(t>>2)*(t&16)|t>>2</code>]",
+		"description": "\"Robocop\". Cool beat discovered by experimenting with <button class=\"code-text\">(t>>2)*(t&16)|t>>2</button>",
 		"children": [{
 			"description": "Very cool sound with biting blows",
 			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
@@ -99,7 +99,7 @@
 			"codeOriginal": "t%((t&-16|t>>11)&42)<<2|t>>4"
 		}]
 	}, {
-		"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> [<code>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</code>]<br>Allows to get different interesting chiptune sounds!<br>",
+		"description": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class=\"code-text\">t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button><br>Allows to get different interesting chiptune sounds!<br>",
 		"children": [{
 			"description": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"

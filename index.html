@@ -8,37 +8,37 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022042802">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022042802"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022050602">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022050602"></script>
 </head>
 <body>
-	<div id="content">
-		<div id="container-fixed">
+	<main id="content">
+		<section id="container-fixed">
 			<div id="editor-container">
 				<textarea  id="editor-default" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
 			</div>
 			<div class="controls">
-				<div id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</div>
+				<button id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</button>
 				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
-				<div id="control-toggleplay" class="control-button control-play" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying);">
+				<button id="control-toggleplay" class="control-button control-play" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying);">
 					<svg id="svg-control-play"><use xlink:href="#symbol-play"></use></svg>
 					<svg id="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
-				</div>
-				<div id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.stopPlay();">
+				</button>
+				<button id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.stopPlay();">
 					<svg><use xlink:href="#symbol-stop"></use></svg>
-				</div>
-				<div id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
+				</button>
+				<button id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
 					<svg><use xlink:href="#symbol-reset"></use></svg>
-				</div>
-				<div id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
+				</button>
+				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
 					<svg><use xlink:href="#symbol-rec"></use></svg>
-				</div>
-				<div id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1, this);">
+				</button>
+				<button id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1, this);">
 					<svg><use xlink:href="#symbol-scaledown"></use></svg>
-				</div>
-				<div id="control-scaleup" class="control-button" title="Zoom out the scope" onclick="bytebeat.setScale(1);">
+				</button>
+				<button id="control-scaleup" class="control-button" title="Zoom out the scope" onclick="bytebeat.setScale(1);">
 					<svg><use xlink:href="#symbol-scaleup"></use></svg>
-				</div>
+				</button>
 				<select id="control-drawmode" class="control-select" title="Drawing mode" onchange="bytebeat.setDrawMode();">
 					<option value="Points" selected>Points</option>
 					<option value="Waveform">Waveform</option>
@@ -56,9 +56,9 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
-				<div id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
+				<button id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
-				</div>
+				</button>
 				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
 			</div>
 			<div id="error"></div>
@@ -70,11 +70,11 @@
 					<svg id="svg-canvas-pause"><use xlink:href="#symbol-pause"></use></svg>
 				</div>
 			</div>
-		</div>
-		<div id="container-scroll">
-			<div class="library-content">
-				<div class="library-header toggle">[Info] &mdash; about bytebeat</div>
-				<div id="info" class="library-container entry-top disabled">
+		</section>
+		<section id="container-scroll">
+			<details class="library-content">
+				<summary class="library-header"><h1>[ Info ] &mdash; about bytebeat</h1></summary>
+				<article id="info" class="library-container entry-top">
 					Bytebeat music (or one-liner music) was invented in September 2011.
 					They're generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
 					It's simply a single-line formula that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
@@ -94,47 +94,49 @@
 					<br>
 					This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
 					Forked by SthephanShi aka Viraya.
-				</div>
-			</div>
-			<div class="library-content">
-				<div class="library-header toggle">
-					[Classic] &mdash; C compatible code with one variable (t)
+				</article>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>[ Classic ] &mdash; C compatible code with one variable (t)</h1>
 					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
-				</div>
-				<div id="library-classic" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div class="library-header toggle">
-					[JS code] &mdash; compact JavaScript code
+				</summary>
+				<div id="library-classic" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>[ Compact JS ] &mdash; compact JavaScript code</h1>
 					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
-				</div>
-				<div id="library-js-code" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div class="library-header toggle">
-					[JS big code] &mdash; big JavaScript code
+				</summary>
+				<div id="library-compact-js" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>[ Big JS ] &mdash; big JavaScript code</h1>
 					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
-				</div>
-				<div id="library-js-big-code" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div class="library-header toggle">
-					[Floatbeat] &mdash; assumes output is -1.0 to 1.0
+				</summary>
+				<div id="library-big-js" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>[ Floatbeat ] &mdash; assumes output is -1.0 to 1.0<h1>
 					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
-				</div>
-				<div id="library-floatbeat" class="library-container disabled"></div>
-			</div>
-			<div class="library-content">
-				<div class="library-header toggle">
-					[SthephanShi] &mdash; code SthephanShi created
+				</summary>
+				<div id="library-floatbeat" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>[ SthephanShi ] &mdash; code SthephanShi created</h1>
 					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
-				</div>
-				<div id="library-sthephanshi" class="library-container disabled"></div>
-			</div>
-			<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank">&gt;&gt; Discussion threads</a><br>
-			<a class="link" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">&gt;&gt; Github</a>
-		</div>
-	</div>
+				</summary>
+				<div id="library-sthephanshi" class="library-container"></div>
+			</details>
+			<footer>
+				<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank">&gt;&gt; Discussion threads</a><br>
+				<a class="link" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">&gt;&gt; Github</a>
+			</footer>
+		</section>
+	</main>
 
 	<!-- SVG BUTTONS -->
 	<div id="svg-icons" style="height: 0; width: 0; overflow: hidden;">
