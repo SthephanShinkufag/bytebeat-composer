@@ -1,5 +1,5 @@
 pi = 3.14159,
-SAMPLE_RATE = 8000, // lower this if there is lag wow
+SAMPLE_RATE = 4000, // lower this if there is lag wow
 BPM = 118,
 beat = BPM * (t / SAMPLE_RATE) / 60,
 tick = int(beat * 24) % 2016,

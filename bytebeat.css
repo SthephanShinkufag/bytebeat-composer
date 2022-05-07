@@ -211,12 +211,13 @@ button[name="close"] {
 	border: none;
 	color: #ffcc53;
 	background: none;
-	font: 12px monospace;
+	font: 12px/14px monospace;
 	text-align: left;
 	text-decoration: none;
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	word-break: break-all;
+	user-select: text;
 	cursor: pointer;
 }
 

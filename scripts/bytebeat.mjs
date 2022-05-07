@@ -260,13 +260,13 @@ globalThis.bytebeat = new class {
 				codeOriginal = codeOriginal.join('\r\n');
 			}
 			entry += `<br><button class="code-text code-text-original${
-				codeMinified ? ' disabled' : '' }" data-songdata='${
-				songData }' code-length="${ codeOriginal.length }">${ this.escapeHTML(codeOriginal) }</a>`;
+				codeMinified ? ' disabled' : '' }" data-songdata='${ songData }' code-length="${
+				codeOriginal.length }">${ this.escapeHTML(codeOriginal) }</button>`;
 		}
 		if(codeMinified) {
 			entry += `${ codeOriginal ? '' : '<br>' }<button class="code-text code-text-minified"` +
 				` data-songdata='${ songData }' code-length="${ codeMinified.length }">${
-					this.escapeHTML(codeMinified) }</a>`;
+					this.escapeHTML(codeMinified) }</button>`;
 		}
 		if(children) {
 			let childrenStr = '';

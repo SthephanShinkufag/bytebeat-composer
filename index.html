@@ -8,8 +8,8 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022050602">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022050602"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022050700">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022050700"></script>
 </head>
 <body>
 	<main id="content">
@@ -49,6 +49,7 @@
 					<option value="Floatbeat">Floatbeat</option>
 				</select>
 				<select id="control-samplerate" class="control-select" title="Sample rate" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value);">
+					<option value="4000" selected>4000Hz</option>
 					<option value="8000" selected>8000Hz</option>
 					<option value="11025">11025Hz</option>
 					<option value="16000">16000Hz</option>
