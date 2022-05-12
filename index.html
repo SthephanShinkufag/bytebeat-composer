@@ -8,8 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022050700">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022050700"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051302">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051302">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051302"></script>
 </head>
 <body>
 	<main id="content">
@@ -20,15 +21,19 @@
 			<div class="controls">
 				<button id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</button>
 				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.togglePlay(false);">
-				<button id="control-toggleplay" class="control-button control-play" title="Play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying);">
-					<svg id="svg-control-play"><use xlink:href="#symbol-play"></use></svg>
-					<svg id="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
+				<button id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
+					<svg><use xlink:href="#symbol-reset"></use></svg>
+				</button>
+				<button id="control-play-backward" class="control-button control-play" title="Reverse" onclick="bytebeat.playBackward();">
+					<svg id="svg-control-play-backward"><use xlink:href="#symbol-play"></use></svg>
+					<svg class="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
 				</button>
 				<button id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.stopPlay();">
 					<svg><use xlink:href="#symbol-stop"></use></svg>
 				</button>
-				<button id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
-					<svg><use xlink:href="#symbol-reset"></use></svg>
+				<button id="control-play-forward" class="control-button control-play" title="Play" onclick="bytebeat.playForward();">
+					<svg id="svg-control-play-forward"><use xlink:href="#symbol-play"></use></svg>
+					<svg class="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
 				</button>
 				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
 					<svg><use xlink:href="#symbol-rec"></use></svg>
@@ -60,13 +65,13 @@
 				<button id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
 				</button>
-				<input id="control-volume" type="range" min="0" max="100" value="35" title="Volume" oninput="bytebeat.setVolume(this);">
+				<input id="control-volume" type="range" min="0" max="100" value="50" title="Volume" oninput="bytebeat.setVolume(this);">
 			</div>
 			<div id="error"></div>
 			<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>
-				<div id="canvas-toggleplay" class="canvas-initial canvas-play">
+				<div id="canvas-play" class="canvas-initial canvas-play">
 					<svg id="svg-canvas-play"><use xlink:href="#symbol-play"></use></svg>
 					<svg id="svg-canvas-pause"><use xlink:href="#symbol-pause"></use></svg>
 				</div>

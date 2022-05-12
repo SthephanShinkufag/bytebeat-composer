@@ -10,6 +10,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.lastValue = 0;
 		};
 		this.isPlaying = false;
+		this.isReverse = false;
 		this.lastByteValue = NaN;
 		this.lastFlooredTime = -1;
 		this.lastFuncValue = NaN;
@@ -101,7 +102,7 @@ class audioProcessor extends AudioWorkletProcessor {
 						drawBuffer.push({ t: flooredSample, value: this.lastByteValue });
 					}
 				}
-				byteSample += flooredTime - this.lastFlooredTime;
+				byteSample += (flooredTime - this.lastFlooredTime) * (this.isReverse ? -1 : 1);
 				this.lastFuncValue = funcValue;
 				this.lastFlooredTime = flooredTime;
 			}
@@ -126,6 +127,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
+		}
+		if(data.isReverse !== undefined) {
+			this.isReverse = data.isReverse;
 		}
 		if(data.mode !== undefined) {
 			this.mode = data.mode;

@@ -42,10 +42,7 @@
 		"no-extra-semi": "error",
 		"no-global-assign": ["error", { "exceptions": ["FormData"] }],
 		"no-labels": ["error", { "allowLoop": true }],
-		"no-multi-spaces": ["error", {
-			"ignoreEOLComments": true,
-			"exceptions": { "VariableDeclarator": true }
-		}],
+		"no-multi-spaces": ["error", { "ignoreEOLComments": true }],
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
 		"no-undef": "error",
 		"no-unreachable": "error",

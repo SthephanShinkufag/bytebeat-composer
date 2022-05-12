@@ -58,6 +58,11 @@ a:hover {
 	height: 100vh;
 }
 
+footer {
+	padding-left: 4px;
+	font-size: 14px;
+}
+
 /* ==[ Canvas ] =========================================================================================== */
 
 #canvas-container {
@@ -86,7 +91,7 @@ a:hover {
 
 /* ==[ Canvas play/pause button ] ========================================================================= */
 
-#canvas-container:hover > #canvas-toggleplay {
+#canvas-container:hover > #canvas-play {
 	display: block;
 	background-image: linear-gradient(to bottom, #92aeec, #181f33) !important;
 }
@@ -100,7 +105,7 @@ a:hover {
 	display: none;
 }
 
-#canvas-toggleplay {
+#canvas-play {
 	display: none;
 	position: absolute;
 	top: 50%;
@@ -114,7 +119,7 @@ a:hover {
 	transform: translate(-50%, -50%);
 }
 
-#canvas-toggleplay > svg {
+#canvas-play > svg {
 	width: 46px;
 	height: 46px;
 	fill: currentColor;
@@ -347,16 +352,15 @@ button[name="close"] {
 /* ==[ Controls ] ========================================================================================= */
 
 .control-button {
-	width: 32px;
-	height: 32px;
+	height: 30px;
 }
 
 .control-button, .control-select {
-	height: 32px;
+	height: 30px;
 	margin: 1px 2px;
 	padding: 0;
 	border: none;
-	border-radius: 6px;
+	border-radius: 5px;
 	background-image: linear-gradient(to bottom, #959595, #242a37);
 	color: #e3e3e3;
 	cursor: pointer;
@@ -372,14 +376,14 @@ button[name="close"] {
 }
 
 .control-button > svg {
-	width: 32px;
-	height: 32px;
+	width: 30px;
+	height: 30px;
 	fill: currentColor;
 }
 
 #control-counter {
 	width: 80px;
-	height: 32px;
+	height: 30px;
 	margin: 1px 2px 1px 0;
 	padding: 0 8px;
 	background: linear-gradient(to top, #3a445e, #181c26);
@@ -391,6 +395,7 @@ button[name="close"] {
 }
 
 #control-counter-units {
+	width: 32px;
 	margin-right: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
@@ -400,8 +405,25 @@ button[name="close"] {
 	user-select: none;
 }
 
-.control-pause > #svg-control-play, .control-play > #svg-control-pause {
+.control-pause > #svg-control-play-backward, .control-pause > #svg-control-play-forward,
+.control-play > .svg-control-pause, .control-play > .svg-control-pause {
 	display: none;
+}
+
+#control-play-backward, #control-scaledown {
+	margin: 1px 0 1px 2px;
+	border-radius: 0 5px 5px 0;
+	transform: scaleX(-1);
+}
+
+#control-play-backward {
+	transform: scaleX(-1);
+}
+
+#control-play-forward, #control-scaleup {
+	margin: 1px 2px 1px 0;
+	border-left: 1px solid #5c636c;
+	border-radius: 0 5px 5px 0;
 }
 
 #control-rec {
@@ -423,10 +445,16 @@ button[name="close"] {
 	color: #435071;
 }
 
+#control-stop {
+	margin: 1px 0;
+	border-left: 1px solid #5c636c;
+	border-radius: 0;
+}
+
 #control-volume {
 	appearance: none;
 	width: 150px;
-	height: 14px;
+	height: 12px;
 	margin: 10px 0 10px 4px;
 	border-radius: 15px;
 	background-color: #2e3239;

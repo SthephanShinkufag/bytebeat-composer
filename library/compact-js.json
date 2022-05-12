@@ -1312,21 +1312,47 @@
 		"codeOriginal": "((0.5*t&t>>8|t&t>>12&t&t>>8)|t*[.3,.335,0.5,0.5][(t>>16)%4])%128+t*0.5%[32,64,128,255][(t>>16)%4]*[0.4,0.3,0.2,0.1][(t>>16)%4]",
 		"codeMinified": "(.5*t&t>>8|t&t>>12&t&t>>8|t*[.3,.335,.5,.5][(t>>16)%4])%128+.5*t%[32,64,128,255][(t>>16)%4]*[.4,.3,.2,.1][(t>>16)%4]"
 	}, {
+		"author": "PortablePorcelain",
+		"children": [{
+			"description": "creepy droning static thing",
+			"url": "https://www.reddit.com/r/bytebeat/comments/tvnthr/creepy_droning_static_thing/",
+			"date": "2022-04-04",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 22050,
+			"codeOriginal": "sin(t*Math.PI/255+sin(t*Math.PI/128)*(t/(65536+(16384*Math.random()))))*64",
+			"codeMinified": "64*sin(t*PI/255+sin(t*PI/128)*(t/(65536+16384*random())))"
+		}, {
+			"description": "1fccccf1",
+			"url": "https://dollchan.net/btb/res/3.html#55",
+			"date": "2022-04-30",
+			"mode": "Signed Bytebeat",
+			"codeOriginal": "a=((t*(Math.pow(2, (t>>16&3)-1)))*((0x1fccccf1>>(t>>10)*(t>>11))%8))|t>>3,b=a%128-32,c=sin(5000/(t&4095))*32,b+c",
+			"codeMinified": "((0x1fccccf1>>(t>>10)*(t>>11))%8*2**((t>>16&3)-1)*t|t>>3)%128+32*sin(5E3/(t&4095))-32"
+		}, {
+			"description": "Doom E1M1 theme recreation",
+			"url": "https://dollchan.net/btb/res/3.html#55",
+			"date": "2022-04-30",
+			"codeOriginal": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=((t/540)%q.length),b=(q.charCodeAt(s)-32)*(t/8),tanb=tan(b*Math.PI/512)*64-128,sinb=sin(b*Math.PI/64)*64-128,(tanb|sinb)-sinb",
+			"codeMinified": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=t/540%q.length,b=(q.charCodeAt(s)-32)*(t/8),tanb=64*tan(b*Math.PI/512)-128,sinb=64*sin(b*Math.PI/64)-128,(tanb|sinb)-sinb",
+			"starred": 2
+		}]
+	}, {
 		"author": "lhphr",
-		"url": "https://dollchan.net/btb/res/3.html#44",
-		"date": "2022-04-14",
 		"children": [{
 			"description": "madnessdescent{offset}",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"sampleRate": 11025,
 			"codeOriginal": "(z=(x=((a=t+16777216)&a>>7)+a/32768)/(y=-x|x*a<<8)|y/x)**z"
 		}, {
 			"description": "processings",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-05",
 			"sampleRate": 22050,
 			"codeOriginal": "(t**(1+(t>>8)/(t/2%(2-4*(x=(t>>17&1))))%(2+14*x))**(t/127%(2-x)))",
 			"codeMinified": "t**(1+(t>>8)/(t/2%(2-4*(x=t>>17&1)))%(2+14*x))**(t/127%(2-x))"
 		}, {
 			"description": "Unnecessary-ARPEG.drm",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-06",
 			"sampleRate": 11025,
 			"codeOriginal": "((15+1*'1370'[t>>15&3])/8*'12346543'[t>>10&7]*t%192+160)%256/2+64+((x=t>>(y=2+1*('99999999999999889999999967886855999999997788886799999999678568459199297788999756956999946788685347999999778888649391990664075405'[t>>10&127]))&2)-1)*(2*3e3*(x+1)/(t&(2**(y+1)-1))&1)*64",
@@ -1334,20 +1360,105 @@
 			"starred": 1
 		}, {
 			"description": "Unnecessary-ARPEG",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-07",
 			"sampleRate": 11025,
 			"codeOriginal": "((15+1*'1370'[t>>15&3])/8*'12346543'[t>>10&7]*t%192+160)%256/2+64"
 		}, {
 			"description": "Numbers Not In Sight",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-09",
 			"codeOriginal": "((~t)-(t))*((x=t/t)-(t>>(z=(y=x+x)**y*y+y))%y)^(t*(t>>z))%(y**y**y)*-t>>z",
 			"codeMinified": "(~t-t)*((x=t/t)-(t>>(z=(y=x+x)**y*y+y))%y)^t*(t>>z)%(y**y**y)*-t>>z"
 		}, {
 			"description": "delchor",
+			"url": "https://dollchan.net/btb/res/3.html#44",
 			"date": "2022-04-13",
 			"sampleRate": 44100,
 			"codeOriginal": "(s=4*((l=t/44100*4400)%2**12)>>11<7)*((a=l*'12'[l>>8&1]*'66998887'[l>>13&7]/6)%48+a%64)|(a<<3&a>>7)%32",
 			"starred": 1
+		}, {
+			"description": "oddsine",
+			"url": "https://dollchan.net/btb/res/3.html#50",
+			"date": "2022-04-19",
+			"sampleRate": 44100,
+			"codeOriginal": "(32*sin((x=t/[1,1,1,2,1.5,1.5,w=1.25+(0.75-1.25*(t>>16&1))*(t>>15&1),w][t>>12&7])/441*65)>>(x/2&16))+128",
+			"codeMinified": "(32*sin((x=t/[1,1,1,2,1.5,1.5,w=1.25+(.75-1.25*(t>>16&1))*(t>>15&1),w][t>>12&7])/441*65)>>(x/2&16))+128"
+		}, {
+			"description": "Unnecessary-ARPEG.hc",
+			"url": "https://dollchan.net/btb/res/3.html#50",
+			"date": "2022-04-19",
+			"sampleRate": 44100,
+			"codeOriginal": "((15+1*'1370'[t>>17&3])/8*'12346543'[t>>12&7]*(t/4)%192+160)%256/2+((sqrt(5E3*(t%65536&(2**[9,12,12,14,,,,,13,12,11,14][(t>>11&15|t^(t/32%8)*t)&11])-1))&128))",
+			"codeMinified": "((15+1*'1370'[t>>17&3])/8*'12346543'[t>>12&7]*(t/4)%192+160)%256/2+(sqrt(5E3*(t%65536&(2**[9,12,12,14,,,,,13,12,11,14][(t>>11&15|t^t/32%8*t)&11])-1))&128)",
+			"starred": 1
+		}, {
+			"description": "genreframe",
+			"url": "https://dollchan.net/btb/res/3.html#50",
+			"date": "2022-04-22",
+			"sampleRate": 32000,
+			"codeOriginal": "2*((x=t%16384)%((x/(y=2+(t>>15&3)-2.25*((t>>15)%8==7))*(y-1))>>7))|x<<(y-2)&x>>(8-(t>>17&1))",
+			"codeMinified": "2*((x=t%16384)%(x/(y=2+(t>>15&3)-2.25*(7==(t>>15)%8))*(y-1)>>7))|x<<y-2&x>>8-(t>>17&1)"
+		}, {
+			"description": "HAZEHOUSE",
+			"url": "https://dollchan.net/btb/res/3.html#50",
+			"date": "2022-04-22",
+			"codeOriginal": "t*=11/12,((t/2**(x=512/[128,128,143,137][t>>14&3])&1?x*t:t>>4)^t>>6)>>(t%16)&t>>4",
+			"codeMinified": "t*=11/12,((t/2**(x=512/[128,128,143,137][t>>14&3])&1?x*t:t>>4)^t>>6)>>t%16&t>>4"
+		}, {
+			"description": "CBRT-FILE R00TZ",
+			"url": "https://dollchan.net/btb/res/3.html#50",
+			"date": "2022-04-22",
+			"sampleRate": 22050,
+			"codeOriginal": "l=t%2**20,n=(l*l/Math.PI)%1,(l>>13)-31?((cbrt(6e7/(r='11141112'[l>>13&7])*(r*l&8191))&64)*1.5+(l>>13&1)*(l>2**17)*(l>>8*l&31)+(l>2**18)*(l*(m='45764586'[l>>15&7])*(5+1*'12357532'[l>>11&7])/20)%64)+(l>2**19)*(16*sin((l<<(r/2-1))*Math.PI/15435*44*(1*m+3))+16)+(l>786432)*((l>>14&1)*((~l+256>>8)%64+63)*n):((~l+128>>7)%64+95)*n",
+			"codeMinified": "l=t%2**20,n=l*l/PI%1,(l>>13)-31?1.5*(cbrt(6E7/(r='11141112'[l>>13&7])*(r*l&8191))&64)+(l>>13&1)*(l>2**17)*(l>>8*l&31)+(l>2**18)*(l*(m='45764586'[l>>15&7])*(5+1*'12357532'[l>>11&7])/20)%64+(l>2**19)*(16*sin((l<<r/2-1)*PI/15435*44*(1*m+3))+16)+(786432<l)*(l>>14&1)*((~l+256>>8)%64+63)*n:((~l+128>>7)%64+95)*n",
+			"starred": 1
+		}, {
+			"description": "Paradigm Contacter",
+			"url": "https://dollchan.net/btb/res/3.html#53",
+			"date": "2022-04-23",
+			"sampleRate": 11025,
+			"codeOriginal": "(f=((l=(r=t%2**20)%2**14)>>13&1)+(r%2**19>>14==31))?0:x=y=0,z=(((x=x/1.001-l)/4&(l|x)+l*(r>>17!=4)*(r>2**16))+(r>2**17)*(y=y+l&l>>5)^64*x/r*y>>1&127*(r>196608)*(r>>18!=2))+(r>2**18)*(x>>(4+4*(s=r>>17&1))*y>>(5+s)),((r>2**18)-(r>>14==47)?f?x/(1-s/1024)|y/2:z:r%2**19>>14==15?n*q:z)^(t>r)*(r>>13==0)*(n=l*l/sqrt(l)%1)*((q=((~r+128>>6)%128+191))-63)",
+			"codeMinified": "(f=((l=(r=t%2**20)%2**14)>>13&1)+(31==r%2**19>>14))?0:x=y=0,z=(((x=x/1.001-l)/4&(l|x)+l*(4!=r>>17)*(r>2**16))+(r>2**17)*(y=y+l&l>>5)^64*x/r*y>>1&127*(196608<r)*(2!=r>>18))+(r>2**18)*(x>>(4+4*(s=r>>17&1))*y>>5+s),((r>2**18)-(47==r>>14)?f?x/(1-s/1024)|y/2:z:15==r%2**19>>14?n*q:z)^(t>r)*(0==r>>13)*(n=l*l/sqrt(l)%1)*((q=(~r+128>>6)%128+191)-63)"
+		}, {
+			"description": "sine of power",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-24",
+			"codeOriginal": "(t%32768>>4)**sin(t/2/'66546657'[t>>13&7])&t>>4"
+		}, {
+			"description": "Duotrigottogon",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-26",
+			"sampleRate": 44100,
+			"codeOriginal": "(6E3**(1-t%2**(12-((t>>13&7)==7)-((t>>15&7)==7))/16384)&128)+(t*(t&t>>9)>>11&64)+(t<<3*(t&t>>10)>>4&63)"
+		}, {
+			"description": "The Evaluator",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-26",
+			"codeOriginal": "eval(unescape(escape`琿〺砽礽〬⡧㵛⡡㴨砽砯㈫⡺㴨眽⠱⬱⨧㜷㤸❛琾㸱㐦㍝⤯㠩⩴⨧ㄱ〲㈱㈲❛琾㸱〦㝝⤥㌲⤦⡹㵸⨲⨪⸵籸㸾ㅞ礯ㄮ㔩⤫⡢㴱㘪獩渨㈰㐸⼨琥㠱㤲⤪⨮〱⤫ㄶ⤬⡳㴨愯㉼⡣㵺⼨ㄫ⡴㸾ㄵ☱⤩☳㈩⼸⤫⡡☱⸵⩴⤩⬲⩢⭣⬨搽㘴⨨⡴㸾ㄵ☳⤽㴳⤪⡵㴨⡱㵴┲⨪ㄵ⤪焯焪⨮㔪偉⤥ㄩ┨焫㄰㈴㸾㄰⤩ⱡ⬱⸵⩢⬴⩢┳㈫挫⡯㴨⡥㵛瘽㈪⠨琾㸱㈦㜩㴽㜩⨨ㄭ⸵⨨琾㸱㔦ㄩ⤬瘬Ⱜ瘬瘬Ⱜ㈬㈮㌷㔬㌬㑝孴㸾㠦ㄵ崪眪琯㈩⼲☱㔩⬨攦ㄵ⤩⬨昽⡴㸾ㄲ☱⤪㘴⩵♾琾㸷┶㐫㘳⤪⸷Ⱳ㵳⬲⩢⬴⩢┳㈫挫搫漫昪⸸Ⱘ氽戫挩⭦⨮㔬氫搫⠲⩥☳ㄩ⭦⨮㔬爭搬爬渽砯睼氬渫戫ㄮ㔪⡥☳ㄩⱢ⬨洽⡰㵺⼲☨琾㸸☳ㄩ⤫漩Ⱞ㤪猫戫搫㈪洬爭搬⸸㔪爫⸴⩯⭰ⱡ⭬⭦⨮㘫洬氫昪⸴⭭⬮㘪搬⡡☳㈩⭢⭭Ⱘ稦㌱⤫洬瀫漪⠱⵴㸾ㄶ☱⥝孴㸾ㄷ崩㸲㔵㼲㔵㩧☲㔵`.replace(/u(..)/g,\"$1%\")))",
+			"codeMinified": "eval(unescape(escape`琿〺砽礽〬㈵㔼⡧㵛⡡㴨砽砯㈫⡺㴨眽⠱⬱⨧㜷㤸❛琾㸱㐦㍝⤯㠩⩴⨧ㄱ〲㈱㈲❛琾㸱〦㝝⤥㌲⤦⡹㵸⨲⨪⸵籸㸾ㅞ礯ㄮ㔩⤫⡢㴱㘪獩渨㈰㐸⼨琥㠱㤲⤪⨮〱⤫ㄶ⤬⡳㴨愯㉼⡣㵺⼨ㄫ⡴㸾ㄵ☱⤩☳㈩⼸⤫⡡☱⸵⩴⤩⬲⩢⭣⬨搽㘴⨨㌽㴨琾㸱㔦㌩⤪⡵㴨焽琥㈪⨱㔩⩱⽱⨪⸵⩐䤥ㄩ┨焫㄰㈴㸾㄰⤩ⱡ⬱⸵⩢⬴⩢┳㈫挫⡯㴨⡥㵛瘽㈪⠷㴽⡴㸾ㄲ☷⤩⨨ㄭ⸵⨨琾㸱㔦ㄩ⤬瘬Ⱜ瘬瘬Ⱜ㈬㈮㌷㔬㌬㑝孴㸾㠦ㄵ崪眪琯㈩⼲☱㔩⬨攦ㄵ⤩⬮㜪⡦㴶㐪⡴㸾ㄲ☱⤪甦繴㸾㜰⤬爽猫㈪戫㐪戥㌲⭣⭤⭯⬮㠪昬⡬㵢⭣⤫⸵⩦ⱬ⭤⬨㈪攦㌱⤫⸵⩦ⱲⵤⱲⱮ㵸⽷籬Ɱ⭢⬱⸵⨨攦㌱⤬戫⡭㴨瀽稯㈦琾㸸☳ㄩ⭯⤬⸹⩳⭢⭤⬲⩭ⱲⵤⰮ㠵⩲⬮㐪漫瀬愫氫⸶⩦⭭ⱬ⬮㐪昫洫⸶⩤Ⱘ愦㌲⤫戫洬⡺☳ㄩ⭭Ɒ⭯⨨ㄭ琾㸱㘦ㄩ嵛琾㸱㝝⤿㈵㔺朦㈵5`.replace(/u(..)/g,'$1%')))",
+			"starred": 1
+		}, {
+			"description": "TTT (The Tonal Tone)",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-27",
+			"sampleRate": 32000,
+			"codeOriginal": "p=t=>2**(t/12),s=t=>16*sin(f/t*q),a=(t,w,v)=>f/t*p([0,3,5,w,v][(5*f>>14)%5])&15,m=t=>f/7*p([0,0,,,3,5,0,0,-2,-2,,,-4,-4][((f>>14)-t)&15])*q&31,f=t*3.52%2**24,q=p([0,-4,0,3][f>>19&3]),n=((f/28*q&15)+(f/42*q&15)+(f/56*q&15))/(2**(2**15/(f%2**19))),(f>>22!=3?(f>>15)%256!=127?m(0)-(f>2**21)*(s(88)+s(176))+(f>2**22)*n+(f>2**23)*a(28/q,7,12):a(56,12,15)+a(28,12,15)+a(14,12,15):m(0)+m(4/3)/2+m(8/3)/4+m(4)/8+n+s(54)/3+s(88)/2)+128-(f>>19)",
+			"codeMinified": "p=t=>2**(t/12),s=t=>16*sin(f/t*q),a=(t,w,v)=>f/t*p([0,3,5,w,v][(5*f>>14)%5])&15,m=t=>f/7*p([0,0,,,3,5,0,0,-2,-2,,,-4,-4][(f>>14)-t&15])*q&31,f=3.52*t%2**24,q=p([0,-4,0,3][f>>19&3]),n=((f/28*q&15)+(f/42*q&15)+(f/56*q&15))/2**(2**15/(f%2**19)),(3!=f>>22?127!=(f>>15)%256?m(0)-(f>2**21)*(s(88)+s(176))+(f>2*22)*n+(f>2**23)*a(28/q,7,12):a(56,12,15)+a(28,12,15)+a(14,12,15):m(0)+m(4/3)/2+m(8/3)/4+m(4)/8+n+s(54)/3+s(88)/2)+128-(f>>19)",
+			"starred": 2
+		}, {
+			"description": "ᓯᑯ ᓯᓚ ᑖᖅᑐᒥ ᐆᒻᒪᑦ",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-28",
+			"sampleRate": 44100,
+			"codeOriginal": "c=z=>t*2**(([5+z,3+z,2+z,z,5+z,3+z,10+z,7+z][t>>17&7]-5)/12),a=y=>t/2205*2**(('MQTWY]`cec`]YWTQ'.charCodeAt(t>>12&15)+[5,3,2,0,5,3,10,7][t>>17&7]-y)/12)%2.8,12*((c(0)>>4)%2.8-(t>2**20)*((c(o=1/20)>>5)%2.8+(2+(t>2**21))/3*(60620&1<<(t%2**17>>13)?(1-t%2**14/2**14)*sin(t**PI):0)))+(t>2**21)*((0xd9119111&1<<(t%2**18>>13)?22*sin(1024/(t%2**13)**.05):0)+12*((c(2*o)/64%2.8&c(2*o)/32.2)+(c(-o)>>3)%2.8/2-(a(o)+a(12))/2%2.8))+128",
+			"codeMinified": "c=z=>t*2**(([5+z,3+z,2+z,z,5+z,3+z,10+z,7+z][t>>17&7]-5)/12),a=y=>t/2205*2**(('MQTWY]`cec`]YWTQ'.charCodeAt(t>>12&15)+[5,3,2,0,5,3,10,7][t>>17&7]-y)/12)%2.8,12*((c(0)>>4)%2.8-(t>2**20)*((c(o=.05)>>5)%2.8+(2+(t>2**21))/3*(60620&1<<(t%2**17>>13)?(1-t%2**14/2**14)*sin(t**PI):0)))+(t>2**21)*((3641807121&1<<(t%2**18>>13)?22*sin(1024/(t%2**13)**.05):0)+12*((c(2*o)/64%2.8&c(2*o)/32.2)+(c(-o)>>3)%2.8/2-(a(o)+a(12))/2%2.8))+128"
+		}, {
+			"description": "octave transition",
+			"url": "https://dollchan.net/btb/res/3.html#54",
+			"date": "2022-04-29",
+			"codeOriginal": "sin((s=PI*(q=t%(a=(f=409600)+f/11/PI)>a/2?a-t%a:t%a)/800)*11*2**(s%0.002))*64+128",
+			"codeMinified": "64*sin(11*(s=PI*(q=t%(a=(f=409600)+f/11/PI)>a/2?a-t%a:t%a)/800)*2**(s%.002))+128"
 		}]
 	}
 ]

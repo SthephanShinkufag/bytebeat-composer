@@ -26,14 +26,15 @@ globalThis.bytebeat = new class {
 		this.canvasCtx = null;
 		this.canvasElem = null;
 		this.canvasHeight = 256;
+		this.canvasPlay = null;
 		this.canvasWidth = 1024;
-		this.canvasTogglePlay = null;
 		this.containerFixed = null;
 		this.controlCounter = null;
 		this.controlMode = null;
+		this.controlPlayBackward = null;
+		this.controlPlayForward = null;
 		this.controlSampleRate = null;
 		this.controlScaleDown = null;
-		this.controlTogglePlay = null;
 		this.controlVolume = null;
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
@@ -42,6 +43,7 @@ globalThis.bytebeat = new class {
 		this.isActiveTab = true;
 		this.isCompilationError = false;
 		this.isPlaying = false;
+		this.isReverse = false;
 		this.isRecording = false;
 		this.mode = 'Bytebeat';
 		this.recordChunks = [];
@@ -94,11 +96,13 @@ globalThis.bytebeat = new class {
 		const endX = Math.floor(startX + this.getX(endTime - startTime));
 		startX = Math.floor(startX);
 		const drawWidth = Math.min(Math.abs(endX - startX) + 1, width);
+		startX = Math.min(startX, endX);
 		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
 		if(this.settings.drawScale) {
+			const x = this.isReverse ? drawWidth - 1 : 0;
 			for(let y = 0; y < height; ++y) {
-				let idx = (drawWidth * (255 - y)) << 2;
+				let idx = (drawWidth * (255 - y) + x) << 2;
 				const value = this.drawEndBuffer[y];
 				if(value === redColor) {
 					imageData.data[idx] = redColor;
@@ -118,11 +122,15 @@ globalThis.bytebeat = new class {
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
-			const curX = this.mod(Math.floor(this.getX(buffer[i].t)) - startX, width);
-			const nextX = this.mod(Math.ceil(this.getX(buffer[i + 1]?.t ?? endTime)) - startX, width);
+			const curTime = buffer[i].t;
+			const nextTime = buffer[i + 1]?.t ?? endTime;
+			const curX = this.mod(Math.floor(this.getX(
+				this.isReverse ? nextTime + 1 : curTime)) - startX, width);
+			const nextX = this.mod(Math.ceil(this.getX(
+				this.isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
 			if(isNaN(curY)) {
-				for(let x = curX; x < nextX; ++x) {
+				for(let x = curX; x !== nextX; ++x) {
 					for(let y = 0; y < height; ++y) {
 						const idx = (drawWidth * y + x) << 2;
 						if(!imageData.data[idx + 1]) {
@@ -150,14 +158,17 @@ globalThis.bytebeat = new class {
 		}
 		// Saving the last points of a segment
 		if(this.settings.drawScale) {
+			const x = this.isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
-				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + drawWidth - 1) << 2];
+				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + x) << 2];
 			}
 		}
 		// Placing a segment on the canvas
 		this.canvasCtx.putImageData(imageData, startX, 0);
-		if(endX > width) {
+		if(endX >= width) {
 			this.canvasCtx.putImageData(imageData, startX - width, 0);
+		} else if(endX <= 0) {
+			this.canvasCtx.putImageData(imageData, startX + width, 0);
 		}
 		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
@@ -327,7 +338,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051302');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -367,16 +378,17 @@ globalThis.bytebeat = new class {
 		this.onresizeWindow();
 		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
 		this.canvasCtx = this.canvasElem.getContext('2d');
-		this.canvasTogglePlay = document.getElementById('canvas-toggleplay');
+		this.canvasPlay = document.getElementById('canvas-play');
 		this.timeCursor = document.getElementById('canvas-timecursor');
 
 		// Controls
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
 		this.controlMode = document.getElementById('control-mode');
+		this.controlPlayBackward = document.getElementById('control-play-backward');
+		this.controlPlayForward = document.getElementById('control-play-forward');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlScaleDown = document.getElementById('control-scaledown');
-		this.controlTogglePlay = document.getElementById('control-toggleplay');
 		this.setScale(0);
 
 		// Time counter
@@ -607,7 +619,7 @@ globalThis.bytebeat = new class {
 			this.clearCanvas();
 			this.timeCursor.style.left = 0;
 			if(!this.isPlaying) {
-				this.canvasTogglePlay.classList.add('canvas-initial');
+				this.canvasPlay.classList.add('canvas-initial');
 			}
 		}
 	}
@@ -667,13 +679,25 @@ globalThis.bytebeat = new class {
 		this.setCounterUnits();
 	}
 	togglePlay(isPlaying, isSendData = true) {
-		this.controlTogglePlay.title = isPlaying ? 'Pause' : 'Play';
-		this.controlTogglePlay.classList.toggle('control-play', !isPlaying);
-		this.controlTogglePlay.classList.toggle('control-pause', isPlaying);
-		this.canvasTogglePlay.classList.toggle('canvas-play', !isPlaying);
-		this.canvasTogglePlay.classList.toggle('canvas-pause', isPlaying);
+		if(this.isReverse) {
+			this.controlPlayBackward.title = isPlaying ? 'Pause' : 'Reverse';
+			this.controlPlayBackward.classList.toggle('control-play', !isPlaying);
+			this.controlPlayBackward.classList.toggle('control-pause', isPlaying);
+			this.controlPlayForward.title = 'Play';
+			this.controlPlayForward.classList.add('control-play');
+			this.controlPlayForward.classList.remove('control-pause');
+		} else {
+			this.controlPlayForward.title = isPlaying ? 'Pause' : 'Play';
+			this.controlPlayForward.classList.toggle('control-play', !isPlaying);
+			this.controlPlayForward.classList.toggle('control-pause', isPlaying);
+			this.controlPlayBackward.title = 'Reverse';
+			this.controlPlayBackward.classList.add('control-play');
+			this.controlPlayBackward.classList.remove('control-pause');
+		}
+		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
+		this.canvasPlay.classList.toggle('canvas-pause', isPlaying);
 		if(isPlaying) {
-			this.canvasTogglePlay.classList.remove('canvas-initial');
+			this.canvasPlay.classList.remove('canvas-initial');
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
 				this.requestAnimationFrame();
@@ -684,8 +708,30 @@ globalThis.bytebeat = new class {
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
-			this.sendData({ isPlaying });
+			this.sendData({ isPlaying, isReverse: this.isReverse });
 		}
+	}
+	playBackward() {
+		if(!this.isReverse) {
+			this.isReverse = true;
+			this.drawBuffer = [];
+			if(this.isPlaying) {
+				this.togglePlay(true);
+				return;
+			}
+		}
+		this.togglePlay(!this.isPlaying);
+	}
+	playForward() {
+		if(this.isReverse) {
+			this.isReverse = false;
+			this.drawBuffer = [];
+			if(this.isPlaying) {
+				this.togglePlay(true);
+				return;
+			}
+		}
+		this.togglePlay(!this.isPlaying);
 	}
 	toggleTimeCursor() {
 		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
