@@ -87,7 +87,7 @@ globalThis.bytebeat = new class {
 		if(!bufferLen) {
 			return;
 		}
-		const redColor = 140;
+		const redColor = 130;
 		const waveColor = 160;
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
@@ -119,6 +119,7 @@ globalThis.bytebeat = new class {
 		}
 		// Drawing in a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
+		let prevX = this.mod(Math.floor(this.getX(buffer[0].t)) - startX, width);
 		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
@@ -130,7 +131,7 @@ globalThis.bytebeat = new class {
 				this.isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
 			if(isNaN(curY)) {
-				for(let x = curX; x !== nextX; ++x) {
+				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 					for(let y = 0; y < height; ++y) {
 						const idx = (drawWidth * y + x) << 2;
 						if(!imageData.data[idx + 1]) {
@@ -143,11 +144,12 @@ globalThis.bytebeat = new class {
 			// Drawing vertical lines in Waveform mode
 			if(isWaveform && curY !== prevY && !isNaN(prevY)) {
 				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
-					let idx = (drawWidth * (255 - y) + curX) << 2;
+					let idx = (drawWidth * (255 - y) + (this.isReverse ? prevX : curX)) << 2;
 					if(imageData.data[idx] === 0) {
 						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = waveColor;
 					}
 				}
+				prevX = curX;
 				prevY = curY;
 			}
 			// Points drawing
@@ -314,9 +316,6 @@ globalThis.bytebeat = new class {
 	}
 	async init() {
 		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
-		if(!window.location.hostname.includes(unescape('%64%6f%6c%6c%63%68%61%6e%2e%6e%65%74'))) {
-			return;
-		}
 		try {
 			this.settings = JSON.parse(localStorage.settings);
 		} catch(err) {
@@ -714,7 +713,6 @@ globalThis.bytebeat = new class {
 	playBackward() {
 		if(!this.isReverse) {
 			this.isReverse = true;
-			this.drawBuffer = [];
 			if(this.isPlaying) {
 				this.togglePlay(true);
 				return;
@@ -725,7 +723,6 @@ globalThis.bytebeat = new class {
 	playForward() {
 		if(this.isReverse) {
 			this.isReverse = false;
-			this.drawBuffer = [];
 			if(this.isPlaying) {
 				this.togglePlay(true);
 				return;
