@@ -46,6 +46,7 @@ globalThis.bytebeat = new class {
 		this.isReverse = false;
 		this.isRecording = false;
 		this.mode = 'Bytebeat';
+		this.needClear = false;
 		this.recordChunks = [];
 		this.sampleRate = 8000;
 		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false };
@@ -119,8 +120,6 @@ globalThis.bytebeat = new class {
 		}
 		// Drawing in a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
-		let prevX = this.mod(Math.floor(this.getX(buffer[0].t)) - startX, width);
-		let prevY = buffer[0].value;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
 			const curTime = buffer[i].t;
@@ -142,15 +141,18 @@ globalThis.bytebeat = new class {
 				continue;
 			}
 			// Drawing vertical lines in Waveform mode
-			if(isWaveform && curY !== prevY && !isNaN(prevY)) {
-				for(let dy = prevY < curY ? 1 : -1, y = prevY + dy; y !== curY; y += dy) {
-					let idx = (drawWidth * (255 - y) + (this.isReverse ? prevX : curX)) << 2;
-					if(imageData.data[idx] === 0) {
-						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = waveColor;
+			if(isWaveform) {
+				const prevY = buffer[i - 1]?.value ?? NaN;
+				if(!isNaN(prevY)) {
+					const x = this.isReverse ?
+						this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
+					for(let dy = prevY < curY ? 1 : -1, y = prevY; y !== curY; y += dy) {
+						let idx = (drawWidth * (255 - y) + x) << 2;
+						if(imageData.data[idx] === 0) {
+							imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = waveColor;
+						}
 					}
 				}
-				prevX = curX;
-				prevY = curY;
 			}
 			// Points drawing
 			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
@@ -441,6 +443,7 @@ globalThis.bytebeat = new class {
 			this.togglePlay(true, false);
 			data.isPlaying = isPlay;
 			data.resetTime = true;
+			this.needClear = true;
 		} else {
 			data.setFunction = code;
 		}
@@ -603,6 +606,7 @@ globalThis.bytebeat = new class {
 		window.requestAnimationFrame(() => this.animationFrame());
 	}
 	resetTime() {
+		this.needClear = true;
 		this.sendData({ resetTime: true });
 	}
 	saveSettings() {
@@ -613,7 +617,8 @@ globalThis.bytebeat = new class {
 	}
 	setByteSample(value) {
 		this.byteSample = +value || 0;
-		if(value === 0) {
+		if(this.needClear && value === 0) {
+			this.needClear = false;
 			this.drawBuffer = [];
 			this.clearCanvas();
 			this.timeCursor.style.left = 0;
@@ -670,6 +675,7 @@ globalThis.bytebeat = new class {
 	}
 	stopPlay() {
 		this.togglePlay(false, false);
+		this.needClear = true;
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
 	toggleCounterUnits() {
@@ -713,6 +719,7 @@ globalThis.bytebeat = new class {
 	playBackward() {
 		if(!this.isReverse) {
 			this.isReverse = true;
+			this.drawBuffer = [];
 			if(this.isPlaying) {
 				this.togglePlay(true);
 				return;
@@ -723,6 +730,7 @@ globalThis.bytebeat = new class {
 	playForward() {
 		if(this.isReverse) {
 			this.isReverse = false;
+			this.drawBuffer = [];
 			if(this.isPlaying) {
 				this.togglePlay(true);
 				return;
