@@ -10,7 +10,7 @@
 	<link rel="shortcut icon" href="favicon.png">
 	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051401">
 	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051401">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051401"></script>
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051402"></script>
 </head>
 <body>
 	<main id="content">
@@ -65,7 +65,7 @@
 				<button id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
 				</button>
-				<input id="control-volume" type="range" min="0" max="100" value="50" title="Volume" oninput="bytebeat.setVolume(this);">
+				<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume" oninput="bytebeat.setVolume(false);">
 			</div>
 			<div id="error"></div>
 			<div id="canvas-container" title="Click to play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">

@@ -49,7 +49,7 @@ globalThis.bytebeat = new class {
 		this.needClear = false;
 		this.recordChunks = [];
 		this.sampleRate = 8000;
-		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false };
+		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false, volume: .5 };
 		this.timeCursor = null;
 		this.init();
 	}
@@ -372,7 +372,7 @@ globalThis.bytebeat = new class {
 
 		// Volume
 		this.controlVolume = document.getElementById('control-volume');
-		this.setVolume(this.controlVolume);
+		this.setVolume(true);
 
 		// Canvas
 		this.canvasContainerElem = document.getElementById('canvas-container');
@@ -661,9 +661,17 @@ globalThis.bytebeat = new class {
 			this.controlScaleDown.removeAttribute('disabled');
 		}
 	}
-	setVolume({ value, max }) {
-		const fraction = parseInt(value) / parseInt(max);
-		this.audioGain.gain.value = fraction * fraction;
+	setVolume(isInit) {
+		let volumeValue = NaN;
+		if(isInit) {
+			volumeValue = parseFloat(this.settings.volume);
+		}
+		if(isNaN(volumeValue)) {
+			volumeValue = this.controlVolume.value / this.controlVolume.max;
+		}
+		this.controlVolume.value = this.settings.volume = volumeValue;
+		this.saveSettings();
+		this.audioGain.gain.value = volumeValue * volumeValue;
 	}
 	stopPlay() {
 		this.togglePlay(false, false);
