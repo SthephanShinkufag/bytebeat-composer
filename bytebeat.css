@@ -432,6 +432,14 @@ button[name="close"] {
 	color: #b50000;
 }
 
+@keyframes blink {
+	50% { opacity: 0.0; }
+}
+
+.control-recording > svg {
+	animation: blink 1s step-start 0s infinite;
+}
+
 #control-scaledown[disabled] {
 	opacity: 0.5;
 	cursor: default;

@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051400">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051400">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051400"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051401">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051401">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051401"></script>
 </head>
 <body>
 	<main id="content">
@@ -35,7 +35,7 @@
 					<svg id="svg-control-play-forward"><use xlink:href="#symbol-play"></use></svg>
 					<svg class="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
 				</button>
-				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.rec();">
+				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.toggleRecording();">
 					<svg><use xlink:href="#symbol-rec"></use></svg>
 				</button>
 				<button id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1, this);">

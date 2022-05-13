@@ -339,7 +339,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051400');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051401');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -389,6 +389,7 @@ globalThis.bytebeat = new class {
 		this.controlMode = document.getElementById('control-mode');
 		this.controlPlayBackward = document.getElementById('control-play-backward');
 		this.controlPlayForward = document.getElementById('control-play-forward');
+		this.controlRec = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.setScale(0);
@@ -560,16 +561,6 @@ globalThis.bytebeat = new class {
 		this.loadCode(songData ||
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
-	rec() {
-		if(this.audioCtx && !this.isRecording) {
-			this.audioRecorder.start();
-			this.isRecording = true;
-			this.recordChunks = [];
-			if(!this.isPlaying) {
-				this.togglePlay(true);
-			}
-		}
-	}
 	receiveData(data) {
 		const { byteSample, error } = data;
 		if(byteSample !== undefined) {
@@ -685,22 +676,23 @@ globalThis.bytebeat = new class {
 		this.setCounterUnits();
 	}
 	togglePlay(isPlaying, isSendData = true) {
+		const pauseTxt = this.isRecording ? 'Pause and stop recording' : 'Pause';
 		if(this.isReverse) {
-			this.controlPlayBackward.title = isPlaying ? 'Pause' : 'Reverse';
+			this.controlPlayBackward.title = isPlaying ? pauseTxt : 'Reverse';
 			this.controlPlayBackward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayBackward.classList.toggle('control-pause', isPlaying);
 			this.controlPlayForward.title = 'Play';
 			this.controlPlayForward.classList.add('control-play');
 			this.controlPlayForward.classList.remove('control-pause');
 		} else {
-			this.controlPlayForward.title = isPlaying ? 'Pause' : 'Play';
+			this.controlPlayForward.title = isPlaying ? pauseTxt : 'Play';
 			this.controlPlayForward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayForward.classList.toggle('control-pause', isPlaying);
 			this.controlPlayBackward.title = 'Reverse';
 			this.controlPlayBackward.classList.add('control-play');
 			this.controlPlayBackward.classList.remove('control-pause');
 		}
-		this.canvasContainerElem.title = isPlaying ? 'Click to pause' :
+		this.canvasContainerElem.title = isPlaying ? `Click to ${ pauseTxt.toLowerCase() }` :
 			`Click to play${ this.isReverse ? ' in reverse' : '' }`;
 		this.canvasPlay.classList.toggle('canvas-play-backward', this.isReverse);
 		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
@@ -712,13 +704,29 @@ globalThis.bytebeat = new class {
 				this.requestAnimationFrame();
 			}
 		} else if(this.isRecording) {
-			this.audioRecorder.stop();
 			this.isRecording = false;
+			this.controlRec.classList.remove('control-recording');
+			this.controlRec.title = 'Record to file';
+			this.audioRecorder.stop();
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
 			this.sendData({ isPlaying, isReverse: this.isReverse });
 		}
+	}
+	toggleRecording() {
+		if(!this.isRecording) {
+			if(this.audioCtx) {
+				this.isRecording = true;
+				this.controlRec.classList.add('control-recording');
+				this.controlRec.title = 'Pause and stop recording';
+				this.audioRecorder.start();
+				this.recordChunks = [];
+			}
+			this.togglePlay(true);
+			return;
+		}
+		this.togglePlay(false);
 	}
 	playBackward() {
 		if(!this.isReverse) {
