@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051302">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051302">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051304"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051400">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051400">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051400"></script>
 </head>
 <body>
 	<main id="content">
@@ -68,7 +68,7 @@
 				<input id="control-volume" type="range" min="0" max="100" value="50" title="Volume" oninput="bytebeat.setVolume(this);">
 			</div>
 			<div id="error"></div>
-			<div id="canvas-container" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
+			<div id="canvas-container" title="Click to play" onclick="bytebeat.togglePlay(!bytebeat.isPlaying)">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>
 				<div id="canvas-play" class="canvas-initial canvas-play">

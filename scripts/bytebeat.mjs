@@ -339,7 +339,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051302');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051400');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -375,6 +375,7 @@ globalThis.bytebeat = new class {
 		this.setVolume(this.controlVolume);
 
 		// Canvas
+		this.canvasContainerElem = document.getElementById('canvas-container');
 		this.canvasElem = document.getElementById('canvas-main');
 		this.onresizeWindow();
 		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
@@ -685,7 +686,6 @@ globalThis.bytebeat = new class {
 	}
 	togglePlay(isPlaying, isSendData = true) {
 		if(this.isReverse) {
-			this.canvasPlay.classList.add('canvas-play-backward');
 			this.controlPlayBackward.title = isPlaying ? 'Pause' : 'Reverse';
 			this.controlPlayBackward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayBackward.classList.toggle('control-pause', isPlaying);
@@ -693,7 +693,6 @@ globalThis.bytebeat = new class {
 			this.controlPlayForward.classList.add('control-play');
 			this.controlPlayForward.classList.remove('control-pause');
 		} else {
-			this.canvasPlay.classList.remove('canvas-play-backward');
 			this.controlPlayForward.title = isPlaying ? 'Pause' : 'Play';
 			this.controlPlayForward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayForward.classList.toggle('control-pause', isPlaying);
@@ -701,6 +700,9 @@ globalThis.bytebeat = new class {
 			this.controlPlayBackward.classList.add('control-play');
 			this.controlPlayBackward.classList.remove('control-pause');
 		}
+		this.canvasContainerElem.title = isPlaying ? 'Click to pause' :
+			`Click to play${ this.isReverse ? ' in reverse' : '' }`;
+		this.canvasPlay.classList.toggle('canvas-play-backward', this.isReverse);
 		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
 		this.canvasPlay.classList.toggle('canvas-pause', isPlaying);
 		if(isPlaying) {
