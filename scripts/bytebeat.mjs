@@ -685,6 +685,7 @@ globalThis.bytebeat = new class {
 	}
 	togglePlay(isPlaying, isSendData = true) {
 		if(this.isReverse) {
+			this.canvasPlay.classList.add('canvas-play-backward');
 			this.controlPlayBackward.title = isPlaying ? 'Pause' : 'Reverse';
 			this.controlPlayBackward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayBackward.classList.toggle('control-pause', isPlaying);
@@ -692,6 +693,7 @@ globalThis.bytebeat = new class {
 			this.controlPlayForward.classList.add('control-play');
 			this.controlPlayForward.classList.remove('control-pause');
 		} else {
+			this.canvasPlay.classList.remove('canvas-play-backward');
 			this.controlPlayForward.title = isPlaying ? 'Pause' : 'Play';
 			this.controlPlayForward.classList.toggle('control-play', !isPlaying);
 			this.controlPlayForward.classList.toggle('control-pause', isPlaying);

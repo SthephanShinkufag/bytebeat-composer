@@ -114,8 +114,6 @@ footer {
 	border-radius: 16px;
 	color: #c5c8c6;
 	line-height: 0;
-	-webkit-transform: translate(-50%, -50%);
-	-moz-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 }
 
@@ -123,6 +121,10 @@ footer {
 	width: 46px;
 	height: 46px;
 	fill: currentColor;
+}
+
+.canvas-play-backward > #svg-canvas-play {
+	transform: scaleX(-1);
 }
 
 /* ==[ Editor ] =========================================================================================== */
