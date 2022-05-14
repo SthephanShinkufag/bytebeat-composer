@@ -354,11 +354,11 @@ button[name="close"] {
 /* ==[ Controls ] ========================================================================================= */
 
 .control-button {
-	height: 30px;
+	height: 28px;
 }
 
 .control-button, .control-select {
-	height: 30px;
+	height: 28px;
 	margin: 1px 2px;
 	padding: 0;
 	border: none;
@@ -378,14 +378,14 @@ button[name="close"] {
 }
 
 .control-button > svg {
-	width: 30px;
-	height: 30px;
+	width: 28px;
+	height: 28px;
 	fill: currentColor;
 }
 
 #control-counter {
 	width: 80px;
-	height: 30px;
+	height: 28px;
 	margin: 1px 2px 1px 0;
 	padding: 0 8px;
 	background: linear-gradient(to top, #3a445e, #181c26);
@@ -403,7 +403,7 @@ button[name="close"] {
 	border-bottom-right-radius: 0;
 	text-align: center;
 	font: bold 13px tahoma;
-	line-height: 30px;
+	line-height: 28px;
 	user-select: none;
 }
 
@@ -412,7 +412,7 @@ button[name="close"] {
 	display: none;
 }
 
-#control-play-backward, #control-scaledown {
+#control-rec, #control-play-backward, #control-scaledown {
 	margin: 1px 0 1px 2px;
 	border-radius: 0 5px 5px 0;
 	transform: scaleX(-1);
@@ -422,20 +422,19 @@ button[name="close"] {
 	transform: scaleX(-1);
 }
 
-#control-play-forward, #control-scaleup {
+#control-expand, #control-play-forward, #control-scaleup {
 	margin: 1px 2px 1px 0;
 	border-left: 1px solid #5c636c;
 	border-radius: 0 5px 5px 0;
 }
 
-#control-rec {
+#control-rec.control-recording {
 	color: #b50000;
 }
 
 @keyframes blink {
 	50% { opacity: 0.0; }
 }
-
 .control-recording > svg {
 	animation: blink 1s step-start 0s infinite;
 }
@@ -455,7 +454,7 @@ button[name="close"] {
 	color: #435071;
 }
 
-#control-stop {
+#control-link, #control-stop {
 	margin: 1px 0;
 	border-left: 1px solid #5c636c;
 	border-radius: 0;
@@ -464,7 +463,7 @@ button[name="close"] {
 #control-volume {
 	appearance: none;
 	width: 150px;
-	height: 12px;
+	height: 10px;
 	margin: 10px 0 10px 4px;
 	border-radius: 15px;
 	background-color: #2e3239;

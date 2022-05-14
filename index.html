@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051401">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051401">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051402"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051403">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051403">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051403"></script>
 </head>
 <body>
 	<main id="content">
@@ -34,9 +34,6 @@
 				<button id="control-play-forward" class="control-button control-play" title="Play" onclick="bytebeat.playForward();">
 					<svg id="svg-control-play-forward"><use xlink:href="#symbol-play"></use></svg>
 					<svg class="svg-control-pause"><use xlink:href="#symbol-pause"></use></svg>
-				</button>
-				<button id="control-rec" class="control-button" title="Record to file" onclick="bytebeat.toggleRecording();">
-					<svg><use xlink:href="#symbol-rec"></use></svg>
 				</button>
 				<button id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1, this);">
 					<svg><use xlink:href="#symbol-scaledown"></use></svg>
@@ -62,6 +59,12 @@
 					<option value="32000">32000Hz</option>
 					<option value="44100">44100Hz</option>
 				</select>
+				<button id="control-rec" class="control-button" title="Record to the .ogg file" onclick="bytebeat.toggleRecording();">
+					<svg><use xlink:href="#symbol-rec"></use></svg>
+				</button>
+				<button id="control-link" class="control-button" title="Copy the song link" onclick="bytebeat.copyLink();">
+					<svg><use xlink:href="#symbol-link"></use></svg>
+				</button>
 				<button id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
 					<svg><use xlink:href="#symbol-expand"></use></svg>
 				</button>
@@ -167,6 +170,9 @@
 			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-scaleup">
 				<path d="M8 16.5v-1c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v1c0 1.1-.9 2-2 2H10c-1.1 0-2-.9-2-2z"/>
+			</symbol>
+			<symbol viewBox="0 0 32 32" id="symbol-link">
+				<path d="M17 22.5H8c-1.7 0-3-1.3-3-3v-4c0-1.7 1.3-3 3-3h2v3H9c-.6 0-1 .4-1 1v2c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V15h3v4.5c0 1.7-1.3 3-3 3zm7-3h-2v-3h1c.6 0 1-.4 1-1v-2c0-.6-.4-1-1-1h-7c-.6 0-1 .4-1 1V17h-3v-4.5c0-1.7 1.3-3 3-3h9c1.7 0 3 1.3 3 3v4c0 1.7-1.3 3-3 3z"/>
 			</symbol>
 			<symbol viewBox="0 0 32 32" id="symbol-expand">
 				<path d="M10.5 7.5H13c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5h-2.5V13c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5v-2.5c0-1.7 1.3-3 3-3zm11 17H19c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5h2.5V19c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v2.5c0 1.7-1.3 3-3 3zm3-14V13c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5v-2.5H19c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5h2.5c1.7 0 3 1.3 3 3zm-17 11V19c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v2.5H13c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5h-2.5c-1.7 0-3-1.3-3-3z"/>
