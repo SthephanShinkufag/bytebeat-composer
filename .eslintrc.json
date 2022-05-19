@@ -59,6 +59,7 @@
 		"quotes": ["error", "single"],
 		"quote-props": ["error", "as-needed"],
 		"require-jsdoc": "off",
+		"space-infix-ops": "error",
 		"template-curly-spacing": ["error", "always"]
 	}
 }

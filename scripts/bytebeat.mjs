@@ -31,8 +31,6 @@ globalThis.bytebeat = new class {
 		this.containerFixed = null;
 		this.controlCounter = null;
 		this.controlMode = null;
-		this.controlPlayBackward = null;
-		this.controlPlayForward = null;
 		this.controlSampleRate = null;
 		this.controlScaleDown = null;
 		this.controlVolume = null;
@@ -43,10 +41,10 @@ globalThis.bytebeat = new class {
 		this.isActiveTab = true;
 		this.isCompilationError = false;
 		this.isPlaying = false;
-		this.isReverse = false;
 		this.isRecording = false;
 		this.mode = 'Bytebeat';
 		this.needClear = false;
+		this.playbackSpeed = 1;
 		this.recordChunks = [];
 		this.sampleRate = 8000;
 		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false, volume: .5 };
@@ -101,10 +99,11 @@ globalThis.bytebeat = new class {
 		startX = Math.floor(startX);
 		const drawWidth = Math.min(Math.abs(endX - startX) + 1, width);
 		startX = Math.min(startX, endX);
+		const isReverse = this.playbackSpeed < 0;
 		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
 		if(this.settings.drawScale) {
-			const x = this.isReverse ? drawWidth - 1 : 0;
+			const x = isReverse ? drawWidth - 1 : 0;
 			for(let y = 0; y < height; ++y) {
 				let idx = (drawWidth * (255 - y) + x) << 2;
 				const value = this.drawEndBuffer[y];
@@ -127,10 +126,8 @@ globalThis.bytebeat = new class {
 			const curY = buffer[i].value;
 			const curTime = buffer[i].t;
 			const nextTime = buffer[i + 1]?.t ?? endTime;
-			const curX = this.mod(Math.floor(this.getX(
-				this.isReverse ? nextTime + 1 : curTime)) - startX, width);
-			const nextX = this.mod(Math.ceil(this.getX(
-				this.isReverse ? curTime + 1 : nextTime)) - startX, width);
+			const curX = this.mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
+			const nextX = this.mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
 			if(isNaN(curY)) {
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
@@ -147,8 +144,7 @@ globalThis.bytebeat = new class {
 			if(isWaveform) {
 				const prevY = buffer[i - 1]?.value ?? NaN;
 				if(!isNaN(prevY)) {
-					const x = this.isReverse ?
-						this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
+					const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
 					for(let dy = prevY < curY ? 1 : -1, y = prevY; y !== curY; y += dy) {
 						let idx = (drawWidth * (255 - y) + x) << 2;
 						if(imageData.data[idx] === 0) {
@@ -165,7 +161,7 @@ globalThis.bytebeat = new class {
 		}
 		// Saving the last points of a segment
 		if(this.settings.drawScale) {
-			const x = this.isReverse ? 0 : drawWidth - 1;
+			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
 				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + x) << 2];
 			}
@@ -342,7 +338,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051403');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051900');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -390,8 +386,6 @@ globalThis.bytebeat = new class {
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
 		this.controlMode = document.getElementById('control-mode');
-		this.controlPlayBackward = document.getElementById('control-play-backward');
-		this.controlPlayForward = document.getElementById('control-play-forward');
 		this.controlRec = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlScaleDown = document.getElementById('control-scaledown');
@@ -404,7 +398,7 @@ globalThis.bytebeat = new class {
 		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
 			if(e.key === 'Enter') {
 				this.controlCounter.blur();
-				this.togglePlay(true);
+				this.playbackToggle(true);
 				return;
 			}
 			const { value } = this.controlCounter;
@@ -442,13 +436,11 @@ globalThis.bytebeat = new class {
 			this.editorElem.value = code;
 		}
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
-		const sampleRatio = this.sampleRate / this.audioCtx.sampleRate;
-		const data = { mode, sampleRatio };
+		const data = { mode, sampleRatio: this.sampleRate / this.audioCtx.sampleRate };
 		if(isPlay) {
-			this.togglePlay(true, false);
-			data.isPlaying = isPlay;
+			this.playbackToggle(true, false);
 			data.resetTime = true;
-			this.needClear = true;
+			data.isPlaying = isPlay;
 		} else {
 			data.setFunction = code;
 		}
@@ -564,6 +556,56 @@ globalThis.bytebeat = new class {
 		this.loadCode(songData ||
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
+	playbackFaster(el, sign) {
+		const valueEl = el.firstElementChild;
+		const value = +valueEl.textContent;
+		this.playbackSetSpeed(sign * value);
+		let newValue;
+		switch(value) {
+		case 2: newValue = 4; break;
+		case 4: newValue = 8; break;
+		case 8: newValue = 2;
+		}
+		valueEl.textContent = newValue;
+		el.title = el.title.replace(value, newValue);
+	}
+	playbackSetSpeed(playbackSpeed) {
+		if(playbackSpeed !== this.playbackSpeed) {
+			this.playbackSpeed = playbackSpeed;
+		}
+		this.playbackToggle(true);
+	}
+	playbackStop() {
+		this.playbackToggle(false, false);
+		this.sendData({ isPlaying: false, resetTime: true });
+	}
+	playbackToggle(isPlaying, isSendData = true) {
+		const isReverse = this.playbackSpeed < 0;
+		this.canvasContainerElem.title = isPlaying ? `Click to ${
+			this.isRecording ? 'pause and stop recording' : 'pause' }` :
+			`Click to play${ isReverse ? ' in reverse' : '' }`;
+		this.canvasPlay.classList.toggle('canvas-play-backward', isReverse);
+		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
+		this.canvasPlay.classList.toggle('canvas-pause', isPlaying);
+		if(isPlaying) {
+			this.canvasPlay.classList.remove('canvas-initial');
+			if(this.audioCtx.resume) {
+				this.audioCtx.resume();
+				this.requestAnimationFrame();
+			}
+		} else if(this.isRecording) {
+			this.isRecording = false;
+			this.controlRec.classList.remove('control-recording');
+			this.controlRec.title = 'Record to file';
+			this.audioRecorder.stop();
+		}
+		this.isPlaying = isPlaying;
+		if(isSendData) {
+			this.sendData({ isPlaying, playbackSpeed: this.playbackSpeed });
+		} else {
+			this.needClear = true;
+		}
+	}
 	receiveData(data) {
 		const { byteSample, error } = data;
 		if(byteSample !== undefined) {
@@ -676,90 +718,20 @@ globalThis.bytebeat = new class {
 		this.saveSettings();
 		this.audioGain.gain.value = volumeValue * volumeValue;
 	}
-	stopPlay() {
-		this.togglePlay(false, false);
-		this.needClear = true;
-		this.sendData({ isPlaying: false, resetTime: true });
-	}
 	toggleCounterUnits() {
 		this.settings.isSeconds = !this.settings.isSeconds;
 		this.saveSettings();
 		this.setCounterUnits();
 	}
-	togglePlay(isPlaying, isSendData = true) {
-		const pauseTxt = this.isRecording ? 'Pause and stop recording' : 'Pause';
-		if(this.isReverse) {
-			this.controlPlayBackward.title = isPlaying ? pauseTxt : 'Reverse';
-			this.controlPlayBackward.classList.toggle('control-play', !isPlaying);
-			this.controlPlayBackward.classList.toggle('control-pause', isPlaying);
-			this.controlPlayForward.title = 'Play';
-			this.controlPlayForward.classList.add('control-play');
-			this.controlPlayForward.classList.remove('control-pause');
-		} else {
-			this.controlPlayForward.title = isPlaying ? pauseTxt : 'Play';
-			this.controlPlayForward.classList.toggle('control-play', !isPlaying);
-			this.controlPlayForward.classList.toggle('control-pause', isPlaying);
-			this.controlPlayBackward.title = 'Reverse';
-			this.controlPlayBackward.classList.add('control-play');
-			this.controlPlayBackward.classList.remove('control-pause');
-		}
-		this.canvasContainerElem.title = isPlaying ? `Click to ${ pauseTxt.toLowerCase() }` :
-			`Click to play${ this.isReverse ? ' in reverse' : '' }`;
-		this.canvasPlay.classList.toggle('canvas-play-backward', this.isReverse);
-		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
-		this.canvasPlay.classList.toggle('canvas-pause', isPlaying);
-		if(isPlaying) {
-			this.canvasPlay.classList.remove('canvas-initial');
-			if(this.audioCtx.resume) {
-				this.audioCtx.resume();
-				this.requestAnimationFrame();
-			}
-		} else if(this.isRecording) {
-			this.isRecording = false;
-			this.controlRec.classList.remove('control-recording');
-			this.controlRec.title = 'Record to file';
-			this.audioRecorder.stop();
-		}
-		this.isPlaying = isPlaying;
-		if(isSendData) {
-			this.sendData({ isPlaying, isReverse: this.isReverse });
-		}
-	}
 	toggleRecording() {
-		if(!this.isRecording) {
-			if(this.audioCtx) {
-				this.isRecording = true;
-				this.controlRec.classList.add('control-recording');
-				this.controlRec.title = 'Pause and stop recording';
-				this.audioRecorder.start();
-				this.recordChunks = [];
-			}
-			this.togglePlay(true);
-			return;
+		if(!this.isRecording && this.audioCtx) {
+			this.isRecording = true;
+			this.controlRec.classList.add('control-recording');
+			this.controlRec.title = 'Pause and stop recording';
+			this.audioRecorder.start();
+			this.recordChunks = [];
 		}
-		this.togglePlay(false);
-	}
-	playBackward() {
-		if(!this.isReverse) {
-			this.isReverse = true;
-			this.drawBuffer = [];
-			if(this.isPlaying) {
-				this.togglePlay(true);
-				return;
-			}
-		}
-		this.togglePlay(!this.isPlaying);
-	}
-	playForward() {
-		if(this.isReverse) {
-			this.isReverse = false;
-			this.drawBuffer = [];
-			if(this.isPlaying) {
-				this.togglePlay(true);
-				return;
-			}
-		}
-		this.togglePlay(!this.isPlaying);
+		this.playbackToggle(this.isRecording);
 	}
 	toggleTimeCursor() {
 		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);

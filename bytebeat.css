@@ -407,25 +407,27 @@ button[name="close"] {
 	user-select: none;
 }
 
-.control-pause > #svg-control-play-backward, .control-pause > #svg-control-play-forward,
-.control-play > .svg-control-pause, .control-play > .svg-control-pause {
-	display: none;
-}
-
-#control-rec, #control-play-backward, #control-scaledown {
-	margin: 1px 0 1px 2px;
-	border-radius: 0 5px 5px 0;
+#control-fast-backward > svg, #control-play-backward > svg {
 	transform: scaleX(-1);
 }
 
-#control-play-backward {
-	transform: scaleX(-1);
+#control-fast-backward, #control-fast-forward {
+	position: relative;
 }
 
-#control-expand, #control-play-forward, #control-scaleup {
-	margin: 1px 2px 1px 0;
-	border-left: 1px solid #5c636c;
-	border-radius: 0 5px 5px 0;
+#control-fast-backward > .control-fast-multiplier {
+	right: 4px;
+}
+
+#control-fast-forward > .control-fast-multiplier {
+	left: 4px;
+}
+
+.control-fast-multiplier {
+	position: absolute;
+	top: 5px;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 #control-rec.control-recording {
@@ -452,12 +454,6 @@ button[name="close"] {
 
 .control-select > option {
 	color: #435071;
-}
-
-#control-link, #control-stop {
-	margin: 1px 0;
-	border-left: 1px solid #5c636c;
-	border-radius: 0;
 }
 
 #control-volume {
@@ -502,6 +498,26 @@ button[name="close"] {
 	flex-wrap: wrap;
 	margin: 2px 0;
 	justify-content: center;
+}
+
+.controls-group {
+	display:flex;
+	margin: 0 2px;
+}
+
+.controls-group > .control-button {
+	margin: 1px 0;
+	border-left: 1px solid #5c636c;
+	border-radius: 0;
+}
+
+.controls-group > .control-button:first-of-type {
+	border: none;
+	border-radius: 5px 0 0 5px;
+}
+
+.controls-group > .control-button:last-of-type {
+	border-radius: 0 5px 5px 0;
 }
 
 /* ==[ Adaptive screen ] ================================================================================== */

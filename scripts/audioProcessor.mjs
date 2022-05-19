@@ -10,7 +10,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.lastValue = 0;
 		};
 		this.isPlaying = false;
-		this.isReverse = false;
+		this.playbackSpeed = 1;
 		this.lastByteValue = NaN;
 		this.lastFlooredTime = -1;
 		this.lastFuncValue = NaN;
@@ -92,17 +92,15 @@ class audioProcessor extends AudioWorkletProcessor {
 					funcValue = NaN;
 				}
 				if(funcValue !== this.lastFuncValue) {
-					if(isNaN(funcValue)) {
-						if(!isNaN(this.lastFuncValue)) {
-							this.lastByteValue = NaN;
-							drawBuffer.push({ t: flooredSample, value: NaN });
-						}
-					} else {
+					if(!isNaN(funcValue)) {
 						this.getByteValue(funcValue);
 						drawBuffer.push({ t: flooredSample, value: this.lastByteValue });
+					} else if(!isNaN(this.lastFuncValue)) {
+						this.lastByteValue = NaN;
+						drawBuffer.push({ t: flooredSample, value: NaN });
 					}
 				}
-				byteSample += (flooredTime - this.lastFlooredTime) * (this.isReverse ? -1 : 1);
+				byteSample += flooredTime - this.lastFlooredTime;
 				this.lastFuncValue = funcValue;
 				this.lastFlooredTime = flooredTime;
 			}
@@ -113,7 +111,13 @@ class audioProcessor extends AudioWorkletProcessor {
 			return true;
 		}
 		this.audioSample += chDataLen;
-		this.byteSample = byteSample;
+		const data = {};
+		if(byteSample !== this.byteSample) {
+			data.byteSample = this.byteSample = byteSample;
+		}
+		if(drawBuffer.length) {
+			data.drawBuffer = drawBuffer;
+		}
 		this.sendData({ drawBuffer, byteSample });
 		return true;
 	}
@@ -128,8 +132,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
 		}
-		if(data.isReverse !== undefined) {
-			this.isReverse = data.isReverse;
+		if(data.playbackSpeed !== undefined) {
+			const sampleRatio = this.sampleRatio / this.playbackSpeed;
+			this.playbackSpeed = data.playbackSpeed;
+			this.setSampleRatio(sampleRatio);
 		}
 		if(data.mode !== undefined) {
 			this.mode = data.mode;
@@ -208,8 +214,8 @@ class audioProcessor extends AudioWorkletProcessor {
 	}
 	setSampleRatio(sampleRatio) {
 		const flooredTimeOffset = Math.floor(this.sampleRatio * this.audioSample) - this.lastFlooredTime;
-		this.sampleRatio = sampleRatio;
-		this.lastFlooredTime = Math.floor(sampleRatio * this.audioSample) - flooredTimeOffset;
+		this.sampleRatio = sampleRatio * this.playbackSpeed;
+		this.lastFlooredTime = Math.floor(this.sampleRatio * this.audioSample) - flooredTimeOffset;
 	}
 }
 
