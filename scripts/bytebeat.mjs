@@ -93,16 +93,25 @@ globalThis.bytebeat = new class {
 		const waveColor = 160;
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
-		const startTime = buffer[0].t;
-		let startX = this.mod(this.getX(startTime), width);
-		const endX = Math.floor(startX + this.getX(endTime - startTime));
-		startX = Math.floor(startX);
-		const drawWidth = Math.min(Math.abs(endX - startX) + 1, width);
-		startX = Math.min(startX, endX);
+		const scale = this.settings.drawScale;
 		const isReverse = this.playbackSpeed < 0;
+		let startTime = buffer[0].t;
+		let startX = this.mod(this.getX(startTime), width);
+		let endX = Math.floor(startX + this.getX(endTime - startTime));
+		startX = Math.floor(startX);
+		let drawWidth = Math.abs(endX - startX) + 1;
+		// Truncate large segments (for high playback speed or 512px canvas)
+		if(drawWidth > width) {
+			startTime = (this.getX(endTime) - width) * (1 << scale);
+			startX = this.mod(this.getX(startTime), width);
+			endX = Math.floor(startX + this.getX(endTime - startTime));
+			startX = Math.floor(startX);
+			drawWidth = Math.abs(endX - startX) + 1;
+		}
+		startX = Math.min(startX, endX);
 		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
-		if(this.settings.drawScale) {
+		if(scale) {
 			const x = isReverse ? drawWidth - 1 : 0;
 			for(let y = 0; y < height; ++y) {
 				let idx = (drawWidth * (255 - y) + x) << 2;
@@ -160,7 +169,7 @@ globalThis.bytebeat = new class {
 			}
 		}
 		// Saving the last points of a segment
-		if(this.settings.drawScale) {
+		if(scale) {
 			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
 				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + x) << 2];
@@ -338,7 +347,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051900');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051901');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
