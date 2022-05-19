@@ -385,6 +385,8 @@ globalThis.bytebeat = new class {
 		// Controls
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
+		this.controlFastBackward = document.getElementById('control-fast-backward');
+		this.controlFastForward = document.getElementById('control-fast-forward');
 		this.controlMode = document.getElementById('control-mode');
 		this.controlRec = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
@@ -557,8 +559,7 @@ globalThis.bytebeat = new class {
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
 	playbackFaster(el, sign) {
-		const valueEl = el.firstElementChild;
-		const value = +valueEl.textContent;
+		const value = +el.firstElementChild.textContent;
 		this.playbackSetSpeed(sign * value);
 		let newValue;
 		switch(value) {
@@ -566,11 +567,14 @@ globalThis.bytebeat = new class {
 		case 4: newValue = 8; break;
 		case 8: newValue = 2;
 		}
-		valueEl.textContent = newValue;
-		el.title = el.title.replace(value, newValue);
+		this.setFastPlayButton(el, newValue);
 	}
 	playbackSetSpeed(playbackSpeed) {
 		if(playbackSpeed !== this.playbackSpeed) {
+			if(Math.abs(playbackSpeed) === 1) {
+				this.setFastPlayButton(this.controlFastBackward, 2);
+				this.setFastPlayButton(this.controlFastForward, 2);
+			}
 			this.playbackSpeed = playbackSpeed;
 		}
 		this.playbackToggle(true);
@@ -674,6 +678,10 @@ globalThis.bytebeat = new class {
 	setDrawMode() {
 		this.settings.drawMode = this.controlDrawMode.value;
 		this.saveSettings();
+	}
+	setFastPlayButton(el, value) {
+		el.firstElementChild.textContent = value;
+		el.title = el.title.replace(/\d/, value);
 	}
 	setFunction() {
 		const setFunction = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
