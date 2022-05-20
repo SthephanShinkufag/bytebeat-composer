@@ -554,7 +554,6 @@ globalThis.bytebeat = new class {
 	}
 	playbackFaster(el, sign) {
 		const value = +el.firstElementChild.textContent;
-		this.playbackSetSpeed(sign * value);
 		let newValue;
 		switch(value) {
 		case 2: newValue = 4; break;
@@ -562,21 +561,21 @@ globalThis.bytebeat = new class {
 		case 8: newValue = 2;
 		}
 		this.setFastPlayButton(el, newValue);
+		this.playbackSetSpeed(sign * value);
 	}
-	playbackSetSpeed(value) {
-		if(value !== this.playbackSpeed) {
-			if(Math.abs(value) === 1) {
-				this.setFastPlayButton(this.controlFastBackward, 2);
-				this.setFastPlayButton(this.controlFastForward, 2);
-			} else if((value ^ this.playbackSpeed) < 0) {
-				this.setFastPlayButton(value > 0 ? this.controlFastBackward : this.controlFastForward, 2);
-			}
-			this.playbackSpeed = value;
+	playbackSetSpeed(value, startPlay = true) {
+		if(Math.abs(value) === 1) {
+			this.setFastPlayButton(this.controlFastBackward);
+			this.setFastPlayButton(this.controlFastForward);
+		} else if((value ^ this.playbackSpeed) < 0) {
+			this.setFastPlayButton(value > 0 ? this.controlFastBackward : this.controlFastForward);
 		}
-		this.playbackToggle(true);
+		this.playbackSpeed = value;
+		if(startPlay) {
+			this.playbackToggle(true);
+		}
 	}
 	playbackStop() {
-		this.playbackSetSpeed(Math.sign(this.playbackSpeed));
 		this.playbackToggle(false, false);
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
@@ -594,11 +593,14 @@ globalThis.bytebeat = new class {
 				this.audioCtx.resume();
 				this.requestAnimationFrame();
 			}
-		} else if(this.isRecording) {
-			this.isRecording = false;
-			this.controlRec.classList.remove('control-recording');
-			this.controlRec.title = 'Record to file';
-			this.audioRecorder.stop();
+		} else {
+			if(this.isRecording) {
+				this.isRecording = false;
+				this.controlRec.classList.remove('control-recording');
+				this.controlRec.title = 'Record to file';
+				this.audioRecorder.stop();
+			}
+			this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
@@ -645,8 +647,8 @@ globalThis.bytebeat = new class {
 	}
 	resetTime() {
 		this.needClear = true;
-		this.playbackSetSpeed(Math.sign(this.playbackSpeed));
-		this.sendData({ resetTime: true });
+		this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
+		this.sendData({ resetTime: true, playbackSpeed: this.playbackSpeed });
 	}
 	saveSettings() {
 		localStorage.settings = JSON.stringify(this.settings);
@@ -677,7 +679,7 @@ globalThis.bytebeat = new class {
 		this.settings.drawMode = this.controlDrawMode.value;
 		this.saveSettings();
 	}
-	setFastPlayButton(el, value) {
+	setFastPlayButton(el, value = 2) {
 		el.firstElementChild.textContent = value;
 		el.title = el.title.replace(/\d/, value);
 	}
