@@ -347,7 +347,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051901');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051902');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
@@ -460,21 +460,13 @@ globalThis.bytebeat = new class {
 	mod(a, b) {
 		return ((a % b) + b) % b;
 	}
-	onclickCodeLoadButton(el) {
-		const xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 304)) {
-				this.loadCode(Object.assign(JSON.parse(el.dataset.songdata),
-					{ code: xhr.responseText }));
-			}
-		};
-		xhr.open('GET', `library/${
+	async onclickCodeLoadButton(el) {
+		const response = await fetch(`library/${
 			el.classList.contains('code-load-formatted') ? 'formatted' :
 			el.classList.contains('code-load-minified') ? 'minified' :
 			el.classList.contains('code-load-original') ? 'original' : ''
-		}/${ el.dataset.codeFile }`, true);
-		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-		xhr.send(null);
+		}/${ el.dataset.codeFile }`, { cache: 'no-cache' });
+		this.loadCode(Object.assign(JSON.parse(el.dataset.songdata), { code: await response.text() }));
 	}
 	onclickCodeToggleButton(el) {
 		const parentEl = el.parentNode;
@@ -489,7 +481,7 @@ globalThis.bytebeat = new class {
 			'Original version shown. Click to view the minified version.';
 		el.textContent = isMinified ? '+' : '–';
 	}
-	onclickLibraryHeader(el) {
+	async onclickLibraryHeader(el) {
 		const containerEl = el.nextElementSibling;
 		const state = containerEl.classList;
 		if(state.contains('loaded') || el.parentNode.open) {
@@ -498,30 +490,23 @@ globalThis.bytebeat = new class {
 		state.add('loaded');
 		const waitEl = el.querySelector('.loading-wait');
 		waitEl.classList.remove('disabled');
-		const xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState !== 4) {
-				return;
-			}
-			waitEl.classList.add('disabled');
-			const { status } = xhr;
-			if(status !== 200 && status !== 304) {
-				state.remove('loaded');
-				containerEl.innerHTML = `<div class="loading-error">Unable to load the library: ${
-					status } ${ xhr.statusText }</div>`;
-				return;
-			}
-			containerEl.innerHTML = '';
-			let libraryHTML = '';
-			const libraryArr = JSON.parse(xhr.responseText);
-			for(let i = 0, len = libraryArr.length; i < len; ++i) {
-				libraryHTML += `<div class="entry-top">${ this.generateLibraryEntry(libraryArr[i]) }</div>`;
-			}
-			containerEl.insertAdjacentHTML('beforeend', libraryHTML);
-		};
-		xhr.open('GET', `./library/${ containerEl.id.replace('library-', '') }.json`, true);
-		xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-		xhr.send(null);
+		const response = await fetch(`./library/${ containerEl.id.replace('library-', '') }.json`,
+			{ cache: 'no-cache' });
+		const { status } = response;
+		waitEl.classList.add('disabled');
+		if(status !== 200 && status !== 304) {
+			state.remove('loaded');
+			containerEl.innerHTML = `<div class="loading-error">Unable to load the library: ${
+				status } ${ response.statusText }</div>`;
+			return;
+		}
+		containerEl.innerHTML = '';
+		let libraryHTML = '';
+		const libraryArr = await response.json();
+		for(let i = 0, len = libraryArr.length; i < len; ++i) {
+			libraryHTML += `<div class="entry-top">${ this.generateLibraryEntry(libraryArr[i]) }</div>`;
+		}
+		containerEl.insertAdjacentHTML('beforeend', libraryHTML);
 	}
 	onresizeWindow() {
 		const isSmallWindow = window.innerWidth <= 768;
@@ -578,17 +563,20 @@ globalThis.bytebeat = new class {
 		}
 		this.setFastPlayButton(el, newValue);
 	}
-	playbackSetSpeed(playbackSpeed) {
-		if(playbackSpeed !== this.playbackSpeed) {
-			if(Math.abs(playbackSpeed) === 1) {
+	playbackSetSpeed(value) {
+		if(value !== this.playbackSpeed) {
+			if(Math.abs(value) === 1) {
 				this.setFastPlayButton(this.controlFastBackward, 2);
 				this.setFastPlayButton(this.controlFastForward, 2);
+			} else if((value ^ this.playbackSpeed) < 0) {
+				this.setFastPlayButton(value > 0 ? this.controlFastBackward : this.controlFastForward, 2);
 			}
-			this.playbackSpeed = playbackSpeed;
+			this.playbackSpeed = value;
 		}
 		this.playbackToggle(true);
 	}
 	playbackStop() {
+		this.playbackSetSpeed(Math.sign(this.playbackSpeed));
 		this.playbackToggle(false, false);
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
@@ -657,6 +645,7 @@ globalThis.bytebeat = new class {
 	}
 	resetTime() {
 		this.needClear = true;
+		this.playbackSetSpeed(Math.sign(this.playbackSpeed));
 		this.sendData({ resetTime: true });
 	}
 	saveSettings() {

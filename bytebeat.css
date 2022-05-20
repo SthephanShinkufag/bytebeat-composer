@@ -353,10 +353,6 @@ button[name="close"] {
 
 /* ==[ Controls ] ========================================================================================= */
 
-.control-button {
-	height: 28px;
-}
-
 .control-button, .control-select {
 	height: 28px;
 	margin: 1px 2px;
@@ -425,9 +421,7 @@ button[name="close"] {
 
 .control-fast-multiplier {
 	position: absolute;
-	top: 5px;
-	font-size: 14px;
-	font-weight: bold;
+	font: bold 14px/28px sans-serif;
 }
 
 #control-rec.control-recording {
