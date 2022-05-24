@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022051902">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022051902">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022051902"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022052400">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022052400">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022052400"></script>
 </head>
 <body>
 	<main id="content">
@@ -19,55 +19,55 @@
 				<textarea  id="editor-default" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
 			</div>
 			<div class="controls">
-				<button id="control-counter-units" class="control-button" title="Time units" onclick="bytebeat.toggleCounterUnits();">t</button>
-				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter" onclick="bytebeat.playbackToggle(false);">
+				<button id="control-counter-units" class="control-button" title="Time units">t</button>
+				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter">
 				<div class="controls-group">
-					<button id="control-stop" class="control-button" title="Stop and reset" onclick="bytebeat.playbackStop();">
+					<button id="control-stop" class="control-button" title="Stop and reset">
 						<svg><use xlink:href="#symbol-stop"></use></svg>
 					</button>
-					<button id="control-reset" class="control-button" title="Reset time to 0" onclick="bytebeat.resetTime();">
+					<button id="control-reset" class="control-button" title="Reset time to 0">
 						<svg><use xlink:href="#symbol-reset"></use></svg>
 					</button>
 				</div>
 				<div class="controls-group">
-					<button id="control-fast-backward" class="control-button" title="Run fast reverse x2 speed" onclick="bytebeat.playbackFaster(this, -1);">
+					<button id="control-fast-backward" class="control-button" title="Run fast reverse x2 speed">
 						<span class="control-fast-multiplier">2</span>
 						<svg><use xlink:href="#symbol-fast"></use></svg>
 					</button>
-					<button id="control-play-backward" class="control-button" title="Reverse" onclick="bytebeat.playbackSetSpeed(-1);">
+					<button id="control-play-backward" class="control-button" title="Reverse">
 						<svg><use xlink:href="#symbol-play"></use></svg>
 					</button>
-					<button id="control-pause" class="control-button" title="Pause" onclick="bytebeat.playbackToggle(false);">
+					<button id="control-pause" class="control-button" title="Pause">
 						<svg><use xlink:href="#symbol-pause"></use></svg>
 					</button>
-					<button id="control-play-forward" class="control-button" title="Play" onclick="bytebeat.playbackSetSpeed(1);">
+					<button id="control-play-forward" class="control-button" title="Play">
 						<svg><use xlink:href="#symbol-play"></use></svg>
 					</button>
-					<button id="control-fast-forward" class="control-button" title="Run fast play x2 speed" onclick="bytebeat.playbackFaster(this, 1);">
+					<button id="control-fast-forward" class="control-button" title="Run fast play x2 speed">
 						<span class="control-fast-multiplier">2</span>
 						<svg><use xlink:href="#symbol-fast"></use></svg>
 					</button>
 				</div>
 				<div class="controls-group">
-					<button id="control-scaledown" class="control-button" title="Zoom in the scope" onclick="bytebeat.setScale(-1, this);">
+					<button id="control-scaledown" class="control-button" title="Zoom in the scope">
 						<svg><use xlink:href="#symbol-scaledown"></use></svg>
 					</button>
-					<button id="control-scaleup" class="control-button" title="Zoom out the scope" onclick="bytebeat.setScale(1);">
+					<button id="control-scaleup" class="control-button" title="Zoom out the scope">
 						<svg><use xlink:href="#symbol-scaleup"></use></svg>
 					</button>
 				</div>
-				<select id="control-drawmode" class="control-select" title="Drawing mode" onchange="bytebeat.setDrawMode();">
+				<select id="control-drawmode" class="control-select" title="Drawing mode">
 					<option value="Points" selected>Points</option>
 					<option value="Waveform">Waveform</option>
 				</select>
-				<select id="control-mode" class="control-select" title="Sound mode" onchange="bytebeat.setMode(this.selectedOptions[0].value);">
+				<select id="control-mode" class="control-select" title="Sound mode">
 					<option value="Bytebeat" selected>Bytebeat</option>
 					<option value="Signed Bytebeat">Signed Bytebeat</option>
 					<option value="Floatbeat">Floatbeat</option>
 				</select>
-				<select id="control-samplerate" class="control-select" title="Sample rate" onchange="bytebeat.setSampleRate(+this.selectedOptions[0].value);">
-					<option value="4000" selected>4000Hz</option>
-					<option value="8000" selected>8000Hz</option>
+				<input type="text" id="control-samplerate" title="Set sample rate then press Enter">
+				<select id="control-samplerate-select" class="control-select" title="Sample rate">
+					<option value="8000">8000Hz</option>
 					<option value="11025">11025Hz</option>
 					<option value="16000">16000Hz</option>
 					<option value="22050">22050Hz</option>
@@ -75,20 +75,20 @@
 					<option value="44100">44100Hz</option>
 				</select>
 				<div class="controls-group">
-					<button id="control-rec" class="control-button" title="Record to the file" onclick="bytebeat.toggleRecording();">
+					<button id="control-rec" class="control-button" title="Record to the file">
 						<svg><use xlink:href="#symbol-rec"></use></svg>
 					</button>
-					<button id="control-link" class="control-button" title="Copy the song link" onclick="bytebeat.copyLink();">
+					<button id="control-link" class="control-button" title="Copy the song link">
 						<svg><use xlink:href="#symbol-link"></use></svg>
 					</button>
-					<button id="control-expand" class="control-button" title="Expand the code editor" onclick="bytebeat.expandEditor();">
+					<button id="control-expand" class="control-button" title="Expand the code editor">
 						<svg><use xlink:href="#symbol-expand"></use></svg>
 					</button>
 				</div>
-				<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume" oninput="bytebeat.setVolume(false);">
+				<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume">
 			</div>
 			<div id="error"></div>
-			<div id="canvas-container" title="Click to play" onclick="bytebeat.playbackToggle(!bytebeat.isPlaying)">
+			<div id="canvas-container" title="Click to play">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>
 				<div id="canvas-play" class="canvas-initial canvas-play">

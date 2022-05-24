@@ -6,8 +6,8 @@ const loadScript = src => new Promise(resolve => {
 		scriptElem.type = 'module';
 		scriptElem.async = true;
 		scriptElem.src = src;
-		scriptElem.onload = () => resolve();
-		scriptElem.onerror = () => console.error(`Failed to load the script ${ src }`);
+		scriptElem.addEventListener('load', () => resolve());
+		scriptElem.addEventListener('error', () => console.error(`Failed to load the script ${ src }`));
 		document.head.appendChild(scriptElem);
 	} catch(err) {
 		console.error(err.message);
@@ -18,21 +18,30 @@ globalThis.bytebeat = new class {
 	constructor() {
 		this.audioCtx = null;
 		this.audioGain = null;
+		this.audioRecordChunks = [];
 		this.audioRecorder = null;
 		this.audioWorkletNode = null;
 		this.byteSample = 0;
-		this.cachedElemParent = null;
-		this.cachedTextNode = null;
+		this.cacheParentElem = null;
+		this.cacheTextElem = null;
+		this.canvasContainer = null;
 		this.canvasCtx = null;
 		this.canvasElem = null;
 		this.canvasHeight = 256;
-		this.canvasPlay = null;
+		this.canvasPlayButton = null;
+		this.canvasTimeCursor = null;
 		this.canvasWidth = 1024;
-		this.containerFixed = null;
-		this.controlCounter = null;
-		this.controlMode = null;
+		this.containerFixedElem = null;
+		this.controlDrawMode = null;
+		this.controlFastBack = null;
+		this.controlFastForw = null;
+		this.controlPlaybackMode = null;
+		this.controlRecord = null;
 		this.controlSampleRate = null;
+		this.controlSampleRateSelect = null;
 		this.controlScaleDown = null;
+		this.controlTime = null;
+		this.controlTimeUnits = null;
 		this.controlVolume = null;
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
@@ -40,15 +49,12 @@ globalThis.bytebeat = new class {
 		this.errorElem = null;
 		this.isActiveTab = true;
 		this.isCompilationError = false;
+		this.isNeedClear = false;
 		this.isPlaying = false;
 		this.isRecording = false;
-		this.mode = 'Bytebeat';
-		this.needClear = false;
 		this.playbackSpeed = 1;
-		this.recordChunks = [];
-		this.sampleRate = 8000;
 		this.settings = { drawMode: 'Points', drawScale: 5, isSeconds: false, volume: .5 };
-		this.timeCursor = null;
+		this.songData = { mode: 'Bytebeat', sampleRate: 8000 };
 		this.init();
 	}
 	get saveData() {
@@ -65,7 +71,7 @@ globalThis.bytebeat = new class {
 		return saveData;
 	}
 	get timeCursorEnabled() {
-		return this.sampleRate >> this.settings.drawScale < 3950;
+		return this.songData.sampleRate >> this.settings.drawScale < 3950;
 	}
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
@@ -184,17 +190,17 @@ globalThis.bytebeat = new class {
 		}
 		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
-			this.timeCursor.style.left = endX / width * 100 + '%';
+			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
 	}
 	escapeHTML(text) {
-		this.cachedTextNode.nodeValue = text;
-		return this.cachedElemParent.innerHTML;
+		this.cacheTextElem.nodeValue = text;
+		return this.cacheParentElem.innerHTML;
 	}
 	expandEditor() {
-		this.containerFixed.classList.toggle('container-expanded');
+		this.containerFixedElem.classList.toggle('container-expanded');
 	}
 	generateLibraryEntry({
 		author,
@@ -304,24 +310,78 @@ globalThis.bytebeat = new class {
 	getX(t) {
 		return t / (1 << this.settings.drawScale);
 	}
-	handleEvent({ target: el, type }) {
-		if(type === 'click') {
-			if(el.classList.contains('code-text')) {
-				this.loadCode(Object.assign({ code: el.innerText },
-					el.hasAttribute('data-songdata') ? JSON.parse(el.dataset.songdata) : {}));
-			} else if(el.classList.contains('code-load')) {
-				this.onclickCodeLoadButton(el);
-			} else if(el.classList.contains('code-toggle') && !el.getAttribute('disabled')) {
-				this.onclickCodeToggleButton(el);
-			} else if(el.classList.contains('library-header')) {
-				this.onclickLibraryHeader(el);
-			} else if(el.parentNode.classList.contains('library-header')) {
-				this.onclickLibraryHeader(el.parentNode);
+	handleEvent(e) {
+		let elem = e.target;
+		switch(e.type) {
+		case 'change':
+			switch(elem.id) {
+			case 'control-drawmode': this.setDrawMode(); break;
+			case 'control-mode': this.setPlaybackMode(elem.value); break;
+			case 'control-samplerate':
+			case 'control-samplerate-select': this.setSampleRate(+elem.value); break;
 			}
 			return;
-		}
-		if(type === 'mouseover' && el.classList.contains('code-text')) {
-			el.title = 'Click to play this code';
+		case 'click':
+			switch(elem.tagName) {
+			case 'svg': elem = elem.parentNode; break;
+			case 'use': elem = elem.parentNode.parentNode; break;
+			default:
+				if(elem.classList.contains('control-fast-multiplier')) {
+					elem = elem.parentNode;
+				}
+			}
+			switch(elem.id) {
+			case 'canvas-container':
+			case 'canvas-main':
+			case 'canvas-play':
+			case 'canvas-timecursor': this.playbackToggle(!this.isPlaying); break;
+			case 'control-counter':
+			case 'control-pause': this.playbackToggle(false); break;
+			case 'control-expand': this.expandEditor(); break;
+			case 'control-fast-backward': this.playbackFaster(elem, -1); break;
+			case 'control-fast-forward': this.playbackFaster(elem, 1); break;
+			case 'control-link': this.copyLink(); break;
+			case 'control-play-backward': this.playbackSetSpeed(-1); break;
+			case 'control-play-forward': this.playbackSetSpeed(1); break;
+			case 'control-rec': this.toggleRecording(); break;
+			case 'control-reset': this.resetTime(); break;
+			case 'control-scaledown': this.setScale(-1, elem); break;
+			case 'control-scaleup': this.setScale(1); break;
+			case 'control-stop': this.playbackStop(); break;
+			case 'control-counter-units': this.toggleCounterUnits(); break;
+			default:
+				if(elem.classList.contains('code-text')) {
+					this.loadCode(Object.assign({ code: elem.innerText },
+						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
+				} else if(elem.classList.contains('code-load')) {
+					this.onclickCodeLoadButton(elem);
+				} else if(elem.classList.contains('code-toggle') && !elem.getAttribute('disabled')) {
+					this.onclickCodeToggleButton(elem);
+				} else if(elem.classList.contains('library-header')) {
+					this.onclickLibraryHeader(elem);
+				} else if(elem.parentNode.classList.contains('library-header')) {
+					this.onclickLibraryHeader(elem.parentNode);
+				}
+			}
+			return;
+		case 'input':
+			switch(elem.id) {
+			case 'control-counter': this.oninputCounter(e); break;
+			case 'control-volume': this.setVolume(false); break;
+			case 'editor-default': this.setFunction(); break;
+			}
+			return;
+		case 'keydown':
+			switch(elem.id) {
+			case 'control-counter': this.oninputCounter(e); break;
+			case 'editor-default': this.onkeydownEditor(e); break;
+			}
+			return;
+		case 'mouseover':
+			if(elem.classList.contains('code-text')) {
+				elem.title = 'Click to play this code';
+			}
+			return;
 		}
 	}
 	async init() {
@@ -347,14 +407,14 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022051902');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022052400');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
-		audioRecorder.ondataavailable = e => this.recordChunks.push(e.data);
-		audioRecorder.onstop = e => {
+		audioRecorder.addEventListener('dataavailable', e => this.audioRecordChunks.push(e.data));
+		audioRecorder.addEventListener('stop', e => {
 			let file, type;
 			const types = ['audio/webm', 'audio/ogg'];
 			const files = ['track.webm', 'track.ogg'];
@@ -364,77 +424,57 @@ globalThis.bytebeat = new class {
 					break;
 				}
 			}
-			this.saveData(new Blob(this.recordChunks, { type }), file);
-		};
+			this.saveData(new Blob(this.audioRecordChunks, { type }), file);
+		});
 		this.audioGain.connect(mediaDest);
 	}
 	initElements() {
 		// Containers
-		this.containerFixed = document.getElementById('container-fixed');
-		this.containerScroll = document.getElementById('container-scroll');
-		this.containerScroll.addEventListener('click', this);
-		this.containerScroll.addEventListener('mouseover', this);
-		this.cachedElemParent = document.createElement('div');
-		this.cachedTextNode = document.createTextNode('');
-		this.cachedElemParent.appendChild(this.cachedTextNode);
+		this.cacheParentElem = document.createElement('div');
+		this.cacheTextElem = document.createTextNode('');
+		this.cacheParentElem.appendChild(this.cacheTextElem);
+		this.containerFixedElem = document.getElementById('container-fixed');
+		['change', 'click', 'input', 'keydown'].forEach(
+			e => this.containerFixedElem.addEventListener(e, this));
+		const containerScroll = document.getElementById('container-scroll');
+		['click', 'mouseover'].forEach(e => containerScroll.addEventListener(e, this));
 
 		// Volume
 		this.controlVolume = document.getElementById('control-volume');
 		this.setVolume(true);
 
 		// Canvas
-		this.canvasContainerElem = document.getElementById('canvas-container');
+		this.canvasContainer = document.getElementById('canvas-container');
 		this.canvasElem = document.getElementById('canvas-main');
+		this.canvasCtx = this.canvasElem.getContext('2d');
+		this.canvasPlayButton = document.getElementById('canvas-play');
+		this.canvasTimeCursor = document.getElementById('canvas-timecursor');
 		this.onresizeWindow();
 		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
-		this.canvasCtx = this.canvasElem.getContext('2d');
-		this.canvasPlay = document.getElementById('canvas-play');
-		this.timeCursor = document.getElementById('canvas-timecursor');
 
 		// Controls
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
-		this.controlFastBackward = document.getElementById('control-fast-backward');
-		this.controlFastForward = document.getElementById('control-fast-forward');
-		this.controlMode = document.getElementById('control-mode');
-		this.controlRec = document.getElementById('control-rec');
+		this.controlFastBack = document.getElementById('control-fast-backward');
+		this.controlFastForw = document.getElementById('control-fast-forward');
+		this.controlPlaybackMode = document.getElementById('control-mode');
+		this.controlRecord = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
+		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.setScale(0);
 
 		// Time counter
-		this.controlCounter = document.getElementById('control-counter');
-		this.controlCounterUnits = document.getElementById('control-counter-units');
+		this.controlTime = document.getElementById('control-counter');
+		this.controlTimeUnits = document.getElementById('control-counter-units');
 		this.setCounterUnits();
-		this.controlCounter.oninput = this.controlCounter.onkeydown = e => {
-			if(e.key === 'Enter') {
-				this.controlCounter.blur();
-				this.playbackToggle(true);
-				return;
-			}
-			const { value } = this.controlCounter;
-			const byteSample = this.settings.isSeconds ? Math.round(value * this.sampleRate) : value;
-			this.setByteSample(byteSample);
-			this.sendData({ byteSample });
-		};
 
 		// Editor
-		this.errorElem = document.getElementById('error');
 		this.editorElem = document.getElementById('editor-default');
-		this.editorElem.oninput = () => this.setFunction();
-		this.editorElem.onkeydown = e => {
-			if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
-				e.preventDefault();
-				const el = e.target;
-				const { value, selectionStart } = el;
-				el.value = value.slice(0, selectionStart) + '\t' + value.slice(el.selectionEnd);
-				el.setSelectionRange(selectionStart + 1, selectionStart + 1);
-				this.setFunction();
-			}
-		};
+		this.errorElem = document.getElementById('error');
 	}
 	loadCode({ code, sampleRate, mode }, isPlay = true) {
-		this.mode = this.controlMode.value = mode = mode || 'Bytebeat';
+		this.songData.mode = this.controlPlaybackMode.value = mode = mode || 'Bytebeat';
 		if(this.editorView) {
 			this.editorView.dispatch({
 				changes: {
@@ -447,7 +487,7 @@ globalThis.bytebeat = new class {
 			this.editorElem.value = code;
 		}
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
-		const data = { mode, sampleRatio: this.sampleRate / this.audioCtx.sampleRate };
+		const data = { mode, sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate };
 		if(isPlay) {
 			this.playbackToggle(true, false);
 			data.resetTime = true;
@@ -460,53 +500,75 @@ globalThis.bytebeat = new class {
 	mod(a, b) {
 		return ((a % b) + b) % b;
 	}
-	async onclickCodeLoadButton(el) {
+	async onclickCodeLoadButton(buttonElem) {
 		const response = await fetch(`library/${
-			el.classList.contains('code-load-formatted') ? 'formatted' :
-			el.classList.contains('code-load-minified') ? 'minified' :
-			el.classList.contains('code-load-original') ? 'original' : ''
-		}/${ el.dataset.codeFile }`, { cache: 'no-cache' });
-		this.loadCode(Object.assign(JSON.parse(el.dataset.songdata), { code: await response.text() }));
+			buttonElem.classList.contains('code-load-formatted') ? 'formatted' :
+			buttonElem.classList.contains('code-load-minified') ? 'minified' :
+			buttonElem.classList.contains('code-load-original') ? 'original' : ''
+		}/${ buttonElem.dataset.codeFile }`, { cache: 'no-cache' });
+		this.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
+			{ code: await response.text() }));
 	}
-	onclickCodeToggleButton(el) {
-		const parentEl = el.parentNode;
-		const origEl = parentEl.querySelector('.code-text-original');
-		const minEl = parentEl.querySelector('.code-text-minified');
-		origEl?.classList.toggle('disabled');
-		minEl?.classList.toggle('disabled');
-		const isMinified = el.textContent === '–';
-		parentEl.querySelector('.code-length').textContent =
-			`${ (isMinified ? minEl : origEl).getAttribute('code-length') }c`;
-		el.title = isMinified ? 'Minified version shown. Click to view the original version.' :
+	onclickCodeToggleButton(buttonElem) {
+		const parentElem = buttonElem.parentNode;
+		const origElem = parentElem.querySelector('.code-text-original');
+		const minElem = parentElem.querySelector('.code-text-minified');
+		origElem?.classList.toggle('disabled');
+		minElem?.classList.toggle('disabled');
+		const isMinified = buttonElem.textContent === '–';
+		parentElem.querySelector('.code-length').textContent =
+			`${ (isMinified ? minElem : origElem).getAttribute('code-length') }c`;
+		buttonElem.title = isMinified ? 'Minified version shown. Click to view the original version.' :
 			'Original version shown. Click to view the minified version.';
-		el.textContent = isMinified ? '+' : '–';
+		buttonElem.textContent = isMinified ? '+' : '–';
 	}
-	async onclickLibraryHeader(el) {
-		const containerEl = el.nextElementSibling;
-		const state = containerEl.classList;
-		if(state.contains('loaded') || el.parentNode.open) {
+	async onclickLibraryHeader(headerElem) {
+		const containerElem = headerElem.nextElementSibling;
+		const state = containerElem.classList;
+		if(state.contains('loaded') || headerElem.parentNode.open) {
 			return;
 		}
 		state.add('loaded');
-		const waitEl = el.querySelector('.loading-wait');
-		waitEl.classList.remove('disabled');
-		const response = await fetch(`./library/${ containerEl.id.replace('library-', '') }.json`,
+		const waitElem = headerElem.querySelector('.loading-wait');
+		waitElem.classList.remove('disabled');
+		const response = await fetch(`./library/${ containerElem.id.replace('library-', '') }.json`,
 			{ cache: 'no-cache' });
 		const { status } = response;
-		waitEl.classList.add('disabled');
+		waitElem.classList.add('disabled');
 		if(status !== 200 && status !== 304) {
 			state.remove('loaded');
-			containerEl.innerHTML = `<div class="loading-error">Unable to load the library: ${
+			containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
 				status } ${ response.statusText }</div>`;
 			return;
 		}
-		containerEl.innerHTML = '';
+		containerElem.innerHTML = '';
 		let libraryHTML = '';
 		const libraryArr = await response.json();
 		for(let i = 0, len = libraryArr.length; i < len; ++i) {
 			libraryHTML += `<div class="entry-top">${ this.generateLibraryEntry(libraryArr[i]) }</div>`;
 		}
-		containerEl.insertAdjacentHTML('beforeend', libraryHTML);
+		containerElem.insertAdjacentHTML('beforeend', libraryHTML);
+	}
+	oninputCounter(e) {
+		if(e.key === 'Enter') {
+			this.controlTime.blur();
+			this.playbackToggle(true);
+			return;
+		}
+		const { value } = this.controlTime;
+		const byteSample = this.settings.isSeconds ? Math.round(value * this.songData.sampleRate) : value;
+		this.setByteSample(byteSample);
+		this.sendData({ byteSample });
+	}
+	onkeydownEditor(e) {
+		if(e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
+			e.preventDefault();
+			const editorElem = e.target;
+			const { value, selectionStart } = editorElem;
+			editorElem.value = value.slice(0, selectionStart) + '\t' + value.slice(editorElem.selectionEnd);
+			editorElem.setSelectionRange(selectionStart + 1, selectionStart + 1);
+			this.setFunction();
+		}
 	}
 	onresizeWindow() {
 		const isSmallWindow = window.innerWidth <= 768;
@@ -552,23 +614,23 @@ globalThis.bytebeat = new class {
 		this.loadCode(songData ||
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
-	playbackFaster(el, sign) {
-		const value = +el.firstElementChild.textContent;
+	playbackFaster(buttonElem, sign) {
+		const value = +buttonElem.firstElementChild.textContent;
 		let newValue;
 		switch(value) {
 		case 2: newValue = 4; break;
 		case 4: newValue = 8; break;
 		case 8: newValue = 2;
 		}
-		this.setFastPlayButton(el, newValue);
+		this.setFastPlayButton(buttonElem, newValue);
 		this.playbackSetSpeed(sign * value);
 	}
 	playbackSetSpeed(value, startPlay = true) {
 		if(Math.abs(value) === 1) {
-			this.setFastPlayButton(this.controlFastBackward);
-			this.setFastPlayButton(this.controlFastForward);
+			this.setFastPlayButton(this.controlFastBack);
+			this.setFastPlayButton(this.controlFastForw);
 		} else if((value ^ this.playbackSpeed) < 0) {
-			this.setFastPlayButton(value > 0 ? this.controlFastBackward : this.controlFastForward);
+			this.setFastPlayButton(value > 0 ? this.controlFastBack : this.controlFastForw);
 		}
 		this.playbackSpeed = value;
 		if(startPlay) {
@@ -581,14 +643,14 @@ globalThis.bytebeat = new class {
 	}
 	playbackToggle(isPlaying, isSendData = true) {
 		const isReverse = this.playbackSpeed < 0;
-		this.canvasContainerElem.title = isPlaying ? `Click to ${
+		this.canvasContainer.title = isPlaying ? `Click to ${
 			this.isRecording ? 'pause and stop recording' : 'pause' }` :
 			`Click to play${ isReverse ? ' in reverse' : '' }`;
-		this.canvasPlay.classList.toggle('canvas-play-backward', isReverse);
-		this.canvasPlay.classList.toggle('canvas-play', !isPlaying);
-		this.canvasPlay.classList.toggle('canvas-pause', isPlaying);
+		this.canvasPlayButton.classList.toggle('canvas-play-backward', isReverse);
+		this.canvasPlayButton.classList.toggle('canvas-play', !isPlaying);
+		this.canvasPlayButton.classList.toggle('canvas-pause', isPlaying);
 		if(isPlaying) {
-			this.canvasPlay.classList.remove('canvas-initial');
+			this.canvasPlayButton.classList.remove('canvas-initial');
 			if(this.audioCtx.resume) {
 				this.audioCtx.resume();
 				this.requestAnimationFrame();
@@ -596,8 +658,8 @@ globalThis.bytebeat = new class {
 		} else {
 			if(this.isRecording) {
 				this.isRecording = false;
-				this.controlRec.classList.remove('control-recording');
-				this.controlRec.title = 'Record to file';
+				this.controlRecord.classList.remove('control-recording');
+				this.controlRecord.title = 'Record to file';
 				this.audioRecorder.stop();
 			}
 			this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
@@ -606,7 +668,7 @@ globalThis.bytebeat = new class {
 		if(isSendData) {
 			this.sendData({ isPlaying, playbackSpeed: this.playbackSpeed });
 		} else {
-			this.needClear = true;
+			this.isNeedClear = true;
 		}
 	}
 	receiveData(data) {
@@ -646,7 +708,7 @@ globalThis.bytebeat = new class {
 		window.requestAnimationFrame(() => this.animationFrame());
 	}
 	resetTime() {
-		this.needClear = true;
+		this.isNeedClear = true;
 		this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
 		this.sendData({ resetTime: true, playbackSpeed: this.playbackSpeed });
 	}
@@ -658,46 +720,61 @@ globalThis.bytebeat = new class {
 	}
 	setByteSample(value) {
 		this.byteSample = +value || 0;
-		if(this.needClear && value === 0) {
-			this.needClear = false;
+		if(this.isNeedClear && value === 0) {
+			this.isNeedClear = false;
 			this.drawBuffer = [];
 			this.clearCanvas();
-			this.timeCursor.style.left = 0;
+			this.canvasTimeCursor.style.left = 0;
 			if(!this.isPlaying) {
-				this.canvasPlay.classList.add('canvas-initial');
+				this.canvasPlayButton.classList.add('canvas-initial');
 			}
 		}
 	}
 	setCounterUnits() {
-		this.controlCounterUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
+		this.controlTimeUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
 		this.setCounterValue(this.byteSample);
 	}
 	setCounterValue(value) {
-		this.controlCounter.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
+		this.controlTime.value = this.settings.isSeconds ?
+			(value / this.songData.sampleRate).toFixed(2) : value;
 	}
 	setDrawMode() {
 		this.settings.drawMode = this.controlDrawMode.value;
 		this.saveSettings();
 	}
-	setFastPlayButton(el, value = 2) {
-		el.firstElementChild.textContent = value;
-		el.title = el.title.replace(/\d/, value);
+	setFastPlayButton(buttonElem, value = 2) {
+		buttonElem.firstElementChild.textContent = value;
+		buttonElem.title = buttonElem.title.replace(/\d/, value);
 	}
 	setFunction() {
 		const setFunction = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
 		this.sendData({ setFunction });
 	}
-	setMode(mode) {
-		this.mode = mode;
+	setPlaybackMode(mode) {
+		this.songData.mode = mode;
 		this.updateUrl();
 		this.sendData({ mode });
 	}
 	setSampleRate(sampleRate, isSendData = true) {
-		this.sampleRate = sampleRate;
+		if(!sampleRate || !isFinite(sampleRate)) {
+			sampleRate = 8000;
+		}
+		switch(sampleRate) {
+		case 8000:
+		case 11025:
+		case 16000:
+		case 22050:
+		case 32000:
+		case 44100: this.controlSampleRateSelect.value = sampleRate; break;
+		default: this.controlSampleRateSelect.selectedIndex = -1;
+		}
+		this.controlSampleRate.value = this.songData.sampleRate = sampleRate;
+		this.controlSampleRate.blur();
+		this.controlSampleRateSelect.blur();
 		this.toggleTimeCursor();
 		if(isSendData) {
 			this.updateUrl();
-			this.sendData({ sampleRatio: this.sampleRate / this.audioCtx.sampleRate });
+			this.sendData({ sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate });
 		}
 	}
 	setScale(amount, buttonElem) {
@@ -732,26 +809,31 @@ globalThis.bytebeat = new class {
 		this.setCounterUnits();
 	}
 	toggleRecording() {
-		if(!this.isRecording && this.audioCtx) {
-			this.isRecording = true;
-			this.controlRec.classList.add('control-recording');
-			this.controlRec.title = 'Pause and stop recording';
-			this.audioRecorder.start();
-			this.recordChunks = [];
+		if(!this.audioCtx) {
+			return;
 		}
-		this.playbackToggle(this.isRecording);
+		if(this.isRecording) {
+			this.playbackToggle(false);
+			return;
+		}
+		this.isRecording = true;
+		this.controlRecord.classList.add('control-recording');
+		this.controlRecord.title = 'Pause and stop recording';
+		this.audioRecorder.start();
+		this.audioRecordChunks = [];
+		this.playbackToggle(true);
 	}
 	toggleTimeCursor() {
-		this.timeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
+		this.canvasTimeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
 	}
 	updateUrl() {
 		const code = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
 		const songData = { code };
-		if(this.sampleRate !== 8000) {
-			songData.sampleRate = this.sampleRate;
+		if(this.songData.sampleRate !== 8000) {
+			songData.sampleRate = this.songData.sampleRate;
 		}
-		if(this.mode !== 'Bytebeat') {
-			songData.mode = this.mode;
+		if(this.songData.mode !== 'Bytebeat') {
+			songData.mode = this.songData.mode;
 		}
 		window.location.hash = `#v3b64${ btoa(String.fromCharCode.apply(undefined,
 			deflateRaw(JSON.stringify(songData)))).replaceAll('=', '') }`;

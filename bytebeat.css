@@ -27,6 +27,11 @@ a:hover {
 	display: none !important;
 }
 
+option {
+	background: white;
+	font-size: 13px;
+}
+
 /* ==[ Containers ] ======================================================================================= */
 
 .container-expanded {
@@ -380,20 +385,23 @@ button[name="close"] {
 }
 
 #control-counter {
+	margin: 1px 2px 1px 0;
+	border-radius: 0 4px 4px 0;
+}
+
+#control-counter, #control-samplerate {
 	width: 80px;
 	height: 28px;
-	margin: 1px 2px 1px 0;
-	padding: 0 8px;
+	padding: 0 5px;
 	background: linear-gradient(to top, #3a445e, #181c26);
 	color: #e3e3e3;
 	border: none;
-	border-radius: 0 4px 4px 0;
 	font-weight: bold;
 	box-shadow: inset 0 0 12px rgba(202, 202, 202, 0.5);
 }
 
 #control-counter-units {
-	width: 32px;
+	width: 28px;
 	margin-right: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
@@ -435,13 +443,26 @@ button[name="close"] {
 	animation: blink 1s step-start 0s infinite;
 }
 
+#control-samplerate {
+	width: 56px;
+	margin: 1px 0 1px 2px;
+	border-radius: 4px 0 0 4px;
+}
+
+#control-samplerate-select {
+	width: 18px;
+	margin-left: 0;
+	font-size: 0;
+	border-radius: 0 5px 5px 0;
+}
+
 #control-scaledown[disabled] {
 	opacity: 0.5;
 	cursor: default;
 }
 
 .control-select {
-	padding-left: 4px;
+	padding-left: 1px;
 	border: none;
 	font-weight: bold;
 }
