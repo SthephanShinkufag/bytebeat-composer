@@ -308,13 +308,26 @@
 		}]
 	}, {
 		"children": [{
-			"description": "\"An endless world of snowy expanses, icebergs, and blue waters...\"<br>The instruments are the same as in \"Frozen Planet\", but the composition is based on playing with coefficients of square-wave arpeggiator and a sine modifier. A notes array is used to generate different sounds in different iterations."
+			"description": "\"An endless world of snowy expanses, icebergs, and blue waters...\"<br>The composition is based on playing with coefficients of square-wave arpeggiator and a sine modifier. A notes array is used to generate different sounds in different iterations."
 		}, {
 			"description": "Antarctica",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/",
 			"date": "2022-05-01",
 			"sampleRate": 44100,
 			"file": "SthephanShi - Antarctica.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}]
+	}, {
+		"children": [{
+			"description": "\"The streets of the night metropolis are full of dangers! But the Moon lights your way, and you're not afraid of anything. Feel free to move forward through the narrow lanes!\"<br>Added some cool drums using the noise instrument, also added the triangle generator."
+		}, {
+			"description": "Dancing Moon",
+			"url": "https://www.reddit.com/r/bytebeat/comments/ux48ti/dancing_moon/",
+			"date": "2022-05-25",
+			"sampleRate": 44100,
+			"file": "SthephanShi - Dancing Moon.js",
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
