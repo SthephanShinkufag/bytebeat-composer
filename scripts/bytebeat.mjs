@@ -71,7 +71,7 @@ globalThis.bytebeat = new class {
 		return saveData;
 	}
 	get timeCursorEnabled() {
-		return Math.abs(this.songData.sampleRate >> this.settings.drawScale) < 3950;
+		return this.songData.sampleRate >> this.settings.drawScale < 3950;
 	}
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
@@ -100,7 +100,7 @@ globalThis.bytebeat = new class {
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
 		const scale = this.settings.drawScale;
-		const isReverse = this.playbackSpeed < 0 ^ this.songData.sampleRate < 0;
+		const isReverse = this.playbackSpeed < 0;
 		let startTime = buffer[0].t;
 		let startX = this.mod(this.getX(startTime), width);
 		let endX = Math.floor(startX + this.getX(endTime - startTime));
@@ -758,6 +758,8 @@ globalThis.bytebeat = new class {
 	setSampleRate(sampleRate, isSendData = true) {
 		if(!sampleRate || !isFinite(sampleRate)) {
 			sampleRate = 8000;
+		} else if(sampleRate < 0) {
+			sampleRate = -sampleRate;
 		}
 		switch(sampleRate) {
 		case 8000:
