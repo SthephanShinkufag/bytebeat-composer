@@ -5,16 +5,16 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSample = 0;
 		this.errorDisplayed = true;
 		this.func = () => 0;
-		this.getByteValue = funcValue => {
-			this.lastByteValue = NaN;
-			this.lastValue = 0;
+		this.getByteValue = (funcValue, ch) => {
+			this.lastByteValue[ch] = NaN;
+			this.lastValue[ch] = 0;
 		};
 		this.isPlaying = false;
 		this.playbackSpeed = 1;
-		this.lastByteValue = NaN;
+		this.lastByteValue = [NaN, NaN];
 		this.lastFlooredTime = -1;
-		this.lastFuncValue = NaN;
-		this.lastValue = 0;
+		this.lastFuncValue = [NaN, NaN];
+		this.lastValue = [0, 0];
 		this.mode = 'Bytebeat';
 		this.sampleRatio = 1;
 		Object.seal(this);
@@ -58,14 +58,9 @@ class audioProcessor extends AudioWorkletProcessor {
 			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
 				` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
 	}
-	process(inputs, outputs, parameters) {
-		const chData = outputs[0][0];
-		const chDataLen = chData.length;
-		if(!chDataLen) {
-			return true;
-		}
-		if(!this.isPlaying) {
-			chData.fill(0);
+	process(inputs, [chData], parameters) {
+		const chDataLen = chData[0].length;
+		if(!chDataLen || !this.isPlaying) {
 			return true;
 		}
 		let time = this.sampleRatio * this.audioSample;
@@ -78,7 +73,9 @@ class audioProcessor extends AudioWorkletProcessor {
 				let funcValue;
 				const flooredSample = Math.floor(byteSample);
 				try {
-					funcValue = +this.func(flooredSample);
+					funcValue = this.func(flooredSample);
+					funcValue = Array.isArray(funcValue) ? [funcValue[0], funcValue[1]] :
+						[funcValue, funcValue];
 				} catch(err) {
 					if(this.errorDisplayed) {
 						this.errorDisplayed = false;
@@ -89,22 +86,38 @@ class audioProcessor extends AudioWorkletProcessor {
 							}
 						});
 					}
-					funcValue = NaN;
+					funcValue = [NaN, NaN];
 				}
-				if(funcValue !== this.lastFuncValue) {
-					if(!isNaN(funcValue)) {
-						this.getByteValue(funcValue);
-						drawBuffer.push({ t: flooredSample, value: this.lastByteValue });
-					} else if(!isNaN(this.lastFuncValue)) {
-						this.lastByteValue = NaN;
-						drawBuffer.push({ t: flooredSample, value: NaN });
+				let hasValue = false;
+				let ch = 2;
+				while(ch--) {
+					try {
+						funcValue[ch] = +funcValue[ch];
+					} catch(err) {
+						funcValue[ch] = NaN;
 					}
+					if(funcValue[ch] !== this.lastFuncValue[ch]) {
+						if(!isNaN(funcValue[ch])) {
+							this.getByteValue(funcValue[ch], ch);
+							hasValue = true;
+						} else if(!isNaN(this.lastFuncValue[ch])) {
+							this.lastByteValue[ch] = NaN;
+							hasValue = true;
+						}
+					}
+				}
+				if(hasValue) {
+					drawBuffer.push({
+						t: flooredSample,
+						value: [this.lastByteValue[0], this.lastByteValue[1]]
+					});
 				}
 				byteSample += flooredTime - this.lastFlooredTime;
 				this.lastFuncValue = funcValue;
 				this.lastFlooredTime = flooredTime;
 			}
-			chData[i] = this.lastValue;
+			chData[0][i] = this.lastValue[0];
+			chData[1][i] = this.lastValue[1];
 		}
 		if(Math.abs(byteSample) > Number.MAX_SAFE_INTEGER) {
 			this.resetTime();
@@ -139,18 +152,18 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		if(data.mode !== undefined) {
 			this.mode = data.mode;
-			this.getByteValue = this.mode === 'Bytebeat' ? funcValue => {
-				this.lastByteValue = funcValue & 255;
-				this.lastValue = this.lastByteValue / 127.5 - 1;
-			} : this.mode === 'Signed Bytebeat' ? funcValue => {
-				this.lastByteValue = (funcValue + 128) & 255;
-				this.lastValue = this.lastByteValue / 127.5 - 1;
-			} : this.mode === 'Floatbeat' ? funcValue => {
-				this.lastValue = Math.max(Math.min(funcValue, 1), -1);
-				this.lastByteValue = Math.round((this.lastValue + 1) * 127.5);
-			} : funcValue => {
-				this.lastByteValue = NaN;
-				this.lastValue = 0;
+			this.getByteValue = this.mode === 'Bytebeat' ? (funcValue, ch) => {
+				this.lastByteValue[ch] = funcValue & 255;
+				this.lastValue[ch] = this.lastByteValue[ch] / 127.5 - 1;
+			} : this.mode === 'Signed Bytebeat' ? (funcValue, ch) => {
+				this.lastByteValue[ch] = (funcValue + 128) & 255;
+				this.lastValue[ch] = this.lastByteValue[ch] / 127.5 - 1;
+			} : this.mode === 'Floatbeat' ? (funcValue, ch) => {
+				this.lastValue[ch] = Math.max(Math.min(funcValue, 1), -1);
+				this.lastByteValue[ch] = Math.round((this.lastValue[ch] + 1) * 127.5);
+			} : (funcValue, ch) => {
+				this.lastByteValue[ch] = NaN;
+				this.lastValue[ch] = 0;
 			};
 		}
 		if(data.setFunction !== undefined) {
@@ -172,8 +185,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.sendData({ byteSample: 0 });
 	}
 	resetValues() {
-		this.audioSample = this.lastValue = 0;
-		this.lastByteValue = this.lastFuncValue = NaN;
+		this.audioSample = 0;
+		this.lastValue = [0, 0];
+		this.lastByteValue = this.lastFuncValue = [NaN, NaN];
 		this.lastFlooredTime = -1;
 	}
 	setFunction(codeText) {

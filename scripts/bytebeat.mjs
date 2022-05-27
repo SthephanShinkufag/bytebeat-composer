@@ -120,12 +120,15 @@ globalThis.bytebeat = new class {
 		if(scale) {
 			const x = isReverse ? drawWidth - 1 : 0;
 			for(let y = 0; y < height; ++y) {
-				let idx = (drawWidth * (255 - y) + x) << 2;
-				const value = this.drawEndBuffer[y];
-				if(value === redColor) {
-					imageData.data[idx] = redColor;
-				} else {
-					imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = value;
+				const drawEndBuffer = this.drawEndBuffer[y];
+				if(drawEndBuffer) {
+					const idx = (drawWidth * (255 - y) + x) << 2;
+					if(drawEndBuffer[0] === redColor) {
+						imageData.data[idx] = redColor;
+					} else {
+						imageData.data[idx] = imageData.data[idx + 2] = drawEndBuffer[0];
+					}
+					imageData.data[idx + 1] = drawEndBuffer[1];
 				}
 			}
 		}
@@ -144,41 +147,55 @@ globalThis.bytebeat = new class {
 			const curX = this.mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
 			const nextX = this.mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
-			if(isNaN(curY)) {
+			let ch = 2;
+			while(ch--) {
+				if(isNaN(curY[ch])) {
+					for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
+						for(let y = 0; y < height; ++y) {
+							const idx = (drawWidth * y + x) << 2;
+							if(!imageData.data[idx + 1] && !imageData.data[idx + 2]) {
+								imageData.data[idx] = redColor;
+							}
+						}
+					}
+					continue;
+				}
+				// Drawing vertical lines in Waveform mode
+				if(isWaveform) {
+					const prevY = buffer[i - 1]?.value ?? [NaN, NaN];
+					if(!isNaN(prevY[ch])) {
+						const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
+						for(let dy = prevY[ch] < curY[ch] ? 1 : -1, y = prevY[ch]; y !== curY[ch]; y += dy) {
+							let idx = (drawWidth * (255 - y) + x) << 2;
+							if(ch) {
+								if(!imageData.data[idx + 2]) {
+									imageData.data[idx] = imageData.data[idx + 2] = waveColor;
+								}
+							} else {
+								if(!imageData.data[++idx]) {
+									imageData.data[idx] = waveColor;
+								}
+							}
+						}
+					}
+				}
+				// Points drawing
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-					for(let y = 0; y < height; ++y) {
-						const idx = (drawWidth * y + x) << 2;
-						if(!imageData.data[idx + 1]) {
-							imageData.data[idx] = redColor;
-						}
+					const idx = (drawWidth * (255 - curY[ch]) + x) << 2;
+					if(ch) {
+						imageData.data[idx] = imageData.data[idx + 2] = 255;
+					} else {
+						imageData.data[idx + 1] = 255;
 					}
 				}
-				continue;
-			}
-			// Drawing vertical lines in Waveform mode
-			if(isWaveform) {
-				const prevY = buffer[i - 1]?.value ?? NaN;
-				if(!isNaN(prevY)) {
-					const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
-					for(let dy = prevY < curY ? 1 : -1, y = prevY; y !== curY; y += dy) {
-						let idx = (drawWidth * (255 - y) + x) << 2;
-						if(imageData.data[idx] === 0) {
-							imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = waveColor;
-						}
-					}
-				}
-			}
-			// Points drawing
-			for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-				let idx = (drawWidth * (255 - curY) + x) << 2;
-				imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 255;
 			}
 		}
 		// Saving the last points of a segment
 		if(scale) {
 			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
-				this.drawEndBuffer[y] = imageData.data[(drawWidth * (255 - y) + x) << 2];
+				const idx = (drawWidth * (255 - y) + x) << 2;
+				this.drawEndBuffer[y] = [imageData.data[idx], imageData.data[idx + 1]];
 			}
 		}
 		// Placing a segment on the canvas
@@ -407,8 +424,9 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022052500');
-		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022052700');
+		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
+			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
 		this.audioWorkletNode.connect(this.audioGain);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
