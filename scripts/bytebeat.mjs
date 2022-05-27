@@ -95,8 +95,7 @@ globalThis.bytebeat = new class {
 		if(!bufferLen) {
 			return;
 		}
-		const redColor = 130;
-		const waveColor = 160;
+		const redColor = 100;
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
 		const scale = this.settings.drawScale;
@@ -117,6 +116,7 @@ globalThis.bytebeat = new class {
 		startX = Math.min(startX, endX);
 		// Restoring the last points of a previous segment
 		const imageData = this.canvasCtx.createImageData(drawWidth, height);
+		const { data } = imageData;
 		if(scale) {
 			const x = isReverse ? drawWidth - 1 : 0;
 			for(let y = 0; y < height; ++y) {
@@ -124,26 +124,26 @@ globalThis.bytebeat = new class {
 				if(drawEndBuffer) {
 					const idx = (drawWidth * (255 - y) + x) << 2;
 					if(drawEndBuffer[0] === redColor) {
-						imageData.data[idx] = redColor;
+						data[idx] = redColor;
 					} else {
-						imageData.data[idx] = imageData.data[idx + 2] = drawEndBuffer[0];
+						data[idx] = data[idx + 2] = drawEndBuffer[0];
 					}
-					imageData.data[idx + 1] = drawEndBuffer[1];
+					data[idx + 1] = drawEndBuffer[1];
 				}
 			}
 		}
 		// Filling an alpha channel in a segment
 		for(let x = 0; x < drawWidth; ++x) {
 			for(let y = 0; y < height; ++y) {
-				imageData.data[((drawWidth * y + x) << 2) + 3] = 255;
+				data[((drawWidth * y + x) << 2) + 3] = 255;
 			}
 		}
 		// Drawing in a segment
 		const isWaveform = this.settings.drawMode === 'Waveform';
+		let ch, drawPoint, drawWaveLine;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
 			const isNaNCurY = [isNaN(curY[0]), isNaN(curY[1])];
-			const isMono = curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1];
 			const curTime = buffer[i].t;
 			const nextTime = buffer[i + 1]?.t ?? endTime;
 			const curX = this.mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
@@ -153,56 +153,41 @@ globalThis.bytebeat = new class {
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 					for(let y = 0; y < height; ++y) {
 						const idx = (drawWidth * y + x) << 2;
-						if(!imageData.data[idx + 1] && !imageData.data[idx + 2]) {
-							imageData.data[idx] = redColor;
+						if(!data[idx + 1] && !data[idx + 2]) {
+							data[idx] = redColor;
 						}
 					}
 				}
 			}
+			// Select mono or stereo functions
+			if(curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1]) {
+				drawPoint = this.drawPointMono;
+				drawWaveLine = this.drawWaveLineMono;
+				ch = 1;
+			} else {
+				drawPoint = this.drawPointStereo;
+				drawWaveLine = this.drawWaveLineStereo;
+				ch = 2;
+			}
 			// Drawing the left and right channels
-			let ch = isMono ? 1 : 2;
 			while(ch--) {
-				const curYCh = curY[ch];
 				if(isNaNCurY[ch]) {
 					continue;
+				}
+				const curYCh = curY[ch];
+				// Points drawing
+				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
+					drawPoint(data, (drawWidth * (255 - curYCh) + x) << 2, ch);
 				}
 				// Drawing vertical lines in Waveform mode
 				if(isWaveform) {
 					const prevY = buffer[i - 1]?.value[ch] ?? NaN;
-					if(!isNaN(prevY)) {
-						const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
-						for(let dy = prevY < curYCh ? 1 : -1, y = prevY; y !== curYCh; y += dy) {
-							let idx = (drawWidth * (255 - y) + x) << 2;
-							if(isMono) {
-								if(!imageData.data[idx + 1]) {
-									imageData.data[idx++] = imageData.data[idx++] =
-										imageData.data[idx] = waveColor;
-								}
-								continue;
-							}
-							if(ch) {
-								if(!imageData.data[idx + 2]) {
-									imageData.data[idx] = imageData.data[idx + 2] = waveColor;
-								}
-							} else {
-								if(!imageData.data[++idx]) {
-									imageData.data[idx] = waveColor;
-								}
-							}
-						}
-					}
-				}
-				// Points drawing
-				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-					let idx = (drawWidth * (255 - curYCh) + x) << 2;
-					if(isMono) {
-						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 255;
+					if(isNaN(prevY)) {
 						continue;
 					}
-					if(ch) {
-						imageData.data[idx] = imageData.data[idx + 2] = 255;
-					} else {
-						imageData.data[idx + 1] = 255;
+					const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
+					for(let dy = prevY < curYCh ? 1 : -1, y = prevY; y !== curYCh; y += dy) {
+						drawWaveLine(data, (drawWidth * (255 - y) + x) << 2, ch);
 					}
 				}
 			}
@@ -212,7 +197,7 @@ globalThis.bytebeat = new class {
 			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
 				const idx = (drawWidth * (255 - y) + x) << 2;
-				this.drawEndBuffer[y] = [imageData.data[idx], imageData.data[idx + 1]];
+				this.drawEndBuffer[y] = [data[idx], data[idx + 1]];
 			}
 		}
 		// Placing a segment on the canvas
@@ -228,6 +213,30 @@ globalThis.bytebeat = new class {
 		}
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+	}
+	drawPointMono(data, i) {
+		data[i++] = data[i++] = data[i] = 255;
+	}
+	drawPointStereo(data, i, ch) {
+		if(ch) {
+			data[i] = data[i + 2] = 255;
+		} else {
+			data[i + 1] = 255;
+		}
+	}
+	drawWaveLineMono(data, i) {
+		if(!data[i + 1]) {
+			data[i++] = data[i++] = data[i] = 160;
+		}
+	}
+	drawWaveLineStereo(data, i, ch) {
+		if(ch) {
+			if(!data[i + 2]) {
+				data[i] = data[i + 2] = 160;
+			}
+		} else if(!data[++i]) {
+			data[i] = 160;
+		}
 	}
 	escapeHTML(text) {
 		this.cacheTextElem.nodeValue = text;
