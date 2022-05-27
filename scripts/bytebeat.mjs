@@ -147,25 +147,29 @@ globalThis.bytebeat = new class {
 			const curX = this.mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
 			const nextX = this.mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
-			let ch = 2;
-			while(ch--) {
-				if(isNaN(curY[ch])) {
-					for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-						for(let y = 0; y < height; ++y) {
-							const idx = (drawWidth * y + x) << 2;
-							if(!imageData.data[idx + 1] && !imageData.data[idx + 2]) {
-								imageData.data[idx] = redColor;
-							}
+			if(isNaN(curY[0]) || isNaN(curY[1])) {
+				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
+					for(let y = 0; y < height; ++y) {
+						const idx = (drawWidth * y + x) << 2;
+						if(!imageData.data[idx + 1] && !imageData.data[idx + 2]) {
+							imageData.data[idx] = redColor;
 						}
 					}
+				}
+			}
+			// Drawing the left and right channels
+			let ch = 2;
+			while(ch--) {
+				const curYCh = curY[ch];
+				if(isNaN(curYCh)) {
 					continue;
 				}
 				// Drawing vertical lines in Waveform mode
 				if(isWaveform) {
-					const prevY = buffer[i - 1]?.value ?? [NaN, NaN];
-					if(!isNaN(prevY[ch])) {
+					const prevY = buffer[i - 1]?.value[ch] ?? NaN;
+					if(!isNaN(prevY)) {
 						const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
-						for(let dy = prevY[ch] < curY[ch] ? 1 : -1, y = prevY[ch]; y !== curY[ch]; y += dy) {
+						for(let dy = prevY < curYCh ? 1 : -1, y = prevY; y !== curYCh; y += dy) {
 							let idx = (drawWidth * (255 - y) + x) << 2;
 							if(ch) {
 								if(!imageData.data[idx + 2]) {
@@ -181,7 +185,7 @@ globalThis.bytebeat = new class {
 				}
 				// Points drawing
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-					const idx = (drawWidth * (255 - curY[ch]) + x) << 2;
+					const idx = (drawWidth * (255 - curYCh) + x) << 2;
 					if(ch) {
 						imageData.data[idx] = imageData.data[idx + 2] = 255;
 					} else {
