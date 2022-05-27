@@ -142,12 +142,14 @@ globalThis.bytebeat = new class {
 		const isWaveform = this.settings.drawMode === 'Waveform';
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
+			const isNaNCurY = [isNaN(curY[0]), isNaN(curY[1])];
+			const isMono = curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1];
 			const curTime = buffer[i].t;
 			const nextTime = buffer[i + 1]?.t ?? endTime;
 			const curX = this.mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
 			const nextX = this.mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			// Error value - filling with red color
-			if(isNaN(curY[0]) || isNaN(curY[1])) {
+			if(isNaNCurY[0] || isNaNCurY[1]) {
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 					for(let y = 0; y < height; ++y) {
 						const idx = (drawWidth * y + x) << 2;
@@ -158,10 +160,10 @@ globalThis.bytebeat = new class {
 				}
 			}
 			// Drawing the left and right channels
-			let ch = 2;
+			let ch = isMono ? 1 : 2;
 			while(ch--) {
 				const curYCh = curY[ch];
-				if(isNaN(curYCh)) {
+				if(isNaNCurY[ch]) {
 					continue;
 				}
 				// Drawing vertical lines in Waveform mode
@@ -171,6 +173,13 @@ globalThis.bytebeat = new class {
 						const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
 						for(let dy = prevY < curYCh ? 1 : -1, y = prevY; y !== curYCh; y += dy) {
 							let idx = (drawWidth * (255 - y) + x) << 2;
+							if(isMono) {
+								if(!imageData.data[idx + 1]) {
+									imageData.data[idx++] = imageData.data[idx++] =
+										imageData.data[idx] = waveColor;
+								}
+								continue;
+							}
 							if(ch) {
 								if(!imageData.data[idx + 2]) {
 									imageData.data[idx] = imageData.data[idx + 2] = waveColor;
@@ -185,7 +194,11 @@ globalThis.bytebeat = new class {
 				}
 				// Points drawing
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-					const idx = (drawWidth * (255 - curYCh) + x) << 2;
+					let idx = (drawWidth * (255 - curYCh) + x) << 2;
+					if(isMono) {
+						imageData.data[idx++] = imageData.data[idx++] = imageData.data[idx] = 255;
+						continue;
+					}
 					if(ch) {
 						imageData.data[idx] = imageData.data[idx + 2] = 255;
 					} else {
