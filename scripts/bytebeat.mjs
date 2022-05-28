@@ -143,6 +143,7 @@ globalThis.bytebeat = new class {
 		let ch, drawPoint, drawWaveLine;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
+			const prevY = buffer[i - 1]?.value ?? [NaN, NaN];
 			const isNaNCurY = [isNaN(curY[0]), isNaN(curY[1])];
 			const curTime = buffer[i].t;
 			const nextTime = buffer[i + 1]?.t ?? endTime;
@@ -159,8 +160,8 @@ globalThis.bytebeat = new class {
 					}
 				}
 			}
-			// Select mono or stereo functions
-			if(curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1]) {
+			// Select mono or stereo drawing
+			if((curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1]) && prevY[0] === prevY[1]) {
 				drawPoint = this.drawPointMono;
 				drawWaveLine = this.drawWaveLineMono;
 				ch = 1;
@@ -169,7 +170,6 @@ globalThis.bytebeat = new class {
 				drawWaveLine = this.drawWaveLineStereo;
 				ch = 2;
 			}
-			// Drawing the left and right channels
 			while(ch--) {
 				if(isNaNCurY[ch]) {
 					continue;
@@ -179,14 +179,14 @@ globalThis.bytebeat = new class {
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 					drawPoint(data, (drawWidth * (255 - curYCh) + x) << 2, ch);
 				}
-				// Drawing vertical lines in Waveform mode
+				// Waveform mode: vertical lines drawing
 				if(isWaveform) {
-					const prevY = buffer[i - 1]?.value[ch] ?? NaN;
-					if(isNaN(prevY)) {
+					const prevYCh = prevY[ch];
+					if(isNaN(prevYCh)) {
 						continue;
 					}
 					const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
-					for(let dy = prevY < curYCh ? 1 : -1, y = prevY; y !== curYCh; y += dy) {
+					for(let dy = prevYCh < curYCh ? 1 : -1, y = prevYCh; y !== curYCh; y += dy) {
 						drawWaveLine(data, (drawWidth * (255 - y) + x) << 2, ch);
 					}
 				}
