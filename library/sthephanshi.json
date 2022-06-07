@@ -321,7 +321,20 @@
 		}]
 	}, {
 		"children": [{
-			"description": "\"The streets of the night metropolis are full of dangers! But the Moon lights your way, and you're not afraid of anything. Feel free to move forward through the narrow lanes!\"<br>Added some cool drums using the noise instrument, also added the triangle generator."
+			"description": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\"<br>Tried to get something like a NES sound. Successfully turned out a noise function, universal for different percussions. Also added the triangle generator."
+		}, {
+			"description": "End of Ice Age",
+			"url": "https://battleofthebits.org/arena/Entry/End+of+Ice+Age/53085/",
+			"date": "2022-05-02",
+			"sampleRate": 44100,
+			"file": "SthephanShi - End of Ice Age.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}]
+	}, {
+		"children": [{
+			"description": "\"The streets of the night metropolis are full of dangers! But the Moon lights your way, and you're not afraid of anything. Feel free to move forward through the narrow lanes!\""
 		}, {
 			"description": "Dancing Moon",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ux48ti/dancing_moon/",

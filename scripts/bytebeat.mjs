@@ -246,21 +246,8 @@ globalThis.bytebeat = new class {
 		this.containerFixedElem.classList.toggle('container-expanded');
 	}
 	generateLibraryEntry({
-		author,
-		children,
-		codeMinified,
-		codeOriginal,
-		date,
-		description,
-		file,
-		fileFormatted,
-		fileMinified,
-		fileOriginal,
-		mode,
-		remixed,
-		sampleRate,
-		starred,
-		url
+		author, children, codeMinified, codeOriginal, date, description, file, fileFormatted, fileMinified,
+		fileOriginal, mode, remixed, sampleRate, starred, stereo, url
 	}) {
 		let entry = '';
 		if(description) {
@@ -291,14 +278,19 @@ globalThis.bytebeat = new class {
 				`<a href="${ remixed.url }" target="_blank">${ remixed.description || '(source)' }</a>` :
 				`"${ remixed.description }"` }${ remixed.author ? ' by ' + remixed.author : '' })`;
 		}
-		if(date) {
-			entry += ` <span class="code-date">(${ date })</span>`;
-		}
-		if(sampleRate) {
-			entry += ` <span class="code-samplerate">${ sampleRate }Hz</span>`;
-		}
-		if(mode) {
-			entry += ` <span class="code-samplerate">${ mode }</span>`;
+
+		if(date || sampleRate || mode || stereo) {
+			let infoStr = date ? `(${ date })` : '';
+			if(sampleRate) {
+				infoStr += `${ infoStr ? ' ' : '' }${ sampleRate }Hz`;
+			}
+			if(mode) {
+				infoStr += (infoStr ? ' ' : '') + mode;
+			}
+			if(stereo) {
+				infoStr += `${ infoStr ? ' ' : '' }<span class="code-stereo">Stereo</span>`;
+			}
+			entry += ` <span class="code-info">${ infoStr }</span>`;
 		}
 		const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
 		if(codeMinified) {
@@ -450,7 +442,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022052700');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022060800');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);

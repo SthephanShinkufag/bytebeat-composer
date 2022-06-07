@@ -18,13 +18,11 @@ gs = g * r,
 n = [a, c, e, c, a, d, f, d, a, c, f, a, c, e, g, e, g, b, d, b, f, a, c, a, a, c, g, c, g, b, d, b],
 os = [1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 2],
 
-delay();
-
-function xy(x, y) {
+xy = function(x, y) {
 	return int(x) * 4 + int(y);
-}
+},
 
-function p(tt, vol) {
+p = function(tt, vol) {
 	aa = sin(int(q *
 			(n[xy((q + tt) * 0.5 % 8, (q + tt) * 32 % 3)] - 1) *
 			(2 + os[int(((q + tt) * 0.5) % 32)]))) *
@@ -35,9 +33,9 @@ function p(tt, vol) {
 			(2 + os[int(((q + tt) * 4) % 32)]))) *
 		(vol / ((sin(q * 0.37) * 0.8) + 1.5));
 	return aa + bb + cc;
-}
+},
 
-function delay() {
+delay = function() {
 	tt = 0,
 	to = 0.25,
 	voll = 2;
@@ -47,9 +45,11 @@ function delay() {
 		tt = tt + to;
 	}
 	return out - 130;
-}
+},
 
-function tri(snd) {
+tri = function(snd) {
 	amp = 3.12;
 	return abs(amp - snd % (amp * 2)) - (amp / 2);
-}
+},
+
+delay();

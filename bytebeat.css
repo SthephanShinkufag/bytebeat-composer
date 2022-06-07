@@ -236,10 +236,6 @@ button[name="close"] {
 .code-text:hover {
 	color: #ed88fb !important;
 }
-.code-date, .code-length, .code-samplerate {
-	color: gray;
-	cursor: default;
-}
 
 .code-button {
 	display: inline-block;
@@ -259,6 +255,15 @@ button[name="close"] {
 .code-button:hover {
 	background-image: linear-gradient(to bottom, #3c508a, #1f2331);
 	color: #c2dfff;
+}
+
+.code-length, .code-info {
+	color: gray;
+	cursor: default;
+}
+
+.code-stereo {
+	color: #008040;
 }
 
 .code-toggle {

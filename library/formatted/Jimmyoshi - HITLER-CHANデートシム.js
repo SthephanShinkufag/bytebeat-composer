@@ -1,10 +1,9 @@
-128 + a();
-function a() {
+a = function() {
 	k = 22050;
 	tk = ((t * 11.5 / k) & 0xFFFF) % 96;
 	return c(tk) + c(tk - 4) / 10 + (6 - tk % 6) * (tk % 6 > 2 && tk % 6 < 4 ? random() * 128 : 0) / 24;
-}
-function c(tk) {
+},
+c = function(tk) {
 	o1 = d(b(
 		'000fffjj0ffhhh0jjjhh0ffff00aa0aa0ccddddff0cc0aa0000mm0mm0kkjjj0hh0ff0hh0000mm0mm0kk0jjjj00hhh000',
 		tk
@@ -18,12 +17,13 @@ function c(tk) {
 		tk
 	) + 12);
 	return o1 + o2 + o3;
-}
-function d(n) {
+},
+d = function(n) {
 	ff = pow(2, n / 12) * 16.4;
 	q = k / ff;
 	return n === 8 || n === 20 ? 0 : t % q >= q / 2 ? 16 : -16;
-}
-function b(s, p) {
+},
+b = function(s, p) {
 	return s.charCodeAt(p) - 40;
-}
+},
+128 + a();

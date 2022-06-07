@@ -46,7 +46,8 @@
 			"sampleRate": 32000,
 			"file": "lehandsomeguy - Floatbeat test.js",
 			"fileFormatted": true,
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}, {
 			"description": "Melody with array",
 			"mode": "Floatbeat",
@@ -68,8 +69,7 @@
 			"sampleRate": 11025,
 			"file": "lehandsomeguy - Drone.js",
 			"fileFormatted": true,
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}, {
 			"description": "Trippy test",
 			"mode": "Floatbeat",
@@ -96,7 +96,8 @@
 			"sampleRate": 32000,
 			"file": "lehandsomeguy - Pretentious Ryoji Ikeda.js",
 			"fileFormatted": true,
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "RealZynx92",
@@ -158,5 +159,27 @@
 		"sampleRate": 32000,
 		"codeOriginal": "n=t*[1,0,1,0,2,2,1,0,1,0,2,2,1,0,2,2][int(t/2048)%16],a=sin(n*Math.PI/255+cos(n*Math.PI/128)*(n/(524288+(16384*Math.random()))))*(128/256),b=cos((50000+(t/3200))/(t&16383))*(64/256),c=sin((2500+(t/3200))/(t&4095))*(48/256),tan(a+b+c)",
 		"codeMinified": "n=t*[1,0,1,0,2,2,1,0,1,0,2,2,1,0,2,2][int(t/2048)%16],a=.5*sin(n*PI/255+cos(n*PI/128)*(n/(524288+16384*random()))),b=.25*cos((5E4+t/3200)/(t&16383)),c=.1875*sin((2500+t/3200)/(t&4095)),tan(a+b+c)"
+	}, {
+		"author": "lhphr",
+		"children": [{
+			"description": "trig",
+			"url": "https://dollchan.net/btb/res/3.html#69",
+			"date": "2022-05-21",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"codeOriginal": "s=sin,c='55545556'[t>>16&7],f=q=>t*PI/q*c,'11011100'[t>>13&7]*tan(PI/2**(2+(t>>11&3))*s(PI*s(f(250))-f(4e4)))/4+([,,h=(1-t%8192/8192)*s(t**3)/8,,,h,,h][t>>12&7]??sinh(PI/2*s(c**4**(1-t%4096/2048))%(PI/4))/4)+(s(f(124)-f(89))+s(f(125)-f(100))+s(f(126)-f(105)))/12",
+			"starred": 1
+		}, {
+			"description": "something something reverb",
+			"url": "https://www.reddit.com/r/bytebeat/comments/v0y4mf/something_something_reverb/",
+			"date": "2022-05-30",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"file": "lhphr - something something reverb.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}
 ]

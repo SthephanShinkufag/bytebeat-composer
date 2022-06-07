@@ -1,5 +1,23 @@
 [
 	{
+		"author": "Radnyx",
+		"children": [{
+			"description": "Multi-voice ByteBeat",
+			"url": "https://battleofthebits.org/arena/Entry/Multi-voice+ByteBeat/17523/",
+			"date": "2015-04-14",
+			"file": "Radnyx - Multi-voice ByteBeat.js",
+			"fileOriginal": true
+		}, {
+			"description": "Impromptu (Diatom)",
+			"url": "https://battleofthebits.org/arena/Entry/Impromptu+%28Diatom%29/34240/",
+			"date": "2020-04-25",
+			"sampleRate": 32000,
+			"file": "Radnyx - Impromptu (Diatom).js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
 		"author": "Savestate",
 		"children": [{
 			"description": "Bit-Shift Melodies",
@@ -329,8 +347,7 @@
 		"file": "InfinitySnapz - Sunset.js",
 		"fileFormatted": true,
 		"fileMinified": true,
-		"fileOriginal": true,
-		"starred": 1
+		"fileOriginal": true
 	}, {
 		"author": "argarak",
 		"children": [{
@@ -358,16 +375,6 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "Impromptu (Diatom)",
-		"author": "Radnyx",
-		"url": "https://battleofthebits.org/arena/Entry/Impromptu+%28Diatom%29/34240/",
-		"date": "2020-04-25",
-		"sampleRate": 32000,
-		"file": "Radnyx - Impromptu (Diatom).js",
-		"fileFormatted": true,
-		"fileOriginal": true,
-		"starred": 1
-	}, {
 		"description": "A NΞW DIMΞNSION",
 		"author": "burlynn n01se",
 		"url": "https://battleofthebits.org/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
@@ -390,6 +397,15 @@
 		"fileOriginal": true,
 		"starred": 1
 	}, {
+		"description": "getting better at this stuff",
+		"author": "Baron Knoxburry",
+		"url": "https://battleofthebits.org/arena/Entry/getting+better+at+this+stuff/46490/",
+		"date": "2021-05-30",
+		"sampleRate": 44100,
+		"file": "Baron Knoxburry - getting better at this stuff.js",
+		"fileFormatted": true,
+		"fileOriginal": true
+	}, {
 		"description": "511",
 		"author": "johanvandegriff",
 		"url": "https://www.reddit.com/r/bytebeat/comments/o7e957/511/",
@@ -405,6 +421,15 @@
 		"fileMinified": true,
 		"fileOriginal": true,
 		"starred": 2
+	}, {
+		"description": "8-Bit Ajaxzit",
+		"author": "HypernovaHeathen",
+		"url": "https://www.pouet.net/topic.php?post=573519",
+		"date": "2021-09-12",
+		"sampleRate": 44100,
+		"file": "HypernovaHeathen - 8-Bit Ajaxzit.js",
+		"fileFormatted": true,
+		"fileOriginal": true
 	}, {
 		"description": "cool loop i guess",
 		"author": "RealZynx92",
@@ -425,7 +450,6 @@
 			"sampleRate": 32000,
 			"file": "Decent-Manager-6169 - Red Green Blue 4.js",
 			"fileFormatted": true,
-			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
 		}, {
@@ -436,8 +460,7 @@
 			"file": "Decent-Manager-6169 - An Escaped War Or Something.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}]
 	}, {
 		"description": "ByteSongg",
@@ -449,6 +472,46 @@
 		"fileFormatted": true,
 		"fileMinified": true,
 		"fileOriginal": true,
-		"starred": 2
+		"starred": 1
+	}, {
+		"author": "maj-6",
+		"children": [{
+			"description": "Something New",
+			"url": "https://battleofthebits.org/arena/Entry/Something+New/52726/",
+			"date": "2022-04-13",
+			"sampleRate": 32000,
+			"file": "maj-6 - Something New.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"description": "\"Something New\" using functions",
+			"url": "https://battleofthebits.org/arena/Entry/Something+New/52726/#post157167",
+			"date": "2022-06-03",
+			"sampleRate": 32000,
+			"file": "maj-6 - 'Something New' using functions.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "advanced technology",
+			"url": "https://www.reddit.com/r/bytebeat/comments/v73kqn/advanced_technology_441khz_stereo_1337_bytes/",
+			"date": "2022-06-07",
+			"stereo": true,
+			"sampleRate": 44100,
+			"file": "maj-6 - advanced technology.js",
+			"fileMinified": true,
+			"starred": 2
+		}]
+	}, {
+		"description": "s.i.t.e. (synth in the emptiness)",
+		"author": "lhphr",
+		"url": "https://dollchan.net/btb/res/3.html#69",
+		"date": "2022-05-26",
+		"sampleRate": 32000,
+		"file": "lhphr - s.i.t.e. (synth in the emptiness).js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"fileOriginal": true
 	}
 ]

@@ -15,7 +15,8 @@ clamp = x => min(max(x, -1), 1),
 adsr = (attack_time, decay_time, sustain_level, release_rate, sustain_time, t) => (
 	ad_time = attack_time + decay_time,
 	ads_time = min(ad_time, sustain_time),
-	release_level = release_rate && adsr(attack_time, decay_time, sustain_level, 0, sustain_time, sustain_time),
+	release_level = release_rate &&
+		adsr(attack_time, decay_time, sustain_level, 0, sustain_time, sustain_time),
 
 	t > sustain_time ? max(release_level - (t - sustain_time) * release_rate, 0) :
 	t < 0 ? 0 :

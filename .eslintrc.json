@@ -8,6 +8,7 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
+	"root": true,
 	"rules": {
 		"arrow-parens": ["error", "as-needed"],
 		"camelcase": "off",

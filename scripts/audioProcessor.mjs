@@ -96,11 +96,13 @@ class audioProcessor extends AudioWorkletProcessor {
 					} catch(err) {
 						funcValue[ch] = NaN;
 					}
-					if(funcValue[ch] !== this.lastFuncValue[ch]) {
-						if(!isNaN(funcValue[ch])) {
-							this.getByteValue(funcValue[ch], ch);
+					const funcValueCh = funcValue[ch];
+					const lastFuncValueCh = this.lastFuncValue[ch];
+					if(funcValueCh !== lastFuncValueCh) {
+						if(!isNaN(funcValueCh)) {
+							this.getByteValue(funcValueCh, ch);
 							hasValue = true;
-						} else if(!isNaN(this.lastFuncValue[ch])) {
+						} else if(!isNaN(lastFuncValueCh)) {
 							this.lastByteValue[ch] = NaN;
 							hasValue = true;
 						}
