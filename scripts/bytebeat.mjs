@@ -442,7 +442,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext();
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022060800');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022060801');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
