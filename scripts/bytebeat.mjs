@@ -47,7 +47,6 @@ globalThis.bytebeat = new class {
 		this.drawEndBuffer = [];
 		this.editorElem = null;
 		this.errorElem = null;
-		this.isActiveTab = true;
 		this.isCompilationError = false;
 		this.isNeedClear = false;
 		this.isPlaying = false;
@@ -420,7 +419,6 @@ globalThis.bytebeat = new class {
 		}
 	}
 	async init() {
-		document.addEventListener('visibilitychange', () => (this.isActiveTab = !document.hidden));
 		try {
 			this.settings = JSON.parse(localStorage.settings);
 		} catch(err) {
@@ -439,13 +437,14 @@ globalThis.bytebeat = new class {
 		loadScript('./scripts/codemirror.min.mjs');
 	}
 	async initAudioContext() {
-		this.audioCtx = new AudioContext();
+		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022060801');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022061400');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
-		this.audioWorkletNode.port.onmessage = ({ data }) => this.receiveData(data);
+		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
+		this.audioWorkletNode.port.start();
 		this.audioWorkletNode.connect(this.audioGain);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
@@ -709,15 +708,15 @@ globalThis.bytebeat = new class {
 	}
 	receiveData(data) {
 		const { byteSample, error } = data;
-		if(byteSample !== undefined) {
+		if(typeof byteSample === 'number') {
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
 		}
-		if(data.drawBuffer !== undefined) {
+		if(Array.isArray(data.drawBuffer)) {
 			this.drawBuffer = this.drawBuffer.concat(data.drawBuffer);
-			if(!this.isActiveTab) {
-				this.drawBuffer = this.drawBuffer.slice(
-					-this.canvasWidth * (1 << this.settings.drawScale));
+			const limit = this.canvasWidth * (1 << this.settings.drawScale) - 1;
+			if(this.drawBuffer.length > limit) {
+				this.drawBuffer = this.drawBuffer.slice(-limit);
 			}
 		}
 		if(error !== undefined) {

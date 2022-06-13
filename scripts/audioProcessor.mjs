@@ -20,7 +20,8 @@ class audioProcessor extends AudioWorkletProcessor {
 		Object.seal(this);
 		audioProcessor.deleteGlobals();
 		audioProcessor.freezeGlobals();
-		this.port.onmessage = ({ data }) => this.receiveData(data);
+		this.port.addEventListener('message', e => this.receiveData(e.data));
+		this.port.start();
 	}
 	static deleteGlobals() {
 		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
@@ -71,23 +72,22 @@ class audioProcessor extends AudioWorkletProcessor {
 			const flooredTime = Math.floor(time);
 			if(this.lastFlooredTime !== flooredTime) {
 				let funcValue;
-				const flooredSample = Math.floor(byteSample);
+				const t = Math.floor(byteSample);
 				try {
-					funcValue = this.func(flooredSample);
-					funcValue = Array.isArray(funcValue) ? [funcValue[0], funcValue[1]] :
-						[funcValue, funcValue];
+					funcValue = this.func(t);
 				} catch(err) {
 					if(this.errorDisplayed) {
 						this.errorDisplayed = false;
 						this.sendData({
 							error: {
-								message: audioProcessor.getErrorMessage(err, flooredSample),
+								message: audioProcessor.getErrorMessage(err, t),
 								isRuntime: true
 							}
 						});
 					}
-					funcValue = [NaN, NaN];
+					funcValue = NaN;
 				}
+				funcValue = Array.isArray(funcValue) ? [funcValue[0], funcValue[1]] : [funcValue, funcValue];
 				let hasValue = false;
 				let ch = 2;
 				while(ch--) {
@@ -109,10 +109,7 @@ class audioProcessor extends AudioWorkletProcessor {
 					}
 				}
 				if(hasValue) {
-					drawBuffer.push({
-						t: flooredSample,
-						value: [this.lastByteValue[0], this.lastByteValue[1]]
-					});
+					drawBuffer.push({ t, value: [this.lastByteValue[0], this.lastByteValue[1]] });
 				}
 				byteSample += flooredTime - this.lastFlooredTime;
 				this.lastFuncValue = funcValue;
@@ -126,14 +123,19 @@ class audioProcessor extends AudioWorkletProcessor {
 			return true;
 		}
 		this.audioSample += chDataLen;
+		let isSend = false;
 		const data = {};
 		if(byteSample !== this.byteSample) {
+			isSend = true;
 			data.byteSample = this.byteSample = byteSample;
 		}
 		if(drawBuffer.length) {
+			isSend = true;
 			data.drawBuffer = drawBuffer;
 		}
-		this.sendData({ drawBuffer, byteSample });
+		if(isSend) {
+			this.sendData(data);
+		}
 		return true;
 	}
 	receiveData(data) {

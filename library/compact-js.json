@@ -1425,6 +1425,30 @@
 			"codeOriginal": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=((t/540)%q.length),b=(q.charCodeAt(s)-32)*(t/8),tanb=tan(b*Math.PI/512)*64-128,sinb=sin(b*Math.PI/64)*64-128,(tanb|sinb)-sinb",
 			"codeMinified": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=t/540%q.length,b=(q.charCodeAt(s)-32)*(t/8),tanb=64*tan(b*Math.PI/512)-128,sinb=64*sin(b*Math.PI/64)-128,(tanb|sinb)-sinb",
 			"starred": 2
+		}, {
+			"description": "Gabriel Miceli's \"Techno\" but the melodies are on opposite ears",
+			"remixed": {
+				"description": "Techno",
+				"author": "Gabriel Miceli",
+				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/ukua3q/gabriel_micelis_techno_but_the_melodies_are_on/",
+			"date": "2022-05-08",
+			"stereo": true,
+			"sampleRate": 11025,
+			"codeOriginal": "[(((t/10|0)^(t/10|0)-1280)%11*t),(((t/640|0)^(t/640|0)-2)%13*t)]",
+			"codeMinified": "[((t/10|0)^(t/10|0)-1280)%11*t,((t/640|0)^(t/640|0)-2)%13*t]"
+		}, {
+			"description": "Stimmer but the melodies are on opposite ears",
+			"remixed": {
+				"description": "Stimmer",
+				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/ukucgm/stimmer_but_the_melodies_are_on_opposite_ears/",
+			"date": "2022-05-08",
+			"stereo": true,
+			"codeOriginal": "[(t/2*(4|7&t>>13)>>(~t>>11&1)&128),(t*2*(t>>11&t>>13)*(~t>>9&3)&127)]",
+			"codeMinified": "[t/2*(4|7&t>>13)>>(~t>>11&1)&128,2*t*(t>>11&t>>13)*(~t>>9&3)&127]"
 		}]
 	}, {
 		"author": "lhphr",
@@ -1660,6 +1684,18 @@
 	}, {
 		"author": "baenhohoho",
 		"children": [{
+			"description": "Noisy Beats but only stereo",
+			"remixed": {
+				"description": "Noisy beats",
+				"author": "tejeez",
+				"url": "https://youtu.be/GtQdIYUtAHg?t=2m55s"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/ukwl5r/noisy_beats_but_only_stereo/",
+			"date": "2022-05-08",
+			"stereo": true,
+			"codeOriginal": "[((-t&4095)*(255&t*(t&t>>13))>>12),(127&t*(234&t>>8&t>>3)>>(3&t>>14))]",
+			"codeMinified": "[(-t&4095)*(255&t*(t&t>>13))>>12,127&t*(234&t>>8&t>>3)>>(3&t>>14)]"
+		}, {
 			"description": "chomik",
 			"url": "https://www.reddit.com/r/bytebeat/comments/uwnd1o/chomik/",
 			"date": "2022-05-24",
