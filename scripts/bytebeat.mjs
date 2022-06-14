@@ -305,17 +305,17 @@ globalThis.bytebeat = new class {
 			if(fileFormatted) {
 				entry += `<button class="code-button code-load code-load-formatted" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the formatted code">► formatted</button>`;
+				}" title="Click to load and play the formatted code">formatted</button>`;
 			}
 			if(fileOriginal) {
 				entry += `<button class="code-button code-load code-load-original" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the original code">► original</button>`;
+				}" title="Click to load and play the original code">original</button>`;
 			}
 			if(fileMinified) {
 				entry += `<button class="code-button code-load code-load-minified" data-songdata='${
 					songData }' data-code-file="${ file
-				}" title="Click to load and play the minified code">► minified</button>`;
+				}" title="Click to load and play the minified code">minified</button>`;
 			}
 		}
 		if(codeOriginal) {

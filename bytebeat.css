@@ -239,7 +239,7 @@ button[name="close"] {
 .code-button {
 	display: inline-block;
 	margin: 1px 0 0 6px;
-	padding: 2px 4px;
+	padding: 2px 6px;
 	border: none;
 	border-radius: 3px;
 	background-image: linear-gradient(to bottom, #424242, #171b22);
@@ -263,10 +263,6 @@ button[name="close"] {
 
 .code-stereo {
 	color: #008040;
-}
-
-.code-toggle {
-	width: 18px;
 }
 
 .entry {
