@@ -1,7 +1,7 @@
 # bytebeat-composer
-Bytebeat player with playlist that contains many interesting formulas from the Internet.
+Live editing algorithmic music generator with a collection of many formulas from around the internet.
 
 **Player and library: https://dollchan.net/bytebeat/**<br>
-**Discussion threads: https://dollchan.net/btb/** - about player and new tunes in library!
+**Discussion threads: https://dollchan.net/btb/** &mdash; about player and new tunes in library!
 
-![Waveform2](https://user-images.githubusercontent.com/1059874/136712159-371c4625-944f-434b-a4c8-4d6758953d46.jpg)
+![Serpinsky](https://user-images.githubusercontent.com/1059874/174153211-6e408635-4286-4128-8fcc-78f60d165465.png)
