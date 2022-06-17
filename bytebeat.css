@@ -64,6 +64,7 @@ option {
 }
 
 footer {
+	margin-left: 8px;
 	padding-left: 4px;
 	font-size: 14px;
 }
@@ -324,7 +325,7 @@ button[name="close"] {
 
 .library-header {
 	display: flex;
-	padding: 4px 8px;
+	padding: 4px 10px;
 	border-radius: 3px;
 	background-image: linear-gradient(to bottom, #202c46, #0b0d17);
 	cursor: pointer;
