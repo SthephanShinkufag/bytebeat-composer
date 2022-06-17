@@ -324,7 +324,7 @@ button[name="close"] {
 
 .library-header {
 	display: flex;
-	padding: 4px 5px;
+	padding: 4px 8px;
 	border-radius: 3px;
 	background-image: linear-gradient(to bottom, #202c46, #0b0d17);
 	cursor: pointer;
@@ -569,5 +569,6 @@ button[name="close"] {
 
 	#editor-container {
 		flex: auto;
+		resize: none;
 	}
 }

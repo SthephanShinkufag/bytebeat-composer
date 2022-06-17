@@ -4,19 +4,19 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="JS algorithmic music generator">
+	<meta name="description" content="Bytebeat player with a collection of many formulas from around the internet">
 	<title>Bytebeat composer</title>
-	<link rel="canonical" href="https://dollchan.net/bytebeat/index.html"/>
+	<link rel="canonical" href="https://dollchan.net/bytebeat/"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022061501">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022061501">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022061501"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022061800">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022061800">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022061800"></script>
 </head>
 <body>
 	<main id="content">
 		<section id="container-fixed">
 			<div id="editor-container">
-				<textarea  id="editor-default" spellcheck="false">t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6</textarea>
+				<textarea  id="editor-default" spellcheck="false">t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)</textarea>
 			</div>
 			<div class="controls">
 				<button id="control-counter-units" class="control-button" title="Time units">t</button>
