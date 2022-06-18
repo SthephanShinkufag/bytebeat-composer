@@ -64,8 +64,7 @@ option {
 }
 
 footer {
-	margin-left: 8px;
-	padding-left: 4px;
+	margin-left: 9px;
 	font-size: 14px;
 }
 
@@ -324,8 +323,7 @@ button[name="close"] {
 }
 
 .library-header {
-	display: flex;
-	padding: 4px 10px;
+	padding: 4px 8px;
 	border-radius: 3px;
 	background-image: linear-gradient(to bottom, #202c46, #0b0d17);
 	cursor: pointer;
@@ -337,8 +335,9 @@ button[name="close"] {
 }
 
 .library-header > h1 {
+	display: inline;
 	margin: inherit;
-	font-size: inherit;
+	font-size: 13px;
 }
 
 .loading-error {
@@ -354,6 +353,7 @@ button[name="close"] {
 	width: 16px;
 	height: 16px;
 	margin-left: 6px;
+	vertical-align: top;
 	animation: wait-anim 1s linear infinite;
 }
 
@@ -553,6 +553,7 @@ button[name="close"] {
 	#container-scroll {
 		display: block !important;
 		height: calc(100vh - 4px);
+		margin: 0 4px 0 6px;
 	}
 
 	#content {
