@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022061900">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022061900">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022061900"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022062503">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022062503">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022062503"></script>
 </head>
 <body>
 	<main id="content">
@@ -19,8 +19,10 @@
 				<textarea  id="editor-default" spellcheck="false">t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)</textarea>
 			</div>
 			<div class="controls">
-				<button id="control-counter-units" class="control-button" title="Time units">t</button>
-				<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter">
+				<div class="controls-group">
+					<button id="control-counter-units" class="control-button" title="Time units">t</button>
+					<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter">
+				</div>
 				<div class="controls-group">
 					<button id="control-stop" class="control-button" title="Stop and reset">
 						<svg><use xlink:href="#symbol-stop"></use></svg>
@@ -30,22 +32,18 @@
 					</button>
 				</div>
 				<div class="controls-group">
-					<button id="control-fast-backward" class="control-button" title="Run fast reverse x2 speed">
-						<span class="control-fast-multiplier">2</span>
-						<svg><use xlink:href="#symbol-fast"></use></svg>
-					</button>
-					<button id="control-play-backward" class="control-button" title="Reverse">
-						<svg><use xlink:href="#symbol-play"></use></svg>
+					<button id="control-play-backward" class="control-button control-play" title="Play reverse">
+						<span class="control-fast-multiplier">1</span>
+						<svg class="svg-fast"><use xlink:href="#symbol-fast"></use></svg>
+						<svg class="svg-play"><use xlink:href="#symbol-play"></use></svg>
 					</button>
 					<button id="control-pause" class="control-button" title="Pause">
 						<svg><use xlink:href="#symbol-pause"></use></svg>
 					</button>
-					<button id="control-play-forward" class="control-button" title="Play">
-						<svg><use xlink:href="#symbol-play"></use></svg>
-					</button>
-					<button id="control-fast-forward" class="control-button" title="Run fast play x2 speed">
-						<span class="control-fast-multiplier">2</span>
-						<svg><use xlink:href="#symbol-fast"></use></svg>
+					<button id="control-play-forward" class="control-button control-play" title="Play forward">
+						<span class="control-fast-multiplier">1</span>
+						<svg class="svg-fast"><use xlink:href="#symbol-fast"></use></svg>
+						<svg class="svg-play"><use xlink:href="#symbol-play"></use></svg>
 					</button>
 				</div>
 				<div class="controls-group">
@@ -56,24 +54,30 @@
 						<svg><use xlink:href="#symbol-scaleup"></use></svg>
 					</button>
 				</div>
-				<select id="control-drawmode" class="control-select" title="Drawing mode">
-					<option value="Points" selected>Points</option>
-					<option value="Waveform">Waveform</option>
-				</select>
-				<select id="control-mode" class="control-select" title="Sound mode">
-					<option value="Bytebeat" selected>Bytebeat</option>
-					<option value="Signed Bytebeat">Signed Bytebeat</option>
-					<option value="Floatbeat">Floatbeat</option>
-				</select>
-				<input type="text" id="control-samplerate" title="Set sample rate (in Hz) then press Enter">
-				<select id="control-samplerate-select" class="control-select" title="Sample rate">
-					<option value="8000">8000Hz</option>
-					<option value="11025">11025Hz</option>
-					<option value="16000">16000Hz</option>
-					<option value="22050">22050Hz</option>
-					<option value="32000">32000Hz</option>
-					<option value="44100">44100Hz</option>
-				</select>
+				<div class="controls-group">
+					<select id="control-drawmode" class="control-select" title="Drawing mode">
+						<option value="Points" selected>Points</option>
+						<option value="Waveform">Waveform</option>
+					</select>
+				</div>
+				<div class="controls-group">
+					<select id="control-mode" class="control-select" title="Sound mode">
+						<option value="Bytebeat" selected>Bytebeat</option>
+						<option value="Signed Bytebeat">Signed Bytebeat</option>
+						<option value="Floatbeat">Floatbeat</option>
+					</select>
+				</div>
+				<div class="controls-group">
+					<input type="text" id="control-samplerate" title="Set sample rate (in Hz) then press Enter">
+					<select id="control-samplerate-select" class="control-select" title="Sample rate">
+						<option value="8000">8000Hz</option>
+						<option value="11025">11025Hz</option>
+						<option value="16000">16000Hz</option>
+						<option value="22050">22050Hz</option>
+						<option value="32000">32000Hz</option>
+						<option value="44100">44100Hz</option>
+					</select>
+				</div>
 				<div class="controls-group">
 					<button id="control-rec" class="control-button" title="Record to the file">
 						<svg><use xlink:href="#symbol-rec"></use></svg>
@@ -127,35 +131,35 @@
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>Classic &mdash; C compatible code with one variable (t)</h1>
-					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-classic" class="library-container"></div>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>Compact JS &mdash; compact JavaScript code</h1>
-					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-compact-js" class="library-container"></div>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>Big JS &mdash; big JavaScript code</h1>
-					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-big-js" class="library-container"></div>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>Floatbeat &mdash; assumes output is -1.0 to 1.0<h1>
-					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-floatbeat" class="library-container"></div>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>SthephanShi &mdash; code SthephanShi created</h1>
-					<svg class="loading-wait disabled"><use xlink:href="#symbol-wait"/></svg>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-sthephanshi" class="library-container"></div>
 			</details>

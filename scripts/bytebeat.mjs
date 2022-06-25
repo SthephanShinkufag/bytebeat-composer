@@ -33,8 +33,6 @@ globalThis.bytebeat = new class {
 		this.canvasWidth = 1024;
 		this.containerFixedElem = null;
 		this.controlDrawMode = null;
-		this.controlFastBack = null;
-		this.controlFastForw = null;
 		this.controlPlaybackMode = null;
 		this.controlRecord = null;
 		this.controlSampleRate = null;
@@ -323,7 +321,7 @@ globalThis.bytebeat = new class {
 				codeOriginal = codeOriginal.join('\r\n');
 			}
 			entry += `<br><button class="code-text code-text-original${
-				codeMinified ? ' disabled' : '' }" data-songdata='${ songData }' code-length="${
+				codeMinified ? ' hidden' : '' }" data-songdata='${ songData }' code-length="${
 				codeOriginal.length }">${ this.escapeHTML(codeOriginal) }</button>`;
 		}
 		if(codeMinified) {
@@ -372,11 +370,9 @@ globalThis.bytebeat = new class {
 			case 'control-counter':
 			case 'control-pause': this.playbackToggle(false); break;
 			case 'control-expand': this.expandEditor(); break;
-			case 'control-fast-backward': this.playbackFaster(elem, -1); break;
-			case 'control-fast-forward': this.playbackFaster(elem, 1); break;
 			case 'control-link': this.copyLink(); break;
-			case 'control-play-backward': this.playbackSetSpeed(-1); break;
-			case 'control-play-forward': this.playbackSetSpeed(1); break;
+			case 'control-play-backward': this.playbackToggle(true, true, -1); break;
+			case 'control-play-forward': this.playbackToggle(true, true, 1); break;
 			case 'control-rec': this.toggleRecording(); break;
 			case 'control-reset': this.resetTime(); break;
 			case 'control-scaledown': this.setScale(-1, elem); break;
@@ -440,7 +436,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022061801');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022062503');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -490,9 +486,9 @@ globalThis.bytebeat = new class {
 		// Controls
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
-		this.controlFastBack = document.getElementById('control-fast-backward');
-		this.controlFastForw = document.getElementById('control-fast-forward');
 		this.controlPlaybackMode = document.getElementById('control-mode');
+		this.controlPlayBackward = document.getElementById('control-play-backward');
+		this.controlPlayForward = document.getElementById('control-play-forward');
 		this.controlRecord = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
@@ -548,8 +544,8 @@ globalThis.bytebeat = new class {
 		const parentElem = buttonElem.parentNode;
 		const origElem = parentElem.querySelector('.code-text-original');
 		const minElem = parentElem.querySelector('.code-text-minified');
-		origElem?.classList.toggle('disabled');
-		minElem?.classList.toggle('disabled');
+		origElem?.classList.toggle('hidden');
+		minElem?.classList.toggle('hidden');
 		const isMinified = buttonElem.textContent === '–';
 		parentElem.querySelector('.code-length').textContent =
 			`${ (isMinified ? minElem : origElem).getAttribute('code-length') }c`;
@@ -565,11 +561,11 @@ globalThis.bytebeat = new class {
 		}
 		state.add('loaded');
 		const waitElem = headerElem.querySelector('.loading-wait');
-		waitElem.classList.remove('disabled');
+		waitElem.classList.remove('hidden');
 		const response = await fetch(`./library/${ containerElem.id.replace('library-', '') }.json`,
 			{ cache: 'no-cache' });
 		const { status } = response;
-		waitElem.classList.add('disabled');
+		waitElem.classList.add('hidden');
 		if(status !== 200 && status !== 304) {
 			state.remove('loaded');
 			containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
@@ -649,35 +645,25 @@ globalThis.bytebeat = new class {
 		this.loadCode(songData ||
 			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
 	}
-	playbackFaster(buttonElem, sign) {
-		const value = +buttonElem.firstElementChild.textContent;
-		let newValue;
-		switch(value) {
-		case 2: newValue = 4; break;
-		case 4: newValue = 8; break;
-		case 8: newValue = 2;
-		}
-		this.setFastPlayButton(buttonElem, newValue);
-		this.playbackSetSpeed(sign * value);
-	}
-	playbackSetSpeed(value, startPlay = true) {
-		if(Math.abs(value) === 1) {
-			this.setFastPlayButton(this.controlFastBack);
-			this.setFastPlayButton(this.controlFastForw);
-		} else if((value ^ this.playbackSpeed) < 0) {
-			this.setFastPlayButton(value > 0 ? this.controlFastBack : this.controlFastForw);
-		}
-		this.playbackSpeed = value;
-		if(startPlay) {
-			this.playbackToggle(true);
-		}
-	}
 	playbackStop() {
 		this.playbackToggle(false, false);
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
-	playbackToggle(isPlaying, isSendData = true) {
-		const isReverse = this.playbackSpeed < 0;
+	playbackToggle(isPlaying, isSendData = true, speedIncrement = 0) {
+		const isReverse = speedIncrement ? speedIncrement < 0 : this.playbackSpeed < 0;
+		const buttonElem = isReverse ? this.controlPlayBackward : this.controlPlayForward;
+		if(speedIncrement && buttonElem.getAttribute('disabled')) {
+			return;
+		}
+		const multiplierElem = buttonElem.firstElementChild;
+		const speed = speedIncrement ? +multiplierElem.textContent : 1;
+		multiplierElem.classList.toggle('control-fast-multiplier-large', speed >= 8);
+		const nextSpeed = speed === 64 ? 0 : speed * 2;
+		this.setPlayButton(this.controlPlayBackward, isPlaying && isReverse ? nextSpeed : 1);
+		this.setPlayButton(this.controlPlayForward, isPlaying && !isReverse ? nextSpeed : 1);
+		if(speedIncrement || !isPlaying) {
+			this.playbackSpeed = isPlaying ? speedIncrement * speed : Math.sign(this.playbackSpeed);
+		}
 		this.canvasContainer.title = isPlaying ? `Click to ${
 			this.isRecording ? 'pause and stop recording' : 'pause' }` :
 			`Click to play${ isReverse ? ' in reverse' : '' }`;
@@ -697,7 +683,6 @@ globalThis.bytebeat = new class {
 				this.controlRecord.title = 'Record to file';
 				this.audioRecorder.stop();
 			}
-			this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
@@ -744,7 +729,6 @@ globalThis.bytebeat = new class {
 	}
 	resetTime() {
 		this.isNeedClear = true;
-		this.playbackSetSpeed(Math.sign(this.playbackSpeed), false);
 		this.sendData({ resetTime: true, playbackSpeed: this.playbackSpeed });
 	}
 	saveSettings() {
@@ -777,10 +761,6 @@ globalThis.bytebeat = new class {
 		this.settings.drawMode = this.controlDrawMode.value;
 		this.saveSettings();
 	}
-	setFastPlayButton(buttonElem, value = 2) {
-		buttonElem.firstElementChild.textContent = value;
-		buttonElem.title = buttonElem.title.replace(/\d/, value);
-	}
 	setFunction() {
 		const setFunction = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
 		this.sendData({ setFunction });
@@ -789,6 +769,21 @@ globalThis.bytebeat = new class {
 		this.songData.mode = mode;
 		this.updateUrl();
 		this.sendData({ mode });
+	}
+	setPlayButton(buttonElem, speed) {
+		const isFast = speed !== 1;
+		buttonElem.classList.toggle('control-fast', isFast);
+		buttonElem.classList.toggle('control-play', !isFast);
+		if(speed) {
+			buttonElem.firstElementChild.textContent = speed;
+			buttonElem.removeAttribute('disabled');
+		} else {
+			buttonElem.setAttribute('disabled', true);
+			buttonElem.removeAttribute('title');
+			return;
+		}
+		const direction = buttonElem === this.controlPlayForward ? 'forward' : 'reverse';
+		buttonElem.title = `Play ${ isFast ? `fast ${ direction } x${ speed } speed` : direction }`;
 	}
 	setSampleRate(sampleRate, isSendData = true) {
 		if(!sampleRate || !isFinite(sampleRate)) {
@@ -861,7 +856,7 @@ globalThis.bytebeat = new class {
 		this.playbackToggle(true);
 	}
 	toggleTimeCursor() {
-		this.canvasTimeCursor.classList.toggle('disabled', !this.timeCursorEnabled);
+		this.canvasTimeCursor.classList.toggle('hidden', !this.timeCursorEnabled);
 	}
 	updateUrl() {
 		const code = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
