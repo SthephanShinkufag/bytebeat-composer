@@ -484,7 +484,7 @@ button[name="close"] {
 }
 
 #control-volume::-moz-range-thumb {
-	width: 12px;
+	width: 10px;
 	height: var(--control-size);
 	border: none;
 	border-radius: 4px;
@@ -500,7 +500,6 @@ button[name="close"] {
 	appearance: none;
 	width: 10px;
 	height: var(--control-size);
-	max-width: 785px;
 	border: none;
 	border-radius: 4px;
 	background-image: linear-gradient(to bottom, #aeaeae, #484c55);
@@ -521,6 +520,10 @@ button[name="close"] {
 .controls-group {
 	display: flex;
 	margin: 1px 2px 2px 1px;
+}
+
+.controls-group-grow, .controls-group-grow > input {
+	flex-grow: 1;
 }
 
 .controls-group > .control-button {
