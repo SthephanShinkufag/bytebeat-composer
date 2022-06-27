@@ -114,7 +114,7 @@
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
 			"starred": 1
 		}, {
-			"description": "By playing with the \"Boss level\" I made a different percussion",
+			"description": "By playing with the \"Boss level\" I made a different rhythm pattern",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
 		}, {
 			"description": "\"Boss level #2\". |t>>4 rhythm sounds cool!",
@@ -265,7 +265,7 @@
 			},
 			"date": "2021-10-25",
 			"sampleRate": 11025,
-			"codeOriginal": "((.5*t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?(t&4096?2:16):2))|t>>4)&127)+(1E5/(t&4095)&128-64)+(random()*(((-t>>(t&4096?6:5))%64)+64))"
+			"codeOriginal": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536>59392?2:t&4096?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)"
 		}]
 	}, {
 		"description": "Death chase",

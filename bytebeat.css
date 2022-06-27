@@ -57,7 +57,7 @@ option {
 #container-scroll {
 	max-width: 1028px;
 	width: 100%;
-	margin-top: 4px;
+	margin-top: 2px;
 	overflow-y: auto;
 }
 
@@ -425,7 +425,7 @@ button[name="close"] {
 }
 
 #control-play-backward > .control-fast-multiplier-large {
-	right: 3px;
+	right: 4px;
 	letter-spacing: -2px;
 }
 
@@ -558,8 +558,10 @@ button[name="close"] {
 
 	#container-scroll {
 		display: block !important;
-		height: calc(100vh - 4px);
-		margin: 0 4px 0 6px;
+		height: 100%;
+		margin-top: 0;
+		margin-left: 6px;
+		padding-right: 6px;
 	}
 
 	#content {
