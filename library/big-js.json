@@ -422,14 +422,44 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
-		"description": "8-Bit Ajaxzit",
 		"author": "HypernovaHeathen",
-		"url": "https://www.pouet.net/topic.php?post=573519",
-		"date": "2021-09-12",
-		"sampleRate": 44100,
-		"file": "HypernovaHeathen - 8-Bit Ajaxzit.js",
-		"fileFormatted": true,
-		"fileOriginal": true
+		"children": [{
+			"description": "Before J.C.D.",
+			"url": "https://www.youtube.com/watch?v=frpeOVBhrvM",
+			"date": "2021-09-10",
+			"sampleRate": 44100,
+			"file": "HypernovaHeathen - Before J.C.D..js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "C. Allen Type Beat",
+			"url": "https://www.youtube.com/watch?v=c77J7MrQfvI",
+			"date": "2021-11-10",
+			"sampleRate": 44100,
+			"file": "HypernovaHeathen - C. Allen Type Beat.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "The Best Bytebeat Song I Made!",
+			"url": "https://www.youtube.com/watch?v=F9i0y_S3Xr0",
+			"date": "2021-12-30",
+			"sampleRate": 44100,
+			"file": "HypernovaHeathen - The Best Bytebeat Song I Made!.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "I've Come To Make An Announcement",
+			"url": "https://dollchan.net/btb/res/77.html",
+			"date": "2022-06-18",
+			"sampleRate": 44100,
+			"file": "HypernovaHeathen - I've Come To Make An Announcement.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}]
 	}, {
 		"description": "cool loop i guess",
 		"author": "RealZynx92",
