@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022062700">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022062700">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2022062700"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2022062800">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2022062800">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2022062800"></script>
 </head>
 <body>
 	<main id="content">
@@ -19,7 +19,7 @@
 				<textarea  id="editor-default" spellcheck="false">t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)</textarea>
 			</div>
 			<div class="controls">
-				<div class="controls-group controls-group-grow">
+				<div class="controls-group controls-grow">
 					<button id="control-counter-units" class="control-button" title="Time units">t</button>
 					<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter">
 				</div>
@@ -54,20 +54,16 @@
 						<svg><use xlink:href="#symbol-scaleup"></use></svg>
 					</button>
 				</div>
-				<div class="controls-group controls-group-grow">
-					<select id="control-drawmode" class="control-select" title="Drawing mode">
-						<option value="Points" selected>Points</option>
-						<option value="Waveform">Waveform</option>
-					</select>
-				</div>
-				<div class="controls-group controls-group-grow">
-					<select id="control-mode" class="control-select" title="Sound mode">
-						<option value="Bytebeat" selected>Bytebeat</option>
-						<option value="Signed Bytebeat">Signed Bytebeat</option>
-						<option value="Floatbeat">Floatbeat</option>
-					</select>
-				</div>
-				<div class="controls-group controls-group-grow">
+				<select id="control-drawmode" class="control-select controls-grow" title="Drawing mode">
+					<option value="Points" selected>Points</option>
+					<option value="Waveform">Waveform</option>
+				</select>
+				<select id="control-mode" class="control-select controls-grow" title="Sound mode">
+					<option value="Bytebeat" selected>Bytebeat</option>
+					<option value="Signed Bytebeat">Signed Bytebeat</option>
+					<option value="Floatbeat">Floatbeat</option>
+				</select>
+				<div class="controls-group controls-grow">
 					<input type="text" id="control-samplerate" title="Set sample rate (in Hz) then press Enter">
 					<select id="control-samplerate-select" class="control-select" title="Sample rate">
 						<option value="8000">8000Hz</option>
