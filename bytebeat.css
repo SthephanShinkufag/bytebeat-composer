@@ -7,6 +7,7 @@
 }
 
 html {
+	color-scheme: dark;
 	background-color: #000;
 	color: #c5c8c6;
 	font: var(--font-size) sans-serif;
@@ -71,6 +72,8 @@ option {
 footer {
 	margin-left: 9px;
 }
+
+
 
 /* ==[ Canvas ] =========================================================================================== */
 
@@ -148,7 +151,7 @@ button[name="close"] {
 
 #editor-container {
 	width: calc(100% - 4px);
-	height: 200px;
+	height: 256px;
 	border: 2px solid #bac2cc;
 	resize: vertical;
 	overflow: hidden;
@@ -523,10 +526,6 @@ button[name="close"] {
 	display: flex;
 }
 
-.controls-grow, .controls-grow > input {
-	flex-grow: 1;
-}
-
 .controls-group > .control-button {
 	border-left: 1px solid #5c636c;
 	border-radius: 0;
@@ -540,6 +539,11 @@ button[name="close"] {
 .controls-group > .control-button:last-child {
 	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }
+
+.controls-grow, .controls-grow > input {
+	flex-grow: 1;
+}
+
 
 /* ==[ Adaptive screen ] ================================================================================== */
 
