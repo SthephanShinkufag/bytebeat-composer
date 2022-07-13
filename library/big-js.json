@@ -441,7 +441,7 @@
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 1
+			"starred": 2
 		}, {
 			"description": "The Best Bytebeat Song I Made!",
 			"url": "https://www.youtube.com/watch?v=F9i0y_S3Xr0",
@@ -542,6 +542,15 @@
 		"file": "lhphr - s.i.t.e. (synth in the emptiness).js",
 		"fileFormatted": true,
 		"fileMinified": true,
+		"fileOriginal": true
+	}, {
+		"description": "PCM Synthesis",
+		"author": "PortablePorcelain",
+		"url": "https://dollchan.net/btb/res/3.html#82",
+		"date": "2022-06-28",
+		"mode": "Signed Bytebeat",
+		"sampleRate": 17000,
+		"file": "PortablePorcelain - PCM Synthesis.js",
 		"fileOriginal": true
 	}
 ]

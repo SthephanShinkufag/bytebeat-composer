@@ -515,6 +515,18 @@
 			"sampleRate": 44100,
 			"codeOriginal": "S=Math.sin,C=Math.cos,(S(t/36+C(t/72.1)*[((t>>14&31)+1),((-t>>14&31)+1)][t>>19&1]/12)*8+C(t/48+S(t/96.5)*[((t>>15&31)+1),((-t>>15&31)+1)][t>>20&1]/6)*8+S(t/18+C(t/36.1)*[((t>>12&31)+1),((-t>>12&31)+1)][t>>17&1]/6)*8+C(t/24+S(t/48.5)*[((t>>13&31)+1),((-t>>13&31)+1)][t>>18&1]/3)*8+32+Math.random()*((-t>>7&31)+1)*(-t>>12&1)+Math.random()*((-t>>9&31)+1)*(-t>>14&1)+Math.abs(1536*Math.log(t&16383)%256-128)/2)*1.5",
 			"codeMinified": "S=sin,C=cos,1.5*(8*S(t/36+C(t/72.1)*[(t>>14&31)+1,(-t>>14&31)+1][t>>19&1]/12)+8*C(t/48+S(t/96.5)*[(t>>15&31)+1,(-t>>15&31)+1][t>>20&1]/6)+8*S(t/18+C(t/36.1)*[(t>>12&31)+1,(-t>>12&31)+1][t>>17&1]/6)+8*C(t/24+S(t/48.5)*[(t>>13&31)+1,(-t>>13&31)+1][t>>18&1]/3)+32+random()*((-t>>7&31)+1)*(-t>>12&1)+random()*((-t>>9&31)+1)*(-t>>14&1)+abs(1536*log(t&16383)%256-128)/2)"
+		}, {
+			"description": "GetDolphinedLOL's Bytebeat Creations But Their Badly Remixed",
+			"remixed": {
+				"description": "Ctrl+V",
+				"author": "getDolphinedLol",
+				"url": "https://www.reddit.com/r/bytebeat/comments/s0ytc9/ctrlv/"
+			},
+			"url": "https://dollchan.net/btb/res/89.html#89",
+			"date": "2020-07-08",
+			"sampleRate": 44100,
+			"codeOriginal": "function(x){return x/6+x/9}((([2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32]*t&192)/2+([0,2,0,2,0,2,0,3,0][(t>>13)%8]*t>>2&128)+(([2,0,3,0,2,0,2.5,0,3,0,2,0,1.8,0,3,3][(t>>12)%16]*t>>2&127)+(t>>8)&128)+([0,1][(t>>13)%2]*t>>2&127)))+24*Math.sin(4095/(t%16384))+24*Math.cos(6143/(t%16384)*1.007)+48+Math.random()*((-t>>8&31)+1)*(-t>>13&1)",
+			"codeMinified": "(x=>x/6+x/9)(([2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32]*t&192)/2+([0,2,0,2,0,2,0,3,0][(t>>13)%8]*t>>2&128)+(([2,0,3,0,2,0,2.5,0,3,0,2,0,1.8,0,3,3][(t>>12)%16]*t>>2&127)+(t>>8)&128)+([0,1][(t>>13)%2]*t>>2&127))+24*sin(4095/(t%16384))+24*cos(6143/(t%16384)*1.007)+48+random()*((-t>>8&31)+1)*(-t>>13&1)"
 		}]
 	}, {
 		"description": "Cool waveform i guess",
@@ -981,7 +993,7 @@
 				"f=e/8%32+(b%190),",
 				"(t%131072<126976?f:(f+(44583/(-t&4095))/2%128))"
 			],
-			"codeMinified": "t/=5.5125,a=t*((t&4096?59392>t%65536?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2),b=a/3%(85+1/3)+(61440>t%65536?44583.5284:0)/(t&4095)/2%128,c=(256>t%1024?4:0)*t*Math.random()|t>>0,d=(256>t%512?4:0)*t*Math.random()|t>>0,e=14336>t%16384?c:d,f=e/8%32+b%190,126976>t%131072?f:f+44583/(-t&4095)/2%128",
+			"codeMinified": "t/=5.5125,a=t*((t&4096?59392>t%65536?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2),b=a/3%(85+1/3)+(61440>t%65536?44583.5284:0)/(t&4095)/2%128,c=(256>t%1024?4:0)*t*random()|t>>0,d=(256>t%512?4:0)*t*random()|t>>0,e=14336>t%16384?c:d,f=e/8%32+b%190,126976>t%131072?f:f+44583/(-t&4095)/2%128",
 			"starred": 1
 		}, {
 			"description": "TIRO Remixed#6 remastered",
@@ -1419,7 +1431,8 @@
 			"mode": "Signed Bytebeat",
 			"sampleRate": 22050,
 			"codeOriginal": "sin(t*Math.PI/255+sin(t*Math.PI/128)*(t/(65536+(16384*Math.random()))))*64",
-			"codeMinified": "64*sin(t*PI/255+sin(t*PI/128)*(t/(65536+16384*random())))"
+			"codeMinified": "64*sin(t*PI/255+sin(t*PI/128)*(t/(65536+16384*random())))",
+			"starred": 1
 		}, {
 			"description": "1fccccf1",
 			"url": "https://dollchan.net/btb/res/3.html#55",
@@ -1432,7 +1445,7 @@
 			"url": "https://dollchan.net/btb/res/3.html#55",
 			"date": "2022-04-30",
 			"codeOriginal": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=((t/540)%q.length),b=(q.charCodeAt(s)-32)*(t/8),tanb=tan(b*Math.PI/512)*64-128,sinb=sin(b*Math.PI/64)*64-128,(tanb|sinb)-sinb",
-			"codeMinified": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=t/540%q.length,b=(q.charCodeAt(s)-32)*(t/8),tanb=64*tan(b*Math.PI/512)-128,sinb=64*sin(b*Math.PI/64)-128,(tanb|sinb)-sinb",
+			"codeMinified": "q='5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  < < XX< < RR< < MM< < II< < IILL< < XX< < RR< < MM< < IIIIIIII  5 5 JJ5 5 FF5 5 AA5 5 ==5 5 ==??5 5 JJ5 5 FF5 5 AA5 5 ========  ',s=t/540%q.length,b=(q.charCodeAt(s)-32)*(t/8),tanb=64*tan(b*PI/512)-128,sinb=64*sin(b*PI/64)-128,(tanb|sinb)-sinb",
 			"starred": 2
 		}, {
 			"description": "Gabriel Miceli's \"Techno\" but the melodies are on opposite ears",
@@ -1458,6 +1471,83 @@
 			"stereo": true,
 			"codeOriginal": "[(t/2*(4|7&t>>13)>>(~t>>11&1)&128),(t*2*(t>>11&t>>13)*(~t>>9&3)&127)]",
 			"codeMinified": "[t/2*(4|7&t>>13)>>(~t>>11&1)&128,2*t*(t>>11&t>>13)*(~t>>9&3)&127]"
+		}, {
+			"description": "TIRO remix",
+			"remixed": {
+				"description": "TIRO Remixed#5.1",
+				"author": "NewFall2020",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/comment/hmu25u3/?utm_source=reddit&utm_medium=web2x&context=3"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#80",
+			"date": "2022-06-20",
+			"sampleRate": 44100,
+			"codeOriginal": "t/=4,z=(x)=>log(sin(x*PI/64)/1+4),y=(x)=>z(x*(1+(1/(x/x))))-sin(x*PI/(64-(1/(x/t))))/2,c=(x)=>abs(y(x/2))**y(x)/z(x),q=c(t*2/(2**(-t>>16&3))*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8)))*(t&4096?16:36),b=z(t&4096?(3-(3&t>>9)+(3&t>>8))*t*(t&16384?7:5)>>3&t*(t&16384?7:5):0)*128,l=3e4/(t%(t&8192?3072:4096))&72,k=b+q+l,u=(random()*64|t>>\"6554554455545434655455445554543265545544555454346554554455543210\"[t>>12&63])%64,g=k+u,j=5e4/(t%(t&8192?7168:6144))&64,n=(g+j-164),s=z(t/4*(t&16384?7:5)|t>>13)*64,min((s+n)/1.5,255)",
+			"codeMinified": "t/=4,z=x=>log(sin(x*PI/64)/1+4),y=x=>z(x*(1+1/(x/x)))-sin(x*PI/(64-1/(x/t)))/2,c=x=>abs(y(x/2))**y(x)/z(x),q=c(2*t/2**(-t>>16&3)*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8)))*(t&4096?16:36),b=128*z(t&4096?(3-(3&t>>9)+(3&t>>8))*t*(t&16384?7:5)>>3&t*(t&16384?7:5):0),l=3E4/(t%(t&8192?3072:4096))&72,k=b+q+l,u=(64*random()|t>>'6554554455545434655455445554543265545544555454346554554455543210'[t>>12&63])%64,g=k+u,j=5E4/(t%(t&8192?7168:6144))&64,n=g+j-164,s=64*z(t/4*(t&16384?7:5)|t>>13),min((s+n)/1.5,255)"
+		}, {
+			"description": "remix of crude sinewave dubstep",
+			"remixed": {
+				"description": "Crude Sinewave Dubstep",
+				"author": "Gabriel Miceli",
+				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#82",
+			"date": "2022-06-28",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 169000,
+			"codeOriginal": "c=(v)=>sin(v*PI),b=t/4,q=c(b*(b&b>>12)/11025/2)/2,n=((6e5/(b&16383))/256)%1,k=((6e5/(b+16383&32767))/256)%1.5,o=((6e4/(b&4095))/256)%0.5,g=min((4*b/[8,8,8,9,10,10,9,9][b>>15&7]&255)*(-b>>5&255)>>8,128),w=min((q+n-k-o)*96+g,127)",
+			"codeMinified": "c=v=>sin(v*PI),b=t/4,q=c(b*(b&b>>12)/11025/2)/2,n=6E5/(b&16383)/256%1,k=6E5/(b+16383&32767)/256%1.5,o=6E4/(b&4095)/256%.5,g=min((4*b/[8,8,8,9,10,10,9,9][b>>15&7]&255)*(-b>>5&255)>>8,128),w=min(96*(q+n-k-o)+g,127)",
+			"starred": 1
+		}, {
+			"description": "super creepy tornado sound effect with EAS included",
+			"url": "https://dollchan.net/btb/res/3.html#80",
+			"date": "2022-06-28",
+			"sampleRate": 44100,
+			"codeOriginal": [
+				"SAMP=44100,",
+				"hz=t/SAMP*256,",
+				"freq1=853,",
+				"freq2=960,",
+				"d=sin(hz*Math.PI/128*freq1)*32+sin(hz*Math.PI/128*freq2)*32+64,",
+				"t<2?(a=0,b=0,c=0):(a=0.99*a+(.003+t/131072000)*random(),b<0?(b=.5*random(),c=random()):b-=1/440,abs(256*a*(5*sin(t/5E4)+10)%256-128)+255*(t/300*(10*c+200)&1)*b**(random()/5+10-(t/131072)))+d"
+			],
+			"codeMinified": "SAMP=44100,hz=t/SAMP*256,freq1=853,freq2=960,d=32*sin(hz*PI/128*freq1)+32*sin(hz*PI/128*freq2)+64,2>t?(a=0,b=0,c=0):(a=.99*a+(.003+t/131072E3)*random(),0>b?(b=.5*random(),c=random()):b-=1/440,abs(256*a*(5*sin(t/5E4)+10)%256-128)+255*(t/300*(10*c+200)&1)*b**(random()/5+10-t/131072))+d",
+			"starred": 1
+		}, {
+			"description": "Second remix of Wiretapped",
+			"remixed": {
+				"author": "wiretapped",
+				"url": "https://www.noisebridge.net/wiki/Bytebeat"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#83",
+			"date": "2022-06-30",
+			"sampleRate": 75000,
+			"codeOriginal": "t/=8,v=(1+(t>>14)%4),b=t*(1+(t>>10)*(43+2*(t>>15-(t>>16)%8)%8)%8)*v|t/3*v>>t*v|t*3*v+t*2*v,b%=256,q=(x,y,z)=>x/(t%y)&z,min(b+q(4e5,4096,64)+q(8e4,1024,53)-q(11e4,t&4096?3072:4096,40)+q(3e5,t&4096?2560:3072,40),400)/1.8+16",
+			"codeMinified": "t/=8,v=1+(t>>14)%4,b=t*(1+(t>>10)*(43+2*(t>>15-(t>>16)%8)%8)%8)*v|t/3*v>>t*v|3*t*v+2*t*v,b%=256,q=(x,y,z)=>x/(t%y)&z,min(b+q(4E5,4096,64)+q(8E4,1024,53)-q(11E4,t&4096?3072:4096,40)+q(3E5,t&4096?2560:3072,40),400)/1.8+16"
+		}, {
+			"description": "bassline remix",
+			"remixed": {
+				"description": "Bassline #countercomplex",
+				"author": "tejeez",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#83",
+			"date": "2022-06-30",
+			"sampleRate": 72000,
+			"codeOriginal": "t/=8,q=(2+(5&t>>14)),v=(~t>>2)*((127&t*(7&t>>10))<(245&t*q))|t>>t*q/8|t>>2,v%=256,v=v/2-1,f=(x,y,z)=>x/(t%y)&z,v+f(2e4,4096,64)+f(4e3,1024,64)-f(4e3,t&4096?t&8192?5120:3072:4096,64)&-t>>((q+3)/2)",
+			"codeMinified": "t/=8,q=2+(5&t>>14),v=(~t>>2)*((127&t*(7&t>>10))<(245&t*q))|t>>t*q/8|t>>2,v%=256,v=v/2-1,f=(x,y,z)=>x/(t%y)&z,v+f(2E4,4096,64)+f(4E3,1024,64)-f(4E3,t&4096?t&8192?5120:3072:4096,64)&-t>>(q+3)/2"
+		}, {
+			"description": "\"squsinsaw\" remix",
+			"remixed": {
+				"description": "squsinsaw music",
+				"author": "_elevate__",
+				"url": "https://www.reddit.com/r/bytebeat/comments/s7aiep/squsinsaw_music/"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#86",
+			"date": "2022-07-04",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=4,sn=(f=(x)=>sin(x*PI/128),v=t*[8,9,9.5,12][t>>10&3],n=\"6698\"[t>>13&3]/6,v=f(v*n)*127-128,g=(s,y=4)=>(s&255)*(-t>>y&63)>>8,v=g(v)*1.5),sq=t/2*n*[2,4,2,4][t>>11&3]&32,c='10'[t>>10&1],x='11'[t>>10&1],sq*=[c,c,c,c,c,x,c,c,c,x,c,c,c,x,c,c][t>>11&15],sw=t/2*n*[8,9.5,12,16][t>>8&3]&63,sw*='01'[t>>11&1],kc=2e4/(t&4095)&63,sr=random()*64*'0101'[t>>12&3],sr=g(sr,6)*5,sw=g(sw,5)*4,sn+sq*'01111111'[t>>16&7]+kc*'00111111'[t>>16&7]+sr*'00111111'[t>>16&7]+sw*'00111111'[t>>16&7]",
+			"codeMinified": "t/=4,sn=(f=x=>sin(x*PI/128),v=t*[8,9,9.5,12][t>>10&3],n='6698'[t>>13&3]/6,v=127*f(v*n)-128,g=(s,y=4)=>(s&255)*(-t>>y&63)>>8,v=1.5*g(v)),sq=t/4*n*[2,4,2,4][t>>11&3]&32,c='10'[t>>10&1],x='11'[t>>10&1],sq*=[c,c,c,c,c,x,c,c,c,x,c,c,c,x,c,c][t>>11&15],sw=t/2*n*[8,9.5,12,16][t>>8&3]&63,sw*='01'[t>>11&1],kc=2E4/(t&4095)&63,sr=64*random()*'0101'[t>>12&3],sr=5*g(sr,6),sw=4*g(sw,5),sn+sq*'01111111'[t>>16&7]+kc*'00111111'[t>>16&7]+sr*'00111111'[t>>16&7]+sw*'00111111'[t>>16&7]",
+			"starred": 2
 		}]
 	}, {
 		"author": "lhphr",
@@ -1689,6 +1779,45 @@
 			"sampleRate": 32000,
 			"codeOriginal": "z=Z=>2**(Z/12),this.a??=0,a+=1,a%=2**22,c=1*'00750079'[a>>15&7],b=a*z(c+1*'00337373'[a>>11&7]),d=(D,f=2)=>b/f&16+D,e=1.5*(300*(a%(4096*(4-(a>>14&1))))**.25&32),f=F=>32*sin(a/46*z(c-F))**(2+(a>>8-(a>>16&1)&254)),g=f(9)+f(4)+f(0),h=(a>>14&1)*(-a>>9&31)*sin((a>>1)**3)**2,i=(!(a>>12&3)+1)*(-a>>8&15)*sin(a**3)**2,y=d(32)+e+g+h+i,min(255,[d(0),d(32)+g,y-i,y,x=y+(d(0,1)^d(32,1))/2+f(-5),x,y-i,y-i,w=g+i/2+d(0)*(-a>>6&31)/16,w+e,v=w+e+h+i/2,!!(-a>>14&15)*v+d(32),x,x,d(32)+g+i,!!(-a>>16&3)*d(0)+g][a>>18&15])",
 			"starred": 2
+		}, {
+			"description": "uni Firaz",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-05-27",
+			"sampleRate": 22050,
+			"codeOriginal": "m=t/25*2**(4-!(-t>>15&3)+[0,4,9,0,4,9,12,16][t>>(11-(t>>14&1))&7]/12),f=z=>m/(4-(t>>15&3))/z&31,(1e3**(1-t%16384/1e4)&32)+(t>>14&1)*(-t>>9&31)*sin((t/(2+(t>>10&15))|0)**3)**2+(m&16^f(.99)^f(1.01))",
+			"codeMinified": "m=t/25*2**(4-!(-t>>15&3)+[0,4,9,0,4,9,12,16][t>>11-(t>>14&1)&7]/12),f=z=>m/(4-(t>>15&3))/z&31,(1E3**(1-t%16384/1E4)&32)+(t>>14&1)*(-t>>9&31)*sin((t/(2+(t>>10&15))|0)**3)**2+(m&16^f(.99)^f(1.01))"
+		}, {
+			"description": "the lone system",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-02",
+			"sampleRate": 32000,
+			"codeOriginal": "p=v=>2**(v/12),a=v=>Array(3072*v).fill(0),t?0:(y=[0,0,0],d=[a(1),a(4)]),s=min(max(t/65536%1*16-1,0),2)/2,c=[0,4+s,2,-1.5-s/2,0,4+s,9,12][t>>16&7],w=(v,q)=>sin(y[v]+=p(q)/25)**2,z=(m=((y[0]+=p([0,5][t>>10&1]+c))&32)/(1+t/16384%4)+16*(w(1,c)+w(2,c+5)))+d[0].shift()+d[1].shift(),d[0].push(z/2),d[1].push(z/2.5),(z+m)/2",
+			"starred": 2
+		}, {
+			"description": "Fidelity Tweak",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-04",
+			"sampleRate": 32000,
+			"codeOriginal": "f=F=>2**(F/12),s=V=>32*(cos(t*f(c+V)/50)**2)**.125,w=V=>s(V+(o=1/8))+s(V)+s(V-o)+8,t?0:d=v=0,c='25302574'[t>>17&7]-2,v+=[0,.8,.95,.9][t>>13&3],v<1?d=f([0,4,7,12][t>>9&3]+c)*t%64+w(0)+w(4)+w(7)+w(14):v--,d"
+		}, {
+			"description": "T!me Tr!al",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-04",
+			"sampleRate": 44100,
+			"codeOriginal": "p=v=>2**(v/12),z=12*(t>>18&1),w=t/32768%1,64*abs(sin(t/50*p([0,3,7,12,,19,,7][t>>11+(t>>13&3^t>>14&1)&7]+z)))**.25+32*sin(70/w**.3)+16*(t>>15&1)*(1-w)*sin((t/3%1024|0)**3)+p([0,3,7,12][t>>11&3]+z)*t/11%16+(t>>13&1&&p(0xA7305730>>(t>>14&28)&15)*t/11&32)+48"
+		}, {
+			"description": "3DIAL",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-26",
+			"sampleRate": 32000,
+			"codeOriginal": "v=t/3,m=v>>10&127^v>>10&v>>9&255,(3E3**(1-t/2**(12-(t>>12&1))%3/3)&64)+64*(1-t/16384%1)*sin((v%16384>>(v>>7&7))**3)**2+1.5*(2**((m/7|0)+[-1,1,1,4,4,6,9][m%7]/12)*t/25*11&32)"
+		}, {
+			"description": "T!me Tr!al EX",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-07-04",
+			"sampleRate": 44100,
+			"codeOriginal": "isNaN(this.T)?P=T=0:0,p=v=>2**(v/12),f=e=>T/2**e%1,m=(s=0,S=0)=>max(64*abs(sin(P/50*p([0,3,7,12,15,19,12,7][T>>11+(T>>13+S&3^T>>14+S&1)&7]+(z=12*(h=T>>18&1))+s)))**.25,16),S=[m(),m()+(c=!!(-T>>15&15))*((k=32*sin(70/(F=f(15))**.3)|0)+(Q=(a=p([0,3,7,12][T>>11&3]+z)*P/11%16)*(1+f(19))*F**(1-f(19)))),A=m()+(d=k+(s=T>>15&1&&16*(1-F)*sin((P/3%1024|0)**3))+a+(b=T>>13&1&&p([0,3,7,5+5*h][T>>16&3])*P/11&32)),B=m()+c*d,(q=m(-12)^m()/6)+(i=a+b+s)-c*s,q+c*(i+k/2-m()*f(15)),A,B,(M=(y=m(0,1))&m(-5,1))+b,M+c*(b+Q+k/2),C=M+d+16,M+c*d+16,y+c*(Q+b+(k+s)*h),C,y+a+k/2-b,y*(1-f(19)/2)+a*!h][T>>19]+32,P++,T+=[.75,(T>>15)/64+.5,1,1,1,1,1,1-!c/4,.6,(T>>15)/80-1.15,.8,.8,h/20+.8,.9,.8,.7-h/10][T>>19],S",
+			"starred": 1
 		}]
 	}, {
 		"author": "baenhohoho",
@@ -1718,7 +1847,22 @@
 			"date": "2022-05-26",
 			"sampleRate": 32000,
 			"codeOriginal": "(sin((t/32/5.0931/4*[12,12,9,12,12,9,12,12,9,12,12,9,12,9,12,9][t>>12&15]*[1,0.89,0.8,0.75][t>>17&3]))*128)&175",
-			"codeMinified": "128*sin(t/32/5.0931/4*[12,12,9,12,12,9,12,12,9,12,12,9,12,9,12,9][t>>12&15]*[1,.89,.8,.75][t>>17&3])&175"
+			"codeMinified": "128*sin(t/32/5.0931/4*[12,12,9,12,12,9,12,12,9,12,12,9,12,9,12,9][t>>12&15]*[1,.89,.8,.75][t>>17&3])&175",
+			"starred": 1
 		}]
+	}, {
+		"author": "Anonymous",
+		"description": "I have made a thing",
+		"url": "https://dollchan.net/btb/res/3.html#78",
+		"date": "2022-06-19",
+		"codeOriginal": [
+			"x=6.28318530718*4*t/44100,",
+			"a=1200-(1200>>((t>>16)%2)),",
+			"b=400+(400>>((t>>14)%4)),",
+			"c=200+(400>>((t>>10)%4)),",
+			"d=200+(200>>((t>>12)%4)),",
+			"(sin(x*a)+sin(x*b)+sin(x*c)+sin(x*d)+4)*30"
+		],
+		"codeMinified": "x=6.28318530718*4*t/44100,a=1200-(1200>>(t>>16)%2),b=400+(400>>(t>>14)%4),c=200+(400>>(t>>10)%4),d=200+(200>>(t>>12)%4),30*(sin(x*a)+sin(x*b)+sin(x*c)+sin(x*d)+4)"
 	}
 ]

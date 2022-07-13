@@ -170,6 +170,19 @@
 			"codeOriginal": "s=sin,c='55545556'[t>>16&7],f=q=>t*PI/q*c,'11011100'[t>>13&7]*tan(PI/2**(2+(t>>11&3))*s(PI*s(f(250))-f(4e4)))/4+([,,h=(1-t%8192/8192)*s(t**3)/8,,,h,,h][t>>12&7]??sinh(PI/2*s(c**4**(1-t%4096/2048))%(PI/4))/4)+(s(f(124)-f(89))+s(f(125)-f(100))+s(f(126)-f(105)))/12",
 			"starred": 1
 		}, {
+			"description": "Sinusoid Pusher",
+			"remixed": {
+				"description": "Crude Sinewave Dubstep",
+				"author": "Gabriel Miceli",
+				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-05-28",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"codeOriginal": "q=(f,v,y)=>(2*y-1)*(f(t*(t&t>>12-log2(1+(z=t>>21&3)))/v/(1+z)+y*PI)**(1-(g=z!=t>>21)/2)),k=y=>(2*y-1)*(sin(2e3/(t%16384)**.1+y*PI)**.25),c=h=>isNaN(h)?0:h,((c(q(cos,1e5,0))+g*c(q(cos,1e5,1)))*(c(q(sin,7e4,0))+g*c(q(sin,7e4,1)))+sin(t%256/(6-4*g)**(t/512%64))+g*(c(k(0))+c(k(1)))/2+sin(2*PI*random())/(2-g/2)**((4+t/4096)%8))/2",
+			"codeMinified": "q=(f,v,y)=>(2*y-1)*f(t*(t&t>>12-log2(1+(z=t>>21&3)))/v/(1+z)+y*PI)**(1-(g=z!=t>>21)/2),k=y=>(2*y-1)*sin(2E3/(t%16384)**.1+y*PI)**.25,c=h=>isNaN(h)?0:h,((c(q(cos,1E5,0))+g*c(q(cos,1E5,1)))*(c(q(sin,7E4,0))+g*c(q(sin,7E4,1)))+sin(t%256/(6-4*g)**(t/512%64))+g*(c(k(0))+c(k(1)))/2+sin(2*PI*random())/(2-g/2)**((4+t/4096)%8))/2"
+		}, {
 			"description": "something something reverb",
 			"url": "https://www.reddit.com/r/bytebeat/comments/v0y4mf/something_something_reverb/",
 			"date": "2022-05-30",
@@ -180,6 +193,33 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"description": "Vé",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-07",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "l=0,t?0:a=Array(n=24576).fill(0),f=(z,v)=>sin(l++<z?f(z,v)-v:(l=0,v)),x=a.shift(),y=(f(t>>13&7^t>>12&3,(z=t*(1*'00210024'[t>>16&7]+10)/10)/16)*f(t>>14&7^t>>12&7,z/32))/(2+t/2048%4)*!!(-t>>14&3)+x,a.push(y/3-a[n/2]/4+a[n/4]/4),(abs(y)**(y*x)-1)*8",
+			"codeMinified": "l=0,t?0:a=Array(n=24576).fill(0),f=(z,v)=>sin(l++<z?f(z,v)-v:(l=0,v)),x=a.shift(),y=f(t>>13&7^t>>12&3,(z=t*(1*'00210024'[t>>16&7]+10)/10)/16)*f(t>>14&7^t>>12&7,z/32)/(2+t/2048%4)*!!(-t>>14&3)+x,a.push(y/3-a[n/2]/4+a[n/4]/4),8*(abs(y)**(y*x)-1)",
+			"starred": 2
+		}, {
+			"description": "8D269D3933E700",
+			"url": "https://dollchan.net/btb/res/3.html#88",
+			"date": "2022-06-25",
+			"mode": "Floatbeat",
+			"sampleRate": 11025,
+			"codeOriginal": "P=(V,D)=>2**(V/D),t?n+=P((t>>4&15),12^2*(t>>12&5))*P([0,0,9,5,0,0,9,14][t>>16&7],12)*2:n=0,sin(n/P(t&t>>12,1+(t>>8))/64|0)/2",
+			"codeMinified": "P=(V,D)=>2**(V/D),t?n+=P(t>>4&15,12^2*(t>>12&5))*P([0,0,9,5,0,0,9,14][t>>16&7],12)*2:n=0,sin(n/P(t&t>>12,1+(t>>8))/64|0)/2",
+			"starred": 1
+		}, {
+			"description": "reverb multi",
+			"url": "https://dollchan.net/btb/res/3.html#87",
+			"date": "2022-07-05",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"file": "lhphr - reverb multi.js",
+			"fileMinified": true,
+			"fileOriginal": true
 		}]
 	}
 ]
