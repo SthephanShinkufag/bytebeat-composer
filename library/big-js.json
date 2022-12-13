@@ -441,7 +441,7 @@
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"description": "The Best Bytebeat Song I Made!",
 			"url": "https://www.youtube.com/watch?v=F9i0y_S3Xr0",
@@ -450,7 +450,8 @@
 			"file": "HypernovaHeathen - The Best Bytebeat Song I Made!.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}, {
 			"description": "I've Come To Make An Announcement",
 			"url": "https://dollchan.net/btb/res/77.html",
@@ -504,6 +505,38 @@
 		"fileOriginal": true,
 		"starred": 1
 	}, {
+		"author": "Senzou4770",
+		"children": [{
+			"description": "Cool arpeggio I made",
+			"url": "https://www.reddit.com/r/bytebeat/comments/srw5kn/cool_arpeggio_i_made/",
+			"date": "2022-02-14",
+			"sampleRate": 44100,
+			"file": "Senzou4770 - Cool arpeggio I made.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "Another long bytebeat arpeggio",
+			"url": "https://www.reddit.com/r/bytebeat/comments/ss6d2b/another_long_bytebeat_arpeggio/",
+			"date": "2022-02-14",
+			"sampleRate": 44100,
+			"file": "Senzou4770 - Another long bytebeat arpeggio.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"description": "Minor Frere Jaques",
+			"url": "https://www.reddit.com/r/bytebeat/comments/sua62m/minor_frere_jaques_sounds_p_neat_38_lines/",
+			"date": "2022-02-17",
+			"sampleRate": 44100,
+			"file": "Senzou4770 - Minor Frere Jaques.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
 		"author": "maj-6",
 		"children": [{
 			"description": "Something New",
@@ -527,8 +560,8 @@
 			"description": "advanced technology",
 			"url": "https://www.reddit.com/r/bytebeat/comments/v73kqn/advanced_technology_441khz_stereo_1337_bytes/",
 			"date": "2022-06-07",
-			"stereo": true,
 			"sampleRate": 44100,
+			"stereo": true,
 			"file": "maj-6 - advanced technology.js",
 			"fileMinified": true,
 			"starred": 2

@@ -23,5 +23,5 @@ m = (beat ^ bar + 3) % 12 + 14,
 root = 17 - bar % 4,
 
 tri(m, 450, 2) +
-.3 * chord(root) +
-.5 * tri(root - 14)
+	.3 * chord(root) +
+	.5 * tri(root - 14);
