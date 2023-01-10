@@ -188,6 +188,10 @@ button[name="close"] {
 	border-radius: 3px;
 }
 
+.cm-searchMatch-selected {
+	background-color: #d541ffba !important;
+}
+
 .cmt-number {
 	color: #ff8dfd;
 }
