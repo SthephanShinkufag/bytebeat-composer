@@ -1,7 +1,9 @@
 /*
  * tuned_phase time_modulation
  * by argarak
+ * adapted for bytebeat players by SthephanShi
  */
+
 dc = 128,
 decreaseAmount = 20,
 slowDownStartSample = 120 * 44100,
@@ -10,7 +12,7 @@ tempo = t === 0 ? 80 : t > slowDownStartSample &&
 	t < slowDownStartSample + decreaseAmount * slowDownSpeed &&
 		t % slowDownSpeed === 0 ? tempo - 1 : tempo,
 
-// control speed and conversion from 8 to 44.1kHz
+// Control speed and conversion from 8 to 44.1kHz
 a = tempo / 441 * t,
 
 bd = function(s, vol) {

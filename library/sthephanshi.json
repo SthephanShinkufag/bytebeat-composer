@@ -294,7 +294,7 @@
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}]
 	}, {
 		"children": [{
@@ -348,6 +348,17 @@
 			"file": "SthephanShi - Sunrise on Mars.js",
 			"fileMinified": true,
 			"fileOriginal": true,
+			"starred": 2
+		}]
+	}, {
+		"children": [{
+			"description": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'."
+		}, {
+			"description": "Dark Forest ",
+			"url": "https://battleofthebits.org/arena/Entry/Dark+forest/57555/",
+			"date": "2022-01-09",
+			"sampleRate": 44100,
+			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
 			"starred": 2
 		}]
 	}

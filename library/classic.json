@@ -288,6 +288,13 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
 			"date": "2014-03-16",
 			"codeOriginal": "(t-(t>>4&t>>8)&t>>12)-1"
+		}, {
+			"description": "19-character dubstep",
+			"author": "SthephanShi",
+			"url": "https://dollchan.net/btb/res/55.html#359",
+			"date": "2023-01-18",
+			"sampleRate": 44100,
+			"codeOriginal": "t&t>>12|t/(t&t>>12)"
 		}]
 	}, {
 		"author": "tangent128",
@@ -549,7 +556,7 @@
 		"children": [{
 			"url": "http://arhivach.ng/thread/28592/#71678984",
 			"codeOriginal": "((t>>4+t%34)|(t>>5+t%(43+(t/7777%8>4?3:0))))|(t/4)|((t/8)%32+3)",
-			"codeMinified": "t>>4+t%34|t>>5+t%(43+(4<t/7777%8?3:0))|t/4|t/8%32+3",
+			"codeMinified": "t>>4+t%34|t>>5+t%(t/31108&1?46:43)|t/4|t/8%35",
 			"starred": 1
 		}, {
 			"description": "Electrohouse",
@@ -638,16 +645,32 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "Electrohouse2",
 		"author": "Chasyxx",
-		"url": "https://www.reddit.com/r/bytebeat/comments/qi3enp/with_new_bytecodes_already_posted_here_are_all/",
-		"date": "2021-10-29",
-		"remixed": {
-			"description": "Electrohouse",
-			"author": "Anonymous from russian imageboards",
-			"url": "http://arhivach.ng/thread/28592/"
-		},
-		"codeOriginal": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&(t/9&t/7|t/5&t/3|t|t*3&t*5|t*7&t*9)>>4"
+		"children": [{
+			"description": "Electrohouse2",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qi3enp/with_new_bytecodes_already_posted_here_are_all/",
+			"date": "2021-10-29",
+			"remixed": {
+				"description": "Electrohouse",
+				"author": "Anonymous from russian imageboards",
+				"url": "http://arhivach.ng/thread/28592/"
+			},
+			"codeOriginal": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&(t/9&t/7|t/5&t/3|t|t*3&t*5|t*7&t*9)>>4"
+		}, {
+			"description": "Modem melody II",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10bh30y/modem_melody_ii/",
+			"date": "2023-01-14",
+			"sampleRate": 32000,
+			"codeOriginal": "(((((t&t>>12)*(t>>4|t>>8))&255) + (((t>>12)-1)&1?((t^(t>>t))^(t^(t>>t))+((t>>15)+1)):0)))/2",
+			"codeMinified": "(((t&t>>12)*(t>>4|t>>8)&255)+((t>>12)-1&1?t^t>>t^(t^t>>t)+((t>>15)+1):0))/2",
+			"starred": 1
+		}, {
+			"description": "WARP_TUNNEL",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10iv4dc/warp_tunnel/",
+			"date": "2023-01-22",
+			"codeOriginal": "((t*2)+2)^(t*(1<<(((t>>8)^(t>>8)+(t>>16))+1)%7))",
+			"codeMinified": "2*t+2^t*(1<<((t>>8^(t>>8)+(t>>16))+1)%7)"
+		}]
 	}, {
 		"author": "kOLbOSa_exe",
 		"children": [{
@@ -775,7 +798,7 @@
 		"codeOriginal": "((t>>9^(t>>9)-1^1)%13*t&31)*(2+(t>>4))"
 	}, {
 		"author": "lhphr",
-		"url": "https://dollchan.net/btb/res/3.html#44",
+		"url": "https://dollchan.net/btb/res/44.html#44",
 		"date": "2022-04-14",
 		"children": [{
 			"description": "idk it's \"t%\"",
@@ -794,7 +817,7 @@
 			"codeOriginal": "t>>6^t&t>>9^t>>12|(t<<(t>>6)%4^-t&-t>>13)%128^-t>>1"
 		}, {
 			"description": "Fractalized Past",
-			"url": "https://dollchan.net/btb/res/3.html#69",
+			"url": "https://dollchan.net/btb/res/44.html#69",
 			"date": "2022-05-26",
 			"codeOriginal": "(t>>10^t>>11)%5*((t>>14&3^t>>15&1)+1)*t%99+((3+(t>>14&3)-(t>>16&1))/3*t%99&64)",
 			"starred": 2
@@ -805,7 +828,7 @@
 				"author": "Anonymous from russian imageboards",
 				"url": "http://arhivach.ng/thread/28592/#71681785"
 			},
-			"url": "https://dollchan.net/btb/res/3.html#69",
+			"url": "https://dollchan.net/btb/res/44.html#69",
 			"date": "2022-05-26",
 			"codeOriginal": "(t>>t%(t&1?t>>15&1?51:t>>14&3?58:65:39)&t>>4&255)/2+(3e5/(t-(t>>2&1024)&4095)&63)+(t>>11&1)*((t>>15&1?19:t>>14&3?17:15)/10*t%78+((t>>9&3)+2)*(t>>15&1?30:t>>14&3?27:20)/20*t%39)/1.5",
 			"starred": 2

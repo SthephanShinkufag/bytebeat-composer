@@ -20444,7 +20444,7 @@ bytebeat();
 
 function init() {
 	// Let's define some constants!!
-	SAMP_RATE = 22050; // change this if there's lag
+	SAMP_RATE = 44100; // change this if there's lag
 	BPM = 165;
 	DETUNE = 1.0028922;
 	pi = 3.14159;
@@ -20466,41 +20466,6 @@ function init() {
 	B_ = 493.88;
 }
 
-function calc_tick(tt) {
-	const tick = int(tt / ticklength);
-	return tick < 32 ? tick : (tick - 32) % (1568 - 32) + 32;
-}
-
-function bytebeat() {
-	song = window.data;
-	const tick = calc_tick(t);
-	const delayTick = calc_tick(t - 14 * ticklength);
-	let out1 = 0;
-	let delayout = 0;
-	for(let i = 0; i < song.NUM_CHANNELS; i++) {
-		if(song.enabled[i]) {
-			const note = song.channels[i][tick][0];
-			const octave = song.channels[i][tick][1];
-			const amp = round(song.globalvol[i] *
-				((song.channels[i][tick][2] * song.channels[i][tick][2]) / 128) / 128);
-			const ins = song.channels[i][tick][3];
-
-			const note2 = song.channels[i][max(0, delayTick)][0];
-			const octave2 = song.channels[i][max(0, delayTick)][1];
-			const amp2 = round(song.globalvol[i] * (
-				(song.channels[i][max(0, delayTick)][2] * song.channels[i][max(0, delayTick)][2]) / 128
-			) / 128);
-			const ins2 = song.channels[i][max(0, delayTick)][3];
-
-			out1 += instrument(ins, fr(note, octave), amp);
-			delayout += (song.delayflags[i] && delayTick >= 0) *
-				instrument(ins2, fr(note2, octave2) * DETUNE, amp2);
-		}
-	}
-	const out = out1 + 0.2 * delayout;
-	return 128 + out;
-}
-
 function vib_algo(freq, strength) {
 	return freq * (1 + strength * sin(
 		(t % (round(freq / VIB) * SAMP_RATE / freq)) * 2 * pi * (freq / SAMP_RATE) / round(freq / 8)
@@ -20510,6 +20475,57 @@ function vib_algo(freq, strength) {
 function release_algo(amp) {
 	return t % (16 * ticklength) >= 12 * ticklength ?
 		amp * pow(1 - (t % (4 * ticklength)) / (4 * ticklength), 2) : amp;
+}
+
+function sine(freq, amp) {
+	return amp * sin(2 * pi * freq * t / SAMP_RATE);
+}
+
+function square50(freq, amp) {
+	let out = 0;
+	for(let i = 0; i < 8; i++) {
+		out += sine((2 * i + 1) * freq, amp / (2 * i + 1));
+	}
+	return out;
+}
+
+function square(tt, freq, amp, pulse) {
+	return amp * ((freq * tt / SAMP_RATE) % 1.0 <= pulse / 100 ? 1 : -1);
+}
+
+function kick(freq, amp) {
+	return amp * sin(2 * pi * freq / 10 * pow(1 - (t % (4 * ticklength)) / (4 * ticklength), 3));
+}
+
+function noise(freq, amp, modulo) {
+	const noiseFreq = int((t % modulo) * (freq * 44100 / SAMP_RATE) / 44100);
+	return amp / 128 * (int(65536 * sin(noiseFreq * noiseFreq)) & 255) - amp;
+}
+
+function sweep(freq, amp) {
+	return noise(freq / C_ * (A_ + 99 * A_ * pow((t % (32 * ticklength)) / (32 * ticklength), 3)),
+		amp, 32 * ticklength);
+}
+
+function wavetable(tt, index, interpolation, freq, amp) {
+	const s = 32 * freq * tt / SAMP_RATE;
+	if(interpolation) {
+		const s1 = int(s) % 32;
+		const s2 = (s1 + 1) % 32;
+		const p = s - int(s);
+		return round(amp /
+			127 * (((1 - p) * song.wavetables[index][s1] + p * song.wavetables[index][s2]) - 128));
+	} else {
+		return round(amp / 127 * (song.wavetables[index][int(s) % 32] - 128));
+	}
+}
+
+function flute(tt, freq, amp) {
+	return wavetable(tt, 0, 0, freq, amp);
+}
+
+function triangle(tt, freq, amp) {
+	return wavetable(tt, 1, 1, freq, amp);
 }
 
 function instrument(ins, freq, amp) {
@@ -20543,58 +20559,42 @@ function instrument(ins, freq, amp) {
 	}
 }
 
-function square50(freq, amp) {
-	let out = 0;
-	for(let i = 0; i < 8; i++) {
-		out += sine((2 * i + 1) * freq, amp / (2 * i + 1));
-	}
-	return out;
-}
-
-function square(tt, freq, amp, pulse) {
-	return amp * ((freq * tt / SAMP_RATE) % 1.0 <= pulse / 100 ? 1 : -1);
-}
-
-function sine(freq, amp) {
-	return amp * sin(2 * pi * freq * t / SAMP_RATE);
-}
-
-function kick(freq, amp) {
-	return amp * sin(2 * pi * freq / 10 * pow(1 - (t % (4 * ticklength)) / (4 * ticklength), 3));
-}
-
-function noise(freq, amp, modulo) {
-	const noiseFreq = int((t % modulo) * (freq * 44100 / SAMP_RATE) / 44100);
-	return amp / 128 * (int(65536 * sin(noiseFreq * noiseFreq)) & 255) - amp;
-}
-
-function sweep(freq, amp) {
-	return noise(freq / C_ * (A_ + 99 * A_ * pow((t % (32 * ticklength)) / (32 * ticklength), 3)),
-		amp, 32 * ticklength);
-}
-
-function flute(tt, freq, amp) {
-	return wavetable(tt, 0, 0, freq, amp);
-}
-
-function triangle(tt, freq, amp) {
-	return wavetable(tt, 1, 1, freq, amp);
-}
-
-function wavetable(tt, index, interpolation, freq, amp) {
-	const s = 32 * freq * tt / SAMP_RATE;
-	if(interpolation) {
-		const s1 = int(s) % 32;
-		const s2 = (s1 + 1) % 32;
-		const p = s - int(s);
-		return round(amp /
-			127 * (((1 - p) * song.wavetables[index][s1] + p * song.wavetables[index][s2]) - 128));
-	} else {
-		return round(amp / 127 * (song.wavetables[index][int(s) % 32] - 128));
-	}
+function calc_tick(tt) {
+	const tick = int(tt / ticklength);
+	return tick < 32 ? tick : (tick - 32) % (1568 - 32) + 32;
 }
 
 function fr(note, oct) {
 	const oct0 = note / 16;
 	return oct0 * pow(2, oct);
+}
+
+function bytebeat() {
+	song = window.data;
+	const tick = calc_tick(t);
+	const delayTick = calc_tick(t - 14 * ticklength);
+	let out1 = 0;
+	let delayout = 0;
+	for(let i = 0; i < song.NUM_CHANNELS; i++) {
+		if(song.enabled[i]) {
+			const note = song.channels[i][tick][0];
+			const octave = song.channels[i][tick][1];
+			const amp = round(song.globalvol[i] *
+				((song.channels[i][tick][2] * song.channels[i][tick][2]) / 128) / 128);
+			const ins = song.channels[i][tick][3];
+
+			const note2 = song.channels[i][max(0, delayTick)][0];
+			const octave2 = song.channels[i][max(0, delayTick)][1];
+			const amp2 = round(song.globalvol[i] * (
+				(song.channels[i][max(0, delayTick)][2] * song.channels[i][max(0, delayTick)][2]) / 128
+			) / 128);
+			const ins2 = song.channels[i][max(0, delayTick)][3];
+
+			out1 += instrument(ins, fr(note, octave), amp);
+			delayout += (song.delayflags[i] && delayTick >= 0) *
+				instrument(ins2, fr(note2, octave2) * DETUNE, amp2);
+		}
+	}
+	const out = out1 + 0.2 * delayout;
+	return 128 + out;
 }

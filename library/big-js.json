@@ -27,7 +27,7 @@
 			"file": "Savestate - Bit-Shift Melodies.js",
 			"fileFormatted": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"description": "Earl Grey Groove",
 			"url": "http://battleofthebits.org/arena/Entry/Earl+Grey+Groove/20500/",
@@ -63,7 +63,7 @@
 			"description": "The Flower Festival",
 			"url": "https://battleofthebits.org/arena/Entry/The+Flower+Festival/17736/",
 			"date": "2015-05-09",
-			"sampleRate": 4000,
+			"sampleRate": 44100,
 			"file": "Jimmyoshi - The Flower Festival.js",
 			"fileFormatted": true,
 			"starred": 2
@@ -71,7 +71,7 @@
 			"description": "Spring Fever",
 			"url": "https://battleofthebits.org/arena/Entry/Spring+Fever/21648/",
 			"date": "2016-04-23",
-			"sampleRate": 22050,
+			"sampleRate": 44100,
 			"file": "Jimmyoshi - Spring Fever.js",
 			"fileFormatted": true,
 			"fileOriginal": true,
@@ -373,6 +373,15 @@
 			"fileFormatted": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"description": "tridecagon sequence",
+			"url": "https://battleofthebits.org/arena/Entry/tridecagon+sequence/57185/",
+			"date": "2022-12-13",
+			"sampleRate": 44100,
+			"file": "argarak - tridecagon sequence.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"description": "A NΞW DIMΞNSION",
@@ -454,7 +463,7 @@
 			"starred": 1
 		}, {
 			"description": "I've Come To Make An Announcement",
-			"url": "https://dollchan.net/btb/res/77.html",
+			"url": "https://dollchan.net/btb/res/77.html#77",
 			"date": "2022-06-18",
 			"sampleRate": 44100,
 			"file": "HypernovaHeathen - I've Come To Make An Announcement.js",
@@ -491,6 +500,32 @@
 			"file": "Decent-Manager-6169 - An Escaped War Or Something.js",
 			"fileFormatted": true,
 			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "Air Island",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10n7fq6/air/",
+			"date": "2023-01-28",
+			"sampleRate": 32000,
+			"file": "Decent-Manager-6169 - Air Island.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "Cocktail Hour Preview",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10os7e7/cocktail_hour_preview/",
+			"date": "2023-01-30",
+			"sampleRate": 32000,
+			"file": "Decent-Manager-6169 - Cocktail Hour Preview.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "List of musical scales",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10usrzr/useless_project_thing_2/",
+			"date": "2023-02-06",
+			"sampleRate": 32000,
+			"file": "Decent-Manager-6169 - List of musical scales.js",
+			"fileFormatted": true,
 			"fileOriginal": true
 		}]
 	}, {
@@ -545,6 +580,7 @@
 			"sampleRate": 32000,
 			"file": "maj-6 - Something New.js",
 			"fileFormatted": true,
+			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
 		}, {
@@ -558,32 +594,118 @@
 			"fileOriginal": true
 		}, {
 			"description": "advanced technology",
-			"url": "https://www.reddit.com/r/bytebeat/comments/v73kqn/advanced_technology_441khz_stereo_1337_bytes/",
+			"url": "https://battleofthebits.org/arena/Entry/advanced+technology+%5B44.1k+stereo_+1_337+bytes%5D/54547/",
 			"date": "2022-06-07",
 			"sampleRate": 44100,
 			"stereo": true,
 			"file": "maj-6 - advanced technology.js",
-			"fileMinified": true,
+			"fileOriginal": true,
 			"starred": 2
 		}]
 	}, {
-		"description": "s.i.t.e. (synth in the emptiness)",
 		"author": "lhphr",
-		"url": "https://dollchan.net/btb/res/3.html#69",
-		"date": "2022-05-26",
-		"sampleRate": 32000,
-		"file": "lhphr - s.i.t.e. (synth in the emptiness).js",
-		"fileFormatted": true,
-		"fileMinified": true,
-		"fileOriginal": true
+		"children": [{
+			"description": "s.i.t.e. (synth in the emptiness)",
+			"url": "https://dollchan.net/btb/res/44.html#69",
+			"date": "2022-05-26",
+			"sampleRate": 32000,
+			"file": "lhphr - s.i.t.e. (synth in the emptiness).js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "Reminisce",
+			"remixed": {
+				"description": "\"Something New\" using functions",
+				"author": "maj-6",
+				"url": "https://battleofthebits.org/arena/Entry/Something+New/52726/#post157167"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/x39ll8/reminisce/",
+			"date": "2022-08-31",
+			"sampleRate": 32000,
+			"file": "lhphr - Reminisce.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}, {
 		"description": "PCM Synthesis",
 		"author": "PortablePorcelain",
-		"url": "https://dollchan.net/btb/res/3.html#82",
+		"url": "https://dollchan.net/btb/res/55.html#82",
 		"date": "2022-06-28",
 		"mode": "Signed Bytebeat",
 		"sampleRate": 17000,
 		"file": "PortablePorcelain - PCM Synthesis.js",
 		"fileOriginal": true
+	}, {
+		"description": "I Wanna Byte You",
+		"author": "kleeder",
+		"url": "https://battleofthebits.org/arena/Entry/I+Wanna+Byte+You+_1/54543/",
+		"date": "2022-07-23",
+		"sampleRate": 11025,
+		"file": "kleeder - I Wanna Byte You.js",
+		"fileFormatted": true,
+		"fileOriginal": true,
+		"starred": 2
+	}, {
+		"author": "Greaserpirate",
+		"children": [{
+			"description": "Showing off the recombination better",
+			"url": "https://www.reddit.com/r/bytebeat/comments/107zk7j/showing_off_the_recombination_better/",
+			"date": "2023-01-10",
+			"sampleRate": 44100,
+			"file": "Greaserpirate - Showing off the recombination better.js",
+		    "fileFormatted": true,
+	    	"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "I've refined my tools",
+			"url": "https://www.reddit.com/r/bytebeat/comments/107yrts/ive_refined_my_tools/",
+			"date": "2023-01-10",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "Greaserpirate - I've refined my tools.js",
+		    "fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "THE MOTHERLODE",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10bv1d5/the_motherlode_a_bundle_of_effects_lowpass_filter/",
+			"date": "2023-01-14",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "Greaserpirate - THE MOTHERLODE.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"description": "a limiter (that also removes offsets)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10nnfbt/another_effect_function_a_limiter_that_also/",
+			"date": "2023-01-28",
+			"sampleRate": 48000,
+			"file": "Greaserpirate - a limiter (that also removes offsets).js",
+		    "fileFormatted": true,
+	    	"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"description": "Graceful Ache",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10usrzr/useless_project_thing_2/",
+			"date": "2023-02-04",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "Greaserpirate - Graceful Ache.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"description": "Step sequencer with interpolation",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10t4z6w/graceful_ache_probably_the_most_complex_bytebeat/",
+			"date": "2023-02-07",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "Greaserpirate - Step sequencer with interpolation.js",
+		    "fileFormatted": true,
+			"fileOriginal": true
+		}]
 	}
 ]

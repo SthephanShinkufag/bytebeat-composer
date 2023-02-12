@@ -2611,7 +2611,7 @@ bytebeat();
 function init()
 {
 	// Let's define some constants!!
-	SAMP_RATE = 22050; // change this if there's lag
+	SAMP_RATE = 44100; // change this if there's lag
 	BPM = 165;
 	DETUNE = 1.0028922;
 	pi = 3.14159;
