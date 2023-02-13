@@ -394,7 +394,6 @@ button[name="close"] {
 
 #control-codesize {
 	min-width: 56px;
-	border-radius: var(--control-corners);
 	cursor: default;
 }
 
@@ -539,12 +538,12 @@ button[name="close"] {
 	border-radius: 0;
 }
 
-.controls-group > .control-button:first-child {
+.controls-group > :first-child {
 	border: none;
 	border-radius: var(--control-corners) 0 0 var(--control-corners);
 }
 
-.controls-group > .control-button:last-child {
+.controls-group > :last-child {
 	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }
 
@@ -581,10 +580,6 @@ button[name="close"] {
 
 	#control-expand {
 		display: none;
-	}
-
-	#control-link {
-		border-radius: 0 var(--control-corners) var(--control-corners) 0;
 	}
 
 	#editor-container {
