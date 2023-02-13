@@ -54,6 +54,9 @@ globalThis.bytebeat = new class {
 		this.songData = { mode: 'Bytebeat', sampleRate: 8000 };
 		this.init();
 	}
+	get editorValue() {
+		return this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
+	}
 	get saveData() {
 		const a = document.body.appendChild(document.createElement('a'));
 		a.style.display = 'none';
@@ -318,7 +321,7 @@ globalThis.bytebeat = new class {
 		}
 		if(codeOriginal) {
 			if(Array.isArray(codeOriginal)) {
-				codeOriginal = codeOriginal.join('\r\n');
+				codeOriginal = codeOriginal.join('\n');
 			}
 			entry += `<br><button class="code-text code-text-original${
 				codeMinified ? ' hidden' : '' }" data-songdata='${ songData }' code-length="${
@@ -436,7 +439,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2022070900');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023021300');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -484,6 +487,7 @@ globalThis.bytebeat = new class {
 		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
 
 		// Controls
+		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
 		this.controlPlaybackMode = document.getElementById('control-mode');
@@ -642,8 +646,7 @@ globalThis.bytebeat = new class {
 		} else {
 			console.error('Couldn\'t load data from url: unrecognized url data');
 		}
-		this.loadCode(songData ||
-			{ code: this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value }, false);
+		this.loadCode(songData || { code: this.editorValue }, false);
 	}
 	playbackStop() {
 		this.playbackToggle(false, false);
@@ -719,6 +722,9 @@ globalThis.bytebeat = new class {
 				this.errorElem.innerText = error.message;
 				this.sendData({ errorDisplayed: true });
 			}
+			if(data.updateUrl !== true) {
+				this.setCodeSize(this.editorValue.length);
+			}
 		}
 		if(data.updateUrl === true) {
 			this.updateUrl();
@@ -753,6 +759,9 @@ globalThis.bytebeat = new class {
 		this.controlTimeUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
 		this.setCounterValue(this.byteSample);
 	}
+	setCodeSize(value) {
+		this.controlCodeSize.textContent = value + 'c';
+	}
 	setCounterValue(value) {
 		this.controlTime.value = this.settings.isSeconds ?
 			(value / this.songData.sampleRate).toFixed(2) : value;
@@ -762,8 +771,7 @@ globalThis.bytebeat = new class {
 		this.saveSettings();
 	}
 	setFunction() {
-		const setFunction = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
-		this.sendData({ setFunction });
+		this.sendData({ setFunction: this.editorValue });
 	}
 	setPlaybackMode(mode) {
 		this.songData.mode = mode;
@@ -832,6 +840,7 @@ globalThis.bytebeat = new class {
 			volumeValue = this.controlVolume.value / this.controlVolume.max;
 		}
 		this.controlVolume.value = this.settings.volume = volumeValue;
+		this.controlVolume.title = `Volume: ${ (volumeValue * 100).toFixed(2) }%`;
 		this.saveSettings();
 		this.audioGain.gain.value = volumeValue * volumeValue;
 	}
@@ -859,7 +868,7 @@ globalThis.bytebeat = new class {
 		this.canvasTimeCursor.classList.toggle('hidden', !this.timeCursorEnabled);
 	}
 	updateUrl() {
-		const code = this.editorView ? this.editorView.state.doc.toString() : this.editorElem.value;
+		const code = this.editorValue;
 		const songData = { code };
 		if(this.songData.sampleRate !== 8000) {
 			songData.sampleRate = this.songData.sampleRate;
@@ -867,6 +876,7 @@ globalThis.bytebeat = new class {
 		if(this.songData.mode !== 'Bytebeat') {
 			songData.mode = this.songData.mode;
 		}
+		this.setCodeSize(code.length);
 		window.location.hash = `#v3b64${ btoa(String.fromCharCode.apply(undefined,
 			deflateRaw(JSON.stringify(songData)))).replaceAll('=', '') }`;
 	}

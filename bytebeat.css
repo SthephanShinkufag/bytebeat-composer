@@ -392,19 +392,25 @@ button[name="close"] {
 	fill: currentColor;
 }
 
-#control-counter {
-	width: 88px;
-	border-radius: 0 var(--control-corners) var(--control-corners) 0;
+#control-codesize {
+	min-width: 56px;
+	border-radius: var(--control-corners);
+	cursor: default;
 }
 
-#control-counter, #control-samplerate {
+#control-codesize, #control-counter, #control-samplerate {
 	height: var(--control-size);
-	padding: 0 6px;
+	padding: 0 4px;
 	background: linear-gradient(to top, #3a445e, #181c26);
 	color: #e3e3e3;
 	border: none;
-	font: bold var(--font-size)/var(--control-size) sans-serif;
+	font: bold var(--font-size)/var(--control-size) monospace;
 	box-shadow: inset 0 0 12px rgba(202, 202, 202, 0.5);
+}
+
+#control-counter {
+	width: 88px;
+	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }
 
 #control-counter-units {
