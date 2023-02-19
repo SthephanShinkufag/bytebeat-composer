@@ -112,6 +112,13 @@
 			"codeOriginal": "((t*9)&(t>>4))|(t*5&t>>7)|(t*3&t/1024)-1",
 			"codeMinified": "9*t&t>>4|5*t&t>>7|(3*t&t>>10)-1"
 		}, {
+			"description": "BM9 harmony",
+			"author": "May_I_Change_My_Name",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yi1cf9/u_wot_m9/",
+			"date": "2022-10-31",
+			"codeOriginal": "2*t&(t>>8)|5*t&(t>>7)|9*t&(t>>4)|15*t&(t>>4)",
+			"codeMinified": "2*t&t>>8|5*t&t>>7|9*t&t>>4|15*t&t>>4"
+		}, {
 			"description": "minimal sierpinski harmony",
 			"author": "viznut",
 			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
@@ -284,7 +291,7 @@
 			"starred": 1
 		}, {
 			"description": "The 8-bit echo",
-			"author": "[deleted]",
+			"author": "Unknown",
 			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
 			"date": "2014-03-16",
 			"codeOriginal": "(t-(t>>4&t>>8)&t>>12)-1"
@@ -465,7 +472,7 @@
 			"codeMinified": "(~t>>2)*(2+(42&2*t*(7&t>>10))<(24&t*((3&t>>14)+2)))"
 		}]
 	}, {
-		"author": "[Deleted]",
+		"author": "Unknown",
 		"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
 		"date": "2014-03-16",
 		"children": [{
@@ -821,23 +828,34 @@
 			"date": "2022-05-26",
 			"codeOriginal": "(t>>10^t>>11)%5*((t>>14&3^t>>15&1)+1)*t%99+((3+(t>>14&3)-(t>>16&1))/3*t%99&64)",
 			"starred": 2
-		}, {
-			"description": "FLⱯR3Z0NE",
-			"remixed": {
-				"description": "Electrohouse",
-				"author": "Anonymous from russian imageboards",
-				"url": "http://arhivach.ng/thread/28592/#71681785"
-			},
-			"url": "https://dollchan.net/btb/res/44.html#69",
-			"date": "2022-05-26",
-			"codeOriginal": "(t>>t%(t&1?t>>15&1?51:t>>14&3?58:65:39)&t>>4&255)/2+(3e5/(t-(t>>2&1024)&4095)&63)+(t>>11&1)*((t>>15&1?19:t>>14&3?17:15)/10*t%78+((t>>9&3)+2)*(t>>15&1?30:t>>14&3?27:20)/20*t%39)/1.5",
-			"starred": 2
 		}]
 	}, {
-		"description": "I have made a thing",
+		"description": "I have made a thing#2",
 		"author": "Anonymous",
 		"url": "https://dollchan.net/btb/res/3.html#78",
 		"date": "2022-06-19",
 		"codeOriginal": "(t>>10|t*5)&(t>>8|t*4)&(t>>4|t*6)"
+	}, {
+		"description": "Bytebeat Polka",
+		"author": "May_I_Change_My_Name",
+		"url": "https://www.reddit.com/r/bytebeat/comments/ye43du/bytebeat_polka/",
+		"date": "2022-10-26",
+		"sampleRate": 11025,
+		"codeOriginal": "~t>>3&(t>>11&1?5:4-(t>>12&1))*t&(t>>7)+t"
+	}, {
+		"description": "WhiskedAwayToPomerania",
+		"author": "wyngwyrm",
+		"url": "https://battleofthebits.org/arena/Entry/WhiskedAwayToPomerania.txt/57975/",
+		"date": "2023-02-02",
+		"codeOriginal": [
+			"(t>>9) &",
+			"",
+			"((t*2) & (t*8) |",
+			"((t/32) & (t*36) & (t*18) & (t*9)) |",
+			"((t/128) & (t*32) & (t*(t/64))) |",
+			"((t/16) & (t/4) | (t/32) & (t/16)) |",
+			"((t/12) & (t/8)) & (t/6))"
+		],
+		"codeMinified": "t>>9&(2*t&8*t|t/32&36*t&18*t&9*t|t/128&32*t&t/64*t|t/16&t/4|t/32&t/16|t/12&t/8&t/6)"
 	}
 ]

@@ -1,7 +1,7 @@
 SAMPLE_RATE = 44100,
 decode64 = (c, n) => (v = c.charCodeAt(n), v - (v > 92 ? 36 : 35)),
 getbits = (num, start, end) => (num & (((1 << start) - 1) - ((1 << end) - 1))) >> end,
-vol = val => val < 15 ? (63 / Math.pow(1.25, val)) | 0 : 0,
+vol = val => val < 15 ? (63 / 1.25 ** val) | 0 : 0,
 
 sq = (reg, t) => (
 	real_t = t / SAMPLE_RATE,

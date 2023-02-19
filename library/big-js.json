@@ -307,6 +307,24 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"description": "Testing stereo",
+			"url": "https://www.reddit.com/r/bytebeat/comments/w1ucw3/testing_stereo/",
+			"date": "2022-07-18",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "Bp103 - Testing stereo.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}, {
+			"description": "guitarbeatbyte",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yzwfg1/guitarbeatbyte/",
+			"date": "2022-11-20",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "Bp103 - guitarbeatbyte.js",
+			"fileFormatted": true,
+			"fileOriginal": true
 		}]
 	}, {
 		"description": "happybeat",
@@ -593,6 +611,15 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
+		    "author": "SthephanShi",
+			"description": "\"Something New\" synchronized",
+			"url": "https://battleofthebits.org/arena/Entry/Something+New/52726/#post157250",
+			"date": "2022-06-06",
+			"sampleRate": 44100,
+			"file": "SthephanShi - 'Something new' synchronized.js",
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
 			"description": "advanced technology",
 			"url": "https://battleofthebits.org/arena/Entry/advanced+technology+%5B44.1k+stereo_+1_337+bytes%5D/54547/",
 			"date": "2022-06-07",
@@ -601,6 +628,39 @@
 			"file": "maj-6 - advanced technology.js",
 			"fileOriginal": true,
 			"starred": 2
+		}]
+	}, {
+		"author": "NewFall2020",
+		"children": [{
+			"description": "TIRO Remixed#6 remastered",
+			"remixed": {
+				"description": "better remix of \"The time is running out!\"",
+				"author": "RealZynx92",
+				"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/better_remix_of_the_time_is_running_out_by/"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/comment/i4r8fis/?utm_source=reddit&utm_medium=web2x&context=3",
+			"date": "2022-04-15",
+			"sampleRate": 44100,
+			"file": "NewFall2020 - TIRO Remixed 6 remastered.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "simple step sequencer remix #2",
+			"remixed": {
+				"description": "simple step sequencer remix",
+				"author": "PortablePorcelain",
+				"url": "https://dollchan.net/btb/res/55.html#155"
+			},
+			"url": "https://dollchan.net/btb/res/3.html#161",
+			"date": "2022-08-25",
+			"sampleRate": 44100,
+			"file": "NewFall2020 - simple step sequencer remix 2.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "lhphr",
@@ -647,6 +707,15 @@
 		"fileFormatted": true,
 		"fileOriginal": true,
 		"starred": 2
+	}, {
+		"author": "cabbage drop",
+		"description": "twenty six",
+		"url": "https://battleofthebits.org/arena/Entry/twenty+six/57195/",
+		"date": "2022-12-13",
+		"sampleRate": 32000,
+		"file": "cabbage drop - twenty six.js",
+		"fileFormatted": true,
+		"fileOriginal": true
 	}, {
 		"author": "Greaserpirate",
 		"children": [{
@@ -707,5 +776,15 @@
 		    "fileFormatted": true,
 			"fileOriginal": true
 		}]
+	}, {
+		"author": "May_I_Change_My_Name",
+		"description": "0xBADA441E",
+		"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
+		"date": "2023-02-15",
+		"sampleRate": 20000,
+		"file": "May_I_Change_My_Name - 0xBADA441E.js",
+		"fileFormatted": true,
+		"fileOriginal": true,
+		"starred": 2
 	}
 ]

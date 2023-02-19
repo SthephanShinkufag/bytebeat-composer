@@ -13,6 +13,7 @@
 		"arrow-parens": ["error", "as-needed"],
 		"camelcase": "off",
 		"comma-dangle": ["error", "never"],
+		"curly": ["error", "all"],
 		"dot-notation": "error",
 		"indent": ["error", "tab", { "flatTernaryExpressions": true }],
 		"key-spacing": ["error", {

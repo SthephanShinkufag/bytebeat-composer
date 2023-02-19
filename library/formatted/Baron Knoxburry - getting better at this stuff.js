@@ -1,6 +1,6 @@
 vol = 90,
 tempo = 6480,
-beat = Math.floor(t / tempo),
+beat = int(t / tempo),
 sample_rate = 44100,
 s = 0,
 
@@ -28,11 +28,13 @@ if_euclid = function(beat_length) {
 },
 
 note_hertz = function(steps_from_a) {
-	return 420.69 * Math.pow(1.059463, steps_from_a);
+	return 420.69 * 1.059463 ** steps_from_a;
 },
 
 decay_exponential = function(start, length, curve) {
-	if(start + length < t) return 0;
+	if(start + length < t) {
+		return 0;
+	}
 	e_pos = ((t - start)) / length;
 	return (1 / (e_pos + 1 / curve)) / curve;
 },
@@ -53,7 +55,7 @@ fm = function(freq, mod) {
 	// car_frequency is in hertz
 	// mod_sine is -1 .. 1
 	duty_length = sample_rate / freq;
-	return Math.sin(Math.PI * (t / duty_length + mod));
+	return sin(PI * (t / duty_length + mod));
 },
 
 // Run sample against decay envelope
@@ -68,7 +70,7 @@ fm1 = function(p, i) {
 },
 
 noise_wave = function() {
-	return Math.random() - 0.5;
+	return random() - 0.5;
 },
 
 square_wave = function(frequency) {
@@ -128,7 +130,7 @@ s += kw,
 sw = lopass(triangle_wave(333) * 0.7 + noise_wave(), 33, 6),
 if_beat(8, 4) ? ram[5] = t : 0,
 sn1 = sw * decay_exponential(ram[5], 2500, 10) * 4,
-(if_euclid(7) || if_euclid(1)) && Math.random() > 0.87 ? ram[7] = t : 0,
+(if_euclid(7) || if_euclid(1)) && random() > 0.87 ? ram[7] = t : 0,
 sn2 = sw * decay_exponential(ram[7], 1200, 10) * 2,
 s += sn1 + sn2,
 
@@ -142,8 +144,8 @@ s += hw * decay_exponential(ram[8], 20000, 50) * (if_beat(2, 0) * 3 + 2),
 
 // Clamp that shit
 // s *= 10,
-s = Math.min(1, s),
-s = Math.max(-1, s),
+s = min(1, s),
+s = max(-1, s),
 
 // output
 s * vol + 127;

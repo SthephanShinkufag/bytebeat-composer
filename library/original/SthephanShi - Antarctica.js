@@ -24,7 +24,7 @@ arp = echo => (i = b - echo, 25 * ((b & 16 ? 4 : 2) * (t + ((b & 32) && wave(6))
 
 // Square bass pad
 pad = (pitch, echo) => 20 * int(.7 * (pitch * (t + wave(4)) * [
-  C, D, EE, D, C, D, B / 2, C
+	C, D, EE, D, C, D, B / 2, C
 ][((b - echo) >> 1) % 8] % 2)),
 
 // Hi-hats

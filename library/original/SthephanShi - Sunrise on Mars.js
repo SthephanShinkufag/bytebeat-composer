@@ -22,5 +22,5 @@ lead = (fn, v, pitch) => rise(72, 16, fade(160, 48)) * .7 * reverb(fn, 0, .6, pi
 
 [(drums('10040010030000004030202020201010') + bass(-8) +
 	arpSqr(1, 4) + arpTri(1, 4) + .6 * lead(square, 6, 4) + lead(triang, 6, 1.5) - 127) / 128,
- (drums('40010030010020000403020202020101') + bass(8) +
+(drums('40010030010020000403020202020101') + bass(8) +
 	arpSqr(2, 6) + arpTri(2, 4) + .6 * lead(square, 4, 3) + lead(triang, 4, 2) - 127) / 128];

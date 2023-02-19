@@ -9,7 +9,7 @@ Gb = 370, G = 392, Ab = 415, A = 440, Bb = 466, B = 494,
 
 // Notes arrays
 intro = [C, D, G, C, D, G, C, D, A, C, D, A, A, A, A,, D, G, B, D, G, B, D, G, A, C, G, A, A, A, A],
-song1 = [,, G,, Gb, A,, Gb, B,, G, B,,, A,,,, C * 2,, B, D * 2,, B, EE * 2,,B, EE * 2,,, D * 2],
+song1 = [,, G,, Gb, A,, Gb, B,, G, B,,, A,,,, C * 2,, B, D * 2,, B, EE * 2,, B, EE * 2,,, D * 2],
 song2 = [C, D, G, D, Gb, A, EE, G, B, D, Gb, A, C * 2, D, G, D * 2, Gb, B, EE * 2, G, B, D * 2, Gb, A],
 
 // Wave modifier
@@ -31,10 +31,10 @@ pad = (pitch, echo) => 18 * int(.7 * (pitch * (t + wave(5)) * [
 ][((b - echo) >> 1) % 8] % 2)),
 
 // Triangle pad
-tri = (pitch, echo) => .3 * (abs(((255 * pitch * (t + wave(4)) * [
+tri = (pitch, echo) => .3 * abs(((255 * pitch * (t + wave(4)) * [
 	D, Gb, G, B, EE, Gb, G, Gb,
 	D, EE, G, A, EE, Gb, G, Gb
-][((b - echo) >> 1) % 16]) & 255) - 128)),
+][((b - echo) >> 1) % 16]) & 255) - 128),
 
 // Noise for drums
 noise = (arr, speed, len, pitch) =>
