@@ -439,7 +439,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023021301');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023022000');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -805,7 +805,8 @@ globalThis.bytebeat = new class {
 		case 16000:
 		case 22050:
 		case 32000:
-		case 44100: this.controlSampleRateSelect.value = sampleRate; break;
+		case 44100:
+		case 48000: this.controlSampleRateSelect.value = sampleRate; break;
 		default: this.controlSampleRateSelect.selectedIndex = -1;
 		}
 		this.controlSampleRate.value = this.songData.sampleRate = sampleRate;
