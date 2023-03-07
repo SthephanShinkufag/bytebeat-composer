@@ -138,21 +138,22 @@
 			"starred": 1
 		}]
 	}, {
-	    "author": "Bp103",
-	    "children": [{
-            "description": "they're getting closer",
-    		"url": "https://www.reddit.com/r/bytebeat/comments/rtld2d/theyre_getting_closer/",
-    		"date": "2022-01-01",
-    		"mode": "Floatbeat",
-    		"sampleRate": 44100,
-    		"codeOriginal": "r=44100,q=t/r,sin(q*(1.3*exp(-2*((q*16)%8))+(9e9*exp(-60*((q*64)%8))))+(((q/2)*r)&((q*8)%r))%tan((q*r)%2))",
-    		"codeMinified": "r=44100,q=t/r,sin(q*(1.3*exp(16*q%8*-2)+9E9*exp(64*q%8*-60))+(q/2*r&8*q%r)%tan(q*r%2))"
-	    }, {
+		"author": "Bp103",
+		"children": [{
+			"description": "they're getting closer",
+			"url": "https://www.reddit.com/r/bytebeat/comments/rtld2d/theyre_getting_closer/",
+			"date": "2022-01-01",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"codeOriginal": "r=44100,q=t/r,sin(q*(1.3*exp(-2*((q*16)%8))+(9e9*exp(-60*((q*64)%8))))+(((q/2)*r)&((q*8)%r))%tan((q*r)%2))",
+			"codeMinified": "r=44100,q=t/r,sin(q*(1.3*exp(16*q%8*-2)+9E9*exp(64*q%8*-60))+(q/2*r&8*q%r)%tan(q*r%2))"
+		}, {
 			"description": "ByteCrusher (fm synth and sequencer setup)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/zp3iv1/bytecrusher_fm_synth_and_sequencer_setup/",
 			"date": "2022-12-18",
-    		"mode": "Floatbeat",
+			"mode": "Floatbeat",
 			"sampleRate": 22050,
+			"stereo": true,
 			"file": "Bp103 - ByteCrusher (fm synth and sequencer setup).js",
 			"fileFormatted": true,
 			"fileOriginal": true
@@ -412,6 +413,22 @@
 			],
 			"codeMinified": "e=512,s=r=8,p=[1.5,1.79,2,1,1,2,1,1,1.6,1,1,1.5,1,1,1.2,1][(t>>12)%16]*[1,1,1.5,1.34][3&t>>17],sin(sin(sin(sin(p*t*PI/16)/8*(r-t/e%s)+p*t*PI/16)/6*(r-t/e%s)+p*t*PI/256)+p*t*PI/128)/1.5",
 			"starred": 1
+		}, {
+			"description": "E. piano",
+			"url": "https://dollchan.net/btb/res/204.html#513",
+			"date": "2023-03-03",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"codeOriginal": [
+				"c=x=>t/1.015*2**((x+5)/12),d=(-t&131064)/16E3/8,g=3&t>>17,",
+				"p1=c([-4,-4,-2,-6][g]),p2=c([1,1,1,1][g]),p3=c([5,3,5,5][g]),p4=c([8,8,10,10][g]),",
+				"m=(p,x=0)=>(x=128+x/2,sin(sin(sin(PI*p/8)/4+PI*p/x)*1.3*d+PI*p/x)*d),",
+				"[(m(p1)+m(p2)+m(p3)+m(p4)+m(p1,-1)+m(p2,-1)+m(p3,-1)+m(p4,-1))/8,",
+				"(m(p1,1)+m(p2,1)+m(p3,1)+m(p4,1)+m(p1,-1)+m(p2,-1)+m(p3,-1)+m(p4,-1))/8]"
+			],
+			"codeMinified": "c=x=>t/1.015*2**((x+5)/12),d=(-t&131064)/16E3/8,g=3&t>>17,p1=c([-4,-4,-2,-6][g]),p2=c([1,1,1,1][g]),p3=c([5,3,5,5][g]),p4=c([8,8,10,10][g]),m=(p,x=0)=>(x=128+x/2,sin(sin(sin(PI*p/8)/4+PI*p/x)*1.3*d+PI*p/x)*d),[(m(p1)+m(p2)+m(p3)+m(p4)+m(p1,-1)+m(p2,-1)+m(p3,-1)+m(p4,-1))/8,(m(p1,1)+m(p2,1)+m(p3,1)+m(p4,1)+m(p1,-1)+m(p2,-1)+m(p3,-1)+m(p4,-1))/8]",
+			"starred": 1
 		}]
 	}, {
 		"author": "hcdphobe",
@@ -422,7 +439,7 @@
 				"author": "viznut",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930"
 			},
-			"url": "https://dollchan.net/btb/res/3.html#373",
+			"url": "https://dollchan.net/btb/res/163.html#373",
 			"date": "2023-01-22",
 			"mode": "Floatbeat",
 			"sampleRate": 48000,
@@ -430,7 +447,7 @@
 			"codeMinified": "t/=6,a=1.5*t*(3+(1^t>>10&5))*(5+(3&t>>14))>>(t>>8&3),b=a*PI/128,sin(sin(b)+b)*tan(sin(b)*cos(b/1.5))*abs(2-abs(cos(b/2)))/3"
 		}, {
 			"description": "CRITICAL_STRUCTURE_CORRUPTION MUSIC",
-			"url": "https://dollchan.net/btb/res/3.html#376",
+			"url": "https://dollchan.net/btb/res/163.html#376",
 			"date": "2023-02-03",
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
@@ -446,7 +463,7 @@
 			"codeMinified": "s=x=>sin(x*PI/128),c=x=>cos(x*PI/128),y=x=>30*sin(2E4/(t%x)),w=[y(65536),y(65536),y(65536),y(12288)][t>>15&3],v=1.25*(t-(t>>16&4|t>>17&6^t>>15&7&t>>12&3)*t/((t>>16&7)+4))*PI,f=1.955*(t&262144?t/4*[1,1.345,1.6,1.825][t>>16&3]:t/((t>>16&3)+4)),abs(c(v/2)+s(1.5*v))*s(3*v)*abs(s(3*v)*c(1.25*v))/5+c(3E3/(f/32%8+3))/5+w/128"
 		}, {
 			"description": "Tripany Sack",
-			"url": "https://dollchan.net/btb/res/3.html#404",
+			"url": "https://dollchan.net/btb/res/163.html#404",
 			"date": "2023-02-14",
 			"mode": "Floatbeat",
 			"sampleRate": 96000,
@@ -455,6 +472,29 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"description": "FM Ctrl+V",
+			"remixed": {
+				"description": "Ctrl+V",
+				"author": "getDolphinedLol",
+				"url": "https://www.reddit.com/r/bytebeat/comments/s0ytc9/ctrlv/"
+			},
+			"url": "https://dollchan.net/btb/res/163.html#486",
+			"date": "2023-02-27",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": "t*=44100/48000,s=sin,e=cos,a=([2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32]*t*4),b=([0,2,0,2,0,2,0,3,0][(t>>13)%8]*t*.5),c=PI/128,s(a*c+e(a/4*c)-s(a/4*c))/4-s(b*c+e(b/2*c))/4",
+			"codeMinified": "t*=44100/48E3,a=t*4*[2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32],b=t/2*'020202030'[(t>>13)%8],p=PI/128,sin(a*p+cos(a/4*p)-sin(a/4*p))/4-sin(b*p+cos(b/2*p))/4"
 		}]
+	}, {
+		"author": "Kouzerumatsu",
+		"description": "XO-TRACKER: 1-BIT BAD APPLE",
+		"url": "https://dollchan.net/btb/res/423.html#423",
+		"date": "2023-02-19",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"file": "Kouzerumatsu - XO-TRACKER 1-BIT BAD APPLE.js",
+		"fileOriginal": true,
+		"starred": 1
 	}
 ]

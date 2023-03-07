@@ -59,6 +59,7 @@
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
 		},
 		"codeOriginal": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
+		"codeMinified": "17*t|(t>>2)+(14-(t>>15&1))*t|t>>3|t>>5",
 		"starred": 1
 	}, {
 		"description": "\"Trance beat\". Experiments with t>>N and ternary operations",
@@ -219,11 +220,7 @@
 			"starred": 1
 		}, {
 			"description": "\"Alien dungeon\" with a complicated rhytm (t|t*3)>>5",
-			"codeOriginal": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
-		}, {
-			"description": "Previous with a slightly different tune",
-			"codeOriginal": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5",
-			"starred": 1
+			"codeOriginal": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
 		}, {
 			"description": "Other \"Boss level\" variation",
 			"codeOriginal": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
@@ -244,7 +241,8 @@
 			"description": "More complicated drums",
 			"date": "2021-10-17",
 			"sampleRate": 11025,
-			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?t&4096?2:16:2))|t>>3"
+			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?t&4096?2:16:2))|t>>3",
+			"codeMinified": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|t%65536>59392?2:16))|t>>3"
 		}, {
 			"description": "Remix of RealZynx92's remix",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
@@ -255,13 +253,14 @@
 			},
 			"date": "2021-10-25",
 			"sampleRate": 11025,
-			"codeOriginal": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536>59392?2:t&4096?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)"
+			"codeOriginal": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536>59392?2:t&4096?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)",
+			"codeMinified": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|t%65536>59392?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)"
 		}]
 	}, {
 		"description": "Death chase",
 		"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
 		"date": "2021-10-28",
-		"starred": 2,
+		"starred": 1,
 		"children": [{
 			"description": "As a basis is taken modified <a href='https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/' target='_blank'>\"The time is running out!\"</a> and <a href='https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/' target='_blank'>\"remix by RealZynx92\"</a> songs. Used the idea of selecting notes and rhythm through an array.",
 			"sampleRate": 44100,
@@ -305,21 +304,21 @@
 			"date": "2022-05-01",
 			"sampleRate": 44100,
 			"file": "SthephanShi - Antarctica.js",
+			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
 			"starred": 2
 		}]
 	}, {
 		"children": [{
-			"description": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\"<br>Tried to get something like a NES sound. Successfully turned out a noise function, universal for different percussions. Also added the triangle generator."
+			"description": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\""
 		}, {
 			"description": "End of Ice Age",
 			"url": "https://battleofthebits.org/arena/Entry/End+of+Ice+Age/53085/",
 			"date": "2022-05-02",
 			"sampleRate": 44100,
 			"file": "SthephanShi - End of Ice Age.js",
+			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
 			"starred": 2
 		}]
 	}, {
@@ -331,8 +330,8 @@
 			"date": "2022-05-25",
 			"sampleRate": 44100,
 			"file": "SthephanShi - Dancing Moon.js",
+			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
 			"starred": 2
 		}]
 	}, {
@@ -346,8 +345,8 @@
 			"sampleRate": 44100,
 			"stereo": true,
 			"file": "SthephanShi - Sunrise on Mars.js",
+			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
 			"starred": 2
 		}]
 	}, {
@@ -356,31 +355,44 @@
 		}, {
 			"description": "Dark Forest ",
 			"url": "https://battleofthebits.org/arena/Entry/Dark+forest/57555/",
-			"date": "2022-01-09",
+			"date": "2023-01-09",
 			"sampleRate": 44100,
 			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
 			"starred": 2
 		}]
 	}, {
-		"description": "Happy squares",
+		"description": "Small Mouse",
 		"remixed": {
 			"description": "ｃｏｏｌ ｖａｐｏｒｗａｖｅ",
 			"author": "Rio zack",
 			"url": "https://dollchan.net/btb/res/204.html#408"
 		},
 		"url": "https://dollchan.net/btb/res/204.html#424",
-		"date": "2022-02-19",
+		"date": "2023-02-19",
 		"sampleRate": 32000,
 		"codeOriginal": [
-			"T=t/1.3,",
-			"i=7&T>>15,",
+			"T=t/1.2,",
 			"a=[0,3,5,7,0,3,-4,-2],",
 			"a1=[3,7,9,11,3,7,0,2],",
 			"a2=[7,10,12,14,7,10,3,5],",
-			"s=(x,y)=>.7*(.88*y*t*2**([a,a1,a2,a1][3&T>>x][i]/12)&64),",
-			"(.88*t*2**(a[i]/12)&-T>>6)%256/2+[s(14,1)+s(15,2),2*(s(9,1)+s(14,2))*(-T&8191)/8E3][1&T>>13]"
+			"B=a=>(.88*t*2**(a[i=7&T>>15]/12)&-T>>6)%256/5,",
+			"S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),",
+			"B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]"
 		],
-		"codeMinified": "T=t/1.3,i=7&T>>15,a=[0,3,5,7,0,3,-4,-2],a1=[3,7,9,11,3,7,0,2],a2=[7,10,12,14,7,10,3,5],s=(x,y)=>.7*(.88*y*t*2**([a,a1,a2,a1][3&T>>x][i]/12)&64),(.88*t*2**(a[i]/12)&-T>>6)%256/2+[s(14,1)+s(15,2),2*(s(9,1)+s(14,2))*(-T&8191)/8E3][1&T>>13]",
+		"codeMinified": "T=t/1.2,a=[0,3,5,7,0,3,-4,-2],a1=[3,7,9,11,3,7,0,2],a2=[7,10,12,14,7,10,3,5],B=a=>(.88*t*2**(a[i=7&T>>15]/12)&-T>>6)%256/5,S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]",
 		"starred": 1
+	}, {
+		"children": [{
+			"description": "\"At night, while the cat is away, mice become masters of the house and dance together in the middle of the room.\""
+		}, {
+			"description": "Mouse Festival",
+			"url": "https://www.reddit.com/r/bytebeat/comments/118066a/mouse_festival/",
+			"date": "2023-02-21",
+			"sampleRate": 32000,
+			"file": "SthephanShi - Mouse Festival.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"starred": 1
+		}]
 	}
 ]

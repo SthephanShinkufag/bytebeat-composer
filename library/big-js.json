@@ -527,7 +527,8 @@
 			"file": "Decent-Manager-6169 - Air Island.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}, {
 			"description": "Cocktail Hour Preview",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10os7e7/cocktail_hour_preview/",
@@ -536,7 +537,8 @@
 			"file": "Decent-Manager-6169 - Cocktail Hour Preview.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}, {
 			"description": "List of musical scales",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10usrzr/useless_project_thing_2/",
@@ -545,6 +547,16 @@
 			"file": "Decent-Manager-6169 - List of musical scales.js",
 			"fileFormatted": true,
 			"fileOriginal": true
+		}, {
+			"description": "Drifting Time Misplaced 8 Bit Slowed",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1163kwi/something_that_kept_in_the_draft_for_2_months/",
+			"date": "2023-02-19",
+			"sampleRate": 64000,
+			"file": "Decent-Manager-6169 - Drifting Time Misplaced 8 Bit Slowed.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"description": "ByteSongg",
@@ -611,14 +623,14 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-		    "author": "SthephanShi",
+			"author": "SthephanShi",
 			"description": "\"Something New\" synchronized",
 			"url": "https://battleofthebits.org/arena/Entry/Something+New/52726/#post157250",
 			"date": "2022-06-06",
 			"sampleRate": 44100,
 			"file": "SthephanShi - 'Something new' synchronized.js",
 			"fileMinified": true,
-			"fileOriginal": true
+			"fileFormatted": true
 		}, {
 			"description": "advanced technology",
 			"url": "https://battleofthebits.org/arena/Entry/advanced+technology+%5B44.1k+stereo_+1_337+bytes%5D/54547/",
@@ -644,8 +656,7 @@
 			"file": "NewFall2020 - TIRO Remixed 6 remastered.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}, {
 			"description": "simple step sequencer remix #2",
 			"remixed": {
@@ -724,8 +735,8 @@
 			"date": "2023-01-10",
 			"sampleRate": 44100,
 			"file": "Greaserpirate - Showing off the recombination better.js",
-		    "fileFormatted": true,
-	    	"fileMinified": true,
+			"fileFormatted": true,
+			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
 		}, {
@@ -735,7 +746,7 @@
 			"sampleRate": 44100,
 			"stereo": true,
 			"file": "Greaserpirate - I've refined my tools.js",
-		    "fileFormatted": true,
+			"fileFormatted": true,
 			"fileOriginal": true,
 			"starred": 1
 		}, {
@@ -753,12 +764,12 @@
 			"date": "2023-01-28",
 			"sampleRate": 48000,
 			"file": "Greaserpirate - a limiter (that also removes offsets).js",
-		    "fileFormatted": true,
-	    	"fileMinified": true,
+			"fileFormatted": true,
+			"fileMinified": true,
 			"fileOriginal": true
 		}, {
 			"description": "Graceful Ache",
-			"url": "https://www.reddit.com/r/bytebeat/comments/10usrzr/useless_project_thing_2/",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10t4z6w/graceful_ache_probably_the_most_complex_bytebeat/",
 			"date": "2023-02-04",
 			"sampleRate": 48000,
 			"stereo": true,
@@ -768,12 +779,12 @@
 			"starred": 2
 		}, {
 			"description": "Step sequencer with interpolation",
-			"url": "https://www.reddit.com/r/bytebeat/comments/10t4z6w/graceful_ache_probably_the_most_complex_bytebeat/",
+			"url": "https://www.reddit.com/r/bytebeat/comments/10vpfsu/another_generalpurpose_effect_step_sequencer_with/",
 			"date": "2023-02-07",
 			"sampleRate": 48000,
 			"stereo": true,
 			"file": "Greaserpirate - Step sequencer with interpolation.js",
-		    "fileFormatted": true,
+			"fileFormatted": true,
 			"fileOriginal": true
 		}]
 	}, {
@@ -782,9 +793,48 @@
 		"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
 		"date": "2023-02-15",
 		"sampleRate": 20000,
+		"stereo": true,
 		"file": "May_I_Change_My_Name - 0xBADA441E.js",
 		"fileFormatted": true,
 		"fileOriginal": true,
 		"starred": 2
+	}, {
+		"author": "Kouzerumatsu",
+		"description": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
+		"url": "https://dollchan.net/btb/res/415.html#415",
+		"date": "2023-02-18",
+		"sampleRate": 32000,
+		"file": "Kouzerumatsu - XO-Tracker Tsukite Moonhand The Bananafox Theme.js",
+		"fileOriginal": true,
+		"starred": 2
+	}, {
+		"author": "Rio zack",
+		"description": "battle castle",
+		"url": "https://dollchan.net/btb/res/204.html#495",
+		"date": "2023-02-27",
+		"sampleRate": 44100,
+		"stereo": true,
+		"file": "Rio zack - battle castle.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "Yamden",
+		"children": [{
+			"description": "Constructing a Melody in One Line",
+			"url": "https://dollchan.net/btb/res/3.html#489",
+			"date": "2023-02-28",
+			"file": "Yamden - Constructing a Melody in One Line.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}, {
+			"description": "Lovely Tune",
+			"url": "https://dollchan.net/btb/res/3.html#497",
+			"date": "2023-03-02",
+			"file": "Yamden - Lovely Tune.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}]
 	}
 ]

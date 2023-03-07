@@ -274,9 +274,10 @@ globalThis.bytebeat = new class {
 			entry += `(<a href="${ url }" target="_blank">source</a>)`;
 		}
 		if(remixed) {
-			entry += ` (remix of ${ remixed.url ? `<a href="${ remixed.url }" target="_blank">${
-				remixed.description || remixed.author }</a>` : `"${ remixed.description }"`
-			}${ remixed.description && remixed.author ? ' by ' + remixed.author : '' })`;
+			const { url: rUrl, description: rDescription, author: rAuthor } = remixed;
+			entry += ` (remix of ${ rUrl ? `<a href="${ rUrl }" target="_blank">${
+				rDescription || rAuthor }</a>` : `"${ rDescription }"`
+			}${ rDescription && rAuthor ? ' by ' + rAuthor : '' })`;
 		}
 
 		if(date || sampleRate || mode || stereo) {
