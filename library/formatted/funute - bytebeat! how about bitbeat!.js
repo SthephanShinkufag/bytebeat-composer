@@ -1,9 +1,7 @@
 S = 1.059463094,
 P = pow,
 X = [
-	function(t) {
-		return t < 1e3 && (sin(t * t) * 1e8 % 2 | 0 ? 1 : 3);
-	},
+	t => t < 1e3 && (sin(t * t) * 1e8 % 2 | 0 ? 1 : 3),
 	function(k, n, t) {
 		l = 4410 / 44 / P(S, n);
 		return t % l > (l / 2 - t * l * k) ? 1 : 3;
@@ -16,20 +14,14 @@ X = [
 	}
 ],
 Y = [
-	function(t) {
-		return t < 1e3 && (k = 299 / (t + 1), k - (k | 0) > 0.5 ? 1 : 3);
-	},
+	t => t < 1e3 && (k = 299 / (t + 1), k - (k | 0) > 0.5 ? 1 : 3),
 	0,
 	X[0],
 	X[2].bind(this, X[1].bind(this, 7e-5)),
-	function(t, f) {
-		return t < 2400 && (p = P(t + 1, 0.8), t < 200 || t > 900 ? X[0](p) : (p / 27 | 0) % 2 ? 1 : 3);
-	}
+	(t, f) => t < 2400 && (p = P(t + 1, 0.8), t < 200 || t > 900 ? X[0](p) : (p / 27 | 0) % 2 ? 1 : 3)
 ],
 Z = [
-	function() {
-		return 0;
-	},
+	() => 0,
 	function(s, n, t) {
 		l = 4410 / 44 / P(S, n);
 		k = (t % (l * 8) / l) | 0;

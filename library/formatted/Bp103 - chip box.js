@@ -18,9 +18,7 @@ gs = g * r,
 n = [a, c, e, c, a, d, f, d, a, c, f, a, c, e, g, e, g, b, d, b, f, a, c, a, a, c, g, c, g, b, d, b],
 os = [1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 0, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 2],
 
-xy = function(x, y) {
-	return int(x) * 4 + int(y);
-},
+xy = (x, y) => int(x) * 4 + int(y),
 
 p = function(tt, vol) {
 	aa = sin(int(q *

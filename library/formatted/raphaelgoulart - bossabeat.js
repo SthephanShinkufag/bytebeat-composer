@@ -651,18 +651,9 @@ window.channels.forEach(chan => {
 	chan.freq = localTick >= note.start && localTick < note.end ? note.note : 0;
 }),
 
-square = function(chan) {
-	return chan.amp * (2 * (int(256 * chan.freq * ts) % 256 <= chan.pulse * 256 / 100) - 1);
-},
-
-saw = function(chan) {
-	return chan.amp * (((255 * chan.freq * ts) & 255) - 128) / 128;
-},
-
-triangle = function(chan, echo) {
-	return chan.amp * 3 * (abs(((255 * chan.freq * echo * ts + 128) & 255) - 128) - 64) / 256;
-},
-
+square = chan => chan.amp * (2 * (int(256 * chan.freq * ts) % 256 <= chan.pulse * 256 / 100) - 1),
+saw = chan => chan.amp * (((255 * chan.freq * ts) & 255) - 128) / 128,
+triangle = (chan, echo) => chan.amp * 3 * (abs(((255 * chan.freq * echo * ts + 128) & 255) - 128) - 64) / 256,
 noiseFreq = int((A / 3) * ts * 44100 / 440),
 noiseAmp = (tick % 192 < 3) * 24 + ((tick + 189) % 192 < 3) * 12 +
 	((tick + 168) % 192 < 3) * 12 + ((tick + 165) % 192 < 3) * 6 +

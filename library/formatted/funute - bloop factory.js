@@ -4,18 +4,10 @@ T = sin,
 I = parseInt,
 S = [0, 2, 4, 7, 9, 5, 6, 19, 12, 1],
 B = [0, 4, 5, 4, 0, -4, -5, -7],
-n = function(c, e) {
-	return 127 * P(T(c * P(1.05946, e) / 15.9517), 3);
-},
-r = function(c) {
-	return I(T(c).toString(16).substring(7, 9) || 0, 16) - 128;
-},
-X = function(c) {
-	return I(T(c + 0.1).toFixed(6)[5]);
-},
-a = function(c, e) {
-	return c * e;
-},
+a = (c, e) => c * e,
+n = (c, e) => 127 * P(T(c * P(1.05946, e) / 15.9517), 3),
+r = c => I(T(c).toString(16).substring(7, 9) || 0, 16) - 128,
+X = c => I(T(c + 0.1).toFixed(6)[5]),
 d = 5E3,
 b = Z(t / d),
 p = 1 - t % d / d,

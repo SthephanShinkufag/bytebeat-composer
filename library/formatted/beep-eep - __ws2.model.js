@@ -30,9 +30,7 @@ f = x => {
 		6 * (t > 5.2e6 ? 1 : 0) -
 		sin(wave ** ((x / 1e3) * 1 * Cm[[0, 0, 2, 4][ia(t / 8e4) % 4]] % 2)) * vol * 1.5;
 },
-e = (s, l, n) => {
-	return int(exp(-((s % 20) * n) * l) * 20);
-},
+e = (s, l, n) => int(exp(-((s % 20) * n) * l) * 20),
 out = n => {
 	v = 0;
 	for(i = 1, k = n; i < k; i++) {

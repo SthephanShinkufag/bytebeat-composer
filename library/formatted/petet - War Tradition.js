@@ -7,9 +7,7 @@ J = function(c, d, m) {
 	}
 	return a;
 },
-Jhas = function(c, d, m, a) {
-	return J(c, d, m).includes(a % c);
-},
+Jhas = (c, d, m, a) => J(c, d, m).includes(a % c),
 mix = function(a, v) {
 	out += (a & 255) * (v & 255) / 255;
 },

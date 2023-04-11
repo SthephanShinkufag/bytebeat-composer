@@ -1,10 +1,6 @@
 time = t / 22050,
-fract = function(x) {
-	return ((x % 1) + 1) % 1;
-},
-hash = function(x) {
-	return fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23);
-},
+fract = x => ((x % 1) + 1) % 1,
+hash = x => fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23),
 main = function(x) {
 	time *= 0.46;
 	/*  _   _       _   _   __

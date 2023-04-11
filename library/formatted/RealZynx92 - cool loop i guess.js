@@ -16,15 +16,9 @@ g = fs * p,
 gs = g * p,
 
 // Functions
-saw = function(n) {
-	return (t2 * n) & 63;
-},
-sqr = function(n) {
-	return (t2 * n) & 64;
-},
-sine = function(n) {
-	return 32 * sin((t2 * n) / 10.25) + 32;
-},
+saw = n => (t2 * n) & 63,
+sqr = n => (t2 * n) & 64,
+sine = n => 32 * sin((t2 * n) / 10.25) + 32,
 
 // Percussion
 kick = 25 * (3E3 / (t & 16383) & 3),

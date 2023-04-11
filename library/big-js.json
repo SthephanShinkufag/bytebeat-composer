@@ -557,6 +557,23 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"description": "Unfinished Casin",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11f49yk/unfinished_casin_this_is_the_first_half_part_now/",
+			"date": "2023-03-01",
+			"sampleRate": 58000,
+			"file": "Decent-Manager-6169 - Unfinished Casin.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"description": "Unfinished Cocktail Hour",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11x28i5/heres_an_unfinished_cocktail_hour_that_i_havent/",
+			"date": "2023-03-21",
+			"sampleRate": 64000,
+			"file": "Decent-Manager-6169 - Unfinished Cocktail Hour.js",
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"description": "ByteSongg",
@@ -719,6 +736,48 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
+		"author": "awogler9124812041",
+		"children": [{
+			"description": "bitcrushed amen break",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
+			"date": "2022-10-24",
+			"file": "awogler9124812041 - bitcrushed amen break.js",
+			"fileOriginal": true
+		}, {
+			"description": "bitcrushed amen break (44100hz version)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
+			"date": "2022-10-24",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - bitcrushed amen break (44100hz version).js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "sparta remix chorus",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yex2iz/sparta_remix_chorus/",
+			"date": "2022-10-27",
+			"sampleRate": 16000,
+			"file": "awogler9124812041 - sparta remix chorus.js",
+			"fileOriginal": true
+		}, {
+			"description": "the midi to bytebeat tool",
+			"remixed": {
+				"description": "now its FM synth",
+				"author": "Bp103",
+				"url": "https://twitter.com/Bp103/status/1345905059964530688"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/11s10f8/a_demonstration_of_my_latest_invention_yet_the/",
+			"date": "2023-3-15",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - the midi to bytebeat tool.js",
+			"fileOriginal": true
+		}, {
+			"description": "adventurous song",
+			"url": "https://www.reddit.com/r/bytebeat/comments/120gv4f/adventurous_song_the_result_of_combining_the/",
+			"date": "2023-3-24",
+			"file": "awogler9124812041 - adventurous song.js",
+			"fileOriginal": true
+		}]
+	}, {
 		"author": "cabbage drop",
 		"description": "twenty six",
 		"url": "https://battleofthebits.org/arena/Entry/twenty+six/57195/",
@@ -836,5 +895,14 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}]
+	}, {
+		"author": "Chasyxx",
+		"description": "Game Boy's noise",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
+		"date": "2023-03-10",
+		"file": "Chasyxx - Game Boy's noise.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"fileOriginal": true
 	}
 ]

@@ -1,16 +1,8 @@
 time = t / 32000,
-fract = function(x) {
-	return x % 1;
-},
-mix = function(a, b, c) {
-	return (a * (1 - c)) + (b * c);
-},
-tri = function(x) {
-	return 2 * asin(sin(x)) / PI;
-},
-noise = function(x) {
-	return sin((x + 10) * sin(pow(x + 10, fract(x) + 10)));
-},
+fract = x => x % 1,
+mix = (a, b, c) => (a * (1 - c)) + (b * c),
+tri = x => 2 * asin(sin(x)) / PI,
+noise = x => sin((x + 10) * sin(pow(x + 10, fract(x) + 10))),
 melodytest = function(time) {
 	melody_string = '5789357857893572';
 	melody = 0;

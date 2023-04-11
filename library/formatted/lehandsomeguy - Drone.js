@@ -1,13 +1,7 @@
 time = t / 11025,
-fract = function(x) {
-	return x % 1;
-},
-mix = function(a, b, c) {
-	return (a * (1 - c)) + (b * c);
-},
-noise = function(x) {
-	return sin((x + 10) * sin(pow(x + 10, fract(x) + 10)));
-},
+fract = x => x % 1,
+mix = (a, b, c) => (a * (1 - c)) + (b * c),
+noise = x => sin((x + 10) * sin(pow(x + 10, fract(x) + 10))),
 main = function(x) {
 	a = 0;
 	for(j = 0; j < 13; j++) {

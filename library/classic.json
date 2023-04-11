@@ -318,18 +318,33 @@
 		"starred": 1
 	}, {
 		"description": "CA98",
-		"starred": 2,
 		"children": [{
 			"author": "rrrola",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902",
 			"date": "2011-10-04",
-			"codeOriginal": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8"
+			"codeOriginal": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8",
+			"starred": 2
 		}, {
 			"description": "slightly shorter version of rrola's",
 			"author": "ryg",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388929",
 			"date": "2011-10-04",
-			"codeOriginal": "t*(0xCA98>>(t>>9&14)&15)|t>>8"
+			"codeOriginal": "t*(0xCA98>>(t>>9&14)&15)|t>>8",
+			"starred": 2
+		}, {
+			"description": "slightly altered version of rrolas formula",
+			"author": "PB95Player",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11o46p7/too_scared_to_use/",
+			"date": "2023-03-11",
+			"codeOriginal": "(t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8)|(4e4/(t&4095))",
+			"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8|4E4/(t&4095)"
+		}, {
+			"description": "slightly improved version of rrola's",
+			"author": "Kehkeown_Uai",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11t7y2b/slightly_improved_version_of_rrolas/",
+			"date": "2023-03-17",
+			"codeOriginal": "t*(0xCA98CA98CA98>>(t>>9&(t>>10))&15)&t>>8",
+			"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&t>>10)&15)&t>>8"
 		}]
 	}, {
 		"description": "Modem melody",
@@ -958,6 +973,19 @@
 		"codeOriginal": "~t>>3&(t>>11&1?5:4-(t>>12&1))*t&(t>>7)+t",
 		"starred": 1
 	}, {
+		"description": "1fcccf1 (c compatible version)",
+		"remixed": {
+			"description": "1fccccf1",
+			"author": "PortablePorcelain",
+			"url": "https://dollchan.net/btb/res/55.html#55"
+		},
+		"author": "orion_aboy",
+		"url": "https://www.reddit.com/r/bytebeat/comments/106vxa3/1fcccf1_c_compatible_version/",
+		"date": "2023-01-09",
+		"codeOriginal": "((((t>>1)*(1<<(t>>16&3)))*((0x1fccccf1>>(t>>10)*(t>>11))&7))|t>>3)|128-((t&4095)>>8?0:t*(t^t%9)&63|t>>2)",
+		"codeMinified": "(t>>1)*(1<<(t>>16&3))*(0x1fccccf1>>(t>>10)*(t>>11)&7)|t>>3|128-((t&4095)>>8?0:t*(t^t%9)&63|t>>2)",
+		"starred": 1
+	}, {
 		"description": "WhiskedAwayToPomerania",
 		"author": "wyngwyrm",
 		"url": "https://battleofthebits.org/arena/Entry/WhiskedAwayToPomerania.txt/57975/",
@@ -990,5 +1018,55 @@
 		"date": "2023-02-23",
 		"codeOriginal": "((-t>>2&255)*((127&t*(7&t>>10))<(245&t*(2+(5&t>>14))))%256+(-t>>2&255)*(2+(42&2*t*(7&t>>10))<(24&t*((3&t>>14)+2)))%256)/2",
 		"starred": 1
+	}, {
+		"description": "Space Status VS Pong",
+		"author": "Glebguything",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11ir8at/space_status_vs_pong/",
+		"date": "2023-03-05",
+		"sampleRate": 48000,
+		"codeOriginal": "t%(t>>15^(t/90)%(t>>9)%(t&t>>100))-2",
+		"codeMinified": "t%(t>>15^t/90%(t>>9)%(t&t>>100))-2"
+	}, {
+		"author": "Cool_ObbyDeveloper",
+		"children": [{
+			"description": "yes.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11i9nk7/yes/",
+			"date": "2023-03-04",
+			"sampleRate": 44100,
+			"codeOriginal": "(t%255&-t%1)-(3*t&t>>13&t>>6)*t>>7"
+		}, {
+			"description": "t*",
+			"url": "https://www.reddit.com/r/bytebeat/comments/120lr7l/t/",
+			"date": "2023-03-24",
+			"codeOriginal": "t*((t>>12|t>>9)&241&t>>4)"
+		}]
+	}, {
+		"description": "frequency dancer",
+		"author": "ANON256-64",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11krrl8/frequency_dancer/",
+		"date": "2023-03-07",
+		"codeOriginal": "(t%125&t>>8)|t>>4|t*t>>8&t>>8",
+		"codeMinified": "t%125&t>>8|t>>4|t*t>>8&t>>8"
+	}, {
+		"description": "Modem melody rhythm",
+		"author": "Kehkeown_Uai",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11t8clc/modem_melody_rhythm/",
+		"date": "2023-03-17",
+		"codeOriginal": "(-t&(t>>4&t>>4)&t>>11)-1&-t>>4",
+		"codeMinified": "(-t&t>>4&t>>4&t>>11)-1&-t>>4"
+	}, {
+		"description": "chaotic craziness",
+		"author": "T_yknow",
+		"url": "https://www.reddit.com/r/bytebeat/comments/120dijk/chaotic_craziness/",
+		"date": "2023-03-24",
+		"sampleRate": 22050,
+		"codeOriginal": "(t^t>>12)*t>>8",
+		"starred": 1
+	}, {
+		"description": "H_YPN0T1Z3%",
+		"author": "absolute199",
+		"url": "https://www.reddit.com/r/bytebeat/comments/122rwfc/h_ypn0t1z3/",
+		"date": "2023-03-26",
+		"codeOriginal": "(t>>3&1)*t>>3^t/128*t"
 	}
 ]

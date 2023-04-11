@@ -65,8 +65,7 @@ ws((c / 7.15) * [nD_, nC, nA_, nG, nA_, nD_, nC, nG_, nC, nD, nC, nA_, nG][ia((c
 	ws((c / 7.15) * [nD_, nC, nA_][ia((c / 3000) % 3)], 2.8) +
 	ws((c / 7.15) * [nF, nG, nG_][ia((c / 1000) % 3)], 2.4) +
 	ws((c / 7.15) * [nA_ / 2, nD / 2, nC][ia((c / 4000) % 3)], 2.0)
-) *
-34 * chord_env * mixer[4] -
+) * 34 * chord_env * mixer[4] -
 
 // bass
 ws((c / 7.15) / 4 * [nA_ / 2, nD / 2, nC][ia((c / 4000) % 3)], 3.7) * 12 *

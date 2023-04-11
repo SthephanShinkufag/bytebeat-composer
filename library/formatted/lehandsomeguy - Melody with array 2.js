@@ -1,10 +1,6 @@
 time = t / 44100,
-fract = function(x) {
-	return x % 1;
-},
-puls = function(x) {
-	return (floor(sin(x)) + 0.5) * 2;
-},
+fract = x => x % 1,
+puls = x => (floor(sin(x)) + 0.5) * 2,
 main = function(time) {
 	speed = 2;
 	pitch = 0;

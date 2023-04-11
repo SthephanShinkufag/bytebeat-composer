@@ -1,0 +1,1 @@
+t<1?this.LFSR=65535:0,this.noise??=function(t,o=2,w=0){processLFSR=(width=0)=>{S=width?1000001E8:1E14;trade=(a,b)=>(LFSR[a]=LFSR[b]);temp=LFSR&1^(LFSR&2)>>1;LFSR>>=1;LFSR=temp?LFSR|S:LFSR&~S};t%(1<<o)==0&&(processLFSR(w),v=LFSR&1);return 128*v},noise(t,3,0)

@@ -394,5 +394,66 @@
 			"fileMinified": true,
 			"starred": 1
 		}]
+	}, {
+		"description": "Voice generator",
+		"remixed": {
+			"description": "YAY!",
+			"author": "justaboutdead",
+			"url": "http://wavepot.com/"
+		},
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"date": "2023-03-10",
+		"children": [{
+			"description": "Low talking robot",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+7*sin(.7*T)))+T)",
+			"starred": 2
+		}, {
+			"description": "Yay yey",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+3*sin(.3*T)))+T)",
+			"starred": 1
+		}, {
+			"description": "Yaeaeae",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)"
+		}, {
+			"description": "YAEAEAE!!!",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((4.8*(2*abs(1-n*t%2)-1)+2*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)",
+			"starred": 1
+		}, {
+			"description": "Yah yai!",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+3*sin(3+T+2*sin(T)))+T)"
+		}, {
+			"description": "Asakagi",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+5*sin(3+.6*T+sin(.6*T)))+T)"
+		}]
+	}, {
+		"children": [{
+			"description": "\"You were engaged in spiritual practices and finally reached nirvana. So, your soul left your body and began to travel in another dimension.\""
+		}, {
+			"description": "Trip to Otherworld",
+			"remixed": {
+				"description": "please someone remix this",
+				"author": "Decent-Manager-6169",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+			},
+			"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
+			"date": "2023-03-31",
+			"sampleRate": 32000,
+			"file": "SthephanShi - Trip to Otherworld.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"starred": 2
+		}]
 	}
 ]

@@ -45,9 +45,7 @@ chord_seq = [
 Cm_notes = [nC, nD, nD_, nF, nG, nG_, nA_],
 
 // exponential snappy envelope
-env = function(step, len, snap) {
-	return int(exp(-((step % 20) * snap) * len) * 20);
-},
+env = (step, len, snap) => int(exp(-((step % 20) * snap) * len) * 20),
 
 // kick
 128 + (sin(log(0.5 + s % 10) * 40) * env(s, 1, 0.3) * 2) * mixer[0] +
@@ -71,8 +69,7 @@ env = function(step, len, snap) {
 ) * mixer[3] +
 
 // arp
-sin(1 +
-	+sin(5 - abs(sin(s / 10) * 4) ** (s * 2 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 2 +
+sin(1 + +sin(5 - abs(sin(s / 10) * 4) ** (s * 2 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 2 +
 	abs(sin(s / 10) * 4) ** (s * 1 * chord_seq[chord_index][int((s / 10) % 4)] % 2)) * 1 *
 env(s * (int((s / 80) % 2) === 0 ? 4 : 2), 0.9, 0.3) * mixer[4] +
 

@@ -1,16 +1,8 @@
 time = t / 44100,
-fract = function(x) {
-	return x % 1;
-},
-mod = function(a, b) {
-	return a % b;
-},
-tri = function(x) {
-	return 2 * asin(sin(x)) / PI;
-},
-noise = function(x) {
-	return sin((x + 10) * sin(pow(x + 10, fract(x) + 10)));
-},
+fract = x => x % 1,
+mod = (a, b) => a % b,
+tri = x => 2 * asin(sin(x)) / PI,
+noise = x => sin((x + 10) * sin(pow(x + 10, fract(x) + 10))),
 main = function(x) {
 	s = 0;
 	for(i = 0; i < 10; i++) {

@@ -2574,17 +2574,13 @@ window.channels.forEach(chan => {
 	chan.freq = localTick >= note.start && localTick < note.end ? note.note : 0;
 }),
 
-square = function(chan, echo) {
-	return chan.amp * (2 * (int(256 * echo * chan.freq * ts) % 256 <= chan.pulse(tick) * 256 / 100) - 1);
-},
+square = (chan, echo) =>
+	chan.amp * (2 * (int(256 * echo * chan.freq * ts) % 256 <= chan.pulse(tick) * 256 / 100) - 1),
 
-saw = function(chan) {
-	return chan.amp * (((255 * chan.freq * ts) & 255) - 128) / 128;
-},
+saw = chan => chan.amp * (((255 * chan.freq * ts) & 255) - 128) / 128,
 
-triangle = function(chan, echo) {
-	return chan.amp * 3 * (abs(((255 * echo * chan.freq * ts + 128) & 255) - 128) - 64) / 256;
-},
+triangle = (chan, echo) =>
+	chan.amp * 3 * (abs(((255 * echo * chan.freq * ts + 128) & 255) - 128) - 64) / 256,
 
 ch = window.channels[0],
 128 +

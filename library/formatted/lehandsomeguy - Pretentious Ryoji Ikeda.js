@@ -1,14 +1,8 @@
 time = t / 32000,
-fract = function(x) {
-	return ((x % 1) + 1) % 1;
-},
-puls = function(x) {
-	return (floor(sin(x)) + 0.5) * 2;
-},
-hash = function(x) {
-	return fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23);
-},
-music1 = function(time) {
+fract = x => ((x % 1) + 1) % 1,
+puls = x => (floor(sin(x)) + 0.5) * 2,
+hash = x => fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23),
+main = function(time) {
 	time *= 0.93 + ((sin(time) * 0.01) / time);
 	a = sin(time * 99000) * pow(1 - fract(time * 0.5), 100);
 	a += sin(time * 300) * [1, 1, 0, 0, 1, 0, 0, 0, 1][floor(time) % 9] * 0.5;
@@ -23,8 +17,5 @@ music1 = function(time) {
 		[0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0][floor(time * 4) % 16] * 0.06;
 	a += (sin(time * 9000) + sin(time * 9060)) * pow(1 - fract(time * 0.125), 100) * 0.2;
 	return a * 0.8;
-},
-main = function(x) {
-	return music1(time);
 },
 main(time);

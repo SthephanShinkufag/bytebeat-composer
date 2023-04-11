@@ -1,7 +1,5 @@
 time = t / 32000,
-fract = function(x) {
-	return x % 1;
-},
+fract = x => x % 1,
 main = function(time) {
 	speed = 1.5;
 	pitch = 0;

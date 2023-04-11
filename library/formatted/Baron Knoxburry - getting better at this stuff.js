@@ -15,21 +15,10 @@ s = 0,
 
 typeof ram == 'undefined' ? ram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] : 0,
 
-get_beat = function(seq_length) {
-	return beat & seq_length;
-},
-
-if_beat = function(seq_length, beat_pos) {
-	return beat % seq_length == beat_pos && t % tempo == 0;
-},
-
-if_euclid = function(beat_length) {
-	return t % (tempo * beat_length) == 0;
-},
-
-note_hertz = function(steps_from_a) {
-	return 420.69 * 1.059463 ** steps_from_a;
-},
+get_beat = seq_length => beat & seq_length,
+if_beat = (seq_length, beat_pos) => beat % seq_length == beat_pos && t % tempo == 0,
+if_euclid = beat_length => t % (tempo * beat_length) == 0,
+note_hertz = steps_from_a => 420.69 * 1.059463 ** steps_from_a,
 
 decay_exponential = function(start, length, curve) {
 	if(start + length < t) {
@@ -50,7 +39,6 @@ lopass = function(s, cut, addr) {
 	return s;
 },
 
-
 fm = function(freq, mod) {
 	// car_frequency is in hertz
 	// mod_sine is -1 .. 1
@@ -69,9 +57,7 @@ fm1 = function(p, i) {
 	return s;
 },
 
-noise_wave = function() {
-	return random() - 0.5;
-},
+noise_wave = () => random() - 0.5,
 
 square_wave = function(frequency) {
 	duty_length = sample_rate / frequency;
