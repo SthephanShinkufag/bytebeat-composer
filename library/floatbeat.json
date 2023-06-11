@@ -5,6 +5,10 @@
 		"date": "2014",
 		"children": [{
 			"description": "Cover of 'Predestined Fate' from VVVVVV",
+			"cover": {
+				"description": "VVVVVV Soundtrack 08/16 \"Predestined Fate\"",
+				"url": "https://youtu.be/yv_lcgLFJmc"
+			},
 			"mode": "Floatbeat",
 			"file": "Wiebe-Marten Wijnja - Cover of 'Predestined Fate' from VVVVVV.js",
 			"fileFormatted": true,
@@ -12,6 +16,10 @@
 			"starred": 1
 		}, {
 			"description": "Cover of 'Please Exist' from Knytt Underground",
+			"cover": {
+				"description": "Knytt Underground - Nifflas - Please Exist, I'd Appreciate It",
+				"url": "https://youtu.be/MlzsEJNnXGk"
+			},
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
 			"file": "Wiebe-Marten Wijnja - Cover of 'Please Exist' from Knytt Underground.js",
@@ -20,6 +28,10 @@
 			"starred": 2
 		}, {
 			"description": "Cover of 'Focus' from SuperHexagon",
+			"cover": {
+				"description": "Chipzel - Focus",
+				"url": "https://youtu.be/wD3j1O1XHQY"
+			},
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
 			"file": "Wiebe-Marten Wijnja - Cover of 'Focus' from SuperHexagon.js",
@@ -29,6 +41,10 @@
 		}, {
 			"description": "Game of Thrones theme",
 			"url": "https://js1k.com/2014-dragons/details/1953",
+			"cover": {
+				"description": "Game of Thrones Theme",
+				"url": "https://youtu.be/s7L2PVdrb_8"
+			},
 			"date": "2014",
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
@@ -160,6 +176,10 @@
 		}, {
 			"description": "twinkle twinkle (simple)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11sj8fx/twinkle_twinkle_simple/",
+			"cover": {
+				"description": "Twinkle Twinkle Little Star",
+				"url": "https://youtu.be/yCjJyiqpAuU"
+			},
 			"date": "2023-03-16",
 			"mode": "Floatbeat",
 			"codeOriginal": [
@@ -185,12 +205,12 @@
 		"author": "PortablePorcelain",
 		"children": [{
 			"description": "remix of ripthisentry.txt tune 3",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/tvnthr/creepy_droning_static_thing/",
+			"remix": {
 				"description": "ripthisentry.txt, tune#3",
 				"author": "raphaelgoulart",
-				"url": "https://battleofthebits.org/arena/Entry/ripthisentry.txt/32559/"
+				"url": "https://battleofthebits.com/arena/Entry/ripthisentry.txt/32559/"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/tvnthr/creepy_droning_static_thing/",
 			"date": "2022-04-04",
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
@@ -198,12 +218,12 @@
 			"codeMinified": "n=t*[1,0,1,0,2,2,1,0,1,0,2,2,1,0,2,2][int(t/2048)%16],a=.5*sin(n*PI/255+cos(n*PI/128)*(n/(524288+16384*random()))),b=.25*cos((5E4+t/3200)/(t&16383)),c=.1875*sin((2500+t/3200)/(t&4095)),tan(a+b+c)"
 		}, {
 			"description": "foldableboldface",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/55.html#194",
+			"remix": {
 				"description": "Vé",
 				"author": "lhphr",
 				"url": "https://dollchan.net/btb/res/44.html#88"
 			},
-			"url": "https://dollchan.net/btb/res/55.html#194",
 			"date": "2022-09-09",
 			"mode": "Floatbeat",
 			"sampleRate": 64000,
@@ -224,12 +244,12 @@
 			"starred": 1
 		}, {
 			"description": "remix of no limit with ambience",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ie4ws/remix_of_no_limit_with_ambience/",
+			"remix": {
 				"description": "No Limit",
 				"author": "ryg",
 				"url": "https://www.pouet.net/topic.php?which=8357&page=10#c388986"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/11ie4ws/remix_of_no_limit_with_ambience/",
 			"date": "2023-03-04",
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
@@ -273,11 +293,11 @@
 			"starred": 2
 		}, {
 			"description": "squsinsaw remix remix",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/11t56nl/squsinsaw_remix_remix_also_please_minify/",
+			"remix": {
 				"description": "\"squsinsaw\" remix",
 				"url": "https://dollchan.net/btb/res/55.html#86"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/11t56nl/squsinsaw_remix_remix_also_please_minify/",
 			"date": "2023-03-16",
 			"mode": "Floatbeat",
 			"sampleRate": 64000,
@@ -286,11 +306,11 @@
 			"starred": 1
 		}, {
 			"description": "facableboldfolds",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/11vaxsg/facableboldfolds_foldableboldface_alt_remix/",
+			"remix": {
 				"description": "foldableboldface",
 				"url": "https://dollchan.net/btb/res/55.html#194"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/11vaxsg/facableboldfolds_foldableboldface_alt_remix/",
 			"date": "2023-03-19",
 			"mode": "Floatbeat",
 			"sampleRate": 48000,
@@ -301,6 +321,10 @@
 		}, {
 			"description": "midi to bytebeat test 1",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11y6g16/midi_to_bytebeat_test_1/",
+			"cover": {
+				"description": "Pokemon Blue/Red - Pallet Town",
+				"url": "https://youtu.be/cOWRNLaCMJg"
+			},
 			"date": "2023-03-22",
 			"mode": "Floatbeat",
 			"sampleRate": 64000,
@@ -310,6 +334,10 @@
 		}, {
 			"description": "музика від україна",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11y9f79/%D0%BC%D1%83%D0%B7%D0%B8%D0%BA%D0%B0_%D0%B2%D1%96%D0%B4_%D1%83%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%B0/",
+			"cover": {
+				"description": "National Anthem of Ukraine",
+				"url": "https://youtu.be/nybtOIxlku8"
+			},
 			"date": "2023-03-22",
 			"mode": "Floatbeat",
 			"sampleRate": 16000,
@@ -329,12 +357,12 @@
 			"starred": 1
 		}, {
 			"description": "Sinusoid Pusher",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/44.html#88",
+			"remix": {
 				"description": "Crude Sinewave Dubstep",
 				"author": "Gabriel Miceli",
 				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
 			},
-			"url": "https://dollchan.net/btb/res/44.html#88",
 			"date": "2022-05-28",
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
@@ -418,11 +446,11 @@
 			"starred": 1
 		}, {
 			"description": "far echoes",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/10xye9m/far_echoes/",
+			"remix": {
 				"description": "Strato",
 				"url": "https://dollchan.net/btb/res/44.html#367"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/10xye9m/far_echoes/",
 			"date": "2023-02-09",
 			"mode": "Floatbeat",
 			"sampleRate": 27000,
@@ -435,6 +463,10 @@
 		"description": "sparta remix is stuck in my head now",
 		"author": "baenhohoho",
 		"url": "https://www.reddit.com/r/bytebeat/comments/w3g7iz/sparta_remix_is_stuck_in_my_head_now/",
+		"cover": {
+			"description": "Keaton Monger - This is Sparta! Last techno remix",
+			"url": "https://youtu.be/rvYZRskNV3w"
+		},
 		"date": "2022-07-20",
 		"mode": "Floatbeat",
 		"sampleRate": 44100,
@@ -447,11 +479,11 @@
 		"author": "polyzium",
 		"children": [{
 			"description": "12db lowpass filter",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/3.html#114",
+			"remix": {
 				"description": "Stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
-			"url": "https://dollchan.net/btb/res/3.html#114",
 			"date": "2022-07-24",
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
@@ -498,14 +530,14 @@
 		"codeOriginal": "t/=4,(((((((t*[1,1,1.5,2][t>>10&3])*\"2235\"[t>>14&3])|t>>3)%128)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64))/1.5)+(((t>>1)*\"2235\"[t>>14&3])%128)/Math.pow(1.0005, t&4095))/128-1",
 		"codeMinified": "t/=4,(((t*[1,1,1.5,2][t>>10&3]*'2235'[t>>14&3]|t>>3)%128+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64))/1.5+(t>>1)*'2235'[t>>14&3]%128/1.0005**(t&4095))/128-1"
 	}, {
-		"author": "Rio zack",
+		"author": "Zackx",
 		"children": [{
 			"description": "FM stimmer",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/204.html#266",
+			"remix": {
 				"description": "Stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
-			"url": "https://dollchan.net/btb/res/204.html#266",
 			"date": "2022-11-29",
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
@@ -555,12 +587,12 @@
 		"author": "hcdphobe",
 		"children": [{
 			"description": "FM Running man",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/163.html#373",
+			"remix": {
 				"description": "Running man",
 				"author": "viznut",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930"
 			},
-			"url": "https://dollchan.net/btb/res/163.html#373",
 			"date": "2023-01-22",
 			"mode": "Floatbeat",
 			"sampleRate": 48000,
@@ -595,12 +627,12 @@
 			"starred": 1
 		}, {
 			"description": "FM Ctrl+V",
-			"remixed": {
+			"url": "https://dollchan.net/btb/res/163.html#486",
+			"remix": {
 				"description": "Ctrl+V",
 				"author": "getDolphinedLol",
 				"url": "https://www.reddit.com/r/bytebeat/comments/s0ytc9/ctrlv/"
 			},
-			"url": "https://dollchan.net/btb/res/163.html#486",
 			"date": "2023-02-27",
 			"mode": "Floatbeat",
 			"sampleRate": 48000,
@@ -611,6 +643,10 @@
 		"author": "Kouzerumatsu",
 		"description": "XO-TRACKER: 1-BIT BAD APPLE",
 		"url": "https://dollchan.net/btb/res/423.html#423",
+		"cover": {
+			"description": "Touhou Project - Bad Apple",
+			"url": "https://youtu.be/FtutLA63Cp8"
+		},
 		"date": "2023-02-19",
 		"mode": "Floatbeat",
 		"sampleRate": 32000,
@@ -619,13 +655,13 @@
 		"starred": 2
 	}, {
 		"description": "Super dubstep thingy",
-		"remixed": {
+		"author": "hrllobrothers4",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11pohr2/super_dubstep_thingy/",
+		"remix": {
 			"description": "dubstep_thingy",
 			"author": "RealZynx92",
 			"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/"
 		},
-		"author": "hrllobrothers4",
-		"url": "https://www.reddit.com/r/bytebeat/comments/11pohr2/super_dubstep_thingy/",
 		"date": "2023-03-12",
 		"mode": "Floatbeat",
 		"sampleRate": 44100,

@@ -44,7 +44,7 @@
 		}]
 	}, {
 		"description": "\"Child swings\". Cool happy tune!",
-		"remixed": {
+		"remix": {
 			"description": "1) THE SWINGS",
 			"author": "Anonymous from russian imageboards",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
@@ -53,7 +53,7 @@
 		"starred": 2
 	}, {
 		"description": "\"Cat-girl\". Nya!",
-		"remixed": {
+		"remix": {
 			"description": "4) CAT-GIRL",
 			"author": "Anonymous from russian imageboards",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
@@ -63,7 +63,7 @@
 		"starred": 1
 	}, {
 		"description": "\"Trance beat\". Experiments with t>>N and ternary operations",
-		"remixed": {
+		"remix": {
 			"description": "11) THE HIT OF THE SEASON",
 			"author": "Anonymous from russian imageboards",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
@@ -246,7 +246,7 @@
 		}, {
 			"description": "Remix of RealZynx92's remix",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
-			"remixed": {
+			"remix": {
 				"description": "remix of \"The time is running out!\"",
 				"author": "RealZynx92",
 				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/"
@@ -262,7 +262,6 @@
 		"date": "2021-10-28",
 		"starred": 1,
 		"children": [{
-			"description": "As a basis is taken modified <a href='https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/' target='_blank'>\"The time is running out!\"</a> and <a href='https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/' target='_blank'>\"remix by RealZynx92\"</a> songs. Used the idea of selecting notes and rhythm through an array.",
 			"sampleRate": 44100,
 			"codeOriginal": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,4,5,5,5,4,5][(t>>12)%8])%64+64)"
 		}, {
@@ -286,7 +285,7 @@
 			"description": "\"Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor...\""
 		}, {
 			"description": "Frozen Planet",
-			"url": "https://battleofthebits.org/arena/Entry/Frozen+Planet/50767/",
+			"url": "https://battleofthebits.com/arena/Entry/Frozen+Planet/50767/",
 			"date": "2022-01-11",
 			"sampleRate": 44100,
 			"file": "SthephanShi - Frozen Planet.js",
@@ -313,7 +312,11 @@
 			"description": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\""
 		}, {
 			"description": "End of Ice Age",
-			"url": "https://battleofthebits.org/arena/Entry/End+of+Ice+Age/53085/",
+			"url": "https://battleofthebits.com/arena/Entry/End+of+Ice+Age/53085/",
+			"remix": {
+				"description": "Antarctica",
+				"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/"
+			},
 			"date": "2022-05-02",
 			"sampleRate": 44100,
 			"file": "SthephanShi - End of Ice Age.js",
@@ -354,7 +357,7 @@
 			"description": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'."
 		}, {
 			"description": "Dark Forest ",
-			"url": "https://battleofthebits.org/arena/Entry/Dark+forest/57555/",
+			"url": "https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
 			"date": "2023-01-09",
 			"sampleRate": 44100,
 			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
@@ -362,12 +365,12 @@
 		}]
 	}, {
 		"description": "Small Mouse",
-		"remixed": {
+		"url": "https://dollchan.net/btb/res/204.html#424",
+		"remix": {
 			"description": "ｃｏｏｌ ｖａｐｏｒｗａｖｅ",
-			"author": "Rio zack",
+			"author": "Zackx",
 			"url": "https://dollchan.net/btb/res/204.html#408"
 		},
-		"url": "https://dollchan.net/btb/res/204.html#424",
 		"date": "2023-02-19",
 		"sampleRate": 32000,
 		"codeOriginal": [
@@ -387,6 +390,10 @@
 		}, {
 			"description": "Mouse Festival",
 			"url": "https://www.reddit.com/r/bytebeat/comments/118066a/mouse_festival/",
+			"remix": {
+				"description": "Small Mouse",
+				"url": "https://dollchan.net/btb/res/204.html#424"
+			},
 			"date": "2023-02-21",
 			"sampleRate": 32000,
 			"file": "SthephanShi - Mouse Festival.js",
@@ -396,12 +403,12 @@
 		}]
 	}, {
 		"description": "Voice generator",
-		"remixed": {
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"remix": {
 			"description": "YAY!",
 			"author": "justaboutdead",
 			"url": "http://wavepot.com/"
 		},
-		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
 		"date": "2023-03-10",
 		"children": [{
 			"description": "Low talking robot",
@@ -442,12 +449,12 @@
 			"description": "\"You were engaged in spiritual practices and finally reached nirvana. So, your soul left your body and began to travel in another dimension.\""
 		}, {
 			"description": "Trip to Otherworld",
-			"remixed": {
+			"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
+			"remix": {
 				"description": "please someone remix this",
 				"author": "Decent-Manager-6169",
 				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
 			},
-			"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
 			"date": "2023-03-31",
 			"sampleRate": 32000,
 			"file": "SthephanShi - Trip to Otherworld.js",

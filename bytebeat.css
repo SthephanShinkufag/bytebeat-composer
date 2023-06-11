@@ -261,6 +261,10 @@ button[name="close"] {
 	color: #c2dfff;
 }
 
+.code-buttons-container {
+	display: inline-block;
+}
+
 .code-length, .code-info {
 	color: gray;
 	cursor: default;

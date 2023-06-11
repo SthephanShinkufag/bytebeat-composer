@@ -247,7 +247,7 @@ globalThis.bytebeat = new class {
 	}
 	generateLibraryEntry({
 		author, children, codeMinified, codeOriginal, date, description, file, fileFormatted, fileMinified,
-		fileOriginal, mode, remixed, sampleRate, starred, stereo, url
+		fileOriginal, mode, remix, cover, sampleRate, starred, stereo, url
 	}) {
 		let entry = '';
 		if(description) {
@@ -273,11 +273,23 @@ globalThis.bytebeat = new class {
 		if(url && !description && !author) {
 			entry += `(<a href="${ url }" target="_blank">source</a>)`;
 		}
-		if(remixed) {
-			const { url: rUrl, description: rDescription, author: rAuthor } = remixed;
-			entry += ` (remix of ${ rUrl ? `<a href="${ rUrl }" target="_blank">${
-				rDescription || rAuthor }</a>` : `"${ rDescription }"`
-			}${ rDescription && rAuthor ? ' by ' + rAuthor : '' })`;
+		if(cover) {
+			const { url: cUrl, description: cDescription } = cover;
+			entry += ` (cover of ${ cUrl ?
+				`<a href="${ cUrl }" target="_blank">${ cDescription }</a>` :
+				`"${ cDescription }"`
+			})`;
+		}
+		if(remix) {
+			const arr = [];
+			const remixArr = Array.isArray(remix) ? remix : [remix];
+			for(let i = 0, len = remixArr.length; i < len; ++i) {
+				const { url: rUrl, description: rDescription, author: rAuthor } = remixArr[i];
+				arr.push(`${ rUrl ? `<a href="${ rUrl }" target="_blank">${
+					rDescription || rAuthor }</a>` : `"${ rDescription }"`
+				}${ rDescription && rAuthor ? ' by ' + rAuthor : '' }`);
+			}
+			entry += ` (remix of ${ arr.join(', ') })`;
 		}
 
 		if(date || sampleRate || mode || stereo) {
@@ -295,29 +307,31 @@ globalThis.bytebeat = new class {
 		}
 		const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
 		if(codeMinified) {
-			if(codeOriginal) {
-				entry += ` <span class="code-length" title="Size in characters">${
-					codeMinified.length }c</span><button class="code-button code-toggle"` +
-					' title="Minified version shown. Click to view the original version.">+</button>';
-			}
+			entry += ` <span class="code-length" title="Size in characters">${
+				codeMinified.length }c</span>` + (codeOriginal ? '<button class="code-button code-toggle"' +
+					' title="Minified version shown. Click to view the original version.">+</button>' : '');
 		} else if(codeOriginal) {
 			entry += ` <span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>`;
 		}
 		if(file) {
+			let codeBtn = '';
 			if(fileFormatted) {
-				entry += `<button class="code-button code-load code-load-formatted" data-songdata='${
+				codeBtn += `<button class="code-button code-load code-load-formatted" data-songdata='${
 					songData }' data-code-file="${ file
 				}" title="Click to load and play the formatted code">formatted</button>`;
 			}
 			if(fileOriginal) {
-				entry += `<button class="code-button code-load code-load-original" data-songdata='${
+				codeBtn += `<button class="code-button code-load code-load-original" data-songdata='${
 					songData }' data-code-file="${ file
 				}" title="Click to load and play the original code">original</button>`;
 			}
 			if(fileMinified) {
-				entry += `<button class="code-button code-load code-load-minified" data-songdata='${
+				codeBtn += `<button class="code-button code-load code-load-minified" data-songdata='${
 					songData }' data-code-file="${ file
 				}" title="Click to load and play the minified code">minified</button>`;
+			}
+			if(codeBtn) {
+				entry += `<div class="code-buttons-container">${ codeBtn }</div>`;
 			}
 		}
 		if(codeOriginal) {
@@ -440,7 +454,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023022000');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023041500');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));

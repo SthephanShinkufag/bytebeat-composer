@@ -1,7 +1,7 @@
 /*
  *  == pcm.modshape.wv ==
  *  by argarak
- *  for:: t % 256 compo on battleofthebits.org!
+ *  for:: t % 256 compo on battleofthebits.com!
  */
 
 // two different clocks, one used nearer the end
