@@ -580,6 +580,7 @@ globalThis.bytebeat = new class {
 		}
 		state.add('loaded');
 		const waitElem = headerElem.querySelector('.loading-wait');
+		if(!waitElem) return;
 		waitElem.classList.remove('hidden');
 		const response = await fetch(`./library/${ containerElem.id.replace('library-', '') }.json`,
 			{ cache: 'no-cache' });
