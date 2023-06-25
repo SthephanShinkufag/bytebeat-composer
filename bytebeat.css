@@ -322,7 +322,6 @@ button[name="close"] {
 .library-content {
 	margin: 4px 0;
 	border-right: 1px solid #444;
-	border-bottom: 1px solid #444;
 	border-left: 1px solid #444;
 	border-radius: 3px;
 	background: #0a0a0a;
@@ -571,6 +570,7 @@ button[name="close"] {
 
 	#container-scroll {
 		display: block !important;
+		max-width: initial;
 		height: 100%;
 		margin-top: 0;
 		margin-left: 6px;

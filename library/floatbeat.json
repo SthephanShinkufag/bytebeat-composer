@@ -638,6 +638,15 @@
 			"sampleRate": 48000,
 			"codeOriginal": "t*=44100/48000,s=sin,e=cos,a=([2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32]*t*4),b=([0,2,0,2,0,2,0,3,0][(t>>13)%8]*t*.5),c=PI/128,s(a*c+e(a/4*c)-s(a/4*c))/4-s(b*c+e(b/2*c))/4",
 			"codeMinified": "t*=44100/48E3,a=t*4*[2,2,3,0,2.9,0,3,0,3.5,3.5,3,3,2.9,2.9,3,0,3,0,3,0,2.9,0,3,0,2,2,1.8,1.8,2,2,1,1][(t>>12)%32],b=t/2*'020202030'[(t>>13)%8],p=PI/128,sin(a*p+cos(a/4*p)-sin(a/4*p))/4-sin(b*p+cos(b/2*p))/4"
+		}, {
+			"description": "pill-relaxing.filter",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14dtjx3/pillrelaxingfilter/",
+			"date": "2023-06-20",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "s=x=>sin(x*PI/128),a=t/1.3,h=a>>11&15,u=x=>x>0&&sin(12*cbrt(a*x%8192/x))/2,b=(d1=1*random()-.5,this.d2??=0,d2+=(d1-d2)/8,d2),c=u('1   1     1 1'[15&a>>12]),b=b*(8==h)*(32-(a/64%32))/16,f=x=>.25*-t*2**(x/12),z=f([5,3,8,10][a>>15&3])*(1+(a>>12&1))%256,d=(k=1*random()-.5,this.k2??=0,k2+=(k-k2)/3,k2)*(32-(a/64%32))/33*(6==h),this.l??=0,l+=(z-l)*((32-(a/128%32))*.05*exp(sin(t/50340)*2))/8,this.q??=0,q+=(l-q)*exp(sin(t/61440)*1.5)/10,q/256+.5+c/3+b+d/6",
+			"codeMinified": "s=x=>sin(x*PI/128),a=t/1.3,h=a>>11&15,u=x=>x>0&&sin(12*cbrt(a*x%8192/x))/2,b=(d1=1*random()-.5,this.d2??=0,d2+=(d1-d2)/8,d2),c=u('1   1     1 1'[15&a>>12]),b=b*(h==8)*(32-a/64%32)/16,f=x=>.25*-t*2**(x/12),z=f([5,3,8,10][a>>15&3])*(1+(a>>12&1))%256,d=(k=1*random()-.5,this.k2??=0,k2+=(k-k2)/3,k2)*(32-a/64%32)/33*(h==6),this.l??=0,l+=.05*(z-l)*(32-a/128%32)*exp(2*sin(t/50340))/8,this.q??=0,q+=(l-q)*exp(1.5*sin(t/61440))/10,q/256+.5+c/3+b+d/6",
+			"starred": 1
 		}]
 	}, {
 		"author": "Kouzerumatsu",
@@ -689,5 +698,74 @@
 			"fileOriginal": true,
 			"starred": 2
 		}]
+	}, {
+		"author": "SleepingLugia",
+		"children": [{
+			"description": "floatbeat tolerable claps",
+			"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/",
+			"date": "2023-05-01",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t>0?(T=t/s*4.2,b=c,c=(54613>>T%16)%2*(1-(T*2&1)),c-b>0?A=0:A+=1/s,o=p,p=(T-.02|0)%4>>1,p-o>0?B=0:B+=1/s,k=m(2e3/(1+A*6e2),31),a=(a+k/s)%1,d=8e-3,h=q+q/(1-z),z=.5-.3*(1-1/(1+B*35)),i=random()*2-1,e+=z*(i-e+h*(e-f)),f+=z*(e-f),g+=z*(f-g),j=(f-g)*(B<d?2*v(B,d):B<d*2?.9*v(B-d,d):B<d*3?v(B-d*2,d):v(B-d*3,.11)),x=(T/4.2*32*((T*2&(T>>2))%11%9%7)+0.5)%1-0.5+3*atan(j*2+min(m(1.5*sin(a*PI*2)*exp(-m(A*A*15,0)),-1),1)/2),d=9e-3,r=r*(1-d)+x*x*d,w=w*(1-d)+r*d,y=y*(1-d)+w*d,u=min(m(y,.2),1),u=u>0?sqrt((2-u)*u)/u:1,x*u/4):(a=b=c=e=f=g=o=p=A=0,r=w=y=B=2,q=z=0.5,v=(a,b)=>a/b<1?(n=1-a/b)*n:0,m=max,s=32e3)",
+			"codeMinified": "t>0?(T=t/s*4.2,b=c,c=(54613>>T%16)%2*(1-(2*T&1)),0<c-b?A=0:A+=1/s,o=p,p=(T-.02|0)%4>>1,0<p-o?B=0:B+=1/s,k=m(2E3/(1+600*A),31),a=(a+k/s)%1,d=.008,h=q+q/(1-z),z=.5-.3*(1-1/(1+35*B)),i=2*random()-1,e+=z*(i-e+h*(e-f)),f+=z*(e-f),g+=z*(f-g),j=(f-g)*(B<d?2*v(B,d):B<2*d?.9*v(B-d,d):B<3*d?v(B-2*d,d):v(B-3*d,.11)),x=(T/4.2*32*((2*T&T>>2)%11%9%7)+.5)%1-.5+3*atan(2*j+min(m(1.5*sin(a*PI*2)*exp(-m(A*A*15,0)),-1),1)/2),d=.009,r=r*(1-d)+x*x*d,w=w*(1-d)+r*d,y=y*(1-d)+w*d,u=min(m(y,.2),1),u=0<u?sqrt((2-u)*u)/u:1,x*u/4):(a=b=c=e=f=g=o=p=A=0,r=w=y=B=2,q=z=.5,v=(a,b)=>1>a/b?(n=1-a/b)*n:0,m=max,s=32E3)"
+		}, {
+			"description": "drums moment",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/comment/jiyzpbm/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": {
+				"description": "please someone remix this",
+				"author": "Decent-Manager-6169",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+			},
+			"date": "2023-05-05",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t>0?(T=t/s*5.6,b=c,c=(54613>>T%16)%2*(1-(T*2&1)),c-b>0?A=0:A+=1/s,o=p,p=(T-.02|0)%4>>1,p-o>0?B=0:B+=1/s,k=m(3e3/(1+A*7e2),31),a=(a+k/s)%1,d=9e-3,z=.5-.24*(1-1/(1+B*35)),h=q+q/(1-z),e+=z*(random()*2-1-e+h*(e-f)),f+=z*(e-f),n=(f-g),g+=z*n,h=n*(B<d?2*v(B,d):B<d*2?.9*v(B-d,d):B<d*3?v(B-d*2,d):v(B-d*3,.11)),u=t/s*55*2**([5,5,7,3,5,5,5,3,1,1,3,3,-2,-2,-2,1][15&T/4]/12+((T*2&3)>>1)*((T*2&3)<3)),r=t/s*880*4*2**([8,0,-7,5,0,-7,8,0,-7,5,0,-7,8,0,5,-7,10,0,-7,5,0,-11,10,1,-7,7,3,-2,10,3,-2,7,12,0,-7,8,0,-7,12,0,-7,8,0,-7,12,0,8,-7,12,0,-7,8,0,-7,12,0,10,1,3,7,-2,3,5,7,8,-4,-11,5,-4,-11,8,-4,-7,5,-4,-11,10,-4,5,-7,7,-2,-9,3,-2,-9,7,-2,-9,3,-9,-2,8,7,5,10,12,0,-7,8,0,-7,12,0,-7,8,0,-7,12,0,8,-7,12,0,-7,8,0,-7,12,0,10,1,3,7,-2,3,5,7][T*2&127]/12-4),x=atan((r%1-0.5)/4+(r*1.01%1-0.5)/6+(r*0.99%1-0.5)/6+(u%1>0.5+sin(T)/4)*(1-T%0.5*2)/3+h+min(m(1.5*sin(a*PI*2)*exp(-m(A*A*15,0)),-1),1)/2),x):(a=b=c=e=f=g=o=p=A=0,B=2,q=z=0.5,v=(a,b)=>a/b<1?(n=1-a/b)*n:0,m=max,s=32e3)",
+			"codeMinified": "t>0?(T=t/s*5.6,b=c,c=(54613>>T%16)%2*(1-(2*T&1)),0<c-b?A=0:A+=1/s,o=p,p=(T-.02|0)%4>>1,0<p-o?B=0:B+=1/s,k=m(3E3/(1+700*A),31),a=(a+k/s)%1,d=.009,z=.5-.24*(1-1/(1+35*B)),h=q+q/(1-z),e+=z*(2*random()-1-e+h*(e-f)),f+=z*(e-f),n=f-g,g+=z*n,h=n*(B<d?2*v(B,d):B<2*d?.9*v(B-d,d):B<3*d?v(B-2*d,d):v(B-3*d,.11)),u=t/s*55*2**([5,5,7,3,5,5,5,3,1,1,3,3,-2,-2,-2,1][15&T/4]/12+((2*T&3)>>1)*(3>(2*T&3))),r=t/s*3520*2**([8,0,-7,5,0,-7,8,0,-7,5,0,-7,8,0,5,-7,10,0,-7,5,0,-11,10,1,-7,7,3,-2,10,3,-2,7,12,0,-7,8,0,-7,12,0,-7,8,0,-7,12,0,8,-7,12,0,-7,8,0,-7,12,0,10,1,3,7,-2,3,5,7,8,-4,-11,5,-4,-11,8,-4,-7,5,-4,-11,10,-4,5,-7,7,-2,-9,3,-2,-9,7,-2,-9,3,-9,-2,8,7,5,10,12,0,-7,8,0,-7,12,0,-7,8,0,-7,12,0,8,-7,12,0,-7,8,0,-7,12,0,10,1,3,7,-2,3,5,7][2*T&127]/12-4),x=atan((r%1-.5)/4+(1.01*r%1-.5)/6+(.99*r%1-.5)/6+(u%1>.5+sin(T)/4)*(1-T%.5*2)/3+h+min(m(1.5*sin(a*PI*2)*exp(-m(A*A*15,0)),-1),1)/2),x):(a=b=c=e=f=g=o=p=A=0,B=2,q=z=.5,v=(a,b)=>1>a/b?(n=1-a/b)*n:0,m=max,s=32E3)",
+			"starred": 1
+		}, {
+			"description": "what the Roland TB303 is this???",
+			"url": "https://www.reddit.com/r/bytebeat/comments/13oleln/what_the_roland_tb303_is_this/",
+			"date": "2023-05-22",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t>0?(z=q+q/(1-f),i=(t/s*10)%32,n=2**(('01100001100001100110001001001001'[i|0]*12+5)/12),n=0.5-(n*t/s*55%1),k=e,e='10100010100010100010100010100010'[i*2%32|0],v(1/s,.05,.5,.2),f=h(m*(cos(t/s/32*5*p+p)/3+.4),.01),a+=f*(n-a+z*(a-b)),b+=f*(a-b),c+=f*(b-c),d+=f*(c-d),atan(d*p)/p):(s=32e3,L=2**32,q=0.95,p=PI,a=b=c=d=e=f=l=m=x=A=B=0,w=(n,r)=>(x=r,l=1/n/s),v=(i,j,r,z)=>(e-k>0?(w(i,0),m=0):x<1&(m>=1)?w(-j,1):x%3>0&m<r?(w(L,2),m=r):e-k<0?w(-z,3):m=h(m+l,0)),h=(f,r)=>(min(max(f,r),1-r)))",
+			"codeMinified": "t>0?(z=q+q/(1-f),i=t/s*10%32,n=2**((12*'01100001100001100110001001001001'[i|0]+5)/12),n=.5-n*t/s*55%1,k=e,e='10100010100010100010100010100010'[2*i%32|0],v(1/s,.05,.5,.2),f=h(m*(cos(t/s/32*5*p+p)/3+.4),.01),a+=f*(n-a+z*(a-b)),b+=f*(a-b),c+=f*(b-c),d+=f*(c-d),atan(d*p)/p):(s=32E3,L=2**32,q=.95,p=PI,a=b=c=d=e=f=l=m=x=A=B=0,w=(n,r)=>(x=r,l=1/n/s),v=(i,j,r,z)=>(0<e-k?(w(i,0),m=0):1>x&1<=m?w(-j,1):0<x%3&m<r?(w(L,2),m=r):0>e-k?w(-z,3):m=h(m+l,0)),h=(f,r)=>min(max(f,r),1-r))",
+			"starred": 1
+		}]
+	}, {
+		"description": "Roland TB303 with clap",
+		"author": "Greaserpirate",
+		"url": "https://www.reddit.com/r/bytebeat/comments/13oleln/comment/jlqh5pu/?utm_source=reddit&utm_medium=web2x&context=3",
+		"remix": [{
+			"description": "floatbeat tolerable claps",
+			"author": "SleepingLugia",
+			"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
+		}, {
+			"description": "what the Roland TB303 is this???",
+			"author": "SleepingLugia",
+			"url": "https://www.reddit.com/r/bytebeat/comments/120dt3g/crave/"
+		}],
+		"date": "2023-05-26",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"file": "Greaserpirate - Roland TB303 with clap.js",
+		"fileMinified": true,
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"description": "Another weird waveform I made",
+		"author": "WilliamP692Backup",
+		"url": "https://www.reddit.com/r/bytebeat/comments/14d0cv9/another_weird_waveform_i_made/",
+		"date": "2023-06-19",
+		"mode": "Floatbeat",
+		"sampleRate": 16000,
+		"codeOriginal": "a=t*(t>>14&3|t>>11&7|t>>16&5|t>>14&9)*PI/128,sin(sin(a)+sin(a/1.5)+sin(a/3))/8+expm1(sin(a/2))/8+sinh(sin(a/4))/8+cosh(cos(a))/6+sin(PI-a/2)/8"
+	}, {
+		"description": "floatbeat rhythm",
+		"author": "psubscirbe",
+		"url": "https://www.reddit.com/r/bytebeat/comments/14e9a5u/floatbeat_rhythm/",
+		"date": "2023-06-20",
+		"mode": "Floatbeat",
+		"codeOriginal": "sin(sqrt(t*(t&4096?random():[1,1,1.2,1.5,1,1,1.2,1.1][t>>14&7])&63)*4)/((t>>(t&8192?t&16384?2:3:4)&255)*.1)"
 	}
 ]

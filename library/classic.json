@@ -995,14 +995,23 @@
 		"codeMinified": "(t>>1)*(1<<(t>>16&3))*(0x1fccccf1>>(t>>10)*(t>>11)&7)|t>>3|128-((t&4095)>>8?0:t*(t^t%9)&63|t>>2)",
 		"starred": 1
 	}, {
-		"description": "badbeats and safe square edition",
 		"author": "psubscirbe",
-		"url": "https://dollchan.net/btb/res/284.html#332",
-		"date": "2023-01-13",
-		"sampleRate": 44100,
-		"codeOriginal": "t*((0xbadbea75>>((t>>12)&30)&3)*0.25*(0x5afe5>>((t>>16)&28)&3))&128",
-		"codeMinified": "t/4*(0xbadbea75>>(t>>12&30)&3)*(0x5afe5>>(t>>16&28)&3)&128",
-		"starred": 1
+		"children": [{
+			"description": "badbeats and safe square edition",
+			"url": "https://dollchan.net/btb/res/284.html#332",
+			"date": "2023-01-13",
+			"sampleRate": 44100,
+			"codeOriginal": "t*((0xbadbea75>>((t>>12)&30)&3)*0.25*(0x5afe5>>((t>>16)&28)&3))&128",
+			"codeMinified": "t/4*(0xbadbea75>>(t>>12&30)&3)*(0x5afe5>>(t>>16&28)&3)&128",
+			"starred": 1
+		}, {
+			"description": "hydrogen fucker",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14do1q3/hydrogen_fucker/",
+			"date": "2023-06-19",
+			"codeOriginal": "((t/2/(4+(t>>13&3))*128)|t>>(t>>12&15))+4e5/(t&4095)|t>>4",
+			"codeMinified": "(t/2/(4+(t>>13&3))*128|t>>(t>>12&15))+4E5/(t&4095)|t>>4"
+		}]
+
 	}, {
 		"description": "WhiskedAwayToPomerania",
 		"author": "wyngwyrm",
@@ -1025,20 +1034,28 @@
 		"sampleRate": 32000,
 		"codeOriginal": "t>>t/(4+(t>>15)%16)*(1+(3&t>>13))>>(2&t>>11)"
 	}, {
-		"description": "combination bassline + isislovecruft",
 		"author": "Zackx",
-		"url": "https://dollchan.net/btb/res/204.html#450",
-		"remix": [{
-			"description": "Bassline #countercomplex",
-			"author": "tejeez",
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+		"children": [{
+			"description": "combination bassline + isislovecruft",
+			"url": "https://dollchan.net/btb/res/204.html#450",
+			"remix": [{
+				"description": "Bassline #countercomplex",
+				"author": "tejeez",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			}, {
+				"author": "isislovecruft",
+				"url": "https://www.noisebridge.net/wiki/Bytebeat"
+			}],
+			"date": "2023-02-23",
+			"codeOriginal": "((-t>>2&255)*((127&t*(7&t>>10))<(245&t*(2+(5&t>>14))))%256+(-t>>2&255)*(2+(42&2*t*(7&t>>10))<(24&t*((3&t>>14)+2)))%256)/2",
+			"starred": 1
 		}, {
-			"author": "isislovecruft",
-			"url": "https://www.noisebridge.net/wiki/Bytebeat"
-		}],
-		"date": "2023-02-23",
-		"codeOriginal": "((-t>>2&255)*((127&t*(7&t>>10))<(245&t*(2+(5&t>>14))))%256+(-t>>2&255)*(2+(42&2*t*(7&t>>10))<(24&t*((3&t>>14)+2)))%256)/2",
-		"starred": 1
+			"description": "simply XOR C code",
+			"url": "https://dollchan.net/btb/res/204.html#850",
+			"date": "2023-04-17",
+			"sampleRate": 48000,
+			"codeOriginal": "t^t>>(t>>14&15)"
+		}]
 	}, {
 		"description": "Space Status VS Pong",
 		"author": "Glebguything",
