@@ -8,9 +8,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/"/>
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2023041500">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2023041500">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2023041500"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2023062600">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2023062600">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2023062600"></script>
 </head>
 <body>
 	<main id="content">
@@ -21,7 +21,7 @@
 			<div class="controls">
 				<div class="controls-group controls-grow">
 					<button id="control-counter-units" class="control-button" title="Time units">t</button>
-					<input type="text" id="control-counter" value="0" title="Set time to jump along the timeline then press Enter">
+					<input type="text" id="control-counter" class="control-text" value="0" title="Set time to jump along the timeline then press Enter">
 				</div>
 				<div class="controls-group">
 					<button id="control-stop" class="control-button" title="Stop and reset">
@@ -64,7 +64,7 @@
 					<option value="Floatbeat">Floatbeat</option>
 				</select>
 				<div class="controls-group controls-grow">
-					<input type="text" id="control-samplerate" title="Set sample rate (in Hz) then press Enter">
+					<input type="text" id="control-samplerate" class="control-text" title="Set sample rate (in Hz) then press Enter">
 					<select id="control-samplerate-select" class="control-select" title="Sample rate">
 						<option value="8000">8000Hz</option>
 						<option value="11025">11025Hz</option>
@@ -85,7 +85,7 @@
 					<button id="control-expand" class="control-button" title="Expand the code editor">
 						<svg><use xlink:href="#symbol-expand"></use></svg>
 					</button>
-					<span id="control-codesize" title="Code size in characters"></span>
+					<span id="control-codesize" class="control-text" title="Code size in characters"></span>
 				</div>
 				<div class="controls-group controls-grow">
 					<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume">
@@ -106,7 +106,7 @@
 				<summary class="library-header">
 					<h1>Info &mdash; about bytebeat</h1>
 				</summary>
-				<article id="info" class="library-container entry-top">
+				<article id="info" class="library-container entry-top loaded">
 					Bytebeat music (or one-liner music) was invented in September 2011.
 					They're generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
 					It's simply a single-line formula that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
@@ -162,6 +162,22 @@
 					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"/></svg>
 				</summary>
 				<div id="library-sthephanshi" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>Settings</h1>
+				</summary>
+				<article id="settings" class="library-container entry-top loaded">
+					<label class="settings-block">
+						<select id="control-theme-style" class="control-select" title="Player style">
+							<option value="Default" selected>Default</option>
+							<option value="Blue">Blue</option>
+							<option value="Green">Green</option>
+							<option value="Purple">Purple</option>
+						</select>
+						<b>Theme style</b>
+					</label>
+				</article>
 			</details>
 			<footer>
 				<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank">&gt;&gt; Discussion threads</a><br>
