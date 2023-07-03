@@ -39,8 +39,8 @@
 			"starred": 2
 		}]
 	}, {
-		"description": "my headache generator",
 		"author": "frantic",
+		"description": "my headache generator",
 		"url": "https://battleofthebits.com/arena/Entry/my+headache+generator/17548/",
 		"date": "2015-04-16",
 		"sampleRate": 44100,
@@ -327,8 +327,8 @@
 			"fileOriginal": true
 		}]
 	}, {
-		"description": "happybeat",
 		"author": "Yung Gotenks",
+		"description": "happybeat",
 		"url": "https://battleofthebits.com/arena/Entry/happybeat/31161/",
 		"date": "2019-03-11",
 		"sampleRate": 44100,
@@ -337,8 +337,8 @@
 		"fileOriginal": true,
 		"starred": 1
 	}, {
-		"description": "Takitjää",
 		"author": "Lia",
+		"description": "Takitjää",
 		"url": "https://battleofthebits.com/arena/Entry/Takitj%C3%A4%C3%A4/31188/",
 		"date": "2019-03-14",
 		"sampleRate": 44100,
@@ -347,8 +347,8 @@
 		"fileMinified": true,
 		"fileOriginal": true
 	}, {
-		"description": "War Tradition",
 		"author": "petet",
+		"description": "War Tradition",
 		"url": "https://battleofthebits.com/arena/Entry/War+Tradition/31413/",
 		"date": "2019-04-13",
 		"sampleRate": 32000,
@@ -357,8 +357,8 @@
 		"fileMinified": true,
 		"fileOriginal": true
 	}, {
-		"description": "Sunset",
 		"author": "InfinitySnapz",
+		"description": "Sunset",
 		"url": "https://www.reddit.com/r/bytebeat/comments/bxmsl7/sunset/",
 		"date": "2019-06-07",
 		"sampleRate": 44100,
@@ -402,8 +402,8 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "A NΞW DIMΞNSION",
 		"author": "burlynn n01se",
+		"description": "A NΞW DIMΞNSION",
 		"url": "https://battleofthebits.com/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
 		"date": "2021-01-19",
 		"sampleRate": 22050,
@@ -413,8 +413,8 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
-		"description": "__ws2.model",
 		"author": "beep-eep",
+		"description": "__ws2.model",
 		"url": "https://battleofthebits.com/arena/Entry/__ws2.model/43638/",
 		"date": "2021-02-13",
 		"sampleRate": 44100,
@@ -424,21 +424,31 @@
 		"fileOriginal": true,
 		"starred": 1
 	}, {
-		"description": "getting better at this stuff",
 		"author": "Baron Knoxburry",
-		"url": "https://battleofthebits.com/arena/Entry/getting+better+at+this+stuff/46490/",
-		"date": "2021-05-30",
-		"sampleRate": 44100,
-		"file": "Baron Knoxburry - getting better at this stuff.js",
-		"fileFormatted": true,
-		"fileOriginal": true
+		"children": [{
+			"description": "getting better at this stuff",
+			"url": "https://battleofthebits.com/arena/Entry/getting+better+at+this+stuff/46490/",
+			"date": "2021-05-30",
+			"sampleRate": 44100,
+			"file": "Baron Knoxburry - getting better at this stuff.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}, {
+			"description": "inside the cornputer",
+			"url": "https://battleofthebits.com/arena/Entry/inside+the+cornputer/60413/",
+			"date": "2021-05-31",
+			"sampleRate": 44100,
+			"file": "Baron Knoxburry - inside the cornputer.js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}]
 	}, {
-		"description": "511",
 		"author": "johanvandegriff",
+		"description": "511",
 		"url": "https://www.reddit.com/r/bytebeat/comments/o7e957/511/",
 		"remix": {
-			"description": "arpeggiator fun",
 			"author": "SArpnt",
+			"description": "arpeggiator fun",
 			"url": "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/"
 		},
 		"date": "2021-06-25",
@@ -489,8 +499,8 @@
 			"fileOriginal": true
 		}]
 	}, {
-		"description": "cool loop i guess",
 		"author": "RealZynx92",
+		"description": "cool loop i guess",
 		"url": "https://www.reddit.com/r/bytebeat/comments/q1tesu/cool_loop_i_guess/",
 		"date": "2021-10-05",
 		"sampleRate": 44100,
@@ -600,8 +610,8 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "ByteSongg",
 		"author": "Danidanijr",
+		"description": "ByteSongg",
 		"url": "https://www.reddit.com/r/bytebeat/comments/rfsu6p/bytesongg_by_danidanijr_44100_hz/",
 		"date": "2021-12-14",
 		"sampleRate": 44100,
@@ -692,8 +702,8 @@
 			"description": "TIRO Remixed#6 remastered",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/comment/i4r8fis/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
-				"description": "better remix of \"The time is running out!\"",
 				"author": "RealZynx92",
+				"description": "better remix of \"The time is running out!\"",
 				"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/better_remix_of_the_time_is_running_out_by/"
 			},
 			"date": "2022-04-15",
@@ -706,8 +716,8 @@
 			"description": "simple step sequencer remix #2",
 			"url": "https://dollchan.net/btb/res/3.html#161",
 			"remix": {
-				"description": "simple step sequencer remix",
 				"author": "PortablePorcelain",
+				"description": "simple step sequencer remix",
 				"url": "https://dollchan.net/btb/res/55.html#155"
 			},
 			"date": "2022-08-25",
@@ -733,8 +743,8 @@
 			"description": "Reminisce",
 			"url": "https://www.reddit.com/r/bytebeat/comments/x39ll8/reminisce/",
 			"remix": {
-				"description": "\"Something New\" using functions",
 				"author": "maj-6",
+				"description": "\"Something New\" using functions",
 				"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157167"
 			},
 			"date": "2022-08-31",
@@ -745,17 +755,43 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "PCM Synthesis",
 		"author": "PortablePorcelain",
-		"url": "https://dollchan.net/btb/res/55.html#82",
-		"date": "2022-06-28",
-		"mode": "Signed Bytebeat",
-		"sampleRate": 17000,
-		"file": "PortablePorcelain - PCM Synthesis.js",
-		"fileOriginal": true
+		"children": [{
+			"description": "PCM Synthesis",
+			"url": "https://dollchan.net/btb/res/55.html#82",
+			"date": "2022-06-28",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 17000,
+			"file": "PortablePorcelain - PCM Synthesis.js",
+			"fileOriginal": true
+		}, {
+			"description": "Poorly made Ryukenden",
+			"url": "https://www.reddit.com/r/bytebeat/comments/13a4k2i/poorly_made_ryukenden/",
+			"cover": {
+				"description": "t-PORT - Shuric Scan",
+				"url": "https://youtu.be/VnQoSjYLPFw"
+			},
+			"date": "2023-05-07",
+			"sampleRate": 22050,
+			"file": "PortablePorcelain - Poorly made Ryukenden.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "tracker test",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14e5bl0/tracker_test/",
+			"cover": {
+				"description": "Zombie Nation - Kernkraft 400",
+				"url": "https://youtu.be/z5LW07FTJbI"
+			},
+			"date": "2023-06-20",
+			"file": "PortablePorcelain - tracker test.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}, {
-		"description": "I Wanna Byte You",
 		"author": "kleeder",
+		"description": "I Wanna Byte You",
 		"url": "https://battleofthebits.com/arena/Entry/I+Wanna+Byte+You+_1/54543/",
 		"date": "2022-07-23",
 		"sampleRate": 11025,
@@ -794,8 +830,8 @@
 			"description": "the midi to bytebeat tool",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11s10f8/a_demonstration_of_my_latest_invention_yet_the/",
 			"remix": {
-				"description": "now its FM synth",
 				"author": "Bp103",
+				"description": "now its FM synth",
 				"url": "https://twitter.com/Bp103/status/1345905059964530688"
 			},
 			"date": "2023-3-15",
@@ -881,7 +917,30 @@
 			"file": "Greaserpirate - Step sequencer with interpolation.js",
 			"fileFormatted": true,
 			"fileOriginal": true
+		}, {
+			"description": "quick remix using my usual tech",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/comment/jei1fir/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"description": "please someone remix this",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+			},
+			"date": "2023-04-01",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "Greaserpirate - quick remix using my usual tech.js",
+			"fileOriginal": true
 		}]
+	}, {
+		"author": "Blast Brothers",
+		"description": "Sepulchre",
+		"url": "https://battleofthebits.com/arena/Entry/Sepulchre/57663/",
+		"date": "2023-01-17",
+		"sampleRate": 48000,
+		"file": "Blast Brothers - Sepulchre.js",
+		"fileMinifiedfileMinified": true,
+		"fileOriginal": true,
+		"starred": 2
 	}, {
 		"author": "May_I_Change_My_Name",
 		"description": "0xBADA441E",
@@ -945,6 +1004,16 @@
 		"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
 		"date": "2023-03-10",
 		"file": "Chasyxx - Game Boy's noise.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"fileOriginal": true
+	}, {
+		"author": "hrllobrothers4",
+		"description": "Explaining and using tools for beginners",
+		"url": "https://www.reddit.com/r/bytebeat/comments/14dl95n/explaining_and_using_tools_for_beginners/",
+		"date": "2023-06-19",
+		"sampleRate": 32000,
+		"file": "hrllobrothers4 - Explaining and using tools for beginners.js",
 		"fileFormatted": true,
 		"fileMinified": true,
 		"fileOriginal": true
