@@ -194,8 +194,8 @@
 			"codeMinified": "t/=8E3,sin(55*t*(2**(1/12))**('a\u0001a\u0001h\u0001h\u0001j\u0001j\u0001hh\u0001\u0001f\u0001f\u0001e\u0001e\u0001c\u0001c\u0001aa\u0001\u0001'.charCodeAt((4*t|0)%32)-23))/5+sin(55*t*(2**(1/12))**('a\u0001a\u0001hthhjej\u0001het\u0001rrr\u0001qqq\u0001o\u0001o\u0001qma\u0001'.charCodeAt((4*t|0)%32)-47)/2)/4"
 		}]
 	}, {
-		"description": "new waveform, or this is a sinusoidal abuse?",
 		"author": "kOLbOSa_exe",
+		"description": "new waveform, or this is a sinusoidal abuse?",
 		"url": "https://dollchan.net/btb/res/27.html#27",
 		"date": "2022-01-14",
 		"mode": "Floatbeat",
@@ -207,8 +207,8 @@
 			"description": "remix of ripthisentry.txt tune 3",
 			"url": "https://www.reddit.com/r/bytebeat/comments/tvnthr/creepy_droning_static_thing/",
 			"remix": {
-				"description": "ripthisentry.txt, tune#3",
 				"author": "raphaelgoulart",
+				"description": "ripthisentry.txt, tune#3",
 				"url": "https://battleofthebits.com/arena/Entry/ripthisentry.txt/32559/"
 			},
 			"date": "2022-04-04",
@@ -220,8 +220,8 @@
 			"description": "foldableboldface",
 			"url": "https://dollchan.net/btb/res/55.html#194",
 			"remix": {
-				"description": "Vé",
 				"author": "lhphr",
+				"description": "Vé",
 				"url": "https://dollchan.net/btb/res/44.html#88"
 			},
 			"date": "2022-09-09",
@@ -246,8 +246,8 @@
 			"description": "remix of no limit with ambience",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11ie4ws/remix_of_no_limit_with_ambience/",
 			"remix": {
-				"description": "No Limit",
 				"author": "ryg",
+				"description": "No Limit",
 				"url": "https://www.pouet.net/topic.php?which=8357&page=10#c388986"
 			},
 			"date": "2023-03-04",
@@ -359,8 +359,8 @@
 			"description": "Sinusoid Pusher",
 			"url": "https://dollchan.net/btb/res/44.html#88",
 			"remix": {
-				"description": "Crude Sinewave Dubstep",
 				"author": "Gabriel Miceli",
+				"description": "Crude Sinewave Dubstep",
 				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
 			},
 			"date": "2022-05-28",
@@ -424,6 +424,10 @@
 		}, {
 			"description": "42-qz",
 			"url": "https://dollchan.net/btb/res/44.html#367",
+			"remix": {
+				"description": "the 42 melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
 			"date": "2022-10-09",
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
@@ -458,10 +462,23 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"children": [{
+				"description": "After gliding through the vast space, you have reached the proximity of Saturn. Looking up, you see an eclipse unlike any other..."
+			}, {
+				"description": "Beyond Saturn's Rings",
+				"url": "https://dollchan.net/btb/res/44.html#837",
+				"date": "2023-04-12",
+				"mode": "Floatbeat",
+				"sampleRate": 44100,
+				"file": "lhphr - Beyond Saturn's Rings.js",
+				"fileOriginal": true
+			}],
+			"starred": 2
 		}]
 	}, {
-		"description": "sparta remix is stuck in my head now",
 		"author": "baenhohoho",
+		"description": "sparta remix is stuck in my head now",
 		"url": "https://www.reddit.com/r/bytebeat/comments/w3g7iz/sparta_remix_is_stuck_in_my_head_now/",
 		"cover": {
 			"description": "Keaton Monger - This is Sparta! Last techno remix",
@@ -589,8 +606,8 @@
 			"description": "FM Running man",
 			"url": "https://dollchan.net/btb/res/163.html#373",
 			"remix": {
-				"description": "Running man",
 				"author": "viznut",
+				"description": "Running man",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930"
 			},
 			"date": "2023-01-22",
@@ -629,8 +646,8 @@
 			"description": "FM Ctrl+V",
 			"url": "https://dollchan.net/btb/res/163.html#486",
 			"remix": {
-				"description": "Ctrl+V",
 				"author": "getDolphinedLol",
+				"description": "Ctrl+V",
 				"url": "https://www.reddit.com/r/bytebeat/comments/s0ytc9/ctrlv/"
 			},
 			"date": "2023-02-27",
@@ -663,12 +680,12 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
-		"description": "Super dubstep thingy",
 		"author": "hrllobrothers4",
+		"description": "Super dubstep thingy",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11pohr2/super_dubstep_thingy/",
 		"remix": {
-			"description": "dubstep_thingy",
 			"author": "RealZynx92",
+			"description": "dubstep_thingy",
 			"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/"
 		},
 		"date": "2023-03-12",
@@ -712,8 +729,8 @@
 			"description": "drums moment",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/comment/jiyzpbm/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
-				"description": "please someone remix this",
 				"author": "Decent-Manager-6169",
+				"description": "please someone remix this",
 				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
 			},
 			"date": "2023-05-05",
@@ -733,16 +750,16 @@
 			"starred": 1
 		}]
 	}, {
-		"description": "Roland TB303 with clap",
 		"author": "Greaserpirate",
+		"description": "Roland TB303 with clap",
 		"url": "https://www.reddit.com/r/bytebeat/comments/13oleln/comment/jlqh5pu/?utm_source=reddit&utm_medium=web2x&context=3",
 		"remix": [{
-			"description": "floatbeat tolerable claps",
 			"author": "SleepingLugia",
+			"description": "floatbeat tolerable claps",
 			"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
 		}, {
-			"description": "what the Roland TB303 is this???",
 			"author": "SleepingLugia",
+			"description": "what the Roland TB303 is this???",
 			"url": "https://www.reddit.com/r/bytebeat/comments/120dt3g/crave/"
 		}],
 		"date": "2023-05-26",
@@ -753,16 +770,16 @@
 		"fileOriginal": true,
 		"starred": 1
 	}, {
-		"description": "Another weird waveform I made",
 		"author": "WilliamP692Backup",
+		"description": "Another weird waveform I made",
 		"url": "https://www.reddit.com/r/bytebeat/comments/14d0cv9/another_weird_waveform_i_made/",
 		"date": "2023-06-19",
 		"mode": "Floatbeat",
 		"sampleRate": 16000,
 		"codeOriginal": "a=t*(t>>14&3|t>>11&7|t>>16&5|t>>14&9)*PI/128,sin(sin(a)+sin(a/1.5)+sin(a/3))/8+expm1(sin(a/2))/8+sinh(sin(a/4))/8+cosh(cos(a))/6+sin(PI-a/2)/8"
 	}, {
-		"description": "floatbeat rhythm",
 		"author": "psubscirbe",
+		"description": "floatbeat rhythm",
 		"url": "https://www.reddit.com/r/bytebeat/comments/14e9a5u/floatbeat_rhythm/",
 		"date": "2023-06-20",
 		"mode": "Floatbeat",

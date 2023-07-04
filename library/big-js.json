@@ -206,6 +206,14 @@
 			"fileFormatted": true,
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"description": "signal stack α",
+			"url": "https://battleofthebits.com/arena/Entry/signal+stack+%CE%B1/59054/",
+			"date": "2023-02-26",
+			"sampleRate": 44100,
+			"file": "funute - signal stack α.js",
+			"fileFormatted": true,
+			"fileOriginal": true
 		}]
 	}, {
 		"author": "pigdevil2010",
@@ -328,14 +336,25 @@
 		}]
 	}, {
 		"author": "Yung Gotenks",
-		"description": "happybeat",
-		"url": "https://battleofthebits.com/arena/Entry/happybeat/31161/",
-		"date": "2019-03-11",
-		"sampleRate": 44100,
-		"file": "Yung Gotenks - happybeat.js",
-		"fileFormatted": true,
-		"fileOriginal": true,
-		"starred": 1
+		"children": [{
+			"description": "happybeat",
+			"url": "https://battleofthebits.com/arena/Entry/happybeat/31161/",
+			"date": "2019-03-11",
+			"sampleRate": 44100,
+			"file": "Yung Gotenks - happybeat.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "the bit shuffle",
+			"url": "https://battleofthebits.com/arena/Entry/the+bit+shuffle/60367/",
+			"date": "2023-05-28",
+			"sampleRate": 11025,
+			"file": "Yung Gotenks - the bit shuffle.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}]
 	}, {
 		"author": "Lia",
 		"description": "Takitjää",
@@ -806,7 +825,8 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
 			"date": "2022-10-24",
 			"file": "awogler9124812041 - bitcrushed amen break.js",
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}, {
 			"description": "bitcrushed amen break (44100hz version)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
@@ -929,7 +949,8 @@
 			"sampleRate": 48000,
 			"stereo": true,
 			"file": "Greaserpirate - quick remix using my usual tech.js",
-			"fileOriginal": true
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "Blast Brothers",
@@ -1007,6 +1028,15 @@
 		"fileFormatted": true,
 		"fileMinified": true,
 		"fileOriginal": true
+	}, {
+		"description": "Pixel Rainfall",
+		"author": ["kleeder", "damifortune"],
+		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
+		"date": "2023-05-18",
+		"sampleRate": 44100,
+		"file": "kleeder, damifortune - Pixel Rainfall.js",
+		"fileOriginal": true,
+		"starred": 2
 	}, {
 		"author": "hrllobrothers4",
 		"description": "Explaining and using tools for beginners",

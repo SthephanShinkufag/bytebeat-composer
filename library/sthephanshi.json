@@ -45,8 +45,8 @@
 	}, {
 		"description": "\"Child swings\". Cool happy tune!",
 		"remix": {
-			"description": "1) THE SWINGS",
 			"author": "Anonymous from russian imageboards",
+			"description": "1) THE SWINGS",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
 		},
 		"codeOriginal": "t>>9&2*t&10*t|t>>5&6*t",
@@ -54,8 +54,8 @@
 	}, {
 		"description": "\"Cat-girl\". Nya!",
 		"remix": {
-			"description": "4) CAT-GIRL",
 			"author": "Anonymous from russian imageboards",
+			"description": "4) CAT-GIRL",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
 		},
 		"codeOriginal": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
@@ -64,8 +64,8 @@
 	}, {
 		"description": "\"Trance beat\". Experiments with t>>N and ternary operations",
 		"remix": {
-			"description": "11) THE HIT OF THE SEASON",
 			"author": "Anonymous from russian imageboards",
+			"description": "11) THE HIT OF THE SEASON",
 			"url": "http://abload.de/img/1405110021643uguil.jpg"
 		},
 		"children": [{
@@ -247,8 +247,8 @@
 			"description": "Remix of RealZynx92's remix",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
-				"description": "remix of \"The time is running out!\"",
 				"author": "RealZynx92",
+				"description": "remix of \"The time is running out!\"",
 				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/"
 			},
 			"date": "2021-10-25",
@@ -367,8 +367,8 @@
 		"description": "Small Mouse",
 		"url": "https://dollchan.net/btb/res/204.html#424",
 		"remix": {
-			"description": "ｃｏｏｌ ｖａｐｏｒｗａｖｅ",
 			"author": "Zackx",
+			"description": "ｃｏｏｌ ｖａｐｏｒｗａｖｅ",
 			"url": "https://dollchan.net/btb/res/204.html#408"
 		},
 		"date": "2023-02-19",
@@ -405,8 +405,8 @@
 		"description": "Voice generator",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
 		"remix": {
-			"description": "YAY!",
 			"author": "justaboutdead",
+			"description": "YAY!",
 			"url": "http://wavepot.com/"
 		},
 		"date": "2023-03-10",
@@ -451,8 +451,8 @@
 			"description": "Trip to Otherworld",
 			"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
 			"remix": {
-				"description": "please someone remix this",
 				"author": "Decent-Manager-6169",
+				"description": "please someone remix this",
 				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
 			},
 			"date": "2023-03-31",
