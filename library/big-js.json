@@ -616,6 +616,19 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
+			"description": "bad minibake recreation using triangle",
+			"url": "https://dollchan.net/btb/res/520.html#575",
+			"cover": {
+				"description": "SArpnt - minibake",
+				"url": "https://www.reddit.com/r/bytebeat/comments/rcykm8/minibake/"
+			},
+			"date": "2023-03-10",
+			"sampleRate": 44100,
+			"file": "Decent-Manager-6169 - bad minibake recreation using triangle.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
 			"description": "Unfinished Cocktail Hour",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11x28i5/heres_an_unfinished_cocktail_hour_that_i_havent/",
 			"cover": {

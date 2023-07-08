@@ -344,6 +344,22 @@
 			"file": "PortablePorcelain - музика від україна.js",
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"description": "Arpeggiator Fun 2",
+			"url": "https://dollchan.net/btb/res/55.html#1056",
+			"remix": {
+				"author": "johanvandegriff",
+				"description": "511",
+				"url": "https://www.reddit.com/r/bytebeat/comments/o7e957/511/"
+			},
+			"date": "2023-04-09",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "PortablePorcelain - Arpeggiator Fun 2.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "lhphr",
@@ -680,22 +696,22 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
-		"author": "hrllobrothers4",
-		"description": "Super dubstep thingy",
-		"url": "https://www.reddit.com/r/bytebeat/comments/11pohr2/super_dubstep_thingy/",
-		"remix": {
-			"author": "RealZynx92",
-			"description": "dubstep_thingy",
-			"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/"
-		},
-		"date": "2023-03-12",
-		"mode": "Floatbeat",
-		"sampleRate": 44100,
-		"codeOriginal": "a=t*(t&t>>12)/(t&16384?10:1e4),sin(a/20.5)*((a>>5)%.7)+sin(log(t&16383)*50)/2+random()*(-t&8E3)/8E3+(sin(3E4/(t/16*2&4095))*.3)-0.5",
-		"codeMinified": "a=t*(t&t>>12)/(t&16384?10:1E4),sin(a/20.5)*((a>>5)%.7)+sin(50*log(t&16383))/2+random()*(-t&8E3)/8E3+.3*sin(3E4/(t/16*2&4095))-.5"
-	}, {
 		"author": "Decent-Manager-6169",
 		"children": [{
+			"description": "almost forgot",
+			"url": "https://dollchan.net/btb/res/520.html#531",
+			"remix": {
+				"author": "PortablePorcelain",
+				"description": "foldableboldface",
+				"url": "https://dollchan.net/btb/res/55.html#194"
+			},
+			"date": "2023-03-06",
+			"mode": "Floatbeat",
+			"sampleRate": 128000,
+			"codeOriginal": "l=0,t?0:a=Array(n=30000).fill(0),f=(z,v)=>sin(l++<z?f(z,v)-v:(l=0,v)),x=a.shift(),t/=16+sin(t/172663)/16,f=q=>(a.push(q/3-a[n/2|0]/2+a[n/4|0]/3),x),f(t/[32,49,63,24][t>>16&3]*1024%256/+333+sin(2.03**(-t/1e3%32+8)))-.2",
+			"codeMinified": "l=0,t?0:a=Array(n=3E4).fill(0),f=(z,v)=>sin(l++<z?f(z,v)-v:(l=0,v)),x=a.shift(),t/=16+sin(t/172663)/16,f=q=>(a.push(q/3-a[n/2|0]/2+a[n/4|0]/3),x),f(t/[32,49,63,24][t>>16&3]*1024%256/333+sin(2.03**(-t/1E3%32+8)))-.2",
+			"starred": 1
+		}, {
 			"description": "Grains of Sand Preview",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11q8gun/grains_of_sand_preview/",
 			"date": "2023-03-13",
@@ -715,6 +731,20 @@
 			"fileOriginal": true,
 			"starred": 2
 		}]
+	}, {
+		"author": "hrllobrothers4",
+		"description": "Super dubstep thingy",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11pohr2/super_dubstep_thingy/",
+		"remix": {
+			"author": "RealZynx92",
+			"description": "dubstep_thingy",
+			"url": "https://www.reddit.com/r/bytebeat/comments/q5oh91/dubstep_thingy/"
+		},
+		"date": "2023-03-12",
+		"mode": "Floatbeat",
+		"sampleRate": 44100,
+		"codeOriginal": "a=t*(t&t>>12)/(t&16384?10:1e4),sin(a/20.5)*((a>>5)%.7)+sin(log(t&16383)*50)/2+random()*(-t&8E3)/8E3+(sin(3E4/(t/16*2&4095))*.3)-0.5",
+		"codeMinified": "a=t*(t&t>>12)/(t&16384?10:1E4),sin(a/20.5)*((a>>5)%.7)+sin(50*log(t&16383))/2+random()*(-t&8E3)/8E3+.3*sin(3E4/(t/16*2&4095))-.5"
 	}, {
 		"author": "SleepingLugia",
 		"children": [{
