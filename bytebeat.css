@@ -635,6 +635,13 @@ button[name="close"] {
 	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }
 
+#control-scale {
+	min-width: 26px;
+	padding: 0 2px;
+	text-align: center;
+	letter-spacing: -1px;
+}
+
 .control-select {
 	padding-left: 2px;
 	border: none;
@@ -732,6 +739,9 @@ button[name="close"] {
 @media screen and (max-width: 768px) {
 	#container-fixed, #container-scroll {
 		max-width: 516px;
+	}
+	#control-counter {
+		width: 66px;
 	}
 }
 

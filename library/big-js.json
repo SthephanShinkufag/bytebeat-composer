@@ -797,6 +797,23 @@
 			"file": "PortablePorcelain - PCM Synthesis.js",
 			"fileOriginal": true
 		}, {
+			"description": "midi test 4",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1345qw3/midi_test_4/",
+			"date": "2023-05-01",
+			"sampleRate": 32000,
+			"file": "PortablePorcelain - midi test 4.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"description": "midi test 5 (sparta remix)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1373l27/midi_test_5_sparta_remix/",
+			"date": "2023-05-04",
+			"sampleRate": 8333,
+			"file": "PortablePorcelain - midi test 5 (sparta remix).js",
+			"fileFormatted": true,
+			"fileOriginal": true
+		}, {
 			"description": "Poorly made Ryukenden",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13a4k2i/poorly_made_ryukenden/",
 			"cover": {
@@ -808,6 +825,18 @@
 			"file": "PortablePorcelain - Poorly made Ryukenden.js",
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"children": [{
+				"description": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones."
+			}, {
+				"description": "Bad Apple Gift Cards",
+				"url": "https://www.reddit.com/r/bytebeat/comments/13dcab9/bad_apple_gift_cards/",
+				"date": "2023-05-10",
+				"sampleRate": 128000,
+				"file": "PortablePorcelain - Bad Apple Gift Cards.js",
+				"fileOriginal": true
+			}],
+			"starred": 2
 		}, {
 			"description": "tracker test",
 			"url": "https://www.reddit.com/r/bytebeat/comments/14e5bl0/tracker_test/",

@@ -37,6 +37,7 @@ globalThis.bytebeat = new class {
 		this.controlRecord = null;
 		this.controlSampleRate = null;
 		this.controlSampleRateSelect = null;
+		this.controlScale = null;
 		this.controlScaleDown = null;
 		this.controlThemeStyle = null;
 		this.controlTime = null;
@@ -463,7 +464,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023062600');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023070900');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -520,6 +521,7 @@ globalThis.bytebeat = new class {
 		this.controlRecord = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
+		this.controlScale = document.getElementById('control-scale');
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlThemeStyle.value = this.settings.themeStyle;
@@ -848,7 +850,11 @@ globalThis.bytebeat = new class {
 		if(buttonElem?.getAttribute('disabled')) {
 			return;
 		}
-		this.settings.drawScale = Math.max(this.settings.drawScale + amount, 0);
+		const scale = Math.max(this.settings.drawScale + amount, 0);
+		this.settings.drawScale = scale;
+		this.controlScale.innerHTML = !scale ? '1x' :
+			scale < 7 ? `1/${ 2 ** scale }${ scale < 4 ? 'x' : '' }` :
+			`<sub>2</sub>-${ scale }`;
 		this.saveSettings();
 		this.clearCanvas();
 		this.toggleTimeCursor();
