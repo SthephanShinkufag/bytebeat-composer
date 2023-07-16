@@ -2,13 +2,13 @@
 	{
 		"author": "Radnyx",
 		"children": [{
-			"description": "Multi-voice ByteBeat",
+			"name": "Multi-voice ByteBeat",
 			"url": "https://battleofthebits.com/arena/Entry/Multi-voice+ByteBeat/17523/",
 			"date": "2015-04-14",
 			"file": "Radnyx - Multi-voice ByteBeat.js",
 			"fileOriginal": true
 		}, {
-			"description": "Impromptu (Diatom)",
+			"name": "Impromptu (Diatom)",
 			"url": "https://battleofthebits.com/arena/Entry/Impromptu+%28Diatom%29/34240/",
 			"date": "2020-04-25",
 			"sampleRate": 32000,
@@ -20,7 +20,7 @@
 	}, {
 		"author": "Savestate",
 		"children": [{
-			"description": "Bit-Shift Melodies",
+			"name": "Bit-Shift Melodies",
 			"url": "https://battleofthebits.com/arena/Entry/Bit-Shift+Melodies/17525/",
 			"date": "2015-04-15",
 			"sampleRate": 44100,
@@ -29,7 +29,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "Earl Grey Groove",
+			"name": "Earl Grey Groove",
 			"url": "http://battleofthebits.com/arena/Entry/Earl+Grey+Groove/20500/",
 			"date": "2016-01-13",
 			"file": "Savestate - Earl Grey Groove.js",
@@ -40,7 +40,7 @@
 		}]
 	}, {
 		"author": "frantic",
-		"description": "my headache generator",
+		"name": "my headache generator",
 		"url": "https://battleofthebits.com/arena/Entry/my+headache+generator/17548/",
 		"date": "2015-04-16",
 		"sampleRate": 44100,
@@ -51,7 +51,7 @@
 	}, {
 		"author": "Jimmyoshi",
 		"children": [{
-			"description": "damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb",
+			"name": "damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb",
 			"url": "https://battleofthebits.com/arena/Entry/damnit+kf+i+have+to+do+homework+why%27d+you+have+to+pick+now+to+host+a+bytebeat+ohb+%5BPLAY+IN+22000+Hz+wow%5D.txt/17659/",
 			"date": "2015-04-29",
 			"sampleRate": 22050,
@@ -60,7 +60,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "The Flower Festival",
+			"name": "The Flower Festival",
 			"url": "https://battleofthebits.com/arena/Entry/The+Flower+Festival/17736/",
 			"date": "2015-05-09",
 			"sampleRate": 44100,
@@ -68,7 +68,7 @@
 			"fileFormatted": true,
 			"starred": 2
 		}, {
-			"description": "Spring Fever",
+			"name": "Spring Fever",
 			"url": "https://battleofthebits.com/arena/Entry/Spring+Fever/21648/",
 			"date": "2016-04-23",
 			"sampleRate": 44100,
@@ -77,7 +77,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "Daydreamer",
+			"name": "Daydreamer",
 			"url": "https://battleofthebits.com/arena/Entry/Daydreamer/25439/",
 			"date": "2017-04-29",
 			"sampleRate": 44100,
@@ -87,7 +87,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "HITLER-CHANデートシム",
+			"name": "HITLER-CHANデートシム",
 			"url": "https://battleofthebits.com/arena/Entry/HITLER-CHAN%E3%83%87%E3%83%BC%E3%83%88%E3%82%B7%E3%83%A0.txt/25871/",
 			"date": "2017-06-16",
 			"sampleRate": 22050,
@@ -100,7 +100,7 @@
 	}, {
 		"author": "raphaelgoulart",
 		"children": [{
-			"description": "the cute bytebeast ^o^",
+			"name": "the cute bytebeast ^o^",
 			"url": "https://battleofthebits.com/arena/Entry/the+cute+bytebeast+%5Eo%5E/17669/",
 			"date": "2015-05-01",
 			"sampleRate": 11025,
@@ -109,7 +109,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "bossabeat",
+			"name": "bossabeat",
 			"url": "https://battleofthebits.com/arena/Entry/bossabeat/21386/",
 			"date": "2016-03-28",
 			"sampleRate": 44100,
@@ -118,7 +118,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "bytefunk",
+			"name": "bytefunk",
 			"url": "https://battleofthebits.com/arena/Entry/bytefunk/31042/",
 			"date": "2019-03-05",
 			"sampleRate": 22050,
@@ -127,7 +127,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "1k dance",
+			"name": "1k dance",
 			"url": "https://battleofthebits.com/arena/Entry/1k+dance/31132/",
 			"date": "2019-03-10",
 			"sampleRate": 11025,
@@ -137,7 +137,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "shy smile",
+			"name": "shy smile",
 			"url": "https://battleofthebits.com/arena/Entry/shy+smile/31801/",
 			"date": "2019-06-01",
 			"sampleRate": 44100,
@@ -146,7 +146,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "ripthisentry.txt",
+			"name": "ripthisentry.txt",
 			"url": "https://battleofthebits.com/arena/Entry/ripthisentry.txt/32559/",
 			"date": "2019-08-27",
 			"sampleRate": 44100,
@@ -159,7 +159,7 @@
 	}, {
 		"author": "funute",
 		"children": [{
-			"description": "bloop factory",
+			"name": "bloop factory",
 			"url": "https://battleofthebits.com/arena/Entry/bloop+factory/20506/",
 			"date": "2016-01-13",
 			"sampleRate": 44100,
@@ -169,7 +169,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "bytebeat? how about bitbeat?",
+			"name": "bytebeat? how about bitbeat?",
 			"url": "https://battleofthebits.com/arena/Entry/bytebeat_+how+about+bitbeat_/21510/",
 			"date": "2016-04-07",
 			"sampleRate": 44100,
@@ -179,7 +179,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "tiny rave",
+			"name": "tiny rave",
 			"url": "https://battleofthebits.com/arena/Entry/tiny+rave/27419/",
 			"date": "2018-02-04",
 			"sampleRate": 44100,
@@ -189,7 +189,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "frequency machine",
+			"name": "frequency machine",
 			"url": "https://battleofthebits.com/arena/Entry/frequency+machine/32329/",
 			"date": "2019-07-28",
 			"sampleRate": 44100,
@@ -198,7 +198,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "vgm engine",
+			"name": "vgm engine",
 			"url": "https://battleofthebits.com/arena/Entry/vgm+engine/39556/",
 			"date": "2020-11-01",
 			"sampleRate": 44100,
@@ -207,7 +207,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "signal stack α",
+			"name": "signal stack α",
 			"url": "https://battleofthebits.com/arena/Entry/signal+stack+%CE%B1/59054/",
 			"date": "2023-02-26",
 			"sampleRate": 44100,
@@ -218,7 +218,7 @@
 	}, {
 		"author": "pigdevil2010",
 		"children": [{
-			"description": "Last Palette",
+			"name": "Last Palette",
 			"url": "https://battleofthebits.com/arena/Entry/Last+Palette/25369/",
 			"date": "2017-04-17",
 			"sampleRate": 44100,
@@ -228,7 +228,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "Last Fountain",
+			"name": "Last Fountain",
 			"url": "https://battleofthebits.com/arena/Entry/Last+Fountain/27281/",
 			"date": "2018-01-20",
 			"sampleRate": 44100,
@@ -241,7 +241,7 @@
 	}, {
 		"author": "Bp103",
 		"children": [{
-			"description": "the proto-version",
+			"name": "the proto-version",
 			"url": "https://twitter.com/Bp103/status/934396842850291712",
 			"date": "2017-11-25",
 			"sampleRate": 44100,
@@ -250,7 +250,7 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "a sequencer type thing",
+			"name": "a sequencer type thing",
 			"url": "https://www.reddit.com/r/bytebeat/comments/enmbix/made_a_sequencer_type_thing/",
 			"date": "2020-01-12",
 			"sampleRate": 32000,
@@ -260,7 +260,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "a song in a half baked pseudo-mml format",
+			"name": "a song in a half baked pseudo-mml format",
 			"url": "https://twitter.com/Bp103/status/1221435415032406017",
 			"date": "2020-01-26",
 			"sampleRate": 32000,
@@ -269,7 +269,7 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "now its FM synth",
+			"name": "now its FM synth",
 			"url": "https://twitter.com/Bp103/status/1345905059964530688",
 			"date": "2021-01-04",
 			"sampleRate": 32000,
@@ -278,7 +278,7 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "triangle kick drum and snare",
+			"name": "triangle kick drum and snare",
 			"url": "https://twitter.com/Bp103/status/1346329796041695233",
 			"date": "2021-01-05",
 			"sampleRate": 32000,
@@ -288,7 +288,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "random bytebeat thing with delay effect",
+			"name": "random bytebeat thing with delay effect",
 			"url": "https://twitter.com/Bp103/status/1401194230656253952",
 			"date": "2021-06-05",
 			"sampleRate": 44100,
@@ -297,7 +297,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "bytebeat song 06-15-2021",
+			"name": "bytebeat song 06-15-2021",
 			"url": "https://www.youtube.com/watch?v=aA7pyVkkPk4",
 			"date": "2021-06-15",
 			"sampleRate": 44100,
@@ -306,7 +306,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "chip box",
+			"name": "chip box",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qenxc2/learned_how_to_do_functions_now_i_have_an/",
 			"date": "2021-10-24",
 			"sampleRate": 44100,
@@ -316,7 +316,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "Testing stereo",
+			"name": "Testing stereo",
 			"url": "https://www.reddit.com/r/bytebeat/comments/w1ucw3/testing_stereo/",
 			"date": "2022-07-18",
 			"sampleRate": 44100,
@@ -325,7 +325,7 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "guitarbeatbyte",
+			"name": "guitarbeatbyte",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yzwfg1/guitarbeatbyte/",
 			"date": "2022-11-20",
 			"sampleRate": 44100,
@@ -337,7 +337,7 @@
 	}, {
 		"author": "Yung Gotenks",
 		"children": [{
-			"description": "happybeat",
+			"name": "happybeat",
 			"url": "https://battleofthebits.com/arena/Entry/happybeat/31161/",
 			"date": "2019-03-11",
 			"sampleRate": 44100,
@@ -346,7 +346,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "the bit shuffle",
+			"name": "the bit shuffle",
 			"url": "https://battleofthebits.com/arena/Entry/the+bit+shuffle/60367/",
 			"date": "2023-05-28",
 			"sampleRate": 11025,
@@ -357,7 +357,7 @@
 		}]
 	}, {
 		"author": "Lia",
-		"description": "Takitjää",
+		"name": "Takitjää",
 		"url": "https://battleofthebits.com/arena/Entry/Takitj%C3%A4%C3%A4/31188/",
 		"date": "2019-03-14",
 		"sampleRate": 44100,
@@ -367,7 +367,7 @@
 		"fileOriginal": true
 	}, {
 		"author": "petet",
-		"description": "War Tradition",
+		"name": "War Tradition",
 		"url": "https://battleofthebits.com/arena/Entry/War+Tradition/31413/",
 		"date": "2019-04-13",
 		"sampleRate": 32000,
@@ -377,7 +377,7 @@
 		"fileOriginal": true
 	}, {
 		"author": "InfinitySnapz",
-		"description": "Sunset",
+		"name": "Sunset",
 		"url": "https://www.reddit.com/r/bytebeat/comments/bxmsl7/sunset/",
 		"date": "2019-06-07",
 		"sampleRate": 44100,
@@ -388,21 +388,21 @@
 	}, {
 		"author": "argarak",
 		"children": [{
-			"description": "phase byte [++t]",
+			"name": "phase byte [++t]",
 			"url": "https://battleofthebits.com/arena/Entry/phase+byte+%5B%2B%2Bt%5D/32262/",
 			"date": "2019-07-15",
 			"file": "argarak - phase byte [++t].js",
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "tuned_phase time_modulation",
+			"name": "tuned_phase time_modulation",
 			"url": "https://battleofthebits.com/arena/Entry/tuned_phase+time_modulation/34772/",
 			"date": "2020-05-10",
 			"sampleRate": 44100,
 			"file": "argarak - tuned_phase time_modulation.js",
 			"fileFormatted": true
 		}, {
-			"description": "pcm.modshape.wv",
+			"name": "pcm.modshape.wv",
 			"url": "https://battleofthebits.com/arena/Entry/pcm.modshape.wv/39543/",
 			"date": "2020-10-31",
 			"sampleRate": 44100,
@@ -411,7 +411,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "tridecagon sequence",
+			"name": "tridecagon sequence",
 			"url": "https://battleofthebits.com/arena/Entry/tridecagon+sequence/57185/",
 			"date": "2022-12-13",
 			"sampleRate": 44100,
@@ -422,7 +422,7 @@
 		}]
 	}, {
 		"author": "burlynn n01se",
-		"description": "A NΞW DIMΞNSION",
+		"name": "A NΞW DIMΞNSION",
 		"url": "https://battleofthebits.com/arena/Entry/A+N%CE%9EW+DIM%CE%9ENSION/42606/",
 		"date": "2021-01-19",
 		"sampleRate": 22050,
@@ -433,7 +433,7 @@
 		"starred": 2
 	}, {
 		"author": "beep-eep",
-		"description": "__ws2.model",
+		"name": "__ws2.model",
 		"url": "https://battleofthebits.com/arena/Entry/__ws2.model/43638/",
 		"date": "2021-02-13",
 		"sampleRate": 44100,
@@ -445,7 +445,7 @@
 	}, {
 		"author": "Baron Knoxburry",
 		"children": [{
-			"description": "getting better at this stuff",
+			"name": "getting better at this stuff",
 			"url": "https://battleofthebits.com/arena/Entry/getting+better+at+this+stuff/46490/",
 			"date": "2021-05-30",
 			"sampleRate": 44100,
@@ -453,7 +453,7 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "inside the cornputer",
+			"name": "inside the cornputer",
 			"url": "https://battleofthebits.com/arena/Entry/inside+the+cornputer/60413/",
 			"date": "2021-05-31",
 			"sampleRate": 44100,
@@ -463,11 +463,11 @@
 		}]
 	}, {
 		"author": "johanvandegriff",
-		"description": "511",
+		"name": "511",
 		"url": "https://www.reddit.com/r/bytebeat/comments/o7e957/511/",
 		"remix": {
 			"author": "SArpnt",
-			"description": "arpeggiator fun",
+			"name": "arpeggiator fun",
 			"url": "https://www.reddit.com/r/bytebeat/comments/fjsa1y/arpeggiator_fun/"
 		},
 		"date": "2021-06-25",
@@ -480,7 +480,7 @@
 	}, {
 		"author": "HypernovaHeathen",
 		"children": [{
-			"description": "Before J.C.D.",
+			"name": "Before J.C.D.",
 			"url": "https://www.youtube.com/watch?v=frpeOVBhrvM",
 			"date": "2021-09-10",
 			"sampleRate": 44100,
@@ -489,7 +489,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "C. Allen Type Beat",
+			"name": "C. Allen Type Beat",
 			"url": "https://www.youtube.com/watch?v=c77J7MrQfvI",
 			"date": "2021-11-10",
 			"sampleRate": 44100,
@@ -499,7 +499,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "The Best Bytebeat Song I Made!",
+			"name": "The Best Bytebeat Song I Made!",
 			"url": "https://www.youtube.com/watch?v=F9i0y_S3Xr0",
 			"date": "2021-12-30",
 			"sampleRate": 44100,
@@ -509,7 +509,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "I've Come To Make An Announcement",
+			"name": "I've Come To Make An Announcement",
 			"url": "https://dollchan.net/btb/res/77.html#77",
 			"date": "2022-06-18",
 			"sampleRate": 44100,
@@ -519,7 +519,7 @@
 		}]
 	}, {
 		"author": "RealZynx92",
-		"description": "cool loop i guess",
+		"name": "cool loop i guess",
 		"url": "https://www.reddit.com/r/bytebeat/comments/q1tesu/cool_loop_i_guess/",
 		"date": "2021-10-05",
 		"sampleRate": 44100,
@@ -531,10 +531,10 @@
 	}, {
 		"author": "Decent-Manager-6169",
 		"children": [{
-			"description": "Red Green Blue 4",
+			"name": "Red Green Blue 4",
 			"url": "https://www.reddit.com/r/bytebeat/comments/r8iuh0/red_green_blue_4/",
 			"cover": {
-				"description": "Keyg - Red green blue 4",
+				"name": "Keyg - Red green blue 4",
 				"url": "https://youtu.be/WUzGNyDd6sk"
 			},
 			"date": "2021-12-04",
@@ -544,7 +544,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "An Escaped War Or Something",
+			"name": "An Escaped War Or Something",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rnngwr/an_escaped_war_or_something/",
 			"date": "2021-12-24",
 			"sampleRate": 44100,
@@ -553,10 +553,10 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "Air Island",
+			"name": "Air Island",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10n7fq6/air/",
 			"cover": {
-				"description": "Air Island - Full Song 3.8.1 (My Singing Monsters)",
+				"name": "Air Island - Full Song 3.8.1 (My Singing Monsters)",
 				"url": "https://youtu.be/ruwZt11bhUI"
 			},
 			"date": "2023-01-28",
@@ -567,10 +567,10 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "Cocktail Hour Preview",
+			"name": "Cocktail Hour Preview",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10os7e7/cocktail_hour_preview/",
 			"cover": {
-				"description": "FΛDE - Cocktail Hour",
+				"name": "FΛDE - Cocktail Hour",
 				"url": "https://youtu.be/ucL0NTdKdb4"
 			},
 			"date": "2023-01-30",
@@ -581,7 +581,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "List of musical scales",
+			"name": "List of musical scales",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10usrzr/useless_project_thing_2/",
 			"date": "2023-02-06",
 			"sampleRate": 32000,
@@ -589,9 +589,9 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "Drifting Time Misplaced 8 Bit Slowed",
+			"name": "Drifting Time Misplaced 8 Bit Slowed",
 			"cover": {
-				"description": "The Caretaker - Drifting time misplaced (8-BIT)",
+				"name": "The Caretaker - Drifting time misplaced (8-BIT)",
 				"url": "https://youtu.be/Y9-OrKWoK3U"
 			},
 			"url": "https://www.reddit.com/r/bytebeat/comments/1163kwi/something_that_kept_in_the_draft_for_2_months/",
@@ -603,10 +603,10 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "Unfinished Casin",
+			"name": "Unfinished Casin",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11f49yk/unfinished_casin_this_is_the_first_half_part_now/",
 			"cover": {
-				"description": "glue70 - Casin",
+				"name": "glue70 - Casin",
 				"url": "https://youtu.be/3Z1h2VE0hzs"
 			},
 			"date": "2023-03-01",
@@ -616,10 +616,10 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "bad minibake recreation using triangle",
+			"name": "bad minibake recreation using triangle",
 			"url": "https://dollchan.net/btb/res/520.html#575",
 			"cover": {
-				"description": "SArpnt - minibake",
+				"name": "SArpnt - minibake",
 				"url": "https://www.reddit.com/r/bytebeat/comments/rcykm8/minibake/"
 			},
 			"date": "2023-03-10",
@@ -629,10 +629,10 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "Unfinished Cocktail Hour",
+			"name": "Unfinished Cocktail Hour",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11x28i5/heres_an_unfinished_cocktail_hour_that_i_havent/",
 			"cover": {
-				"description": "FΛDE - Cocktail Hour",
+				"name": "FΛDE - Cocktail Hour",
 				"url": "https://youtu.be/ucL0NTdKdb4"
 			},
 			"date": "2023-03-21",
@@ -643,7 +643,7 @@
 		}]
 	}, {
 		"author": "Danidanijr",
-		"description": "ByteSongg",
+		"name": "ByteSongg",
 		"url": "https://www.reddit.com/r/bytebeat/comments/rfsu6p/bytesongg_by_danidanijr_44100_hz/",
 		"date": "2021-12-14",
 		"sampleRate": 44100,
@@ -655,7 +655,7 @@
 	}, {
 		"author": "Senzou4770",
 		"children": [{
-			"description": "Cool arpeggio I made",
+			"name": "Cool arpeggio I made",
 			"url": "https://www.reddit.com/r/bytebeat/comments/srw5kn/cool_arpeggio_i_made/",
 			"date": "2022-02-14",
 			"sampleRate": 44100,
@@ -665,7 +665,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "Another long bytebeat arpeggio",
+			"name": "Another long bytebeat arpeggio",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ss6d2b/another_long_bytebeat_arpeggio/",
 			"date": "2022-02-14",
 			"sampleRate": 44100,
@@ -675,10 +675,10 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "Minor Frere Jaques",
+			"name": "Minor Frere Jaques",
 			"url": "https://www.reddit.com/r/bytebeat/comments/sua62m/minor_frere_jaques_sounds_p_neat_38_lines/",
 			"cover": {
-				"description": "Frère Jacques",
+				"name": "Frère Jacques",
 				"url": "https://youtu.be/BC6rvbxdywg"
 			},
 			"date": "2022-02-17",
@@ -691,7 +691,7 @@
 	}, {
 		"author": "maj-6",
 		"children": [{
-			"description": "Something New",
+			"name": "Something New",
 			"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/",
 			"date": "2022-04-13",
 			"sampleRate": 32000,
@@ -701,7 +701,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "\"Something New\" using functions",
+			"name": "\"Something New\" using functions",
 			"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157167",
 			"date": "2022-06-03",
 			"sampleRate": 32000,
@@ -711,7 +711,7 @@
 			"fileOriginal": true
 		}, {
 			"author": "SthephanShi",
-			"description": "\"Something New\" synchronized",
+			"name": "\"Something New\" synchronized",
 			"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157250",
 			"date": "2022-06-06",
 			"sampleRate": 44100,
@@ -719,7 +719,7 @@
 			"fileMinified": true,
 			"fileFormatted": true
 		}, {
-			"description": "advanced technology",
+			"name": "advanced technology",
 			"url": "https://battleofthebits.com/arena/Entry/advanced+technology+%5B44.1k+stereo_+1_337+bytes%5D/54547/",
 			"date": "2022-06-07",
 			"sampleRate": 44100,
@@ -731,11 +731,11 @@
 	}, {
 		"author": "NewFall2020",
 		"children": [{
-			"description": "TIRO Remixed#6 remastered",
+			"name": "TIRO Remixed#6 remastered",
 			"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/comment/i4r8fis/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
 				"author": "RealZynx92",
-				"description": "better remix of \"The time is running out!\"",
+				"name": "better remix of \"The time is running out!\"",
 				"url": "https://www.reddit.com/r/bytebeat/comments/qlst5m/better_remix_of_the_time_is_running_out_by/"
 			},
 			"date": "2022-04-15",
@@ -745,11 +745,11 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "simple step sequencer remix #2",
+			"name": "simple step sequencer remix #2",
 			"url": "https://dollchan.net/btb/res/3.html#161",
 			"remix": {
 				"author": "PortablePorcelain",
-				"description": "simple step sequencer remix",
+				"name": "simple step sequencer remix",
 				"url": "https://dollchan.net/btb/res/55.html#155"
 			},
 			"date": "2022-08-25",
@@ -763,7 +763,7 @@
 	}, {
 		"author": "lhphr",
 		"children": [{
-			"description": "s.i.t.e. (synth in the emptiness)",
+			"name": "s.i.t.e. (synth in the emptiness)",
 			"url": "https://dollchan.net/btb/res/44.html#69",
 			"date": "2022-05-26",
 			"sampleRate": 32000,
@@ -772,11 +772,11 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "Reminisce",
+			"name": "Reminisce",
 			"url": "https://www.reddit.com/r/bytebeat/comments/x39ll8/reminisce/",
 			"remix": {
 				"author": "maj-6",
-				"description": "\"Something New\" using functions",
+				"name": "\"Something New\" using functions",
 				"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157167"
 			},
 			"date": "2022-08-31",
@@ -789,7 +789,7 @@
 	}, {
 		"author": "PortablePorcelain",
 		"children": [{
-			"description": "PCM Synthesis",
+			"name": "PCM Synthesis",
 			"url": "https://dollchan.net/btb/res/55.html#82",
 			"date": "2022-06-28",
 			"mode": "Signed Bytebeat",
@@ -797,7 +797,7 @@
 			"file": "PortablePorcelain - PCM Synthesis.js",
 			"fileOriginal": true
 		}, {
-			"description": "midi test 4",
+			"name": "midi test 4",
 			"url": "https://www.reddit.com/r/bytebeat/comments/1345qw3/midi_test_4/",
 			"date": "2023-05-01",
 			"sampleRate": 32000,
@@ -806,7 +806,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "midi test 5 (sparta remix)",
+			"name": "midi test 5 (sparta remix)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/1373l27/midi_test_5_sparta_remix/",
 			"date": "2023-05-04",
 			"sampleRate": 8333,
@@ -814,10 +814,10 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "Poorly made Ryukenden",
+			"name": "Poorly made Ryukenden",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13a4k2i/poorly_made_ryukenden/",
 			"cover": {
-				"description": "t-PORT - Shuric Scan",
+				"name": "t-PORT - Shuric Scan",
 				"url": "https://youtu.be/VnQoSjYLPFw"
 			},
 			"date": "2023-05-07",
@@ -827,9 +827,9 @@
 			"starred": 1
 		}, {
 			"children": [{
-				"description": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones."
+				"name": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones."
 			}, {
-				"description": "Bad Apple Gift Cards",
+				"name": "Bad Apple Gift Cards",
 				"url": "https://www.reddit.com/r/bytebeat/comments/13dcab9/bad_apple_gift_cards/",
 				"date": "2023-05-10",
 				"sampleRate": 128000,
@@ -838,10 +838,10 @@
 			}],
 			"starred": 2
 		}, {
-			"description": "tracker test",
+			"name": "tracker test",
 			"url": "https://www.reddit.com/r/bytebeat/comments/14e5bl0/tracker_test/",
 			"cover": {
-				"description": "Zombie Nation - Kernkraft 400",
+				"name": "Zombie Nation - Kernkraft 400",
 				"url": "https://youtu.be/z5LW07FTJbI"
 			},
 			"date": "2023-06-20",
@@ -852,7 +852,7 @@
 		}]
 	}, {
 		"author": "kleeder",
-		"description": "I Wanna Byte You",
+		"name": "I Wanna Byte You",
 		"url": "https://battleofthebits.com/arena/Entry/I+Wanna+Byte+You+_1/54543/",
 		"date": "2022-07-23",
 		"sampleRate": 11025,
@@ -863,14 +863,14 @@
 	}, {
 		"author": "awogler9124812041",
 		"children": [{
-			"description": "bitcrushed amen break",
+			"name": "bitcrushed amen break",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
 			"date": "2022-10-24",
 			"file": "awogler9124812041 - bitcrushed amen break.js",
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "bitcrushed amen break (44100hz version)",
+			"name": "bitcrushed amen break (44100hz version)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
 			"date": "2022-10-24",
 			"sampleRate": 44100,
@@ -878,10 +878,10 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "sparta remix chorus",
+			"name": "sparta remix chorus",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yex2iz/sparta_remix_chorus/",
 			"cover": {
-				"description": "Keaton Monger - This is Sparta! Last techno remix",
+				"name": "Keaton Monger - This is Sparta! Last techno remix",
 				"url": "https://youtu.be/rvYZRskNV3w"
 			},
 			"date": "2022-10-27",
@@ -889,11 +889,11 @@
 			"file": "awogler9124812041 - sparta remix chorus.js",
 			"fileOriginal": true
 		}, {
-			"description": "the midi to bytebeat tool",
+			"name": "the midi to bytebeat tool",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11s10f8/a_demonstration_of_my_latest_invention_yet_the/",
 			"remix": {
 				"author": "Bp103",
-				"description": "now its FM synth",
+				"name": "now its FM synth",
 				"url": "https://twitter.com/Bp103/status/1345905059964530688"
 			},
 			"date": "2023-3-15",
@@ -901,7 +901,7 @@
 			"file": "awogler9124812041 - the midi to bytebeat tool.js",
 			"fileOriginal": true
 		}, {
-			"description": "adventurous song",
+			"name": "adventurous song",
 			"url": "https://www.reddit.com/r/bytebeat/comments/120gv4f/adventurous_song_the_result_of_combining_the/",
 			"date": "2023-3-24",
 			"file": "awogler9124812041 - adventurous song.js",
@@ -909,7 +909,7 @@
 		}]
 	}, {
 		"author": "cabbage drop",
-		"description": "twenty six",
+		"name": "twenty six",
 		"url": "https://battleofthebits.com/arena/Entry/twenty+six/57195/",
 		"date": "2022-12-13",
 		"sampleRate": 32000,
@@ -919,7 +919,7 @@
 	}, {
 		"author": "Greaserpirate",
 		"children": [{
-			"description": "Showing off the recombination better",
+			"name": "Showing off the recombination better",
 			"url": "https://www.reddit.com/r/bytebeat/comments/107zk7j/showing_off_the_recombination_better/",
 			"date": "2023-01-10",
 			"sampleRate": 44100,
@@ -929,7 +929,7 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "I've refined my tools",
+			"name": "I've refined my tools",
 			"url": "https://www.reddit.com/r/bytebeat/comments/107yrts/ive_refined_my_tools/",
 			"date": "2023-01-10",
 			"sampleRate": 44100,
@@ -939,10 +939,10 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"description": "THE MOTHERLODE",
+			"name": "THE MOTHERLODE",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10bv1d5/the_motherlode_a_bundle_of_effects_lowpass_filter/",
 			"cover": {
-				"description": "l l l三l l l三 - NISHIMONAI BON ODORI「GANKE」NEO",
+				"name": "l l l三l l l三 - NISHIMONAI BON ODORI「GANKE」NEO",
 				"url": "https://youtu.be/dJ8yYk-aQNY"
 			},
 			"date": "2023-01-14",
@@ -952,7 +952,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "a limiter (that also removes offsets)",
+			"name": "a limiter (that also removes offsets)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10nnfbt/another_effect_function_a_limiter_that_also/",
 			"date": "2023-01-28",
 			"sampleRate": 48000,
@@ -961,7 +961,7 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"description": "Graceful Ache",
+			"name": "Graceful Ache",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10t4z6w/graceful_ache_probably_the_most_complex_bytebeat/",
 			"date": "2023-02-04",
 			"sampleRate": 48000,
@@ -971,7 +971,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"description": "Step sequencer with interpolation",
+			"name": "Step sequencer with interpolation",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10vpfsu/another_generalpurpose_effect_step_sequencer_with/",
 			"date": "2023-02-07",
 			"sampleRate": 48000,
@@ -980,11 +980,11 @@
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "quick remix using my usual tech",
+			"name": "quick remix using my usual tech",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/comment/jei1fir/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
 				"author": "Decent-Manager-6169",
-				"description": "please someone remix this",
+				"name": "please someone remix this",
 				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
 			},
 			"date": "2023-04-01",
@@ -996,7 +996,7 @@
 		}]
 	}, {
 		"author": "Blast Brothers",
-		"description": "Sepulchre",
+		"name": "Sepulchre",
 		"url": "https://battleofthebits.com/arena/Entry/Sepulchre/57663/",
 		"date": "2023-01-17",
 		"sampleRate": 48000,
@@ -1006,10 +1006,10 @@
 		"starred": 2
 	}, {
 		"author": "May_I_Change_My_Name",
-		"description": "0xBADA441E",
+		"name": "0xBADA441E",
 		"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
 		"cover": {
-			"description": "Touhou Project - Bad Apple",
+			"name": "Touhou Project - Bad Apple",
 			"url": "https://youtu.be/FtutLA63Cp8"
 		},
 		"date": "2023-02-15",
@@ -1021,7 +1021,7 @@
 		"starred": 2
 	}, {
 		"author": "Kouzerumatsu",
-		"description": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
+		"name": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
 		"url": "https://dollchan.net/btb/res/415.html#415",
 		"date": "2023-02-18",
 		"sampleRate": 32000,
@@ -1030,10 +1030,10 @@
 		"starred": 2
 	}, {
 		"author": "Zackx",
-		"description": "battle castle",
+		"name": "battle castle",
 		"url": "https://dollchan.net/btb/res/204.html#495",
 		"remix": {
-			"description": "inside castle",
+			"name": "inside castle",
 			"url": "https://dollchan.net/btb/res/204.html#480"
 		},
 		"date": "2023-02-27",
@@ -1047,14 +1047,14 @@
 	}, {
 		"author": "Yamden",
 		"children": [{
-			"description": "Constructing a Melody in One Line",
+			"name": "Constructing a Melody in One Line",
 			"url": "https://dollchan.net/btb/res/3.html#489",
 			"date": "2023-02-28",
 			"file": "Yamden - Constructing a Melody in One Line.js",
 			"fileFormatted": true,
 			"fileOriginal": true
 		}, {
-			"description": "Lovely Tune",
+			"name": "Lovely Tune",
 			"url": "https://dollchan.net/btb/res/3.html#497",
 			"date": "2023-03-02",
 			"file": "Yamden - Lovely Tune.js",
@@ -1063,7 +1063,7 @@
 		}]
 	}, {
 		"author": "Chasyxx",
-		"description": "Game Boy's noise",
+		"name": "Game Boy's noise",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
 		"date": "2023-03-10",
 		"file": "Chasyxx - Game Boy's noise.js",
@@ -1071,7 +1071,7 @@
 		"fileMinified": true,
 		"fileOriginal": true
 	}, {
-		"description": "Pixel Rainfall",
+		"name": "Pixel Rainfall",
 		"author": ["kleeder", "damifortune"],
 		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
 		"date": "2023-05-18",
@@ -1081,7 +1081,7 @@
 		"starred": 2
 	}, {
 		"author": "hrllobrothers4",
-		"description": "Explaining and using tools for beginners",
+		"name": "Explaining and using tools for beginners",
 		"url": "https://www.reddit.com/r/bytebeat/comments/14dl95n/explaining_and_using_tools_for_beginners/",
 		"date": "2023-06-19",
 		"sampleRate": 32000,

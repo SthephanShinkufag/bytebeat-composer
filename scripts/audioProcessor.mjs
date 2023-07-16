@@ -3,6 +3,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		super(...args);
 		this.audioSample = 0;
 		this.byteSample = 0;
+		this.drawMode = 'Points';
 		this.errorDisplayed = true;
 		this.func = null;
 		this.getValues = null;
@@ -63,6 +64,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		let time = this.sampleRatio * this.audioSample;
 		let { byteSample } = this;
 		const drawBuffer = [];
+		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 		for(let i = 0; i < chDataLen; ++i) {
 			time += this.sampleRatio;
 			const currentTime = Math.floor(time);
@@ -91,6 +93,15 @@ class audioProcessor extends AudioWorkletProcessor {
 						funcValue[ch] = +funcValue[ch];
 					} catch(err) {
 						funcValue[ch] = NaN;
+					}
+					if(isDiagram) {
+						if(!isNaN(funcValue[ch])) {
+							this.outValue[ch] = this.getValues(funcValue[ch], ch);
+						} else {
+							this.lastByteValue[ch] = NaN;
+						}
+						hasValue = true;
+						continue;
 					}
 					if(funcValue[ch] === this.lastFuncValue[ch]) {
 						continue;
@@ -166,6 +177,9 @@ class audioProcessor extends AudioWorkletProcessor {
 				break;
 			default: this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
 			}
+		}
+		if(data.drawMode !== undefined) {
+			this.drawMode = data.drawMode;
 		}
 		if(data.setFunction !== undefined) {
 			this.setFunction(data.setFunction);
