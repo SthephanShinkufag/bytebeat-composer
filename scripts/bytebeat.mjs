@@ -32,6 +32,11 @@ globalThis.bytebeat = new class {
 		this.canvasTimeCursor = null;
 		this.canvasWidth = 1024;
 		this.containerFixedElem = null;
+		this.controlColorDiagram = null;
+		this.controlColorDiagramInfo = null;
+		this.controlColorStereo = 1; // Left=G, Right=R+B
+		this.controlColorWaveform = null;
+		this.controlColorWaveformInfo = null;
 		this.controlDrawMode = null;
 		this.controlPlaybackMode = null;
 		this.controlRecord = null;
@@ -43,8 +48,20 @@ globalThis.bytebeat = new class {
 		this.controlTime = null;
 		this.controlTimeUnits = null;
 		this.controlVolume = null;
-		this.colorDiagram = [0, 0, 255];
-		this.colorWaveform = [255, 255, 255];
+		this.colorChLeft = null;
+		this.colorChRight = null;
+		this.colorDiagram = null;
+		this.colorWaveform = null;
+		this.defaultSettings = {
+			colorDiagram: '#0080ff',
+			colorStereo: 1,
+			colorWaveform: '#ffffff',
+			drawMode: 'Combined',
+			drawScale: 5,
+			isSeconds: false,
+			themeStyle: 'Default',
+			volume: .5
+		};
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
 		this.editorElem = null;
@@ -54,15 +71,7 @@ globalThis.bytebeat = new class {
 		this.isPlaying = false;
 		this.isRecording = false;
 		this.playbackSpeed = 1;
-		this.settings = {
-			colorDiagram: '#0000ff',
-			colorWaveform: '#ffffff',
-			drawMode: 'Combined',
-			drawScale: 5,
-			isSeconds: false,
-			themeStyle: 'Default',
-			volume: .5
-		};
+		this.settings = this.defaultSettings;
 		this.songData = { mode: 'Bytebeat', sampleRate: 8000 };
 		this.init();
 	}
@@ -196,6 +205,7 @@ globalThis.bytebeat = new class {
 			}
 			while(ch--) {
 				const curYCh = curY[ch];
+				const colorCh = ch ? this.colorChRight : this.colorChLeft;
 				// Diagram drawing
 				if(isCombined || isDiagram) {
 					const isNaNCurYCh = isNaNCurY[ch];
@@ -207,7 +217,7 @@ globalThis.bytebeat = new class {
 							if(isNaNCurYCh) {
 								data[idx] = 100; // Error: red color
 							} else {
-								drawDiagramPoint(data, idx, color, ch);
+								drawDiagramPoint(data, idx, color, colorCh, ch);
 							}
 						}
 					}
@@ -217,7 +227,7 @@ globalThis.bytebeat = new class {
 				}
 				// Points drawing
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
-					drawPoint(data, (drawWidth * (255 - curYCh) + x) << 2, colorPoints, ch);
+					drawPoint(data, (drawWidth * (255 - curYCh) + x) << 2, colorPoints, colorCh, ch);
 				}
 				// Waveform vertical lines drawing
 				if(isCombined || isWaveform) {
@@ -227,7 +237,7 @@ globalThis.bytebeat = new class {
 					}
 					const x = isReverse ? this.mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
 					for(let dy = prevYCh < curYCh ? 1 : -1, y = prevYCh; y !== curYCh; y += dy) {
-						drawWavePoint(data, (drawWidth * (255 - y) + x) << 2, colorWaveform, ch);
+						drawWavePoint(data, (drawWidth * (255 - y) + x) << 2, colorWaveform, colorCh, ch);
 					}
 				}
 			}
@@ -259,12 +269,14 @@ globalThis.bytebeat = new class {
 		data[i++] = color[1];
 		data[i] = color[2];
 	}
-	drawPointStereo(data, i, color, ch) {
-		if(ch) {
-			data[i] = color[0];
-			data[i + 2] = color[2];
+	drawPointStereo(data, i, color, colorCh, isRight) {
+		if(isRight) {
+			const c0 = colorCh[0];
+			const c1 = colorCh[1];
+			data[i + c0] = color[c0];
+			data[i + c1] = color[c1];
 		} else {
-			data[i + 1] = color[1];
+			data[i + colorCh] = color[colorCh];
 		}
 	}
 	drawSoftPointMono(data, i, color) {
@@ -274,14 +286,16 @@ globalThis.bytebeat = new class {
 			data[i] = color[2];
 		}
 	}
-	drawSoftPointStereo(data, i, color, ch) {
-		if(ch) {
-			if(!data[i] && !data[i + 2]) {
-				data[i] = color[0];
-				data[i + 2] = color[2];
+	drawSoftPointStereo(data, i, color, colorCh, isRight) {
+		if(isRight) {
+			const c0 = colorCh[0];
+			const c1 = colorCh[1];
+			if(!data[i + c0] && !data[i + c1]) {
+				data[i + c0] = color[c0];
+				data[i + c1] = color[c1];
 			}
-		} else if(!data[++i]) {
-			data[i] = color[1];
+		} else if(!data[i + colorCh]) {
+			data[i + colorCh] = color[colorCh];
 		}
 	}
 	escapeHTML(text) {
@@ -410,10 +424,33 @@ globalThis.bytebeat = new class {
 			parseInt(value.substr(5, 2), 16)];
 	}
 	getColorTest(value) {
-		return `[ Left <span class="control-color-test" style="background: rgb(0, ${ value[1] }, 0);"></span>
-			G=${ value[1] }, Right
-			<span class="control-color-test" style="background: rgb(${ value[0] }, 0, ${ value[2] });"></span>
-			R=${ value[0] } + B=${ value[2] } ]`;
+		let leftTxt, leftColor, rightTxt, rightColor;
+		const c0 = this.colorChLeft;
+		const c1 = this.colorChRight[0];
+		const c2 = this.colorChRight[1];
+		switch(c0) {
+		case 0:
+			leftTxt = 'R';
+			leftColor = `${ value[c0] }, 0, 0`;
+			rightTxt = ['G', 'B'];
+			rightColor = `0, ${ value[c1] }, ${ value[c2] }`;
+			break;
+		case 2:
+			leftTxt = 'B';
+			leftColor = `0, 0, ${ value[c0] }`;
+			rightTxt = ['R', 'G'];
+			rightColor = `${ value[c1] }, ${ value[c2] }, 0`;
+			break;
+		default:
+			leftTxt = 'G';
+			leftColor = `0, ${ value[c0] }, 0`;
+			rightTxt = ['R', 'B'];
+			rightColor = `${ value[c1] }, 0, ${ value[c2] }`;
+		}
+		return `[ Left <span class="control-color-test" style="background: rgb(${ leftColor });"></span>
+			${ leftTxt }=${ value[c0] }, Right
+			<span class="control-color-test" style="background: rgb(${ rightColor });"></span>
+			${ rightTxt[0] }=${ value[c1] } + ${ rightTxt[1] }=${ value[c2] } ]`;
 	}
 	getX(t) {
 		return t / (1 << this.settings.drawScale);
@@ -424,6 +461,11 @@ globalThis.bytebeat = new class {
 		case 'change':
 			switch(elem.id) {
 			case 'control-color-diagram': this.setColorDiagram(elem.value); break;
+			case 'control-color-stereo':
+				this.setColorStereo(+elem.value);
+				this.controlColorDiagramInfo.innerHTML = this.getColorTest(this.colorDiagram);
+				this.controlColorWaveformInfo.innerHTML = this.getColorTest(this.colorWaveform);
+				break;
 			case 'control-color-waveform': this.setColorWaveform(elem.value); break;
 			case 'control-drawmode': this.setDrawMode(); break;
 			case 'control-mode': this.setPlaybackMode(elem.value); break;
@@ -569,6 +611,8 @@ globalThis.bytebeat = new class {
 
 		// Controls
 		this.controlCodeSize = document.getElementById('control-codesize');
+		this.controlColorStereo = document.getElementById('control-color-stereo');
+		this.setColorStereo();
 		this.controlColorDiagram = document.getElementById('control-color-diagram');
 		this.controlColorDiagramInfo = document.getElementById('control-color-diagram-info');
 		this.setColorDiagram();
@@ -846,37 +890,55 @@ globalThis.bytebeat = new class {
 			}
 		}
 	}
+	setColorStereo(value) {
+		if(value !== undefined) {
+			this.settings.colorStereo = value;
+			this.saveSettings();
+		} else if(!(value = this.settings.colorStereo)) {
+			value = this.settings.colorStereo = this.defaultSettings.colorStereo;
+			this.saveSettings();
+		}
+		this.controlColorStereo.value = value;
+		switch(value) {
+		case 0:
+			this.colorChLeft = 0;
+			this.colorChRight = [1, 2];
+			break;
+		case 2:
+			this.colorChLeft = 2;
+			this.colorChRight = [0, 1];
+			break;
+		default:
+			this.colorChLeft = 1;
+			this.colorChRight = [0, 2];
+		}
+	}
 	setColorDiagram(value) {
-		if(value) {
+		if(value !== undefined) {
 			this.settings.colorDiagram = value;
 			this.saveSettings();
 		} else {
-			value = this.settings.colorDiagram;
-			if(!value) {
-				value = this.settings.colorDiagram = '#0000ff';
+			if(!(value = this.settings.colorDiagram)) {
+				value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
 				this.saveSettings();
 			}
 			this.controlColorDiagram.value = value;
 		}
-		const rgb = this.getColor(value);
-		this.colorDiagram = rgb;
-		this.controlColorDiagramInfo.innerHTML = this.getColorTest(rgb);
+		this.controlColorDiagramInfo.innerHTML = this.getColorTest(this.colorDiagram = this.getColor(value));
 	}
 	setColorWaveform(value) {
-		if(value) {
+		if(value !== undefined) {
 			this.settings.colorWaveform = value;
 			this.saveSettings();
 		} else {
-			value = this.settings.colorWaveform;
-			if(!value) {
-				value = this.settings.colorWaveform = '#ffffff';
+			if(!(value = this.settings.colorWaveform)) {
+				value = this.settings.colorWaveform = this.defaultSettings.colorWaveform;
 				this.saveSettings();
 			}
 			this.controlColorWaveform.value = value;
 		}
-		const rgb = this.getColor(value);
-		this.colorWaveform = rgb;
-		this.controlColorWaveformInfo.innerHTML = this.getColorTest(rgb);
+		this.controlColorWaveformInfo.innerHTML =
+			this.getColorTest(this.colorWaveform = this.getColor(value));
 	}
 	setCounterUnits() {
 		this.controlTimeUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
@@ -962,10 +1024,9 @@ globalThis.bytebeat = new class {
 		}
 	}
 	setThemeStyle(value) {
-		if(!value) {
-			value = this.settings.themeStyle;
-			if(!value) {
-				value = this.settings.themeStyle = 'Default';
+		if(value === undefined) {
+			if(!(value = this.settings.themeStyle)) {
+				value = this.settings.themeStyle = this.defaultSettings.themeStyle;
 				this.saveSettings();
 			}
 			document.documentElement.dataset.theme = value;
@@ -974,14 +1035,32 @@ globalThis.bytebeat = new class {
 		document.documentElement.dataset.theme = this.settings.themeStyle = value;
 		let colorDiagram = '#0000ff';
 		switch(value) {
-		case 'Blue': colorDiagram = '#0080ff'; break;
-		case 'Cake': colorDiagram = '#ff00ff'; break;
-		case 'Green': colorDiagram = '#00ff00'; break;
+		case 'Cake':
+			this.setColorStereo(0);
+			colorDiagram = '#ff00ff';
+			break;
+		case 'Green':
+			this.setColorStereo(1);
+			colorDiagram = '#50ff80';
+			break;
 		case 'Orange':
-		case 'Purple': colorDiagram = '#8000ff'; break;
-		case 'Teal': colorDiagram = '#00ffff'; break;
+			this.setColorStereo(0);
+			colorDiagram = '#8000ff';
+			break;
+		case 'Purple':
+			this.setColorStereo(0);
+			colorDiagram = '#A040ff';
+			break;
+		case 'Teal':
+			this.setColorStereo(1);
+			colorDiagram = '#40ffff';
+			break;
+		default:
+			this.setColorStereo(1);
+			colorDiagram = '#4080ff';
 		}
 		this.setColorDiagram(this.controlColorDiagram.value = colorDiagram); // Contains this.saveSettings();
+		this.controlColorWaveformInfo.innerHTML = this.getColorTest(this.colorWaveform);
 	}
 	setVolume(isInit) {
 		let volumeValue = NaN;
