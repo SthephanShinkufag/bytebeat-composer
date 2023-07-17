@@ -26,8 +26,6 @@
 	--library-header-hover-color: #94c7ff;
 	--link: #89c2ff;
 	--link-hover: #ed88fb !important;
-	--timecursor: #80bbff;
-	--timecursor-shadow: #bbddff;
 }
 
 html {
@@ -78,8 +76,6 @@ html[data-theme="Green"] {
 	--library-header-hover: linear-gradient(to bottom, #326c42, #152b1b);
 	--library-header-hover-color: #94ffc7;
 	--link: #89ffac;
-	--timecursor: #80ff80;
-	--timecursor-shadow: #bbffbb;
 }
 
 html[data-theme="Purple"] {
@@ -101,8 +97,6 @@ html[data-theme="Purple"] {
 	--library-header-hover: linear-gradient(to bottom, #65326c, #2b152a);
 	--link: #ca89ff;
 	--link-hover: #94c7ff !important;
-	--timecursor: #ff80ff;
-	--timecursor-shadow: #ffbbee;
 }
 
 html[data-theme="Teal"] {
@@ -147,8 +141,6 @@ html[data-theme="Orange"] {
 	--library-header-hover: linear-gradient(to bottom, #f58004, #3b260d);
 	--library-header-hover-color: #ffffa5;
 	--link: #d6ff8e;
-	--timecursor: #ffff80;
-	--timecursor-shadow: #ffffbb;
 }
 
 html[data-theme="Cake"] {
@@ -174,8 +166,6 @@ html[data-theme="Cake"] {
 	--library-header-hover-color: #94fbff;
 	--link: #88eafb;
 	--link-hover: #ff89ed !important;
-	--timecursor: #80ffff;
-	--timecursor-shadow: #bbffff;
 }
 
 body {
@@ -261,8 +251,8 @@ footer {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	border-left: 2px solid var(--timecursor);
-	box-shadow: 0 0 8px var(--timecursor-shadow), 0 0 16px #fff;
+	border-left: 2px solid #80bbff;
+	box-shadow: 0 0 8px #fff, 0 0 16px #fff;
 	left: 0;
 }
 

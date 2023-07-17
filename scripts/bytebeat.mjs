@@ -48,13 +48,13 @@ globalThis.bytebeat = new class {
 		this.controlTime = null;
 		this.controlTimeUnits = null;
 		this.controlVolume = null;
-		this.colorChLeft = null;
-		this.colorChRight = null;
+		this.colorChannels = null;
 		this.colorDiagram = null;
 		this.colorWaveform = null;
 		this.defaultSettings = {
 			colorDiagram: '#0080ff',
 			colorStereo: 1,
+			colorTimeCursor: '#80bbff',
 			colorWaveform: '#ffffff',
 			drawMode: 'Combined',
 			drawScale: 5,
@@ -205,7 +205,7 @@ globalThis.bytebeat = new class {
 			}
 			while(ch--) {
 				const curYCh = curY[ch];
-				const colorCh = ch ? this.colorChRight : this.colorChLeft;
+				const colorCh = this.colorChannels;
 				// Diagram drawing
 				if(isCombined || isDiagram) {
 					const isNaNCurYCh = isNaNCurY[ch];
@@ -271,32 +271,39 @@ globalThis.bytebeat = new class {
 	}
 	drawPointStereo(data, i, color, colorCh, isRight) {
 		if(isRight) {
-			const c0 = colorCh[0];
 			const c1 = colorCh[1];
-			data[i + c0] = color[c0];
+			const c2 = colorCh[2];
 			data[i + c1] = color[c1];
+			data[i + c2] = color[c2];
 		} else {
-			data[i + colorCh] = color[colorCh];
+			const c0 = colorCh[0];
+			data[i + c0] = color[c0];
 		}
 	}
 	drawSoftPointMono(data, i, color) {
-		if(!data[i + 1]) {
-			data[i++] = color[0];
-			data[i++] = color[1];
-			data[i] = color[2];
+		if(data[i + 1]) {
+			return;
 		}
+		data[i++] = color[0];
+		data[i++] = color[1];
+		data[i] = color[2];
 	}
 	drawSoftPointStereo(data, i, color, colorCh, isRight) {
 		if(isRight) {
-			const c0 = colorCh[0];
-			const c1 = colorCh[1];
-			if(!data[i + c0] && !data[i + c1]) {
-				data[i + c0] = color[c0];
-				data[i + c1] = color[c1];
+			let i1, i2, c1, c2;
+			if(data[i1 = i + (c1 = colorCh[1])] || data[i2 = i + (c2 = colorCh[2])]) {
+				return;
 			}
-		} else if(!data[i + colorCh]) {
-			data[i + colorCh] = color[colorCh];
+			data[i1] = color[c1];
+			data[i2] = color[c2];
+			return;
 		}
+		const c0 = colorCh[0];
+		const i0 = i + c0;
+		if(data[i0]) {
+			return;
+		}
+		data[i0] = color[c0];
 	}
 	escapeHTML(text) {
 		this.cacheTextElem.nodeValue = text;
@@ -424,33 +431,28 @@ globalThis.bytebeat = new class {
 			parseInt(value.substr(5, 2), 16)];
 	}
 	getColorTest(value) {
-		let leftTxt, leftColor, rightTxt, rightColor;
-		const c0 = this.colorChLeft;
-		const c1 = this.colorChRight[0];
-		const c2 = this.colorChRight[1];
-		switch(c0) {
+		let rgbTxt, leftColor, rightColor;
+		const c = this.colorChannels;
+		switch(c[0]) {
 		case 0:
-			leftTxt = 'R';
-			leftColor = `${ value[c0] }, 0, 0`;
-			rightTxt = ['G', 'B'];
-			rightColor = `0, ${ value[c1] }, ${ value[c2] }`;
+			rgbTxt = ['R', 'G', 'B']; // [Left, Rigtht1, Right2]
+			leftColor = `${ value[c[0]] }, 0, 0`;
+			rightColor = `0, ${ value[c[1]] }, ${ value[c[2]] }`;
 			break;
 		case 2:
-			leftTxt = 'B';
-			leftColor = `0, 0, ${ value[c0] }`;
-			rightTxt = ['R', 'G'];
-			rightColor = `${ value[c1] }, ${ value[c2] }, 0`;
+			rgbTxt = ['B', 'R', 'G'];
+			leftColor = `0, 0, ${ value[c[0]] }`;
+			rightColor = `${ value[c[1]] }, ${ value[c[2]] }, 0`;
 			break;
 		default:
-			leftTxt = 'G';
-			leftColor = `0, ${ value[c0] }, 0`;
-			rightTxt = ['R', 'B'];
-			rightColor = `${ value[c1] }, 0, ${ value[c2] }`;
+			rgbTxt = ['G', 'R', 'B'];
+			leftColor = `0, ${ value[c[0]] }, 0`;
+			rightColor = `${ value[c[1]] }, 0, ${ value[c[2]] }`;
 		}
 		return `[ Left <span class="control-color-test" style="background: rgb(${ leftColor });"></span>
-			${ leftTxt }=${ value[c0] }, Right
+			${ rgbTxt[0] }=${ value[c[0]] }, Right
 			<span class="control-color-test" style="background: rgb(${ rightColor });"></span>
-			${ rightTxt[0] }=${ value[c1] } + ${ rightTxt[1] }=${ value[c2] } ]`;
+			${ rgbTxt[1] }=${ value[c[1]] } + ${ rgbTxt[2] }=${ value[c[2]] } ]`;
 	}
 	getX(t) {
 		return t / (1 << this.settings.drawScale);
@@ -466,6 +468,7 @@ globalThis.bytebeat = new class {
 				this.controlColorDiagramInfo.innerHTML = this.getColorTest(this.colorDiagram);
 				this.controlColorWaveformInfo.innerHTML = this.getColorTest(this.colorWaveform);
 				break;
+			case 'control-color-timecursor': this.setColorTimeCursor(elem.value); break;
 			case 'control-color-waveform': this.setColorWaveform(elem.value); break;
 			case 'control-drawmode': this.setDrawMode(); break;
 			case 'control-mode': this.setPlaybackMode(elem.value); break;
@@ -562,7 +565,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023071602');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023071800');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -619,6 +622,8 @@ globalThis.bytebeat = new class {
 		this.controlColorWaveform = document.getElementById('control-color-waveform');
 		this.controlColorWaveformInfo = document.getElementById('control-color-waveform-info');
 		this.setColorWaveform();
+		this.controlColorTimeCursor = document.getElementById('control-color-timecursor');
+		this.setColorTimeCursor();
 		this.controlDrawMode = document.getElementById('control-drawmode');
 		this.controlDrawMode.value = this.settings.drawMode;
 		this.sendData({ drawMode: this.settings.drawMode });
@@ -891,52 +896,53 @@ globalThis.bytebeat = new class {
 		}
 	}
 	setColorStereo(value) {
+		// value: Red=0, Green=1, Blue=2
 		if(value !== undefined) {
 			this.settings.colorStereo = value;
 			this.saveSettings();
-		} else if(!(value = this.settings.colorStereo)) {
+		} else if((value = this.settings.colorStereo) === undefined) {
 			value = this.settings.colorStereo = this.defaultSettings.colorStereo;
 			this.saveSettings();
 		}
 		this.controlColorStereo.value = value;
 		switch(value) {
-		case 0:
-			this.colorChLeft = 0;
-			this.colorChRight = [1, 2];
-			break;
-		case 2:
-			this.colorChLeft = 2;
-			this.colorChRight = [0, 1];
-			break;
-		default:
-			this.colorChLeft = 1;
-			this.colorChRight = [0, 2];
+		// [Left, Right1, Right2]
+		case 0: this.colorChannels = [0, 1, 2]; break;
+		case 2: this.colorChannels = [2, 0, 1]; break;
+		default: this.colorChannels = [1, 0, 2];
 		}
 	}
 	setColorDiagram(value) {
 		if(value !== undefined) {
 			this.settings.colorDiagram = value;
 			this.saveSettings();
-		} else {
-			if(!(value = this.settings.colorDiagram)) {
-				value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
-				this.saveSettings();
-			}
-			this.controlColorDiagram.value = value;
+		} else if((value = this.settings.colorDiagram) === undefined) {
+			value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
+			this.saveSettings();
 		}
+		this.controlColorDiagram.value = value;
 		this.controlColorDiagramInfo.innerHTML = this.getColorTest(this.colorDiagram = this.getColor(value));
+	}
+	setColorTimeCursor(value) {
+		if(value !== undefined) {
+			this.settings.colorTimeCursor = value;
+			this.saveSettings();
+		} else if((value = this.settings.colorTimeCursor) === undefined) {
+			value = this.settings.colorTimeCursor = this.defaultSettings.colorTimeCursor;
+			this.saveSettings();
+		}
+		this.controlColorTimeCursor.value = value;
+		this.canvasTimeCursor.style.borderLeft = '2px solid ' + value;
 	}
 	setColorWaveform(value) {
 		if(value !== undefined) {
 			this.settings.colorWaveform = value;
 			this.saveSettings();
-		} else {
-			if(!(value = this.settings.colorWaveform)) {
-				value = this.settings.colorWaveform = this.defaultSettings.colorWaveform;
-				this.saveSettings();
-			}
-			this.controlColorWaveform.value = value;
+		} else if((value = this.settings.colorWaveform) === undefined) {
+			value = this.settings.colorWaveform = this.defaultSettings.colorWaveform;
+			this.saveSettings();
 		}
+		this.controlColorWaveform.value = value;
 		this.controlColorWaveformInfo.innerHTML =
 			this.getColorTest(this.colorWaveform = this.getColor(value));
 	}
@@ -1025,7 +1031,7 @@ globalThis.bytebeat = new class {
 	}
 	setThemeStyle(value) {
 		if(value === undefined) {
-			if(!(value = this.settings.themeStyle)) {
+			if((value = this.settings.themeStyle) === undefined) {
 				value = this.settings.themeStyle = this.defaultSettings.themeStyle;
 				this.saveSettings();
 			}
@@ -1033,34 +1039,40 @@ globalThis.bytebeat = new class {
 			return;
 		}
 		document.documentElement.dataset.theme = this.settings.themeStyle = value;
-		let colorDiagram = '#0000ff';
+		let colorCursor, colorDiagram;
+		let colorStereo = 1; // Red=0, Green=1, Blue=2
 		switch(value) {
 		case 'Cake':
-			this.setColorStereo(0);
+			colorCursor = '#40ffff';
 			colorDiagram = '#ff00ff';
+			colorStereo = 0;
 			break;
 		case 'Green':
-			this.setColorStereo(1);
-			colorDiagram = '#50ff80';
+			colorCursor = '#ff0000';
+			colorDiagram = '#00c080';
 			break;
 		case 'Orange':
-			this.setColorStereo(0);
+			colorCursor = '#ffff80';
 			colorDiagram = '#8000ff';
+			colorStereo = 0;
 			break;
 		case 'Purple':
-			this.setColorStereo(0);
-			colorDiagram = '#A040ff';
+			colorCursor = '#ff50ff';
+			colorDiagram = '#a040ff';
+			colorStereo = 0;
 			break;
 		case 'Teal':
-			this.setColorStereo(1);
-			colorDiagram = '#40ffff';
+			colorCursor = '#80c0ff';
+			colorDiagram = '#00ffff';
 			break;
 		default:
-			this.setColorStereo(1);
-			colorDiagram = '#4080ff';
+			colorCursor = '#80c0ff';
+			colorDiagram = '#0080ff';
 		}
-		this.setColorDiagram(this.controlColorDiagram.value = colorDiagram); // Contains this.saveSettings();
+		this.setColorTimeCursor(colorCursor);
+		this.setColorStereo(colorStereo);
 		this.controlColorWaveformInfo.innerHTML = this.getColorTest(this.colorWaveform);
+		this.setColorDiagram(this.controlColorDiagram.value = colorDiagram); // Contains this.saveSettings();
 	}
 	setVolume(isInit) {
 		let volumeValue = NaN;
