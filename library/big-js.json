@@ -1063,12 +1063,133 @@
 		}]
 	}, {
 		"author": "Chasyxx",
-		"name": "Game Boy's noise",
-		"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
-		"date": "2023-03-10",
-		"file": "Chasyxx - Game Boy's noise.js",
-		"fileFormatted": true,
-		"fileMinified": true,
+		"children": [{
+			"name": "Game Boy's noise",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
+			"date": "2023-03-10",
+			"file": "Chasyxx - Game Boy's noise.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true
+		}, {
+			"name": "ibniz-based interpreter",
+			"url": "https://dollchan.net/btb/res/756.html#862",
+			"date": "2023-04-18",
+			"file": "Chasyxx - ibniz-based interpreter.js",
+			"fileOriginal": true
+		}, {
+			"name": "Government Funding cover",
+			"url": "https://dollchan.net/btb/res/756.html#1017",
+			"cover": {
+				"name": "Backrooms OST - Government Funding",
+				"url": "https://youtu.be/CYO7hU8txhI"
+			},
+			"date": "2023-05-04",
+			"sampleRate": 48000,
+			"file": "Chasyxx - Government Funding cover.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "THE BOX",
+			"url": "https://dollchan.net/btb/res/756.html#1037",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"name": "atari thingy",
+				"url": "https://www.reddit.com/r/bytebeat/comments/121ie23/dont_know_what_to_name_with_atari_thingy/"
+			},
+			"date": "2023-05-13",
+			"sampleRate": 32000,
+			"stereo": true,
+			"file": "Chasyxx - THE BOX.js",
+			"fileOriginal": true
+		}, {
+			"name": "gTRACKER-NoSqSqTi: Bad apple port",
+			"url": "https://dollchan.net/btb/res/756.html#1323",
+			"cover": {
+				"name": "Touhou Project - Bad Apple",
+				"url": "https://youtu.be/FtutLA63Cp8"
+			},
+			"date": "2023-06-18",
+			"sampleRate": 32000,
+			"file": "Chasyxx - gTRACKER-NoSqSqTi Bad apple port.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "gTRACKER-NoSqSqTi+V",
+			"url": "https://dollchan.net/btb/res/756.html#1333",
+			"date": "2023-06-18",
+			"sampleRate": 32000,
+			"file": "Chasyxx - gTRACKER-NoSqSqTi+V.js",
+			"fileOriginal": true
+		}, {
+			"name": "\"somebody please remix this\" gTracker",
+			"url": "https://dollchan.net/btb/res/756.html#1369",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"name": "please someone remix this",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+			},
+			"date": "2023-06-20",
+			"sampleRate": 32000,
+			"file": "Chasyxx - somebody please remix this gTracker.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Complex number idea",
+			"url": "https://dollchan.net/btb/res/756.html#1602",
+			"remix": {
+				"author": "Zackx",
+				"name": "FM bass such as sega genesis",
+				"url": "https://dollchan.net/btb/res/204.html#267"
+			},
+			"date": "2023-07-12",
+			"sampleRate": 32000,
+			"file": "Chasyxx - Complex number idea.js",
+			"fileOriginal": true
+		}, {
+			"name": "trip to otherworld stereo mix",
+			"url": "https://dollchan.net/btb/res/756.html#1646",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "Trip to Otherworld",
+				"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/"
+			},
+			"date": "2023-07-17",
+			"sampleRate": 32000,
+			"file": "Chasyxx - trip to otherworld stereo mix.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "sid function",
+			"url": "https://dollchan.net/btb/res/756.html#1659",
+			"date": "2023-07-18",
+			"sampleRate": 44100,
+			"file": "Chasyxx - sid function.js",
+			"fileOriginal": true
+		}, {
+			"name": "Rhythm Hell",
+			"url": "https://dollchan.net/btb/res/756.html#1695",
+			"cover": {
+				"name": "Louie Zong - Rhythm Hell",
+				"url": "https://youtu.be/a-EI30uucng"
+			},
+			"date": "2023-07-24",
+			"sampleRate": 32000,
+			"file": "Chasyxx - Rhythm Hell.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
+		"name": "Unfinished/Preview Attack of the Killer Beats",
+		"author": "hcdphobe",
+		"url": "https://www.reddit.com/r/bytebeat/comments/121cmy2/unfinishedpreview_attack_of_the_killer_beats_by/",
+		"cover": {
+			"name": "Deltarune: Chapter 2 - Attack of the Killer Queen",
+			"url": "https://youtu.be/D7LdVtrf7N0"
+		},
+		"date": "2023-03-25",
+		"sampleRate": 44100,
+		"file": "hcdphobe - Unfinished Preview Attack of the Killer Beats.js",
 		"fileOriginal": true
 	}, {
 		"name": "Pixel Rainfall",
@@ -1080,14 +1201,19 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
-		"author": "hrllobrothers4",
-		"name": "Explaining and using tools for beginners",
-		"url": "https://www.reddit.com/r/bytebeat/comments/14dl95n/explaining_and_using_tools_for_beginners/",
-		"date": "2023-06-19",
-		"sampleRate": 32000,
-		"file": "hrllobrothers4 - Explaining and using tools for beginners.js",
+		
+		"author": "BSquareIsBack",
+		"name": "cover of \"Sparta Atari Base\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/155a8c0/cover_of_sparta_atari_base_completed/",
+		"cover": {
+			"name": "Teh36thSpartan - Sparta Atari Base",
+			"url": "https://youtu.be/lOp5sN16DZs"
+		},
+		"date": "2023-07-21",
+		"file": "BSquareIsBack - cover of Sparta Atari Base.js",
 		"fileFormatted": true,
 		"fileMinified": true,
-		"fileOriginal": true
+		"fileOriginal": true,
+		"starred": 1
 	}
 ]

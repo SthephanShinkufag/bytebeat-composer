@@ -462,5 +462,35 @@
 			"fileMinified": true,
 			"starred": 2
 		}]
+	}, {
+		"children": [{
+			"name": "\"You are traveling by the Galaxy, flying through another star system. Your path passes by its planets, asteroid belts and gas clouds, past the Red Giant in the center...\"<br>00:00 - 'Star System', 03:24 (204s) - 'Red Giant'"
+		}, {
+			"name": "Through the Star System",
+			"url": "https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+			"remix": {
+				"author": "Gasman",
+				"name": "Steady On Tim, It's Only A Budget Game",
+				"url": "https://demozoo.org/music/305284/"
+			},
+			"date": "2023-07-25",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "SthephanShi - Through the Star System.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"starred": 2
+		}, {
+			"name": "Flying past the Black Hole",
+			"url": "https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+			"remix": {
+				"name": "Through the Star System"
+			},
+			"date": "2023-07-25",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "SthephanShi - Flying past the Black Hole.js",
+			"fileFormatted": true
+		}]
 	}
 ]

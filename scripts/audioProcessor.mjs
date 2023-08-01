@@ -214,7 +214,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		audioProcessor.deleteGlobals();
 		// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
 		codeText = codeText.trim().replace(
-			/^eval\(unescape\(escape`(.*?)`.replace\(\/u\(\.\.\)\/g,["']\$1%["']\)\)\)$/,
+			/^eval\(unescape\(escape(?:`|\('|\("|\(`)(.*?)(?:`|'\)|"\)|`\)).replace\(\/u\(\.\.\)\/g,["'`]\$1%["'`]\)\)\)$/,
 			(match, m1) => unescape(escape(m1).replace(/u(..)/g, '$1%')));
 		// Bytebeat code testing
 		let isCompiled = false;

@@ -104,6 +104,11 @@
 			"url": "https://dollchan.net/btb/res/204.html#459",
 			"date": "2023-02-23",
 			"codeOriginal": "t*(42&t>>10)%256*(1-t%2048/2048)"
+		}, {
+			"author": "SthephanShi",
+			"name": "sine-nomath 42 melody",
+			"date": "2023-07-27",
+			"codeOriginal": "(t*(42&t>>10)/8&15)*(-t*(42&t>>10)/8&15)*((t*(42&t>>10)/8&16)/8-1)+128"
 		}]
 	}, {
 		"author": "bear @ celephais",
@@ -878,6 +883,13 @@
 		"codeOriginal": "((t>>9^(t>>9)-1^1)%13*t&31)*(2+(t>>4))",
 		"starred": 1
 	}, {
+		"author": "GolezTrol",
+		"name": "Send in the Clowns (if that makes it stop) ",
+		"url": "https://demozoo.org/music/305278/",
+		"date": "2022-02-12",
+		"codeOriginal": "t>>4|(t>>12)+(222&(t*(1+(7685152>>(t>>12)&15)/8)))",
+		"codeMinified": "t>>4|(t>>12)+(222&t*(1+(7685152>>(t>>12)&15)/8))"
+	}, {
 		"author": "lhphr",
 		"url": "https://dollchan.net/btb/res/44.html#44",
 		"date": "2022-04-14",
@@ -1010,6 +1022,11 @@
 			"date": "2023-06-19",
 			"codeOriginal": "((t/2/(4+(t>>13&3))*128)|t>>(t>>12&15))+4e5/(t&4095)|t>>4",
 			"codeMinified": "(t/2/(4+(t>>13&3))*128|t>>(t>>12&15))+4E5/(t&4095)|t>>4"
+		}, {
+			"name": "rachet modem + moon scanner generalization",
+			"url": "https://www.reddit.com/r/bytebeat/comments/155p571/rachet_modem_moon_scanner_generalization/",
+			"date": "2023-06-21",
+			"codeOriginal": "(t-(t^t>>5)+t*(t>>14&14)&255)/2+(100*((t<<2|t>>5|t^63)&(t<<10|t>>11))&255)/2"
 		}]
 
 	}, {
@@ -1055,6 +1072,30 @@
 			"date": "2023-04-17",
 			"sampleRate": 48000,
 			"codeOriginal": "t^t>>(t>>14&15)"
+		}, {
+			"name": "happiness",
+			"url": "https://dollchan.net/btb/res/204.html#923",
+			"date": "2023-04-23",
+			"codeOriginal": "(t*(2&t>>10|(t>>10&18)-8)&128)*(-t>>2&255)>>7",
+			"starred": 1
+		}, {
+			"name": "80s video game noise",
+			"url": "https://dollchan.net/btb/res/204.html#923",
+			"date": "2023-04-23",
+			"codeOriginal": "(t*(3&-t>>8|(t>>10&9)+4*(6&t>>10)+4)&128)*(-t>>2&255)>>7"
+		}, {
+			"name": "just focus",
+			"url": "https://dollchan.net/btb/res/204.html#923",
+			"date": "2023-04-23",
+			"codeOriginal": "(t*(2&t>>10|(t>>10&9)-4*(3&t>>15)+3)&128)*(-t>>2&255)>>7"
+		}, {
+			"name": "bongo",
+			"url": "https://dollchan.net/btb/res/204.html#932",
+			"date": "2023-04-24",
+			"sampleRate": 32000,
+			"codeOriginal": "(((t*(t&131072?t&65536?3/2:4/3:1)>>1*(1&~t>>13)&128)*(-t>>5<<(1&t>>15)&255)>>7)+(t>>5<<(1&t>>15)&255)/2)",
+			"codeMinified": "((t*(t&131072?t&65536?1.5:4/3:1)>>(1&~t>>13)&128)*(-t>>5<<(1&t>>15)&255)>>7)+(t>>5<<(1&t>>15)&255)/2",
+			"starred": 1
 		}]
 	}, {
 		"author": "Glebguything",
@@ -1102,7 +1143,7 @@
 		"codeOriginal": "(t^t>>12)*t>>8",
 		"starred": 1
 	}, {
-		"author": "absolute199",
+		"author": "absolute197",
 		"name": "H_YPN0T1Z3%",
 		"url": "https://www.reddit.com/r/bytebeat/comments/122rwfc/h_ypn0t1z3/",
 		"date": "2023-03-26",
@@ -1114,5 +1155,97 @@
 		"date": "2023-04-12",
 		"codeOriginal": "(t*((t>>9|t>>11)%7*(~t>>8&2))&64)+(t*((t>>9|t>>8)%7*(~t>>8&2))&64)+(t*((t>>9|t>>12)%7*(~t>>9&2))&64)",
 		"codeMinified": "((t>>9|t>>11)%7*t*(~t>>8&2)&64)+((t>>9|t>>8)%7*t*(~t>>8&2)&64)+((t>>9|t>>12)%7*t*(~t>>9&2)&64)"
+	}, {
+		"author": "SHCWAZERNECJLACE",
+		"children": [{
+			"name": "ilovemykids26",
+			"sampleRate": 16000,
+			"url": "https://www.reddit.com/r/bytebeat/comments/14xvls0/garage_of_unposted_crap/",
+			"date": "2023-07-04",
+			"codeOriginal": "3*t^t>>6|t"
+		}, {
+			"name": "cool little fight scene",
+			"sampleRate": 11025,
+			"url": "https://www.reddit.com/r/bytebeat/comments/1583l77/another_garbage_truck_of_unposted_things/",
+			"date": "2023-07-24",
+			"codeOriginal": "3*t^t>>1&(0xcabd1)&(t>>8%42)",
+			"codeMinified": "3*t^t>>1&0xcabd1&t>>8",
+			"starred": 1
+		}, {
+			"name": "monoxide type thing",
+			"sampleRate": 48000,
+			"url": "https://www.reddit.com/r/bytebeat/comments/158d3d7/me_producing_random_shit_help_me/",
+			"date": "2023-07-24",
+			"codeOriginal": "t*t%(55*0xCADE11)"
+		}]
+	}, {
+		"author": "BSquareIsBack",
+		"name": "Atari sound discovered?",
+		"url": "https://www.reddit.com/r/bytebeat/comments/15383dn/atari_sound_discovered/",
+		"date": "2023-07-18",
+		"codeOriginal": "t*(0xAFEDC320>>t/(6-(t>>10&13))&1)&&128"
+	}, {
+		"author": "IncreaseRegular",
+		"name": "Shimmer Surfer",
+		"url": "https://www.reddit.com/r/bytebeat/comments/153h95z/shimmer_surfer/",
+		"remix": [{
+			"author": "stimmer",
+			"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
+		}, {
+			"author": "raer",
+			"name": "Street Surfer",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
+		}],
+		"mode": "Signed Bytebeat",
+		"date": "2023-07-19",
+		"codeOriginal": "a=(0.5*t*(4|t>>13&3)>>(~t>>11&1)|~t>>5)&127,b=0.5*(t*(t>>11&t>>13)*(~t>>9&3)&127)&127+128,c=((t&4096?(t*(t^t%255)|t>>5)>>1:t>>4|(t&8192?t<<1:t))&127)+64,a+b+c",
+		"codeMinified": "((t/2*(4|t>>13&3)>>(~t>>11&1)|~t>>5)&127)+(t*(t>>11&t>>13)*(~t>>9&3)&127)/2+((t&4096?(t*(t^t%255)|t>>5)>>1:t>>4|(t&8192?t<<1:t))&127)+64",
+		"starred": 1
+	}, {
+		"author": "hcdphobe",
+		"children": [{
+			"name": "times new music",
+			"url": "https://www.reddit.com/r/bytebeat/comments/155inp4/times_new_music/",
+			"date": "2023-07-21",
+			"sampleRate": 32000,
+			"codeOriginal": "((0b1011101101>>(t>>13&7|-t>>12&11|(-t>>14&5))/3)*t/3520&1)&&(-t>>5)*((t>>15&3)==2?1/4:t>>7&128?(t>>15&3)!=0?1/2:2:1)",
+			"codeMinified": "(0b1011101101>>(t>>13&7|-t>>12&11|-t>>14&5)/3)*t/3520&1&&(-t>>5)*((t>>15&3)==2?1/4:t>>7&128?t>>15&3?1/2:2:1)"
+		}, {
+			"name": "OMG TEH BYTEBEATNESS number one",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1567oiq/omg_teh_bytebeatness/",
+			"cover": {
+				"name": "Keaton Monger - This is Sparta! Last techno remix",
+				"url": "https://youtu.be/rvYZRskNV3w"
+			},
+			"date": "2023-07-22",
+			"sampleRate": 15360,
+			"codeOriginal": "t*(t&16384?16/3:t&32768?13*32/93:5)*(t&65536?t&4096?3/2:1:1)|t>>(t&65536?4:6)",
+			"codeMinified": "t*(t&16384?16/3:t&32768?416/93:5)*(t&65536?t&4096?3/2:1:1)|t>>(t&65536?4:6)",
+			"starred": 1
+		}, {
+			"name": "OMG TEH BYTEBEATNESS number two (pwm)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1567oiq/omg_teh_bytebeatness/",
+			"cover": {
+				"name": "Keaton Monger - This is Sparta! Last techno remix",
+				"url": "https://youtu.be/rvYZRskNV3w"
+			},
+			"date": "2023-07-22",
+			"sampleRate": 15360,
+			"codeOriginal": "64+((t/2*(t&16384?16/3:t&32768?13*32/93:5)*(t&65536?t&4096?3/2:1:1)&127)+(t>>(t&65536?5:7)&127)&128)",
+			"codeMinified": "64+((t/2*(t&16384?16/3:t&32768?416/93:5)*(t&65536?t&4096?3/2:1:1)&127)+(t>>(t&65536?5:7)&127)&128)"
+		}]
+	}, {
+		"author": "Federal_Loss2780",
+		"name": "Inter Time Dubstep",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1580wez/inter_time_dubstep/",
+		"remix": {
+			"author": "krcko",
+			"name": "Modem melody",
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+		},
+		"date": "2023-07-24",
+		"sampleRate": 44100,
+		"codeOriginal": "(t>>(t>>13&31)&128)+((t&t>>12)*t>>12)+3e5/(t%16384)",
+		"starred": 1
 	}
 ]

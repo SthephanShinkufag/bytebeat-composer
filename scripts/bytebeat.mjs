@@ -163,9 +163,9 @@ globalThis.bytebeat = new class {
 		const { colorDiagram } = this;
 		const colorPoints = this.colorWaveform;
 		const colorWaveform = !isWaveform ? colorPoints : [
-			Math.floor(.6 * colorPoints[0]),
-			Math.floor(.6 * colorPoints[1]),
-			Math.floor(.6 * colorPoints[2])];
+			Math.floor(.6 * colorPoints[0] | 0),
+			Math.floor(.6 * colorPoints[1] | 0),
+			Math.floor(.6 * colorPoints[2] | 0)];
 		let ch, drawDiagramPoint, drawPoint, drawWavePoint;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;
@@ -177,9 +177,8 @@ globalThis.bytebeat = new class {
 			const nextX = this.mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			let diagramSize, diagramStart;
 			if(isCombined || isDiagram) {
-				const zoom = 1 << scale;
-				diagramSize = Math.max(1, 256 / zoom);
-				diagramStart = diagramSize * this.mod(curTime, zoom);
+				diagramSize = Math.max(1, 256 >> scale);
+				diagramStart = diagramSize * this.mod(curTime, 1 << scale);
 			} else if(isNaNCurY[0] || isNaNCurY[1]) {
 				// Error value - filling with red color
 				for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
@@ -194,12 +193,12 @@ globalThis.bytebeat = new class {
 			// Select mono or stereo drawing
 			if((curY[0] === curY[1] || isNaNCurY[0] && isNaNCurY[1]) && prevY[0] === prevY[1]) {
 				ch = 1;
-				drawDiagramPoint = this.drawSoftPointMono;
+				drawDiagramPoint = isCombined ? this.drawSoftPointMono : this.drawPointMono;
 				drawPoint = this.drawPointMono;
 				drawWavePoint = isCombined ? this.drawPointMono : this.drawSoftPointMono;
 			} else {
 				ch = 2;
-				drawDiagramPoint = this.drawSoftPointStereo;
+				drawDiagramPoint = isCombined ? this.drawSoftPointStereo : this.drawPointStereo;
 				drawPoint = this.drawPointStereo;
 				drawWavePoint = isCombined ? this.drawPointStereo : this.drawSoftPointStereo;
 			}
@@ -210,7 +209,10 @@ globalThis.bytebeat = new class {
 				if(isCombined || isDiagram) {
 					const isNaNCurYCh = isNaNCurY[ch];
 					const value = (curYCh & 255) / 256;
-					const color = [value * colorDiagram[0], value * colorDiagram[1], value * colorDiagram[2]];
+					const color = [
+						value * colorDiagram[0] | 0,
+						value * colorDiagram[1] | 0,
+						value * colorDiagram[2] | 0];
 					for(let x = curX; x !== nextX; x = this.mod(x + 1, width)) {
 						for(let y = 0; y < diagramSize; ++y) {
 							const idx = (drawWidth * (diagramStart + y) + x) << 2;
@@ -246,8 +248,8 @@ globalThis.bytebeat = new class {
 		if(scale) {
 			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
-				const idx = (drawWidth * (255 - y) + x) << 2;
-				this.drawEndBuffer[y] = [data[idx], data[idx + 1], data[idx + 2]];
+				let idx = (drawWidth * (255 - y) + x) << 2;
+				this.drawEndBuffer[y] = [data[idx++], data[idx++], data[idx]];
 			}
 		}
 		// Placing a segment on the canvas
@@ -281,7 +283,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	drawSoftPointMono(data, i, color) {
-		if(data[i + 1]) {
+		if(data[i] || data[i + 1] ||  data[i + 2]) {
 			return;
 		}
 		data[i++] = color[0];
@@ -565,7 +567,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023071800');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023071900');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
