@@ -1,6 +1,6 @@
 [
 	{
-		"name": "\"Explosive beat\". Formulas family discovered by experimenting with \"Explosions\" <button class=\"code-text\">(t>>2)*(t>>5)|t>>5</button>",
+		"description": "Formulas family discovered by experimenting with \"Explosions\" <button class=\"code-text\">(t>>2)*(t>>5)|t>>5</button>",
 		"children": [{
 			"codeOriginal": "(t>>4)*(t>>3)|t>>2"
 		}, {
@@ -10,10 +10,10 @@
 			"codeOriginal": "(t>>4)*(t>>3)|t>>(t&4096?3:2)",
 			"starred": 1
 		}, {
-			"name": "\"M-m-multiple explosion beat\"",
+			"name": "M-m-multiple explosion beat",
 			"codeOriginal": "(t>>4)*(t>>2)|t>>(t>>12)%4"
 		}, {
-			"name": "\"Diesel engine\"",
+			"name": "Diesel engine",
 			"codeOriginal": "(t>>5)*(t>>5)|t>>2"
 		}]
 	}, {
@@ -83,22 +83,23 @@
 		"name": "\"Protoss engine\". Experimenting with resonance, a pretty hypnotic result",
 		"codeOriginal": "2*(-t%128|t%130)"
 	}, {
-		"name": "\"Harmonics\"",
+		"name": "Harmonics",
 		"codeOriginal": "t<<2^t>>4^t<<4&t>>8|t<<1&-t>>4"
 	}, {
-		"name": "\"Bass beat + lead\"",
+		"name": "Bass beat + lead",
 		"codeOriginal": "15-t%(t&16384?26:29)&t>>4|t<<1&-t>>4"
 	}, {
 		"children": [{
-			"name": "\"Arabic beat\"",
+			"name": "Arabic beat",
 			"codeOriginal": "t%((t&-16|t>>10)&42)<<2|t>>4",
 			"starred": 1
 		}, {
-			"name": "\"Arabic beat #2\"",
+			"name": "Arabic beat #2",
 			"codeOriginal": "t%((t&-16|t>>11)&42)<<2|t>>4"
 		}]
 	}, {
-		"name": "\"Game levels\"<br>Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class=\"code-text\">t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button><br>Allows to get different interesting chiptune sounds!<br>",
+		"name": "Game levels",
+		"description": "Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class=\"code-text\">t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button>",
 		"children": [{
 			"name": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
@@ -162,7 +163,7 @@
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
 			"starred": 1
 		}, {
-			"name": "<br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)"
+			"description": "<br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)"
 		}, {
 			"name": "\"Aliens encounter + drums\". Impressive sound!",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
@@ -172,7 +173,7 @@
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
 			"starred": 2
 		}, {
-			"name": "<br>Finally you can use complex ternary operators to create more complex drums:"
+			"description": "<br>Finally you can use complex ternary operators to create more complex drums:"
 		}, {
 			"name": "\"Ready to fight?\". Cool for a fighting game :)",
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
@@ -182,7 +183,7 @@
 			"codeOriginal": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
 			"starred": 2
 		}, {
-			"name": "<br>Fantastic! Let's continue our experiments:"
+			"description": "<br>Let's continue our experiments:"
 		}, {
 			"name": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
@@ -281,87 +282,90 @@
 			"codeOriginal": "t*((t&4096?t%65536<59392?7:t>>6:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?4:3:2)"
 		}]
 	}, {
-		"children": [{
-			"name": "\"Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor...\""
-		}, {
-			"name": "Frozen Planet",
-			"url": "https://battleofthebits.com/arena/Entry/Frozen+Planet/50767/",
-			"date": "2022-01-11",
-			"sampleRate": 44100,
-			"file": "SthephanShi - Frozen Planet.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"fileOriginal": true,
-			"starred": 1
-		}]
+		"name": "Frozen Planet",
+		"description": "\"Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor...\"",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Frozen+Planet/50767/",
+			"https://www.reddit.com/r/bytebeat/comments/u2ejqr/frozen_planet/"
+		],
+		"date": "2022-01-11",
+		"sampleRate": 44100,
+		"file": "SthephanShi - Frozen Planet.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"fileOriginal": true,
+		"starred": 1
 	}, {
-		"children": [{
-			"name": "\"An endless world of snowy expanses, icebergs, and blue waters...\"<br>The composition is based on playing with coefficients of square-wave arpeggiator and a sine modifier. A notes array is used to generate different sounds in different iterations."
-		}, {
+		"name": "Antarctica",
+		"description": "\"An endless world of snowy expanses, icebergs, and blue waters...\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/",
+		"date": "2022-05-01",
+		"sampleRate": 44100,
+		"file": "SthephanShi - Antarctica.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
+	}, {
+		"name": "End of Ice Age",
+		"description": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\"",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/End+of+Ice+Age/53085/",
+			"https://www.reddit.com/r/bytebeat/comments/v6522p/end_of_ice_age/"
+		],
+		"remix": {
 			"name": "Antarctica",
-			"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/",
-			"date": "2022-05-01",
-			"sampleRate": 44100,
-			"file": "SthephanShi - Antarctica.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}]
+			"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/"
+		},
+		"date": "2022-05-02",
+		"sampleRate": 44100,
+		"file": "SthephanShi - End of Ice Age.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
+	}, {
+		"name": "Dancing Moon",
+		"description": "\"The streets of the night metropolis are full of dangers! But the Moon lights your way, and you're not afraid of anything. Feel free to move forward through the narrow lanes!\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/ux48ti/dancing_moon/",
+		"date": "2022-05-25",
+		"sampleRate": 44100,
+		"file": "SthephanShi - Dancing Moon.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
+	}, {
+		"name": "Sunrise on Mars",
+		"description": "\"You are standing in the rocky Martian desert and looking at a small pale Sun that rises from the horizon...\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/w0inwh/sunrise_on_mars_stereo/",
+		"date": "2022-07-16",
+		"mode": "Floatbeat",
+		"sampleRate": 44100,
+		"stereo": true,
+		"file": "SthephanShi - Sunrise on Mars.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
 	}, {
 		"children": [{
-			"name": "\"For thousands of years there was a world of glaciers, snowy expanses and ice caves. But the earth is changing. Giant ice walls are crumbling, falling in huge chunks. Here and there the first flowers bloom and the grass turns green. The first spring is coming to these lands...\""
-		}, {
-			"name": "End of Ice Age",
-			"url": "https://battleofthebits.com/arena/Entry/End+of+Ice+Age/53085/",
-			"remix": {
-				"name": "Antarctica",
-				"url": "https://www.reddit.com/r/bytebeat/comments/ufxliq/antarctica/"
-			},
-			"date": "2022-05-02",
-			"sampleRate": 44100,
-			"file": "SthephanShi - End of Ice Age.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}]
-	}, {
-		"children": [{
-			"name": "\"The streets of the night metropolis are full of dangers! But the Moon lights your way, and you're not afraid of anything. Feel free to move forward through the narrow lanes!\""
-		}, {
-			"name": "Dancing Moon",
-			"url": "https://www.reddit.com/r/bytebeat/comments/ux48ti/dancing_moon/",
-			"date": "2022-05-25",
-			"sampleRate": 44100,
-			"file": "SthephanShi - Dancing Moon.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}]
-	}, {
-		"children": [{
-			"name": "\"You are standing in the rocky Martian desert and looking at a small pale Sun that rises from the horizon...\"<br>Smooth rise/fade of volume and echo parameters is implemented. The possibilities of stereo are used, the echo responds alternately in each ear."
-		}, {
-			"name": "Sunrise on Mars",
-			"url": "https://www.reddit.com/r/bytebeat/comments/w0inwh/sunrise_on_mars_stereo/",
-			"date": "2022-07-16",
-			"mode": "Floatbeat",
-			"sampleRate": 44100,
-			"stereo": true,
-			"file": "SthephanShi - Sunrise on Mars.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}]
-	}, {
-		"children": [{
-			"name": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'."
-		}, {
-			"name": "Dark Forest ",
-			"url": "https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
+			"name": "Dark Forest",
+			"description": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'.",
+			"url": [
+				"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
+				"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
+			],
 			"date": "2023-01-09",
 			"sampleRate": 44100,
 			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
 			"starred": 2
+		}, {
+			"name": "Chase in the Forest",
+			"description": "Another harmony by changing the pattern.",
+			"url": [
+				"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
+				"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
+			],
+			"date": "2023-01-09",
+			"sampleRate": 44100,
+			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?4:8,S=(s,p,d=0)=>(t*2**(p+'023'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(1,k/4)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))"
 		}]
 	}, {
 		"name": "Small Mouse",
@@ -385,22 +389,19 @@
 		"codeMinified": "T=t/1.2,a=[0,3,5,7,0,3,-4,-2],a1=[3,7,9,11,3,7,0,2],a2=[7,10,12,14,7,10,3,5],B=a=>(.88*t*2**(a[i=7&T>>15]/12)&-T>>6)%256/5,S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]",
 		"starred": 1
 	}, {
-		"children": [{
-			"name": "\"At night, while the cat is away, mice become masters of the house and dance together in the middle of the room.\""
-		}, {
-			"name": "Mouse Festival",
-			"url": "https://www.reddit.com/r/bytebeat/comments/118066a/mouse_festival/",
-			"remix": {
-				"name": "Small Mouse",
-				"url": "https://dollchan.net/btb/res/204.html#424"
-			},
-			"date": "2023-02-21",
-			"sampleRate": 32000,
-			"file": "SthephanShi - Mouse Festival.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 1
-		}]
+		"name": "Mouse Festival",
+		"description": "\"At night, while the cat is away, mice become masters of the house and dance together in the middle of the room.\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/118066a/mouse_festival/",
+		"remix": {
+			"name": "Small Mouse",
+			"url": "https://dollchan.net/btb/res/204.html#424"
+		},
+		"date": "2023-02-21",
+		"sampleRate": 32000,
+		"file": "SthephanShi - Mouse Festival.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 1
 	}, {
 		"name": "Voice generator",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
@@ -445,29 +446,28 @@
 			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+5*sin(3+.6*T+sin(.6*T)))+T)"
 		}]
 	}, {
-		"children": [{
-			"name": "\"You were engaged in spiritual practices and finally reached nirvana. So, your soul left your body and began to travel in another dimension.\""
-		}, {
-			"name": "Trip to Otherworld",
-			"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
-			"remix": {
-				"author": "Decent-Manager-6169",
-				"name": "please someone remix this",
-				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
-			},
-			"date": "2023-03-31",
-			"sampleRate": 32000,
-			"file": "SthephanShi - Trip to Otherworld.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}]
+		"name": "Trip to Otherworld",
+		"description": "\"You were engaged in spiritual practices and finally reached nirvana. So, your soul left your body and began to travel in another dimension.\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/127ij8e/trip_to_otherworld/",
+		"remix": {
+			"author": "Decent-Manager-6169",
+			"name": "please someone remix this",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+		},
+		"date": "2023-03-31",
+		"sampleRate": 32000,
+		"file": "SthephanShi - Trip to Otherworld.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
 	}, {
 		"children": [{
-			"name": "\"You are traveling by the Galaxy, flying through another star system. Your path passes by its planets, asteroid belts and gas clouds, past the Red Giant in the center...\"<br>00:00 - 'Star System', 03:24 (204s) - 'Red Giant'"
-		}, {
 			"name": "Through the Star System",
-			"url": "https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+			"description": "\"You are traveling by the Galaxy, flying through another star system. Your path passes by its planets, asteroid belts and gas clouds, past the Red Giant in the center...\"<br>00:00 - 'Star System', 03:24 (204s) - 'Red Giant'",
+			"url": [
+				"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+				"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
+			],
 			"remix": {
 				"author": "Gasman",
 				"name": "Steady On Tim, It's Only A Budget Game",
@@ -482,10 +482,11 @@
 			"starred": 2
 		}, {
 			"name": "Flying past the Black Hole",
-			"url": "https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
-			"remix": {
-				"name": "Through the Star System"
-			},
+			"description": "Changing the chords to minor ones, continuing the journey.",
+			"url": [
+				"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+				"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
+			],
 			"date": "2023-07-25",
 			"sampleRate": 44100,
 			"stereo": true,

@@ -58,7 +58,7 @@
 			"file": "Jimmyoshi - damnit kf i have to do homework why'd you have to pick now to host a bytebeat ohb.js",
 			"fileFormatted": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "The Flower Festival",
 			"url": "https://battleofthebits.com/arena/Entry/The+Flower+Festival/17736/",
@@ -166,8 +166,7 @@
 			"file": "funute - bloop factory.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}, {
 			"name": "bytebeat? how about bitbeat?",
 			"url": "https://battleofthebits.com/arena/Entry/bytebeat_+how+about+bitbeat_/21510/",
@@ -187,7 +186,7 @@
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "frequency machine",
 			"url": "https://battleofthebits.com/arena/Entry/frequency+machine/32329/",
@@ -526,8 +525,7 @@
 		"file": "RealZynx92 - cool loop i guess.js",
 		"fileFormatted": true,
 		"fileMinified": true,
-		"fileOriginal": true,
-		"starred": 1
+		"fileOriginal": true
 	}, {
 		"author": "Decent-Manager-6169",
 		"children": [{
@@ -542,7 +540,7 @@
 			"file": "Decent-Manager-6169 - Red Green Blue 4.js",
 			"fileFormatted": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "An Escaped War Or Something",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rnngwr/an_escaped_war_or_something/",
@@ -662,8 +660,7 @@
 			"file": "Senzou4770 - Cool arpeggio I made.js",
 			"fileFormatted": true,
 			"fileMinified": true,
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}, {
 			"name": "Another long bytebeat arpeggio",
 			"url": "https://www.reddit.com/r/bytebeat/comments/ss6d2b/another_long_bytebeat_arpeggio/",
@@ -673,7 +670,7 @@
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "Minor Frere Jaques",
 			"url": "https://www.reddit.com/r/bytebeat/comments/sua62m/minor_frere_jaques_sounds_p_neat_38_lines/",
@@ -764,6 +761,7 @@
 		"author": "lhphr",
 		"children": [{
 			"name": "s.i.t.e. (synth in the emptiness)",
+			"description": "A synth in isolation can sound cool.",
 			"url": "https://dollchan.net/btb/res/44.html#69",
 			"date": "2022-05-26",
 			"sampleRate": 32000,
@@ -773,7 +771,11 @@
 			"fileOriginal": true
 		}, {
 			"name": "Reminisce",
-			"url": "https://www.reddit.com/r/bytebeat/comments/x39ll8/reminisce/",
+			"description": "This song is quite inspired by \"Something New\".",
+			"url": [
+				"https://www.reddit.com/r/bytebeat/comments/x39ll8/reminisce/",
+				"https://dollchan.net/btb/res/44.html#367"
+			],
 			"remix": {
 				"author": "maj-6",
 				"name": "\"Something New\" using functions",
@@ -826,16 +828,13 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
-			"children": [{
-				"name": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones."
-			}, {
-				"name": "Bad Apple Gift Cards",
-				"url": "https://www.reddit.com/r/bytebeat/comments/13dcab9/bad_apple_gift_cards/",
-				"date": "2023-05-10",
-				"sampleRate": 128000,
-				"file": "PortablePorcelain - Bad Apple Gift Cards.js",
-				"fileOriginal": true
-			}],
+			"name": "Bad Apple Gift Cards",
+			"description": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/13dcab9/bad_apple_gift_cards/",
+			"date": "2023-05-10",
+			"sampleRate": 128000,
+			"file": "PortablePorcelain - Bad Apple Gift Cards.js",
+			"fileOriginal": true,
 			"starred": 2
 		}, {
 			"name": "tracker test",
@@ -991,8 +990,7 @@
 			"sampleRate": 48000,
 			"stereo": true,
 			"file": "Greaserpirate - quick remix using my usual tech.js",
-			"fileOriginal": true,
-			"starred": 1
+			"fileOriginal": true
 		}]
 	}, {
 		"author": "Blast Brothers",
@@ -1180,8 +1178,8 @@
 			"starred": 1
 		}]
 	}, {
-		"name": "Unfinished/Preview Attack of the Killer Beats",
 		"author": "hcdphobe",
+		"name": "Unfinished/Preview Attack of the Killer Beats",
 		"url": "https://www.reddit.com/r/bytebeat/comments/121cmy2/unfinishedpreview_attack_of_the_killer_beats_by/",
 		"cover": {
 			"name": "Deltarune: Chapter 2 - Attack of the Killer Queen",
@@ -1192,14 +1190,22 @@
 		"file": "hcdphobe - Unfinished Preview Attack of the Killer Beats.js",
 		"fileOriginal": true
 	}, {
-		"name": "Pixel Rainfall",
 		"author": ["kleeder", "damifortune"],
+		"name": "Pixel Rainfall",
 		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
 		"date": "2023-05-18",
 		"sampleRate": 44100,
 		"file": "kleeder, damifortune - Pixel Rainfall.js",
 		"fileOriginal": true,
 		"starred": 2
+	}, {
+		"author": "Minerscale",
+		"name": "F25 Key",
+		"url": "https://battleofthebits.com/arena/Entry/F25+Key/60346/",
+		"date": "2023-05-27",
+		"stereo": true,
+		"file": "Minerscale - F25 Key.js",
+		"fileFormatted": true
 	}, {
 		
 		"author": "BSquareIsBack",

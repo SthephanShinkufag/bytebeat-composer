@@ -895,10 +895,12 @@
 		"date": "2022-04-14",
 		"children": [{
 			"name": "idk it's \"t%\"",
+			"description": "Rather small and quite over the place for what it is.",
 			"codeOriginal": "(t%(t&t>>12))*t>>8",
 			"codeMinified": "t%(t&t>>12)*t>>8"
 		}, {
 			"name": ":arp",
+			"description": "Loops in 12 seconds and is rather basic.",
 			"date": "2022-03-13",
 			"sampleRate": 44100,
 			"codeOriginal": "((t>>(1+(t>>18)%2))%256*(t%(4+((t>>15)%8))))",
@@ -909,7 +911,16 @@
 			"sampleRate": 22050,
 			"codeOriginal": "t>>6^t&t>>9^t>>12|(t<<(t>>6)%4^-t&-t>>13)%128^-t>>1"
 		}, {
+			"name": "Logics, and?",
+			"description": "First song where I tried to utilize the logical AND operator.",
+			"url": "https://dollchan.net/btb/res/44.html#61",
+			"date": "2022-05-01",
+			"codeOriginal": "t&(165&t%255)&&t/256*(t&t>>12)",
+			"codeMinified": "t&165&t%255&&t/256*(t&t>>12)",
+			"starred": 1
+		}, {
 			"name": "Fractalized Past",
+			"description": "Why does this sound like I've heard this before, even though I know I haven't?",
 			"url": "https://dollchan.net/btb/res/44.html#69",
 			"date": "2022-05-26",
 			"codeOriginal": "(t>>10^t>>11)%5*((t>>14&3^t>>15&1)+1)*t%99+((3+(t>>14&3)-(t>>16&1))/3*t%99&64)",
@@ -1072,6 +1083,20 @@
 			"date": "2023-04-17",
 			"sampleRate": 48000,
 			"codeOriginal": "t^t>>(t>>14&15)"
+		}, {
+			"name": "Combination stimmer + Street Surfer fix up",
+			"url": "https://www.reddit.com/r/bytebeat/comments/12vt718/list_of_my_creatorremixes_2/",
+			"remix": [{
+				"author": "stimmer",
+				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
+			}, {
+				"author": "raer",
+				"name": "Street Surfer",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
+			}],
+			"date": "2023-04-23",
+			"codeOriginal": "((t*(4|t>>13&3)>>(~t>>11&1)&128|t*(t>>11&t>>13)*(~t>>9&3)&127)&255)/2+((t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t))&255)/2",
+			"starred": 1
 		}, {
 			"name": "happiness",
 			"url": "https://dollchan.net/btb/res/204.html#923",

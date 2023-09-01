@@ -283,7 +283,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	drawSoftPointMono(data, i, color) {
-		if(data[i] || data[i + 1] ||  data[i + 2]) {
+		if(data[i] || data[i + 1] || data[i + 2]) {
 			return;
 		}
 		data[i++] = color[0];
@@ -315,12 +315,13 @@ globalThis.bytebeat = new class {
 		this.containerFixedElem.classList.toggle('container-expanded');
 	}
 	generateLibraryEntry({
-		author, children, codeMinified, codeOriginal, cover, date, file, fileFormatted, fileMinified,
-		fileOriginal, mode, name, remix, sampleRate, starred, stereo, url
+		author, children, codeMinified, codeOriginal, cover, date, description, file, fileFormatted,
+		fileMinified, fileOriginal, mode, name, remix, sampleRate, starred, stereo, url
 	}) {
 		let entry = '';
+		const noArrayUrl = url && !Array.isArray(url);
 		if(name) {
-			entry += !url ? name : `<a href="${ url }" target="_blank">${ name }</a>`;
+			entry += url ? `<a href="${ noArrayUrl ? url : url[0] }" target="_blank">${ name }</a>` : name;
 		}
 		if(author) {
 			let authorsList = '';
@@ -328,7 +329,7 @@ globalThis.bytebeat = new class {
 			for(let i = 0, len = authorsArr.length; i < len; ++i) {
 				const authorElem = authorsArr[i];
 				if(typeof authorElem === 'string') {
-					authorsList += name || !url ? authorElem :
+					authorsList += name || !noArrayUrl ? authorElem :
 						`<a href="${ url }" target="_blank">${ authorElem }</a>`;
 				} else {
 					authorsList += `<a href="${ authorElem[1] }" target="_blank">${ authorElem[0] }</a>`;
@@ -339,8 +340,16 @@ globalThis.bytebeat = new class {
 			}
 			entry += `<span>${ name ? ` (by ${ authorsList })` : `by ${ authorsList }` }</span>`;
 		}
-		if(url && !name && !author) {
-			entry += `(<a href="${ url }" target="_blank">source</a>)`;
+		if(url && (!noArrayUrl || !name && !author)) {
+			if(noArrayUrl) {
+				entry += `(<a href="${ url }" target="_blank">link</a>)`;
+			} else {
+				const urlsList = [];
+				for(let i = name ? 1 : 0, len = url.length; i < len; ++i) {
+					urlsList.push(`<a href="${ url[i] }" target="_blank">link${ i + 1 }</a>`);
+				}
+				entry += ` (${ urlsList.join(', ') })`;
+			}
 		}
 		if(cover) {
 			const { url: cUrl, name: coverName } = cover;
@@ -402,6 +411,9 @@ globalThis.bytebeat = new class {
 			if(codeBtn) {
 				entry += `<div class="code-buttons-container">${ codeBtn }</div>`;
 			}
+		}
+		if(description) {
+			entry += (entry ? '<br>' : '') + description;
 		}
 		if(codeOriginal) {
 			if(Array.isArray(codeOriginal)) {
@@ -567,7 +579,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023071900');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023080300');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
