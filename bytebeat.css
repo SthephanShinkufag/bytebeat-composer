@@ -797,6 +797,40 @@ button[name="close"] {
 
 /* ==[ Adaptive screen ] ================================================================================== */
 
+@media screen and (max-height: 768px) and (min-width: 768px) {
+	#container-fixed {
+		flex-shrink: 0;
+		max-width: 516px;
+		height: 100%;
+	}
+
+	#container-scroll {
+		display: block !important;
+		height: 100%;
+		margin-top: 0;
+		margin-left: 6px;
+		padding-right: 6px;
+	}
+
+	#content {
+		flex-flow: row;
+		align-items: start;
+	}
+
+	#control-counter {
+		width: 66px;
+	}
+
+	#control-expand {
+		display: none;
+	}
+
+	#editor-container {
+		flex: auto;
+		resize: none;
+	}
+}
+
 @media screen and (max-width: 512px) {
 	#editor-container {
 		height: calc(100vw/2);
@@ -807,6 +841,7 @@ button[name="close"] {
 	#container-fixed, #container-scroll {
 		max-width: 516px;
 	}
+
 	#control-counter {
 		width: 66px;
 	}

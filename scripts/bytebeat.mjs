@@ -579,7 +579,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023090400');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023090501');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -760,7 +760,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	onresizeWindow() {
-		const isSmallWindow = window.innerWidth <= 768;
+		const isSmallWindow = window.innerWidth <= 768 || window.innerHeight <= 768;
 		if(this.canvasWidth === 1024) {
 			if(isSmallWindow) {
 				this.canvasWidth = this.canvasElem.width = 512;
