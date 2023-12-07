@@ -2243,7 +2243,8 @@
 			"date": "2023-04-08",
 			"sampleRate": 30000,
 			"codeOriginal": "t%=2**21,t/=2,t?0:y=Array(16).fill(0),ɐ=0,ø=(x,sp=.1,q=256)=>(x%=q,x|=0,mi=y[ɐ]=min(y[ɐ]+sp,x,q),mx=y[ɐ+1]=max(y[ɐ+1]-sp,x,mi+9),ɐ+=2,(x-mi)*255/(mx-mi)),n=k=>isNaN(k)?0:k,p=(k,l,j=2,q=(r=k=>k),z=t>>11,y=Infinity)=>(l=k*(n(l=l.charCodeAt(z%l.length))<=32?0:2**((l-64)/12)),q(l)%y)*j,ɞ=(x,y=1,z=255)=>min(max(x,y),z),k=(q,r=1,s=1,v=64)=>(q+(sin(t*s*PI/1536)*r*32)),ɞ((ø(ø(sin(sin(k(p(t,`@GL@GL@G`.repeat(3)+`CJOCJOCJ<CH<CH<C<CH<CH<C;BG;BG;B?GK?GK?G`,1),1/8,3)*PI/64)*4%3)*(2+(t>131072)*((w=t*p(1,`@@@C<<;?`,1,k=>k,t>>14))>>7&1)),(sin(w*PI/64+t/65536)*2|0)/10))/3+((t>>7^t>>9|t>>13|w)&63)+((d=t%524288)<507904?(t>262144)*p(t/2,`@@@C<<;?`,t/4096%2,k=>sin(k*PI/16)*64,t>>14)+(t>393216)*p(t*.75,`@@@><<;>`,t/4096%2,k=>cbrt(sin(k*PI/16+t/1638.4))*64,t>>14):0)/3)+32+(t>262144)*(d<507904)*cbrt(sin(cbrt(t&8191)*10))*32+(t>524288)*n((s=sin(t>>5),h=1&t,2E5/(t&2**11/[1,2,h,2,1,h,s,h,2,2,1,h,1,2,3,s+3,1,2,h,2,s,s-h,h,s+2,1,2,3,2,t&42,4,w&t>>12,w*w&73][(t>>11)%32]-1))%256)/4)",
-			"codeMinified": "t%=2**21,(t/=2)?0:y=Array(16).fill(0),A=0,O=(x,s=.1,q=256)=>(x%=q,x|=0,mi=y[A]=min(y[A]+s,x,q),mx=y[A+1]=max(y[A+1]-s,x,mi+9),A+=2,255*(x-mi)/(mx-mi)),n=k=>isNaN(k)?0:k,p=(k,l,j=2,q=(r=k=>k),z=t>>11,y=Infinity)=>(l=k*(n(l=l.charCodeAt(z%l.length))<=32?0:2**((l-64)/12)),q(l)%y)*j,S=(x,y=1,z=255)=>min(max(x,y),z),k=(q,r=1,s=1)=>q+(sin(t*s*PI/1536)*r*32),S(O(O(sin(4*sin(k(p(t,'@GL@GL@G'.repeat(3)+'CJOCJOCJ<CH<CH<C<CH<CH<C;BG;BG;B?GK?GK?G',1),1/8,3)*PI/64)%3)*(2+(t>131072)*((w=t*p(1,'@@@C<<;?',1,k=>k,t>>14))>>7&1)),(2*sin(w*PI/64+t/65536)|0)/10))/3+((t>>7^t>>9|t>>13|w)&63)+((d=t%524288)<507904?(t>262144)*p(t/2,'@@@C<<;?',t/4096%2,k=>sin(k*PI/16)*64,t>>14)+(t>393216)*p(.75*t,'@@@><<;>',t/4096%2,k=>cbrt(sin(k*PI/16+t/1638.4))*64,t>>14):0)/3+32+(t>262144)*(d<507904)*cbrt(sin(10*cbrt(t&8191)))*32+(t>524288)*n((s=sin(t>>5),h=1&t,2E5/(t&2**11/[1,2,h,2,1,h,s,h,2,2,1,h,1,2,3,s+3,1,2,h,2,s,s-h,h,s+2,1,2,3,2,t&42,4,w&t>>12,w*w&73][(t>>11)%32]-1))%256)/4)"
+			"codeMinified": "t%=2**21,(t/=2)?0:y=Array(16).fill(0),A=0,O=(x,s=.1,q=256)=>(x%=q,x|=0,mi=y[A]=min(y[A]+s,x,q),mx=y[A+1]=max(y[A+1]-s,x,mi+9),A+=2,255*(x-mi)/(mx-mi)),n=k=>isNaN(k)?0:k,p=(k,l,j=2,q=(r=k=>k),z=t>>11,y=Infinity)=>(l=k*(n(l=l.charCodeAt(z%l.length))<=32?0:2**((l-64)/12)),q(l)%y)*j,S=(x,y=1,z=255)=>min(max(x,y),z),k=(q,r=1,s=1)=>q+(sin(t*s*PI/1536)*r*32),S(O(O(sin(4*sin(k(p(t,'@GL@GL@G'.repeat(3)+'CJOCJOCJ<CH<CH<C<CH<CH<C;BG;BG;B?GK?GK?G',1),1/8,3)*PI/64)%3)*(2+(t>131072)*((w=t*p(1,'@@@C<<;?',1,k=>k,t>>14))>>7&1)),(2*sin(w*PI/64+t/65536)|0)/10))/3+((t>>7^t>>9|t>>13|w)&63)+((d=t%524288)<507904?(t>262144)*p(t/2,'@@@C<<;?',t/4096%2,k=>sin(k*PI/16)*64,t>>14)+(t>393216)*p(.75*t,'@@@><<;>',t/4096%2,k=>cbrt(sin(k*PI/16+t/1638.4))*64,t>>14):0)/3+32+(t>262144)*(d<507904)*cbrt(sin(10*cbrt(t&8191)))*32+(t>524288)*n((s=sin(t>>5),h=1&t,2E5/(t&2**11/[1,2,h,2,1,h,s,h,2,2,1,h,1,2,3,s+3,1,2,h,2,s,s-h,h,s+2,1,2,3,2,t&42,4,w&t>>12,w*w&73][(t>>11)%32]-1))%256)/4)",
+			"starred": 1
 		}, {
 			"name": "TB303-esque",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13mhzom/three_codes_in_one_post/",
@@ -2264,6 +2265,81 @@
 			"mode": "Signed Bytebeat",
 			"sampleRate": 44100,
 			"codeOriginal": "f=(x,w=3,y=4,z=2,q=128,a=k=>sin(k*PI/4))=>(i=x/q,k=abs(i-(i|0))**z*y,t||(l=0),l=a(k*w)*(i%1-1)),f(w=t*[4,0,4,0,4,3.8,4,4.8,5,0,4.8,0,4,3.9,3.8,3.7,3,3.1,3,3.1,2,0,1.5,0,1,0,.5,0,1,0,.5,0,4,0,4,0,4,3.8,4,5,7,0,7,0,7,7,8,3.7,3,3.1,3,3.1,2,0,1.5,0,1,0,.5,0,1,0,.5,0][(t>>12)%64]/2.4,sin(t/163840)+1,64,1,256)*64"
+		}, {
+			"name": "bitbeat concerto",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14nq9up/bitbeat_concerto/",
+			"date": "2023-07-21",
+			"sampleRate": 48000,
+			"codeOriginal": "t*=.184,(1&((t*2**(([5,5,7,7,0,0,5,0][t/3>>13&7]-5)/12-2))&((t>>9)%24+1)?!(1&t*2**(('aaeeecfffe`a^^ccce^^^c`^\\\\\\\\cccehhhcefhhhejhccchec'.charCodeAt((t>>12)%48)-97)/12-5))?1:('000000001000101011001100'[(t>>9)%24]*random()*2):0))*64",
+			"codeMinified" : "t*=.184,64*(1&(t*2**(([5,5,7,7,0,0,5,0][t/3>>13&7]-5)/12-2)&(t>>9)%24+1?1&t*2**(('aaeeecfffe`a^^ccce^^^c`^\\\\\\\\cccehhhcefhhhejhccchec'.charCodeAt((t>>12)%48)-97)/12-5)?'000000001000101011001100'[(t>>9)%24]*random()*2:1:0))"
+		}, {
+			"name": "filter thing",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15bsx3s/filter_thing/",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"name": "Synthwave",
+				"url": "https://dollchan.net/btb/res/520.html#577"
+			},
+			"date": "2023-07-28",
+			"sampleRate": 48000,
+			"codeOriginal": "a=(t*=2/3)*1.01*2**([0,-2,0,3,5,7,10,12,-5,-2,0,3,5,7,10,12,-7,-2,-4,0,3,5,10,5,0,-2,-4,0,3,5,10,5,-9,-7,-5,-2,-4,0,3,8,-5,-7,-5,-2,-4,0,3,8,-5,-2,7,5,-5,-2,7,3,-5,-2,5,2,0,3,2,-2][t/1.66>>12&63]/12),a=(a%256+a%254)/4,b=t*.503*2**([0,-2,-4,-5][t/1.66>>16&3]/12),b=(b%256+b%255)/5,d=a+b,t>0?0:e=f=0,g=k=>min(max(f+=(e+=d-f)-(e*=k/(k+1)),0),255),g(abs(sin(t/1.66*PI/65536))*64)",
+			"starred": 1
+		}, {
+			"name": "filtered arpeg",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15ciw98/filtered_arpeg/",
+			"remix": {
+				"author": "lhphr",
+				"name": "Unnecessary-ARPEG.hc",
+				"url": "https://dollchan.net/btb/res/44.html#50"
+			},
+			"date": "2023-07-29",
+			"sampleRate": 48000,
+			"codeOriginal": "t*=441/480,d=((15+1*'1370'[t>>17&3])/8*'12346543'[t>>12&7]*(t/4)%192+160)%256/2+(sqrt(5E3*(t%65536&(2**[9,12,12,14,,,,,13,12,11,14][(t>>11&15|t^t/32%8*t)&11])-1))&128),h=(i=0)+1,c=(d,k)=>(this[h]??=this[i]??=0,g=(k,h,i)=>min(max(this[i]+=(this[h]+=d/4+64-this[i])-(this[h]*=1/(1+k/24000)),0),255),h++,i++,g(k,--h,--i)),c(d,abs(t/2**19%1-.5)*1000)",
+			"codeMinified" : "t*=441/480,d=((15+1*'1370'[t>>17&3])/8*'12346543'[t>>12&7]*(t/4)%192+160)%256/2+(sqrt(5E3*(t%65536&2**[9,12,12,14,,,,,13,12,11,14][(t>>11&15|t^t/32%8*t)&11]-1))&128),h=(i=0)+1,c=(d,k)=>(this[h]??=this[i]??=0,g=(k,h,i)=>min(max(this[i]+=(this[h]+=d/4+64-this[i])-(this[h]*=1/(1+k/24E3)),0),255),h++,i++,g(k,--h,--i)),c(d,1E3*abs(t/2**19%1-.5))"
+		}, {
+			"name": "fimmer (stimmer with resonance filter applied)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16gs1yk/fimmer_stimmer_with_resonance_filter_applied/",
+			"remix": {
+				"name": "Stimmer",
+				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
+			},
+			"date": "2023-09-12",
+			"sampleRate": 32000,
+			"codeOriginal": "t/=4,h=1+(i=0),lp=(d,k)=>(this[h]??=0,this[i]??=0,g=(k,h,i)=>min(max(this[i]+=(this[h]+=d/4+64-this[i])-(this[h]/=(1+k/48000)),0),255),h+=2,i+=2,g(k,h-2,i-2)),lp(t*(4|t>>13&3)>>(~t>>11&1)&128,max(1e6/(t%2048),1000))+lp(t*(t>>11&t>>13)*(~t>>9&3)&127,max(1e6/(t%2048),1000)*2)",
+			"codeMinified" : "t/=4,h=1+(i=0),lp=(d,k)=>(this[h]??=0,this[i]??=0,g=(k,h,i)=>min(max(this[i]+=(this[h]+=d/4+64-this[i])-(this[h]/=1+k/48E3),0),255),h+=2,i+=2,g(k,h-2,i-2)),lp(t*(4|t>>13&3)>>(~t>>11&1)&128,max(1E6/(t%2048),1E3))+lp(t*(t>>11&t>>13)*(~t>>9&3)&127,2*max(1E6/(t%2048),1E3))"
+		}, {
+			"name": "you spin me byte round",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16nwz8h/you_spin_me_byte_round/",
+			"cover": {
+				"name": "Dead Or Alive - You Spin Me Round",
+				"url": "https://youtu.be/PGNiXGX2nLU"
+			},
+			"date": "2023-09-21",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 48000,
+			"codeOriginal": [
+				"t?0:Z=Y=Array(16384).fill(b=c=d=0),",
+				"h=0,",
+				"H=(t,b)=>{for(i=m=0;i<t.length;i++)b>t[i]&&(m=b-t[i]);return m},",
+				"lpr=(b,n)=>(t||(Z[h]=0),t||(Z[++h]=0),g=(i,n,r)=>min(max(Z[r]+=(Z[n]+=b/4+64-Z[r])-(Z[n]/=1+i/48e3),0),255),h+=2,g(n,h,h+1)),",
+				"b+=(U=170/288e4),l=0,",
+				"p=(k,s=b,f=sin,q=10)=>(t?0:Z[h]=0,Q=Z[h]=(q*Z[h]+(isNaN(parseInt(k[s|0],36))?0:2**(parseInt(k[s|0],36)/12)))/(q+1),h+=2,t?0:Z[h]=0,Q=Z[h]+=isNaN(parseInt(k[s|0],36))?0:Q,Y=f(Q),Q=0,Y),",
+				"(p('    CCCCCCCCCCCCFFFFFFFFAAAAHHHHFCCCCCCCHHHHFFFFAAAAAAAAHHHHFFEE',b*4%64,k=>sin(k*PI/128)>.75,1200)*(1.5-H([0,1,2,3,4,5,6,6.5,7,8,9,9.5,10,10.5,11,11.5,12,13,14,15,15.5],b%16))/2.5+((R=k=>lpr(random()*256-128,k)/64-1)(8000)>0)*max((1+b*4)&3,1)*(b*4%1-1)/6+p(['CFJF','CFJF','CFJF','AFJF'][b/2&3|0],b*16%4,k=>k/256%1>.25,0)/2*(((b+.5)%1-1)*(1==((b+.5)&1)))+p('CCCA885A',b/2%8,k=>sin(k*PI/512*+'12'[b*2&1])>0,0)/3+(sin(cbrt(b*('222222242222242422222224222484848'[b*2&31])%1*4)*128)>0)/3+(((2==(b*2&3))*(R(1000)+R(5000)+R(7000)+R(10000)+R(25000))>0)*(b*2%1-1)**1)/2)*64"
+			],
+			"codeMinified": "t?0:Z=Y=Array(16384).fill(b=c=d=0),h=0,H=(t,b)=>{for(i=m=0;i<t.length;i++)b>t[i]&&(m=b-t[i]);return m},lpr=(b,n)=>(t||(Z[h]=0),t||(Z[++h]=0),g=(i,n,r)=>min(max(Z[r]+=(Z[n]+=b/4+64-Z[r])-(Z[n]/=1+i/48E3),0),255),h+=2,g(n,h,h+1)),b+=U=170/288E4,l=0,p=(k,s=b,f=sin,q=10)=>(t?0:Z[h]=0,Q=Z[h]=(q*Z[h]+(isNaN(parseInt(k[s|0],36))?0:2**(parseInt(k[s|0],36)/12)))/(q+1),h+=2,t?0:Z[h]=0,Q=Z[h]+=isNaN(parseInt(k[s|0],36))?0:Q,Y=f(Q),Q=0,Y),64*(p('    CCCCCCCCCCCCFFFFFFFFAAAAHHHHFCCCCCCCHHHHFFFFAAAAAAAAHHHHFFEE',4*b%64,k=>sin(k*PI/128)>.75,1200)*(1.5-H([0,1,2,3,4,5,6,6.5,7,8,9,9.5,10,10.5,11,11.5,12,13,14,15,15.5],b%16))/2.5+((R=k=>lpr(256*random()-128,k)/64-1)(8E3)>0)*max(1+4*b&3,1)*(4*b%1-1)/6+p(['CFJF','CFJF','CFJF','AFJF'][b/2&3|0],16*b%4,k=>k/256%1>.25,0)/2*((b+.5)%1-1)*(1==(b+.5&1))+p('CCCA885A',b/2%8,k=>sin(k*PI/512*+'12'[2*b&1])>0,0)/3+(0<sin(128*cbrt(b*'222222242222242422222224222484848'[2*b&31]%1*4)))/3+(0<(2==(2*b&3))*(R(1E3)+R(5E3)+R(7E3)+R(1E4)+R(25E3)))*(2*b%1-1)/2)",
+			"starred": 1
+		}, {
+			"name": "the person that i am directly referring to is currently a visible hue with a high frequency wavelength",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16xbupa/the_person_that_i_am_directly_referring_to_is/",
+			"cover": {
+				"name": "Eiffel 65 - Blue (Da Ba Dee)",
+				"url": "https://youtu.be/zA52uNzx7Y4"
+			},
+			"date": "2023-10-01",
+			"sampleRate": 48000,
+			"codeOriginal": "(r=t)?0:A=Array(12288).fill(0),a=max(min(((P=k=>t*2**(k/12-1.1))(parseInt((-(z=t/1.25)>>17&3?'H9EHJCGHHEHLMELJ':'H9EHG7CEEECEEEGG')[z>>13&15],36))%256*min(z>>4&1023,255)/1024)+((C=(k,u,f)=>{for(j=w=0;j<u;j++)w+=f(P(parseInt(k.substr(u*(z>>15&3),u*(z>>15&3)+u)[j],36)));return w})('9EHCJG'+(-z>>17&3?'HELAHE':'HE9EH9'),3,k=>(k/2%64&k/4%64)&(256*(z/65536%1))))+(7e3*cbrt(16e3*((z&16383)/65536**2))&64)+max(t*sin(t*t)%16*min(z/4096%1-.5,0)*4,0)+(r%3?x:x=random())*32*abs(z/8192%1-1)+(r%2?y:y=random())*64*abs(z/16384%1-1)*(z>>14&1),255),0),a=a+A[Z=r/1.25%A.length|0],A[Z-1]=a*.25,max(min(a,255),0)",
+			"codeMinified" : "(r=t)?0:A=Array(12288).fill(0),a=max(min((P=k=>t*2**(k/12-1.1))(parseInt((-(z=t/1.25)>>17&3?'H9EHJCGHHEHLMELJ':'H9EHG7CEEECEEEGG')[z>>13&15],36))%256*min(z>>4&1023,255)/1024+(C=(k,u,f)=>{for(j=w=0;j<u;j++)w+=f(P(parseInt(k.substr(u*(z>>15&3),u*(z>>15&3)+u)[j],36)));return w})('9EHCJG'+(-z>>17&3?'HELAHE':'HE9EH9'),3,k=>k/2%64&k/4%64&z/65536%1*256)+(7E3*cbrt((z&16383)/65536**2*16E3)&64)+max(t*sin(t*t)%16*min(z/4096%1-.5,0)*4,0)+32*(r%3?x:x=random())*abs(z/8192%1-1)+64*(r%2?y:y=random())*abs(z/16384%1-1)*(z>>14&1),255),0),a+=A[Z=r/1.25%A.length|0],A[Z-1]=.25*a,max(min(a,255),0)",
+			"starred": 1
 		}]
 	}, {
 		"author": "lhphr",
@@ -2911,7 +2987,7 @@
 				"what=(t*\"12344321\"[t>>9&7]&-t>>5)*[0,0,1,0][t>>13&3]/4&63,",
 				"Melody+Kick+Snare+Hihat+what)/1.2"
 			],
-			"codeMinified": "(Melody=t/[1.2,,1.2,,1.2,1.2,,,1,,1,,1,1,,,.8,,.8,,.8,.8,,,.9,,.9,,.9,.9][t>>12&31]/4&63|t^t,Kick=sqrt(t%32768*200)&32,Snare=(32*sin(t|1.5*t)*(-t>>3&255)>>8)*'10001010'[t>>11&7]+32,Hihat=(32*sin(t|5*t)*(-t>>4&255)>>9)+32,what=(t*'12344321'[t>>9&7]&-t>>5)*[0,0,1,0][t>>13&3]/4&63,Melody+Kick+Snare+Hihat+what)/1.2"
+			"codeMinified": "((t>>12+(t>>14&1)&1||t/[1.2,1,.8,.9][t>>15&3]/4&63)+(sqrt(t%32768*200)&32)+(32*sin(t|1.5*t)*(-t>>3&255)>>8)*'10001010'[t>>11&7]+64+(32*sin(t|5*t)*(-t>>4&255)>>9)+((t*'12344321'[t>>9&7]&-t>>5)*!(2+(t>>13)&3)/4&63))/1.2"
 		}, {
 			"name": "goose melody but atari square",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13me24e/goose_melody_but_atari_square/",
@@ -5078,5 +5154,35 @@
 			"codeOriginal": "(t*(t>>12&13^2|t>>10&9)|t>>2)|3e4/(t%4096)",
 			"codeMinified": "t*(t>>12&13^2|t>>10&9)|t>>2|3E4/(t%4096)"
 		}]
+	}, {
+		"author": "Spimfurt",
+		"name": "mini drums at your disposal",
+		"url": "https://dollchan.net/btb/res/3.html#1799",
+		"date": "2023-08-03",
+		"sampleRate": 16800,
+		"codeOriginal": [
+			"//bd    tone                        << seq <<          seq speed       vol",
+			"(((0x480%(t&2047)&99)*((0b01000001000000010000000100000001>>(t>>11))&1))/3+",
+			"//hh",
+			"((t%25^t%214)&28)*((0b01010101110101010101010101010101>>(t>>11))&1)/8+",
+			"//sd",
+			"((t%81^t%104)&64)*((0b10010000000100000001000000010000>>(t>>11))&1))*6/",
+			"//common envelope",
+			"(1+(t>>7&15))"
+		],
+		"codeMinified": "6*((1152%(t&2047)&99)*(0b01000001000000010000000100000001>>(t>>11)&1)/3+((t%25^t%214)&28)*(0b01010101110101010101010101010101>>(t>>11)&1)/8+((t%81^t%104)&64)*(0b10010000000100000001000000010000>>(t>>11)&1))/(1+(t>>7&15))"
+	}, {
+		"author": "SleepingLugia",
+		"name": "i mashed my keyboard",
+		"url": "https://www.reddit.com/r/bytebeat/comments/15ldcnc/i_mashed_my_keyboard/",
+		"remix": {
+			"author": "Spimfurt",
+			"name": "mini drums at your disposal",
+			"url": "https://dollchan.net/btb/res/3.html#1799"
+		},
+		"date": "2023-08-08",
+		"sampleRate": 48000,
+		"codeOriginal": "i=t/2500,j=i>>1,e=1+i%2*3,a='jsijiswjiwndwijiwoqw내에즈ㅡ춰뱌ㅑ챠ㅐ대ㅏㅏ마ㅏㄴjjsikospqpqpp너ㅑㅔㅔ베ㅏ으ㅜㅑㅂㅈ브ㅑ느ㅑㅓㅑㅂㄴ더ㅑㅓㅑ너ㅐㅜㅑㅜㅇ댜우댜우댜우저우더우어우냐어냐너재너재뱌내뱌내멍쟈누ㅐ버ㅐ배ㅐㅔ네ㅐㅏ바ㅏ배ㅐㅏ어ㅓ야ㅓㅇ쟈ㅓ어저얃어댜ㅏ저ㅐㅏㅐ뱌ㅔ재베ㅐ베ㅐㅔㅐㅐㄱ더ㅡㅏ',l=a.length,a.charCodeAt(t/4*[1,1,1.2,.9][i>>5&3]&j*a.charCodeAt((j+a.charCodeAt(j/16%l))%l)/24%l)%(1+(j&65535))%256/e/2-54/e+128+(1e3/(.5+(n=i%8*2))&99)/(1+n)*(i>256)-((t%207^t%25+999*sin(t>>4))&96)/(1+n)*(i>384)*(i%16>8)",
+		"starred": 1
 	}
 ]

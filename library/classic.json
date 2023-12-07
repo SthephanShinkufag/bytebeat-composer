@@ -1179,7 +1179,8 @@
 		"url": "https://battleofthebits.com/arena/Entry/dumpster_tunes.txt/59825/",
 		"date": "2023-04-12",
 		"codeOriginal": "(t*((t>>9|t>>11)%7*(~t>>8&2))&64)+(t*((t>>9|t>>8)%7*(~t>>8&2))&64)+(t*((t>>9|t>>12)%7*(~t>>9&2))&64)",
-		"codeMinified": "((t>>9|t>>11)%7*t*(~t>>8&2)&64)+((t>>9|t>>8)%7*t*(~t>>8&2)&64)+((t>>9|t>>12)%7*t*(~t>>9&2)&64)"
+		"codeMinified": "((t>>9|t>>11)%7*t*(~t>>8&2)&64)+((t>>9|t>>8)%7*t*(~t>>8&2)&64)+((t>>9|t>>12)%7*t*(~t>>9&2)&64)",
+		"starred": 1
 	}, {
 		"author": "SHCWAZERNECJLACE",
 		"children": [{
@@ -1234,7 +1235,8 @@
 			"date": "2023-07-21",
 			"sampleRate": 32000,
 			"codeOriginal": "((0b1011101101>>(t>>13&7|-t>>12&11|(-t>>14&5))/3)*t/3520&1)&&(-t>>5)*((t>>15&3)==2?1/4:t>>7&128?(t>>15&3)!=0?1/2:2:1)",
-			"codeMinified": "(0b1011101101>>(t>>13&7|-t>>12&11|-t>>14&5)/3)*t/3520&1&&(-t>>5)*((t>>15&3)==2?1/4:t>>7&128?t>>15&3?1/2:2:1)"
+			"codeMinified": "(0b1011101101>>(t>>13&7|-t>>12&11|-t>>14&5)/3)*t/3520&1&&(-t>>5)*((t>>15&3)==2?1/4:t>>7&128?t>>15&3?1/2:2:1)",
+			"starred": 1
 		}, {
 			"name": "OMG TEH BYTEBEATNESS number one",
 			"url": "https://www.reddit.com/r/bytebeat/comments/1567oiq/omg_teh_bytebeatness/",
@@ -1257,7 +1259,8 @@
 			"date": "2023-07-22",
 			"sampleRate": 15360,
 			"codeOriginal": "64+((t/2*(t&16384?16/3:t&32768?13*32/93:5)*(t&65536?t&4096?3/2:1:1)&127)+(t>>(t&65536?5:7)&127)&128)",
-			"codeMinified": "64+((t/2*(t&16384?16/3:t&32768?416/93:5)*(t&65536?t&4096?3/2:1:1)&127)+(t>>(t&65536?5:7)&127)&128)"
+			"codeMinified": "64+((t/2*(t&16384?16/3:t&32768?416/93:5)*(t&65536?t&4096?3/2:1:1)&127)+(t>>(t&65536?5:7)&127)&128)",
+			"starred": 1
 		}]
 	}, {
 		"author": "Federal_Loss2780",
@@ -1272,5 +1275,50 @@
 		"sampleRate": 44100,
 		"codeOriginal": "(t>>(t>>13&31)&128)+((t&t>>12)*t>>12)+3e5/(t%16384)",
 		"starred": 1
+	}, {
+		"author": "PortablePorcelain",
+		"children": [{
+			"name": "\"an random song i made\" c compatible",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15hkahm/an_random_song_i_made_c_compatible/",
+			"remix": {
+				"author": "tribute1123",
+				"name": "an random song i made",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11fk93c/an_random_song_i_made/"
+			},
+			"date": "2023-08-04",
+			"sampleRate": 40960,
+			"codeOriginal": "(t*(t&(1<<4+(t>>17&3))+3)>>8)+t",
+			"starred": 2
+		}, {
+			"name": "C-compatible(?) Intolerable Claps",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15psf4l/ccompatible_intolerable_claps/",
+			"remix": {
+				"author": "SleepingLugia",
+				"name": "floatbeat tolerable claps",
+				"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
+			},
+			"date": "2023-08-13",
+			"codeOriginal": "((t*((2*t>>11&t>>13)%11%9%7)>>1)&127)+((((t>>11)+2&3)?0:1)*(-t>>4&127)*(((t>>2^-(t&t>>2))*t)&255)>>8)+((-t>>12&7?(-t>>11&1):1)*(5000/(t%2048?t%2048:1))&128)",
+			"codeMinified": "((2*t>>11&t>>13)%11%9%7*t>>1&127)+(((t>>11)+2&3?0:1)*(-t>>4&127)*((t>>2^-(t&t>>2))*t&255)>>8)+(5E3/(t%2048?t%2048:1)*(-t>>12&7?-t>>11&1:1)&128)"
+		}, {
+			"name": "I don't know what this is",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16fipf6/i_dont_know_what_this_is/",
+			"date": "2023-09-11",
+			"sampleRate": 9000,
+			"codeOriginal": "t<<(t>>1)%(1<<(((t>>6&t>>10)&63)*7>>3))^t>>5",
+			"codeMinified": "t<<(t>>1)%(1<<(7*(t>>6&t>>10&63)>>3))^t>>5"
+		}, {
+			"name": "Noise maker with only one variable",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16u1o2d/noise_maker_with_only_one_variable/",
+			"remix": {
+				"author": "Gabriel Miceli",
+				"name": "Noise Maker",
+				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+			},
+			"date": "2023-09-28",
+			"sampleRate": 11025,
+			"codeOriginal": "(((t&4096?t*(t^t+t/256)|t>>4:t>>3|(t&8192?t<<2:t))>>1&127)+((t*((t>>9^(t>>9)-1^1)%13)&255)>>1))*(2+(t>>16))",
+			"codeMinified": "(((t&4096?t*(t^t+t/256)|t>>4:t>>3|(t&8192?t<<2:t))>>1&127)+(((t>>9^(t>>9)-1^1)%13*t&255)>>1))*(2+(t>>16))"
+		}]
 	}
 ]

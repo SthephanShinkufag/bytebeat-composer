@@ -722,6 +722,7 @@
 			"sampleRate": 44100,
 			"stereo": true,
 			"file": "maj-6 - advanced technology.js",
+			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 2
 		}]

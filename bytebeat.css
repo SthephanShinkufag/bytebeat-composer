@@ -396,6 +396,7 @@ button[name="close"] {
 
 #error {
 	color: #f92672;
+	font: 14px/14px monospace;
 	word-break: break-all;
 }
 
