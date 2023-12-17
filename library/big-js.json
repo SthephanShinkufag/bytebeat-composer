@@ -830,10 +830,11 @@
 			"starred": 1
 		}, {
 			"name": "Bad Apple Gift Cards",
-			"description": "Bad Apple animation in the scope! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones.",
+			"description": "Bad Apple animation. Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13dcab9/bad_apple_gift_cards/",
 			"date": "2023-05-10",
 			"sampleRate": 128000,
+			"drawing": { "mode": "Points", "scale": 2 },
 			"file": "PortablePorcelain - Bad Apple Gift Cards.js",
 			"fileOriginal": true,
 			"starred": 2
@@ -1001,48 +1002,165 @@
 		"sampleRate": 48000,
 		"file": "Blast Brothers - Sepulchre.js",
 		"fileMinifiedfileMinified": true,
+		"fileMinified": true,
 		"fileOriginal": true,
 		"starred": 2
 	}, {
 		"author": "May_I_Change_My_Name",
-		"name": "0xBADA441E",
-		"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
-		"cover": {
-			"name": "Touhou Project - Bad Apple",
-			"url": "https://youtu.be/FtutLA63Cp8"
-		},
-		"date": "2023-02-15",
-		"sampleRate": 20000,
-		"stereo": true,
-		"file": "May_I_Change_My_Name - 0xBADA441E.js",
-		"fileFormatted": true,
-		"fileOriginal": true,
-		"starred": 2
+		"children": [{
+			"name": "0xBADA441E",
+			"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
+			"cover": {
+				"name": "Touhou Project - Bad Apple",
+				"url": "https://youtu.be/FtutLA63Cp8"
+			},
+			"date": "2023-02-15",
+			"sampleRate": 20000,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - 0xBADA441E.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "0xBADA441E chiptune version",
+			"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/comment/jirn97r/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": {
+				"name": "0xBADA441E",
+				"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/"
+			},
+			"date": "2023-05-04",
+			"sampleRate": 20000,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - 0xBADA441E chiptune version.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Bad Apple animation with melody",
+			"description": "Set \"Points\" mode and zoom to 1/32 on monitors, or 1/64 on phones.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/137568e/um/",
+			"cover": {
+				"name": "Touhou Project - Bad Apple",
+				"url": "https://youtu.be/FtutLA63Cp8"
+			},
+			"date": "2023-05-04",
+			"sampleRate": 256000,
+			"drawing": { "mode": "Points", "scale": 5 },
+			"file": "May_I_Change_My_Name - Bad Apple animation with melody.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Badder Apple",
+			"description": "Full animation and song! Set \"Points\" mode and zoom to 1/4 on monitors, or 1/8 on phones. The song crashes at 221.87sec",
+			"url": "https://www.reddit.com/r/bytebeat/comments/13d1ctq/badder_apple/",
+			"remix": {
+				"name": "0xBADA441E",
+				"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/"
+			},
+			"date": "2023-05-09",
+			"sampleRate": 61440,
+			"stereo": true,
+			"drawing": { "mode": "Points", "scale": 2 },
+			"file": "May_I_Change_My_Name - Badder Apple.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Pizza Time",
+			"description": "The pitch rise at a constant rate per repetition (about 4 semitones per full loop)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15i9lk6/pizza_time/",
+			"cover": {
+				"name": "Spider-Man 2: The Game Pizza Theme",
+				"url": "https://youtu.be/czTksCF6X8Y"
+			},
+			"date": "2023-08-04",
+			"sampleRate": 44100,
+			"file": "May_I_Change_My_Name - Pizza Time.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}, {
 		"author": "Kouzerumatsu",
-		"name": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
-		"url": "https://dollchan.net/btb/res/415.html#415",
-		"date": "2023-02-18",
-		"sampleRate": 32000,
-		"file": "Kouzerumatsu - XO-Tracker Tsukite Moonhand The Bananafox Theme.js",
-		"fileOriginal": true,
-		"starred": 2
+		"children": [{
+			"name": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
+			"url": "https://dollchan.net/btb/res/415.html#415",
+			"date": "2023-02-18",
+			"sampleRate": 32000,
+			"file": "Kouzerumatsu - XO-Tracker Tsukite Moonhand The Bananafox Theme.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Bossabeat minified",
+			"url": "https://dollchan.net/btb/res/415.html#1848",
+			"remix": {
+				"author": "raphaelgoulart",
+				"name": "bossabeat",
+				"url": "https://battleofthebits.com/arena/Entry/bossabeat/21386/"
+			},
+			"date": "2023-08-06",
+			"sampleRate": 44100,
+			"file": "Kouzerumatsu - Bossabeat minified.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Adventure's Began - Kouzerumatsukite (v0.2)",
+			"url": "https://dollchan.net/btb/res/415.html#1849",
+			"date": "2023-08-08",
+			"sampleRate": 32000,
+			"file": "Kouzerumatsu - Adventure's Began - Kouzerumatsukite (v0.2).js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Multivoiced RTTTL Player",
+			"url": "https://dollchan.net/btb/res/415.html#1852",
+			"remix": {
+				"name": "Adventure's Began - Kouzerumatsukite (v0.2)",
+				"url": "https://dollchan.net/btb/res/415.html#1849"
+			},
+			"date": "2023-09-19",
+			"sampleRate": 32768,
+			"file": "Kouzerumatsu - Multivoiced RTTTL Player.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}, {
 		"author": "Zackx",
-		"name": "battle castle",
-		"url": "https://dollchan.net/btb/res/204.html#495",
-		"remix": {
-			"name": "inside castle",
-			"url": "https://dollchan.net/btb/res/204.html#480"
-		},
-		"date": "2023-02-27",
-		"sampleRate": 44100,
-		"stereo": true,
-		"file": "Zackx - battle castle.js",
-		"fileFormatted": true,
-		"fileMinified": true,
-		"fileOriginal": true,
-		"starred": 1
+		"children": [{
+			"name": "battle castle",
+			"url": "https://dollchan.net/btb/res/204.html#495",
+			"remix": {
+				"name": "inside castle",
+				"url": "https://dollchan.net/btb/res/204.html#480"
+			},
+			"date": "2023-02-27",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "Zackx - battle castle.js",
+			"fileFormatted": true,
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "bad apple + mrbeast sample (PCM)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14pyx7j/time_to_cheating/",
+			"cover": {
+				"name": "Touhou Project - Bad Apple",
+				"url": "https://youtu.be/FtutLA63Cp8"
+			},
+			"date": "2023-07-04",
+			"sampleRate": 16000,
+			"file": "Zackx - bad apple + mrbeast sample (PCM).js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "bomb has been planted",
+			"url": "https://dollchan.net/btb/res/204.html#1495",
+			"date": "2023-07-06",
+			"sampleRate": 32000,
+			"file": "Zackx - bomb has been planted.js",
+			"fileOriginal": true
+		}]
 	}, {
 		"author": "Yamden",
 		"children": [{
@@ -1063,18 +1181,18 @@
 	}, {
 		"author": "Chasyxx",
 		"children": [{
-			"name": "Game Boy's noise",
+			"name": "Game Boy's noise channel emulation",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11ifny8/i_made_something_based_off_of_the_game_boys_noise/",
 			"date": "2023-03-10",
-			"file": "Chasyxx - Game Boy's noise.js",
+			"file": "Chasyxx - Game Boy's noise channel emulation.js",
 			"fileFormatted": true,
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"name": "ibniz-based interpreter",
+			"name": "ibniz-like interpreter",
 			"url": "https://dollchan.net/btb/res/756.html#862",
 			"date": "2023-04-18",
-			"file": "Chasyxx - ibniz-based interpreter.js",
+			"file": "Chasyxx - ibniz-like interpreter.js",
 			"fileOriginal": true
 		}, {
 			"name": "Government Funding cover",
@@ -1089,7 +1207,7 @@
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"name": "THE BOX",
+			"name": "THE [] BOX",
 			"url": "https://dollchan.net/btb/res/756.html#1037",
 			"remix": {
 				"author": "Decent-Manager-6169",
@@ -1099,10 +1217,10 @@
 			"date": "2023-05-13",
 			"sampleRate": 32000,
 			"stereo": true,
-			"file": "Chasyxx - THE BOX.js",
+			"file": "Chasyxx - THE [] BOX.js",
 			"fileOriginal": true
 		}, {
-			"name": "gTRACKER-NoSqSqTi: Bad apple port",
+			"name": "gTrackerNSST: Bad apple port",
 			"url": "https://dollchan.net/btb/res/756.html#1323",
 			"cover": {
 				"name": "Touhou Project - Bad Apple",
@@ -1110,15 +1228,19 @@
 			},
 			"date": "2023-06-18",
 			"sampleRate": 32000,
-			"file": "Chasyxx - gTRACKER-NoSqSqTi Bad apple port.js",
+			"file": "Chasyxx - gTrackerNSST Bad apple port.js",
 			"fileOriginal": true,
 			"starred": 2
 		}, {
-			"name": "gTRACKER-NoSqSqTi+V",
+			"name": "gTrackerNSST+V",
 			"url": "https://dollchan.net/btb/res/756.html#1333",
+			"cover": {
+				"name": "Omori OST - 168 OMORI & 169 OMORI - ALTER",
+				"url": "https://youtu.be/zBpUvvkKma0"
+			},
 			"date": "2023-06-18",
 			"sampleRate": 32000,
-			"file": "Chasyxx - gTRACKER-NoSqSqTi+V.js",
+			"file": "Chasyxx - gTrackerNSST+V.js",
 			"fileOriginal": true
 		}, {
 			"name": "\"somebody please remix this\" gTracker",
@@ -1143,6 +1265,7 @@
 			},
 			"date": "2023-07-12",
 			"sampleRate": 32000,
+			"stereo": true,
 			"file": "Chasyxx - Complex number idea.js",
 			"fileOriginal": true
 		}, {
@@ -1155,9 +1278,17 @@
 			},
 			"date": "2023-07-17",
 			"sampleRate": 32000,
+			"stereo": true,
 			"file": "Chasyxx - trip to otherworld stereo mix.js",
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"name": "And the Sun Rose Again",
+			"url": "https://battleofthebits.com/arena/Entry/And+the+Sun+Rose+Again/60972/",
+			"date": "2023-07-18",
+			"sampleRate": 48000,
+			"file": "Chasyxx - And the Sun Rose Again.js",
+			"fileOriginal": true
 		}, {
 			"name": "sid function",
 			"url": "https://dollchan.net/btb/res/756.html#1659",
@@ -1175,6 +1306,34 @@
 			"date": "2023-07-24",
 			"sampleRate": 32000,
 			"file": "Chasyxx - Rhythm Hell.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Cover of \"OMORI OST - Acrophobia\"",
+			"url": "https://dollchan.net/btb/res/756.html#1781",
+			"cover": {
+				"name": "OMORI OST - Acrophobia (Sped Up) Extended",
+				"url": "https://youtu.be/JM1rfAOjHbc"
+			},
+			"date": "2023-08-02",
+			"sampleRate": 32000,
+			"file": "Chasyxx - Cover of OMORI OST - Acrophobia.js",
+			"fileOriginal": true
+		}, {
+			"name": "mandelbrot",
+			"description": "Mandelbrot fractal visualization. Set \"Diagram\" mode and zoom to 2(-8) or 2(-9).",
+			"url": "https://dollchan.net/btb/res/756.html#2249",
+			"date": "2023-09-08",
+			"drawing": { "mode": "Diagram", "scale": 8 },
+			"file": "Chasyxx - mandelbrot.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Final Run",
+			"url": "https://dollchan.net/btb/res/756.html#2510",
+			"date": "2023-10-21",
+			"sampleRate": 32000,
+			"file": "Chasyxx - Final Run.js",
 			"fileOriginal": true,
 			"starred": 1
 		}]

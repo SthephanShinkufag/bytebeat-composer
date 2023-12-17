@@ -933,12 +933,38 @@
 			"fileOriginal": true,
 			"starred": 1
 		}, {
+			"name": "sega bass thing",
+			"url": "https://dollchan.net/btb/res/204.html#1800",
+			"date": "2023-07-21",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": [
+				"e=256,r=40,d=32,",
+				"p=t*2**(parseInt('0CC0CC57'[7&t>>13],36)/12)/2.43,",
+				"sin(",
+				"sin(",
+				"sin(",
+				"p*PI/16)/76*(r-(t/e)%d)+",
+				"p*PI/256)/8*(r-(t/e)%d)+",
+				"p*PI/256)*(r-(t/e)%d)/64"
+			],
+			"codeMinified": "e=256,r=40,d=32,p=t*2**(parseInt('0CC0CC57'[7&t>>13],36)/12)/2.43,sin(sin(sin(p*PI/16)/76*(r-t/e%d)+p*PI/256)/8*(r-t/e%d)+p*PI/256)*(r-t/e%d)/64"
+		}, {
 			"name": "Four beats drum machine",
 			"url": "https://dollchan.net/btb/res/204.html#1387",
 			"date": "2023-06-22",
 			"mode": "Floatbeat",
 			"sampleRate": 48000,
 			"codeOriginal": "r=t*.8,h=['1111111144144242','2211224423336333','2222422424224222','1112222132212244'][3&r>>18][15&r>>12],sin(6*cbrt(r*h%16384/h+64))*(1-r*h%8192/8192)*(r*h&8192?0:1)*2"
+		}, {
+			"name": "blurry checkered pattern on diagram",
+			"description": "Set \"Diagram\" mode and zoom to 2(-7) or 2(-8).",
+			"url": "https://dollchan.net/btb/res/204.html#1738",
+			"date": "2023-07-27",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"drawing": { "mode": "Diagram", "scale": 7 },
+			"codeOriginal": "sin(t*PI/32)*sin(t*PI/8192)"
 		}]
 	}, {
 		"author": "hcdphobe",
@@ -1135,7 +1161,7 @@
 			},
 			"date": "2023-04-22",
 			"mode": "Floatbeat",
-			"sampleRate": 32000,
+			"sampleRate": 30000,
 			"stereo": true,
 			"file": "Chasyxx - vQ Rise from the darkness.js",
 			"fileOriginal": true

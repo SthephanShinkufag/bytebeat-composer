@@ -315,7 +315,7 @@ globalThis.bytebeat = new class {
 		this.containerFixedElem.classList.toggle('container-expanded');
 	}
 	generateLibraryEntry({
-		author, children, codeMinified, codeOriginal, cover, date, description, file, fileFormatted,
+		author, children, codeMinified, codeOriginal, cover, date, description, drawing, file, fileFormatted,
 		fileMinified, fileOriginal, mode, name, remix, sampleRate, starred, stereo, url
 	}) {
 		let entry = '';
@@ -370,7 +370,7 @@ globalThis.bytebeat = new class {
 			entry += ` (remix of ${ arr.join(', ') })`;
 		}
 
-		if(date || sampleRate || mode || stereo) {
+		if(date || sampleRate || mode || stereo || drawing) {
 			let infoStr = date ? `(${ date })` : '';
 			if(sampleRate) {
 				infoStr += `${ infoStr ? ' ' : '' }${ sampleRate }Hz`;
@@ -381,9 +381,17 @@ globalThis.bytebeat = new class {
 			if(stereo) {
 				infoStr += `${ infoStr ? ' ' : '' }<span class="code-stereo">Stereo</span>`;
 			}
+			if(drawing) {
+				infoStr += `${ infoStr ? ' ' : '' } (${ drawing.mode } mode)`;
+			}
 			entry += ` <span class="code-info">${ infoStr }</span>`;
 		}
-		const songData = codeOriginal || codeMinified || file ? JSON.stringify({ sampleRate, mode }) : '';
+		const songObj = { sampleRate, mode };
+		if(drawing) {
+			songObj.drawMode = drawing.mode;
+			songObj.scale = drawing.scale;
+		}
+		const songData = codeOriginal || codeMinified || file ? JSON.stringify(songObj) : '';
 		if(codeMinified) {
 			entry += ` <span class="code-length" title="Size in characters">${
 				codeMinified.length }c</span>` + (codeOriginal ? '<button class="code-button code-toggle"' +
@@ -579,7 +587,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023120600');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023121600');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -662,7 +670,7 @@ globalThis.bytebeat = new class {
 		this.editorElem = document.getElementById('editor-default');
 		this.errorElem = document.getElementById('error');
 	}
-	loadCode({ code, sampleRate, mode }, isPlay = true) {
+	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
 		this.songData.mode = this.controlPlaybackMode.value = mode = mode || 'Bytebeat';
 		if(this.editorView) {
 			this.editorView.dispatch({
@@ -683,6 +691,13 @@ globalThis.bytebeat = new class {
 			data.isPlaying = isPlay;
 		} else {
 			data.setFunction = code;
+		}
+		if(drawMode) {
+			this.controlDrawMode.value = drawMode;
+			this.setDrawMode();
+		}
+		if(scale !== undefined) {
+			this.setScale(scale - this.settings.drawScale);
 		}
 		this.sendData(data);
 	}
