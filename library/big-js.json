@@ -198,6 +198,7 @@
 			"starred": 2
 		}, {
 			"name": "vgm engine",
+			"description": "A bytebeat engine that played VGM files. This is a SN76489 emulator on top of a converted VGM dump.",
 			"url": "https://battleofthebits.com/arena/Entry/vgm+engine/39556/",
 			"date": "2020-11-01",
 			"sampleRate": 44100,
@@ -212,6 +213,13 @@
 			"sampleRate": 44100,
 			"file": "funute - signal stack α.js",
 			"fileFormatted": true,
+			"fileOriginal": true
+		}, {
+			"name": "signal stack β",
+			"url": "https://battleofthebits.com/arena/Entry/signal+stack+%CE%B2/63469/",
+			"date": "2023-11-26",
+			"sampleRate": 44100,
+			"file": "funute - signal stack β.js",
 			"fileOriginal": true
 		}]
 	}, {
@@ -996,19 +1004,32 @@
 		}]
 	}, {
 		"author": "Blast Brothers",
-		"name": "Sepulchre",
-		"url": "https://battleofthebits.com/arena/Entry/Sepulchre/57663/",
-		"date": "2023-01-17",
-		"sampleRate": 48000,
-		"file": "Blast Brothers - Sepulchre.js",
-		"fileMinifiedfileMinified": true,
-		"fileMinified": true,
-		"fileOriginal": true,
-		"starred": 2
+		"children": [{
+			"name": "Sepulchre",
+			"description": "The leading instrument with pitch slides is wonderful, seems to be singing a sad aria about a fallen hero. A lot of comments.",
+			"url": "https://battleofthebits.com/arena/Entry/Sepulchre/57663/",
+			"date": "2023-01-17",
+			"sampleRate": 48000,
+			"file": "Blast Brothers - Sepulchre.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Slouch",
+			"description": "Funky FM bass and a lot of various effects. This is probably the most thoroughly commented bytebeat.",
+			"url": "https://battleofthebits.com/arena/Entry/Slouch/61961/",
+			"date": "2023-09-22",
+			"sampleRate": 48000,
+			"file": "Blast Brothers - Slouch.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}, {
 		"author": "May_I_Change_My_Name",
 		"children": [{
 			"name": "0xBADA441E",
+			"description": "The very first implementation of Bad Apple! Full song with stereo and echoes.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/",
 			"cover": {
 				"name": "Touhou Project - Bad Apple",
@@ -1036,7 +1057,7 @@
 			"starred": 2
 		}, {
 			"name": "Bad Apple animation with melody",
-			"description": "Set \"Points\" mode and zoom to 1/32 on monitors, or 1/64 on phones.",
+			"description": "Implementation of the first frames. Set \"Points\" mode and zoom to 1/32 on monitors, or 1/64 on phones.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/137568e/um/",
 			"cover": {
 				"name": "Touhou Project - Bad Apple",
@@ -1065,7 +1086,7 @@
 			"starred": 2
 		}, {
 			"name": "Pizza Time",
-			"description": "The pitch rise at a constant rate per repetition (about 4 semitones per full loop)",
+			"description": "The pitch rise at a constant rate per repetition (about 4 semitones per full loop) and goes to infinity at 272.5sec.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15i9lk6/pizza_time/",
 			"cover": {
 				"name": "Spider-Man 2: The Game Pizza Theme",
@@ -1077,12 +1098,39 @@
 			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"name": "Music Theorists Rejoice!",
+			"description": "A chord parsing function designed to be used with tagged templates.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15kyjqp/music_theorists_rejoice/",
+			"date": "2023-08-08",
+			"sampleRate": 44100,
+			"file": "May_I_Change_My_Name - Music Theorists Rejoice!.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "An Extended Instrumental in a Long Year",
+			"description": "Using of \"Music Theorists Rejoice!\" tech",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15lulwa/an_extended_instrumental_in_a_long_year/",
+			"remix": {
+				"author": "Zackx",
+				"name": "My new instrumental in new year",
+				"url": "https://dollchan.net/btb/res/204.html#292"
+			},
+			"date": "2023-08-09",
+			"sampleRate": 32000,
+			"file": "May_I_Change_My_Name - An Extended Instrumental in a Long Year.js",
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "Kouzerumatsu",
 		"children": [{
 			"name": "XO-Tracker: Tsukite Moonhand The Bananafox Theme",
-			"url": "https://dollchan.net/btb/res/415.html#415",
+			"description": "Main theme of Kouzerumatsu's own character - blue eyed yellow fox with glasses. Ported from <a href='https://kouzeru.itch.io/xo-tracker-demo' target='_blank'>XO-Tracker</a> to bytebeat js.",
+			"url": [
+				"https://dollchan.net/btb/res/415.html#415",
+				"https://youtu.be/nY1MCRI9DCQ"
+			],
 			"date": "2023-02-18",
 			"sampleRate": 32000,
 			"file": "Kouzerumatsu - XO-Tracker Tsukite Moonhand The Bananafox Theme.js",
@@ -1090,6 +1138,7 @@
 			"starred": 2
 		}, {
 			"name": "Bossabeat minified",
+			"description": "In fact, rewrited from scratch with other tracker tools.",
 			"url": "https://dollchan.net/btb/res/415.html#1848",
 			"remix": {
 				"author": "raphaelgoulart",
@@ -1104,6 +1153,7 @@
 			"starred": 2
 		}, {
 			"name": "Adventure's Began - Kouzerumatsukite (v0.2)",
+			"description": "A song about the adventures of a Kouzerumatsu's yellow fox.",
 			"url": "https://dollchan.net/btb/res/415.html#1849",
 			"date": "2023-08-08",
 			"sampleRate": 32000,
@@ -1113,6 +1163,7 @@
 			"starred": 2
 		}, {
 			"name": "Multivoiced RTTTL Player",
+			"description": "Previous song rewrited with another tracker format.",
 			"url": "https://dollchan.net/btb/res/415.html#1852",
 			"remix": {
 				"name": "Adventure's Began - Kouzerumatsukite (v0.2)",
@@ -1128,11 +1179,16 @@
 		"author": "Zackx",
 		"children": [{
 			"name": "battle castle",
+			"description": "Extended version of \"Castle at the night\" with arpeggios and lhphr's drums from \"Awaiting Connection\".",
 			"url": "https://dollchan.net/btb/res/204.html#495",
-			"remix": {
+			"remix": [{
 				"name": "inside castle",
 				"url": "https://dollchan.net/btb/res/204.html#480"
-			},
+			}, {
+				"author": "lhphr",
+				"name": "Awaiting Connection",
+				"url": "https://dollchan.net/btb/res/44.html#367"
+			}],
 			"date": "2023-02-27",
 			"sampleRate": 44100,
 			"stereo": true,
@@ -1143,6 +1199,7 @@
 			"starred": 1
 		}, {
 			"name": "bad apple + mrbeast sample (PCM)",
+			"description": "Bad Apple using funny PCM sample. Laughed of loud!",
 			"url": "https://www.reddit.com/r/bytebeat/comments/14pyx7j/time_to_cheating/",
 			"cover": {
 				"name": "Touhou Project - Bad Apple",
@@ -1155,6 +1212,7 @@
 			"starred": 1
 		}, {
 			"name": "bomb has been planted",
+			"description": "Counter Strike terrorists PCM sample and the ticking bomb.",
 			"url": "https://dollchan.net/btb/res/204.html#1495",
 			"date": "2023-07-06",
 			"sampleRate": 32000,
@@ -1221,6 +1279,7 @@
 			"fileOriginal": true
 		}, {
 			"name": "gTrackerNSST: Bad apple port",
+			"description": "Chasyxx's own tracker format, Noise + 2x Squares + Triangle. The first to come up with the idea of displaying data by throwing errors. Very convenient and visual!",
 			"url": "https://dollchan.net/btb/res/756.html#1323",
 			"cover": {
 				"name": "Touhou Project - Bad Apple",
@@ -1233,6 +1292,7 @@
 			"starred": 2
 		}, {
 			"name": "gTrackerNSST+V",
+			"description": "NSST + Vibrato added.",
 			"url": "https://dollchan.net/btb/res/756.html#1333",
 			"cover": {
 				"name": "Omori OST - 168 OMORI & 169 OMORI - ALTER",
@@ -1284,6 +1344,7 @@
 			"starred": 2
 		}, {
 			"name": "And the Sun Rose Again",
+			"description": "Light and warm song.",
 			"url": "https://battleofthebits.com/arena/Entry/And+the+Sun+Rose+Again/60972/",
 			"date": "2023-07-18",
 			"sampleRate": 48000,
@@ -1291,13 +1352,16 @@
 			"fileOriginal": true
 		}, {
 			"name": "sid function",
+			"description": "It's interesting to view the pulses movement at the max zoom.",
 			"url": "https://dollchan.net/btb/res/756.html#1659",
 			"date": "2023-07-18",
 			"sampleRate": 44100,
+			"drawing": { "mode": "Combined", "scale": 0 },
 			"file": "Chasyxx - sid function.js",
 			"fileOriginal": true
 		}, {
 			"name": "Rhythm Hell",
+			"description": "gTracker is used.",
 			"url": "https://dollchan.net/btb/res/756.html#1695",
 			"cover": {
 				"name": "Louie Zong - Rhythm Hell",
@@ -1330,6 +1394,7 @@
 			"starred": 1
 		}, {
 			"name": "Final Run",
+			"description": "Beautiful chords with echo.",
 			"url": "https://dollchan.net/btb/res/756.html#2510",
 			"date": "2023-10-21",
 			"sampleRate": 32000,
@@ -1351,6 +1416,7 @@
 		"fileOriginal": true
 	}, {
 		"author": ["kleeder", "damifortune"],
+		"description": "NES format (.nsf) converted to bytebeat. Used a lua script to log the APU into .csv while playing back the .nsf in fceux. Then .csv converted by a python script into a javascript array. The js logic is going through the array data and converts it on the fly for 4 channels.", 
 		"name": "Pixel Rainfall",
 		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
 		"date": "2023-05-18",
@@ -1360,6 +1426,7 @@
 		"starred": 2
 	}, {
 		"author": "Minerscale",
+		"description": "Waltz of a man whose brain is gradually degrading from schizophrenia, in the style of an early bytebeat. Written in C, converted to bytebeat by SthephanShi.",
 		"name": "F25 Key",
 		"url": "https://battleofthebits.com/arena/Entry/F25+Key/60346/",
 		"date": "2023-05-27",
@@ -1368,7 +1435,7 @@
 		"fileFormatted": true
 	}, {
 		
-		"author": "BSquareIsBack",
+		"author": "WilliamP692",
 		"name": "cover of \"Sparta Atari Base\"",
 		"url": "https://www.reddit.com/r/bytebeat/comments/155a8c0/cover_of_sparta_atari_base_completed/",
 		"cover": {
@@ -1376,10 +1443,32 @@
 			"url": "https://youtu.be/lOp5sN16DZs"
 		},
 		"date": "2023-07-21",
-		"file": "BSquareIsBack - cover of Sparta Atari Base.js",
+		"file": "WilliamP692 - cover of Sparta Atari Base.js",
 		"fileFormatted": true,
 		"fileMinified": true,
 		"fileOriginal": true,
 		"starred": 1
+	}, {
+		"author": "damifortune",
+		"description": "NES format (.nsf) converted to bytebeat, uses the same engine as \"Pixel Rainfall\".",
+		"name": "byte-sized rhapsody",
+		"url": "https://battleofthebits.com/arena/Entry/byte-sized+rhapsody/61592/",
+		"date": "2023-08-23",
+		"sampleRate": 44100,
+		"file": "damifortune - byte-sized rhapsody.js",
+		"fileOriginal": true,
+		"starred": 2
+	}, {
+		"author": "blower5",
+		"description": "Playful and cheerful song, modulates up with time. The overall winner of \"Very Rare Formats II\" competition.",
+		"name": "as esport",
+		"url": "https://battleofthebits.com/arena/Entry/as+esport/61968/",
+		"date": "2023-09-22",
+		"sampleRate": 48000,
+		"stereo": true,
+		"file": "blower5 - as esport.js",
+		"fileMinified": true,
+		"fileOriginal": true,
+		"starred": 2
 	}
 ]

@@ -428,8 +428,8 @@ button[name="close"] {
 }
 
 .code-button {
-	margin: 1px 0 0 6px;
-	padding: 2px 6px;
+	margin: 1px 0 0 5px;
+	padding: 2px 5px;
 	border: none;
 	border-radius: 3px;
 	background-image: var(--code-button);

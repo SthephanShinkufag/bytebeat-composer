@@ -8,15 +8,15 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2023121600">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2023121600">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2023121600"></script>
+	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2023121814">
+	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2023121814">
+	<script type="module" async src="./scripts/bytebeat.mjs?version=2023121814"></script>
 </head>
 <body>
 	<main id="content">
 		<section id="container-fixed">
 			<div id="editor-container">
-				<textarea  id="editor-default" spellcheck="false">t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)</textarea>
+				<textarea id="editor-default" spellcheck="false">2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)</textarea>
 			</div>
 			<div class="controls">
 				<div class="controls-group controls-grow">
@@ -65,6 +65,7 @@
 					<option value="Bytebeat" selected>Bytebeat</option>
 					<option value="Signed Bytebeat">Signed Bytebeat</option>
 					<option value="Floatbeat">Floatbeat</option>
+					<option value="Funcbeat">Funcbeat</option>
 				</select>
 				<div class="controls-group controls-grow">
 					<input type="text" id="control-samplerate" class="control-text" title="Set sample rate (in Hz) then press Enter">
@@ -158,6 +159,13 @@
 					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"></svg>
 				</summary>
 				<div id="library-floatbeat" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>Funcbeat &mdash; statement based<h1>
+					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"></svg>
+				</summary>
+				<div id="library-funcbeat" class="library-container"></div>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">

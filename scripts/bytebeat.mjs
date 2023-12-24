@@ -587,7 +587,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023121600');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023121814');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -684,14 +684,17 @@ globalThis.bytebeat = new class {
 			this.editorElem.value = code;
 		}
 		this.setSampleRate(this.controlSampleRate.value = +sampleRate || 8000, false);
-		const data = { mode, sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate };
+		const data = {
+			mode,
+			sampleRate: this.songData.sampleRate,
+			sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate
+		};
 		if(isPlay) {
 			this.playbackToggle(true, false);
 			data.resetTime = true;
 			data.isPlaying = isPlay;
-		} else {
-			data.setFunction = code;
 		}
+		data.setFunction = code;
 		if(drawMode) {
 			this.controlDrawMode.value = drawMode;
 			this.setDrawMode();
@@ -1037,7 +1040,10 @@ globalThis.bytebeat = new class {
 		this.toggleTimeCursor();
 		if(isSendData) {
 			this.updateUrl();
-			this.sendData({ sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate });
+			this.sendData({
+				sampleRate: this.songData.sampleRate,
+				sampleRatio: this.songData.sampleRate / this.audioCtx.sampleRate
+			});
 		}
 	}
 	setScale(amount, buttonElem) {

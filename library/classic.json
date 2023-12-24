@@ -1226,7 +1226,15 @@
 		"date": "2023-03-26",
 		"codeOriginal": "(t>>3&1)*t>>3^t/128*t"
 	}, {
-		"author": "leejh20",
+		"author": "SquareWave",
+		"name": "ommm",
+		"url": "https://battleofthebits.com/arena/Entry/ommm/59801/",
+		"date": "2023-04-09",
+		"sampleRate": 32000,
+		"codeOriginal": "t ^ (t/2) * (t/t) ^ t * (t/10000000)",
+		"codeMinified": "t^t/2^t*t/1E7"
+	}, {
+		"author": "SleepingLugia (leejh20)",
 		"name": "Tune 5",
 		"url": "https://battleofthebits.com/arena/Entry/dumpster_tunes.txt/59825/",
 		"date": "2023-04-12",
@@ -1257,7 +1265,7 @@
 			"codeOriginal": "t*t%(55*0xCADE11)"
 		}]
 	}, {
-		"author": "BSquareIsBack",
+		"author": "WilliamP692",
 		"name": "Atari sound discovered?",
 		"url": "https://www.reddit.com/r/bytebeat/comments/15383dn/atari_sound_discovered/",
 		"date": "2023-07-18",
@@ -1346,7 +1354,7 @@
 			"name": "C-compatible(?) Intolerable Claps",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15psf4l/ccompatible_intolerable_claps/",
 			"remix": {
-				"author": "SleepingLugia",
+				"author": "SleepingLugia (leejh20)",
 				"name": "floatbeat tolerable claps",
 				"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
 			},

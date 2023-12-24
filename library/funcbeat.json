@@ -1,0 +1,38 @@
+[
+	{
+		"author": "SArpnt",
+		"children": [{
+			"name": "Example",
+			"description": "Basic explanations about Funcbeat in comments.",
+			"url": "https://bytebeat.ficial.net/",
+			"date": "2022-04-24",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "SArpnt - Example.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "boots in bed",
+			"description": "Stereo song with echoes, slowdown and acceleration effects.",
+			"url": "https://dollchan.net/btb/res/141.html#141",
+			"date": "2022-08-14",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"codeOriginal": "return s=s=>2**((\"023578\"[s%7|0]||10)/12+(s/7|0)+7.5),o=(t,b)=>(O=[O=t>12&&sin(b*200)/4+(t*s(\"0035\"[t/3&3])/4%1>t/3%1)/4*b||0,O],(T=>{for(i=0;i<9;i++)(N=t-3/8*i)<0||(n=N*s(N%3*4-(N/3&2)+7),O[i%2]+=N<132&&T(n+N%3/9*T(n/((N/3&3)+1)))*(1-N*4%1)/3*.6**i)})(t=>abs(t%1*4-2)-1),O),t=>t>127?o(t+4):o(t>48?(a=t%1,x=t*2&7,(t/4|0)*3+(t>96?(t&3)+a-(x>3):[a,(t&3)+[a%(1/12),(a-1)**2,a,a-.5,a*3/2,a*2/3,a-1,a-1][x],[a*3/2,a,a*3/2,(a-1)**2,a,a-.5,a*2/3,a*2/4][x]][t/16-3|0])):t,t<24||(t*(t/8-13|0?2:1)%1)**.4)",
+			"starred": 2
+		}]
+	}, 	{
+		"author": "Romash",
+		"name": "grass song",
+		"description": "A calming melody to lie back and look at the clouds.",
+		"url": "https://battleofthebits.com/arena/Entry/grass+song/60925/",
+		"date": "2023-07-16",
+		"mode": "Funcbeat",
+		"sampleRate": 48000,
+		"stereo": true,
+		"file": "Romash - grass song.js",
+		"fileOriginal": true,
+		"starred": 1
+	}
+]
