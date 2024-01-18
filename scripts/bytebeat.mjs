@@ -92,7 +92,7 @@ globalThis.bytebeat = new class {
 		return saveData;
 	}
 	get timeCursorEnabled() {
-		return this.songData.sampleRate >> this.settings.drawScale < 3950;
+		return this.songData.sampleRate >> this.settings.drawScale < 2000;
 	}
 	animationFrame() {
 		this.drawGraphics(this.byteSample);
@@ -338,17 +338,17 @@ globalThis.bytebeat = new class {
 					authorsList += ', ';
 				}
 			}
-			entry += `<span>${ name ? ` (by ${ authorsList })` : `by ${ authorsList }` }</span>`;
+			entry += ` <span>by ${ authorsList }</span>`;
 		}
 		if(url && (!noArrayUrl || !name && !author)) {
 			if(noArrayUrl) {
-				entry += `(<a href="${ url }" target="_blank">link</a>)`;
+				entry += `[<a href="${ url }" target="_blank">link</a>]`;
 			} else {
 				const urlsList = [];
 				for(let i = name ? 1 : 0, len = url.length; i < len; ++i) {
 					urlsList.push(`<a href="${ url[i] }" target="_blank">link${ i + 1 }</a>`);
 				}
-				entry += ` (${ urlsList.join(', ') })`;
+				entry += ` [${ urlsList.join(', ') }]`;
 			}
 		}
 		if(cover) {
@@ -587,7 +587,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2023121814');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024011500');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));

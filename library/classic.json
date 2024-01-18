@@ -61,10 +61,19 @@
 		}]
 	}, {
 		"author": "visy",
-		"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
-		"date": "2011-09-18",
-		"codeOriginal": "t*(t>>8*((t>>15)|(t>>8))&(20|(t>>19)*5>>t|(t>>3)))",
-		"codeMinified": "t*(t>>8*(t>>15|t>>8)&(20|5*(t>>19)>>t|t>>3))"
+		"children": [{
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"date": "2011-09-18",
+			"codeOriginal": "t*(t>>8*((t>>15)|(t>>8))&(20|(t>>19)*5>>t|(t>>3)))",
+			"codeMinified": "t*(t>>8*(t>>15|t>>8)&(20|5*(t>>19)>>t|t>>3))"
+		}, {
+			"name": "Slow progression with 8-bit Atari inspired sounds",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250",
+			"date": "2011-10-06",
+			"codeOriginal": "(t%25-(t>>2|t*15|t%227)-t>>3)|((t>>5)&(t<<5)*1663|(t>>3)%1544)/(t%17|t%2048 )",
+			"codeMinified": "t%25-(t>>2|15*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048)",
+			"starred": 1
+		}]
 	}, {
 		"author": "sub",
 		"name": "Oh the headaches",
@@ -187,7 +196,7 @@
 		"name": "Street Surfer",
 		"date": "2011-09-30",
 		"codeOriginal": "(t&4096)?((t*(t^t%255)|(t>>4))>>1):(t>>3)|((t&8192)?t<<2:t)",
-		"codeMinified": "t&4096?(t*(t^t%255)|t>>4)>>1:t>>3|(t&8192?t<<2:t)",
+		"codeMinified": "t&4096?t/2*(t^t%255)|t>>5:t/8|(t&8192?4*t:t)",
 		"starred": 2
 	}, {
 		"author": "varjohukka",
@@ -436,14 +445,6 @@
 		"codeMinified": "(t>>9^(t>>9)-1^1)%13*t",
 		"starred": 1
 	}, {
-		"author": "visy",
-		"name": "Slow progression with 8-bit Atari inspired sounds",
-		"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250",
-		"date": "2011-10-06",
-		"codeOriginal": "(t%25-(t>>2|t*15|t%227)-t>>3)|((t>>5)&(t<<5)*1663|(t>>3)%1544)/(t%17|t%2048 )",
-		"codeMinified": "t%25-(t>>2|15*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048)",
-		"starred": 1
-	}, {
 		"author": "beyon",
 		"name": "A bit long I suppose...but nice and soothing. Featuring a snippet from yumeji on pouet.net",
 		"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318081308422#c4945456935852459432",
@@ -494,7 +495,7 @@
 			"url": "https://github.com/erlehmann/algorithmic-symphonies/blob/master/sine-nomath/",
 			"date": "2011-11-18",
 			"codeOriginal": "(t&0xF)*((0-t)&0xF)*(((t&0x10)>>3)-1)*0x80/0x41+0x80",
-			"codeMinified": "(t&15)*(0-t&15)*(((t&16)>>3)-1)*128/65+128"
+			"codeMinified": "(t&15)*(-t&15)*(((t&16)>>3)-1)*128/65+128"
 		}, {
 			"name": "crowd",
 			"url": "https://github.com/erlehmann/algorithmic-symphonies/blob/master/crowd/",
@@ -803,6 +804,72 @@
 			"sampleRate": 44100,
 			"codeOriginal": "((t/t+(((t>>12)%6))+((t>>16)%3))*10)*(t/6)&64",
 			"codeMinified": "t/6*(t/t+(t>>12)%6+(t>>16)%3)*10&64"
+		}, {
+			"name": "i said there is no more cool waveforms in non-js",
+			"description": "Dubstep-like sound",
+			"url": "https://www.reddit.com/r/bytebeat/comments/rvqvk7/i_said_there_is_no_more_cool_waveforms_in_nonjs/",
+			"date": "2022-01-04",
+			"sampleRate": 44100,
+			"codeOriginal": "t*((4e5/(t>>2^(t>>12))))*2",
+			"codeMinified": "8E5*t/(t>>2^t>>12)",
+			"starred": 2
+		}, {
+			"name": "how is this possible (, i didnt copied mu6k lines)?",
+			"description": "Sounds like \"No Limit\" by mu6k",
+			"url": "https://www.reddit.com/r/bytebeat/comments/s9fr5l/how_is_this_possible_i_didnt_copied_mu6k_lines/",
+			"date": "2022-01-21",
+			"sampleRate": 32000,
+			"codeOriginal": "(t*2&((((t&256?-t:t)>>8)&((t&256?-t:t)>>6))))",
+			"codeMinified": "2*t&(t&256?-t:t)>>8&(t&256?-t:t)>>6"
+		}, {
+			"name": "glitch",
+			"url": "https://www.reddit.com/r/bytebeat/comments/twpbte/glitch/",
+			"date": "2022-04-05",
+			"sampleRate": 44100,
+			"codeOriginal": "((t*2%255)/((t>>10)&((t/(t/16&8192?2:4)&16)?31:120)))^9000/(t/4&4095)",
+			"codeMinified": "2*t%255/(t>>10&(t/(t/16&8192?2:4)&16?31:120))^9E3/(t/4&4095)"
+		}, {
+			"name": "electricity",
+			"url": "https://www.reddit.com/r/bytebeat/comments/ufvuio/electricity/",
+			"date": "2022-05-01",
+			"sampleRate": 32000,
+			"codeOriginal": [
+				"((t>>12&3)?((t>>12)%(((t>>16)%6/(3&t>>12))+1)+1)*t&-t>>4:",
+				"((t>>1)%(((t>>16)%6/(3&t>>12))+1)+1)*t&t)+5e3/(t/4&4095)"
+			],
+			"codeMinified": "(t>>12&3?((t>>12)%((t>>16)%6/(3&t>>12)+1)+1)*t&-t>>4:((t>>1)%((t>>16)%6/(3&t>>12)+1)+1)*t&t)+5E3/(t/4&4095)",
+			"starred": 1
+		}, {
+			"name": "ELECTROCORE",
+			"url": "https://www.reddit.com/r/bytebeat/comments/upnhe4/electrocore/",
+			"date": "2022-05-14",
+			"sampleRate": 32000,
+			"codeOriginal": "(((t*((((t>>16^t>>6&t>>12)>>4)^(t>>18^t>>16)%8)%16))&128)/2)+((t*t/((t>>18^t>>16)%8))&-t>>6)",
+			"codeMinified": "(((t>>16^t>>6&t>>12)>>4^(t>>18^t>>16)%8)%16*t&128)/2+(t*t/((t>>18^t>>16)%8)&-t>>6)",
+			"starred": 2
+		}, {
+			"name": "ɪɴɗʊʂʈɾɪʌʟɪʈɤ",
+			"url": "https://www.reddit.com/r/bytebeat/comments/x9odix/%C9%AA%C9%B4%C9%97%CA%8A%CA%82%CA%88%C9%BE%C9%AA%CA%8C%CA%9F%C9%AA%CA%88%C9%A4/",
+			"date": "2022-09-09",
+			"sampleRate": 32000,
+			"codeOriginal": "(t*(((t>>13)%8)+1))&t*((t>>10&4|t>>12&6|t>>16&12)&6|((t>>18)%8))-(((-t>>16)%4)*9)",
+			"codeMinified": "t*((t>>13)%8+1)&t*((t>>10&4|t>>12&6|t>>16&12)&6|(t>>18)%8)-(-t>>16)%4*9",
+			"starred": 1
+		}, {
+			"name": "veryangrysymphony",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18m62vw/veryangrysymphony/",
+			"date": "2023-12-19",
+			"sampleRate": 32000,
+			"codeOriginal": "(t/((t>>13&t>>14)&7)^t-t/256)|(2*((t>>13&t>>14)&3)*t&t>>8|4*t&t>>6)",
+			"codeMinified": "t/(t>>13&t>>14&7)^t-t/256|2*(t>>13&t>>14&3)*t&t>>8|4*t&t>>6"
+		}, {
+			"name": "Robotik",
+			"description": "JS code originally, converted to classic C by SthephanShi",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18m6ncd/comment/kg6w9xq/?utm_source=reddit&utm_medium=web2x&context=3",
+			"date": "2023-12-19",
+			"sampleRate": 32000,
+			"codeOriginal": "t*(6+(~t>>17&3))/6^t*(6+(~t>>17&3))*(1-1/(1+(t>>14^t>>13)&6))",
+			"starred": 2
 		}]
 	}, {
 		"author": "getDolphinedLol",
@@ -1087,6 +1154,20 @@
 		"codeOriginal": "(t*5)*((t>>8)%((t>>12)%9))%((((t/4)>>12)*16)%256)|(t)%32",
 		"codeMinified": "(t>>8)%((t>>12)%9)*t*5%(16*(t/4>>12)%256)|t%32"
 	}, {
+		"author": "Natt",
+		"name": "Stress Signal",
+		"url": [
+			"https://demozoo.org/music/305286/",
+			"https://gist.github.com/akumanatt/694eda21ebb263e6989dbefd20b8795a"
+		],
+		"date": "2023-02-12",
+		"sampleRate": 44100,
+		"codeOriginal": "((t/(t>>9&15))&32)*(((-t>>16&t>>20|t>>21)&118518023>>(t>>11))&1)+((t/(t%152))&(-t>>7&t>>10&t>>17)&63)+(t*4/(3353657496>>(t>>18<<3)&255)&23)+(t*8/(3370500505>>(t>>18<<3)&255)&23)+(t*5/24&(-t>>9&13))+(t*5/32&(-t>>8&13))+((t/4-t/64*(-t>>17&1))&(-t/3>>8&13))",
+		"codeMinified": "(t/(t>>9&15)&32)*((-t>>16&t>>20|t>>21)&118518023>>(t>>11)&1)+(t/(t%152)&-t>>7&t>>10&t>>17&63)+(4*t/(3353657496>>(t>>18<<3)&255)&23)+(8*t/(3370500505>>(t>>18<<3)&255)&23)+(5*t/24&-t>>9&13)+(5*t/32&-t>>8&13)+(t/4-t/64*(-t>>17&1)&-t/3>>8&13)",
+		"file": "Natt - Stress Signal.js",
+		"fileFormatted": true,
+		"starred": 2
+	}, {
 		"author": "aturned777",
 		"url": "https://dollchan.net/btb/res/3.html#406",
 		"date": "2023-02-16",
@@ -1242,6 +1323,30 @@
 		"codeMinified": "((t>>9|t>>11)%7*t*(~t>>8&2)&64)+((t>>9|t>>8)%7*t*(~t>>8&2)&64)+((t>>9|t>>12)%7*t*(~t>>9&2)&64)",
 		"starred": 1
 	}, {
+		"author": "awogler9124812041",
+		"children": [{
+			"name": "attempt at making a c-compatible song",
+			"url": "https://www.reddit.com/r/bytebeat/comments/145wwjd/attempt_at_making_a_ccompatible_song/",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "Hard level"
+			},
+			"date": "2023-06-10",
+			"codeOriginal": "t*(t>>12&1?(4-(1&t>>1))>>(3&t>>2):1)*((t>>13&2)+1)*((t>>14&4)+1)|t>>3",
+			"codeMinified": "t*(t>>12&1?4-(1&t>>1)>>(3&t>>2):1)*((t>>13&2)+1)*((t>>14&4)+1)|t>>3",
+			"starred": 1
+		}, {
+			"name": "CA98 remix",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14avwx0/ca98_remix_or_smth/",
+			"remix": {
+				"name": "CA98",
+				"author": "rrrola",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
+			},
+			"date": "2023-06-16",
+			"codeOriginal": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8|t<<(t>>9)^80000/(t&4095)"
+		}]
+	}, {
 		"author": "SHCWAZERNECJLACE",
 		"children": [{
 			"name": "ilovemykids26",
@@ -1266,11 +1371,45 @@
 		}]
 	}, {
 		"author": "WilliamP692",
-		"name": "Atari sound discovered?",
-		"url": "https://www.reddit.com/r/bytebeat/comments/15383dn/atari_sound_discovered/",
-		"date": "2023-07-18",
-		"codeOriginal": "t*(0xAFEDC320>>t/(6-(t>>10&13))&1)&&128",
-		"codeMinified": "t*(0xAFEDC320>>t/(6-(t>>10&13))&1)?128:0"
+		"children": [{
+			"name": "Atari sound discovered?",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15383dn/atari_sound_discovered/",
+			"date": "2023-07-18",
+			"codeOriginal": "t*(0xAFEDC320>>t/(6-(t>>10&13))&1)&&128",
+			"codeMinified": "t*(0xAFEDC320>>t/(6-(t>>10&13))&1)?128:0"
+		}, {
+			"name": "Fractal trying to make music",
+			"url": "https://dollchan.net/btb/res/2628.html#2665",
+			"date": "2023-11-18",
+			"codeOriginal": "(1+(t>>12))*(t^t+(t>>8&3|t>>9&11|-t>>10&14))",
+			"starred": 1
+		}, {
+			"name": "Tundrah + visy",
+			"url": "https://dollchan.net/btb/res/2628.html#2730",
+			"remix": [{
+				"author": "Tundrah",
+				"name": "ass kicking vocals (starting properly after 50s or so)",
+				"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107"
+			}, {
+				"author": "visy",
+				"name": "Slow progression with 8-bit Atari inspired sounds",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250"
+			}],
+			"date": "2023-12-06",
+			"codeOriginal": "((t>>5|t>>4|(t%42*(t>>4)|357052691-(t>>4))/(t>>16)^(t|t>>4))&255)/2+((t%25-(t>>2|15*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048))&255)/2",
+			"starred": 1
+		}, {
+			"name": "8-bit guitar",
+			"url": "https://dollchan.net/btb/res/2628.html#2750",
+			"date": "2023-12-08",
+			"codeOriginal": "(t/(t/(3+(t>>12&3))*(3+(t>>14&6))&120)&1023)/(t>>5&127)",
+			"starred": 2
+		}, {
+			"name": "t>>t%",
+			"url": "hhttps://dollchan.net/btb/res/2628.html#2783",
+			"date": "2023-12-14",
+			"codeOriginal": "((t>>t%(t%2?7:19)|t>>t%(t&16384?36:32))&65535)/(t%4096)"
+		}]
 	}, {
 		"author": "IncreaseRegular",
 		"name": "Shimmer Surfer",

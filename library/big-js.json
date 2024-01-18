@@ -872,7 +872,23 @@
 	}, {
 		"author": "awogler9124812041",
 		"children": [{
+			"name": "chipzel - focus cover",
+			"url": [
+				"https://www.reddit.com/r/bytebeat/comments/xw55jt/chipzel_focus/",
+				"https://www.reddit.com/r/bytebeat/comments/znd55u/remade_my_chipzel_focus_cover/"
+			],
+			"cover": {
+				"name": "chipzel - Focus",
+				"url": "https://youtu.be/wD3j1O1XHQY"
+			},
+			"date": "2022-10-05",
+			"file": "awogler9124812041 - chipzel - focus cover.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}, {
 			"name": "bitcrushed amen break",
+			"description": "Converted 8 bit unsigned PCM data into bytebeat, with samples repeating after each 5th one.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
 			"date": "2022-10-24",
 			"file": "awogler9124812041 - bitcrushed amen break.js",
@@ -880,6 +896,7 @@
 			"starred": 1
 		}, {
 			"name": "bitcrushed amen break (44100hz version)",
+			"description": "Higher quality version",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
 			"date": "2022-10-24",
 			"sampleRate": 44100,
@@ -888,6 +905,7 @@
 			"starred": 1
 		}, {
 			"name": "sparta remix chorus",
+			"description": "Why not convert a sample of a synth and then pitch it?",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yex2iz/sparta_remix_chorus/",
 			"cover": {
 				"name": "Keaton Monger - This is Sparta! Last techno remix",
@@ -898,6 +916,21 @@
 			"file": "awogler9124812041 - sparta remix chorus.js",
 			"fileOriginal": true
 		}, {
+			"name": "sparta remix with amen break",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yex2iz/comment/iu3hfry/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": [{
+				"name": "sparta remix chorus",
+				"url": "https://www.reddit.com/r/bytebeat/comments/yex2iz/sparta_remix_chorus/"
+			}, {
+				"name": "bitcrushed amen break",
+				"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/"
+			}],
+			"date": "2022-10-28",
+			"sampleRate": 16000,
+			"file": "awogler9124812041 - sparta remix with amen break.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
 			"name": "the midi to bytebeat tool",
 			"url": "https://www.reddit.com/r/bytebeat/comments/11s10f8/a_demonstration_of_my_latest_invention_yet_the/",
 			"remix": {
@@ -905,16 +938,99 @@
 				"name": "now its FM synth",
 				"url": "https://twitter.com/Bp103/status/1345905059964530688"
 			},
-			"date": "2023-3-15",
+			"date": "2023-03-15",
 			"sampleRate": 44100,
 			"file": "awogler9124812041 - the midi to bytebeat tool.js",
 			"fileOriginal": true
 		}, {
 			"name": "adventurous song",
+			"description": "the result of combining the outputs of \"audio to bytebeat\" and \"midi to bytebeat\" tools",
 			"url": "https://www.reddit.com/r/bytebeat/comments/120gv4f/adventurous_song_the_result_of_combining_the/",
-			"date": "2023-3-24",
+			"date": "2023-03-24",
 			"file": "awogler9124812041 - adventurous song.js",
 			"fileOriginal": true
+		}, {
+			"name": "morse code encoder",
+			"description": "Sends 'bytebeat is awesome!' in Morse code",
+			"url": "https://www.reddit.com/r/bytebeat/comments/123jytq/morse_code_encoder/",
+			"date": "2023-03-27",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - morse code encoder.js",
+			"fileOriginal": true
+		}, {
+			"name": "rendition of sparta remix or smth",
+			"description": "Made using the midi to bytebeat tool",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1461blh/rendition_of_sparta_remix_or_smth_made_using_the/",
+			"cover": {
+				"name": "Keaton Monger - This is Sparta! Last techno remix",
+				"url": "https://youtu.be/rvYZRskNV3w"
+			},
+			"date": "2023-06-10",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - rendition of sparta remix or smth.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "test.mid",
+			"description": "Made using the midi to bytebeat tool",
+			"url": "https://www.reddit.com/r/bytebeat/comments/14jg805/no_idea_what_to_name_this_but_the_original_file/",
+			"date": "2023-06-26",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - test.mid.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "moving square",
+			"description": "The very first graphics drawing in \"Diagram\" mode. Zoom to 1/16.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/167bkrc/graphics_in_bytebeat_moving_square/",
+			"date": "2023-09-01",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 1 },
+			"file": "awogler9124812041 - moving square.js",
+			"fileOriginal": true
+		}, {
+			"name": "spinning line",
+			"description": "Set \"Diagram\" mode and zoom to 1/8.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/167xhpa/graphics_in_bytebeat_spinning_line/",
+			"date": "2023-09-02",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 3 },
+			"file": "awogler9124812041 - spinning line.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "pseudo 3d cube",
+			"description": "Set \"Diagram\" mode and zoom to 1/16.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1681kct/graphics_in_bytebeat_pseudo_3d_cube/",
+			"date": "2023-09-02",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 4 },
+			"file": "awogler9124812041 - pseudo 3d cube.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "the mandelbrot set",
+			"description": "Set \"Diagram\" mode and zoom to 2(-8) or 2(-9).",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16wb5gv/graphics_in_bytebeat_the_mandelbrot_set/",
+			"date": "2023-09-30",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 8 },
+			"file": "awogler9124812041 - the mandelbrot set.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "pcm support to the midi to bytebeat tool",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16zqx3t/added_pcm_support_to_the_midi_to_bytebeat_tool/",
+			"remix": {
+				"author": "Chasyxx",
+				"name": "THE [] BOX",
+				"url": "https://dollchan.net/btb/res/756.html#1037"
+			},
+			"date": "2023-10-04",
+			"sampleRate": 44100,
+			"file": "awogler9124812041 - pcm support to the midi to bytebeat tool.js",
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "cabbage drop",
@@ -1416,8 +1532,8 @@
 		"fileOriginal": true
 	}, {
 		"author": ["kleeder", "damifortune"],
-		"description": "NES format (.nsf) converted to bytebeat. Used a lua script to log the APU into .csv while playing back the .nsf in fceux. Then .csv converted by a python script into a javascript array. The js logic is going through the array data and converts it on the fly for 4 channels.", 
 		"name": "Pixel Rainfall",
+		"description": "NES format (.nsf) converted to bytebeat. Used a lua script to log the APU into .csv while playing back the .nsf in fceux. Then .csv converted by a python script into a javascript array. The js logic is going through the array data and converts it on the fly for 4 channels.", 
 		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
 		"date": "2023-05-18",
 		"sampleRate": 44100,
@@ -1426,8 +1542,8 @@
 		"starred": 2
 	}, {
 		"author": "Minerscale",
-		"description": "Waltz of a man whose brain is gradually degrading from schizophrenia, in the style of an early bytebeat. Written in C, converted to bytebeat by SthephanShi.",
 		"name": "F25 Key",
+		"description": "Waltz of a man whose brain is gradually degrading from schizophrenia, in the style of an early bytebeat. Written in C, converted to bytebeat by SthephanShi.",
 		"url": "https://battleofthebits.com/arena/Entry/F25+Key/60346/",
 		"date": "2023-05-27",
 		"stereo": true,
@@ -1450,8 +1566,8 @@
 		"starred": 1
 	}, {
 		"author": "damifortune",
-		"description": "NES format (.nsf) converted to bytebeat, uses the same engine as \"Pixel Rainfall\".",
 		"name": "byte-sized rhapsody",
+		"description": "NES format (.nsf) converted to bytebeat, uses the same engine as \"Pixel Rainfall\".",
 		"url": "https://battleofthebits.com/arena/Entry/byte-sized+rhapsody/61592/",
 		"date": "2023-08-23",
 		"sampleRate": 44100,
@@ -1459,9 +1575,61 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
+		"author": "kOLbOSa_exe",
+		"children": [{
+			"name": "TRCK v91623 - farmer type beat",
+			"description": "4-channel POKEY-like tracker.",
+			"url": [
+				"https://dollchan.net/btb/res/27.html#2301",
+				"https://www.reddit.com/r/bytebeat/comments/16kail3/trck_v91623_farmer_type_beat/"
+			],
+			"date": "2023-09-16",
+			"sampleRate": 16000,
+			"file": "kOLbOSa_exe - TRCK v91623 - farmer type beat.js",
+			"fileOriginal": true
+		}, {
+			"name": "xy logo",
+			"description": "Set \"Diagram\" mode and zoom to 1/8 or 1/16.",
+			"url": [
+				"https://dollchan.net/btb/res/27.html#2309",
+				"https://www.reddit.com/r/bytebeat/comments/16kkngq/c_i_r_c_l_e/"
+			],
+			"date": "2023-09-17",
+			"sampleRate": 63200,
+			"drawing": { "mode": "Diagram", "scale": 3 },
+			"file": "kOLbOSa_exe - xy logo.js",
+			"fileOriginal": true
+		}, {
+			"name": "visual trackrr",
+			"description": "Tracker visualization in error console",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18gjd4h/whoever_is_active/",
+			"date": "2023-12-12",
+			"sampleRate": 16000,
+			"file": "kOLbOSa_exe - visual trackrr.js",
+			"fileOriginal": true
+		}, {
+			"name": "tracker could execute 3 channels at once",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18hrmqj/comment/kd8fkg7/?utm_source=reddit&utm_medium=web2x&context=3",
+			"date": "2023-12-13",
+			"sampleRate": 16000,
+			"stereo": true,
+			"file": "kOLbOSa_exe - tracker could execute 3 channels at once.js",
+			"fileOriginal": true
+		}, {
+			"name": "bouncing ball",
+			"description": "Like in an Arkanoid game or a TV logo screensaver! Set \"Diagram\" mode and zoom to 1/16 on phones.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18nsqvt/comment/kecqea1/?utm_source=reddit&utm_medium=web2x&context=3",
+			"date": "2023-12-21",
+			"sampleRate": 32000,
+			"drawing": { "mode": "Diagram", "scale": 4 },
+			"file": "kOLbOSa_exe - bouncing ball.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
 		"author": "blower5",
-		"description": "Playful and cheerful song, modulates up with time. The overall winner of \"Very Rare Formats II\" competition.",
 		"name": "as esport",
+		"description": "Playful and cheerful song, modulates up with time. The overall winner of \"Very Rare Formats II\" competition.",
 		"url": "https://battleofthebits.com/arena/Entry/as+esport/61968/",
 		"date": "2023-09-22",
 		"sampleRate": 48000,

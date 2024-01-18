@@ -9,6 +9,7 @@
 			"mode": "Funcbeat",
 			"sampleRate": 48000,
 			"file": "SArpnt - Example.js",
+			"fileMinified": true,
 			"fileOriginal": true,
 			"starred": 1
 		}, {
@@ -23,6 +24,26 @@
 			"starred": 2
 		}]
 	}, 	{
+		"author": "kOLbOSa_exe",
+		"children": [{
+			"name": "return value",
+			"url": "https://www.reddit.com/r/bytebeat/comments/utzx9t/return_value/",
+			"date": "2022-05-20",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "kOLbOSa_exe - return value.js",
+			"fileOriginal": true
+		}, {
+			"name": "Drum Machine",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11j0vhv/drum_machine/",
+			"date": "2023-03-05",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "kOLbOSa_exe - Drum Machine.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, 	{
 		"author": "Romash",
 		"name": "grass song",
 		"description": "A calming melody to lie back and look at the clouds.",
@@ -32,6 +53,31 @@
 		"sampleRate": 48000,
 		"stereo": true,
 		"file": "Romash - grass song.js",
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "awogler9124812041",
+		"name": "Middle Dave from Sheriff Domestic",
+		"description": "Composed in <a href='https://keithclark.github.io/ZzFXM/tracker/' target='_blank'>ZzFXM tracker</a> and ported to bytebeat",
+		"url": "https://www.reddit.com/r/bytebeat/comments/19013nb/middle_dave_from_sheriff_domestic_zzfxm_funcbeat/",
+		"cover": {
+			"name": "Sheriff Domestic OST - Middle Dave",
+			"url": "https://youtu.be/yfQZNJur49Y"
+		},
+		"date": "2024-01-06",
+		"mode": "Funcbeat",
+		"sampleRate": 48000,
+		"file": "awogler9124812041 - Middle Dave from Sheriff Domestic.js",
+		"fileOriginal": true,
+		"starred": 2
+	}, 	{
+		"author": "WilliamP692",
+		"name": "The Mystery Game",
+		"url": "https://dollchan.net/btb/res/2628.html#2898",
+		"date": "2024-01-10",
+		"mode": "Funcbeat",
+		"sampleRate": 48000,
+		"file": "WilliamP692 - The Mystery Game.js",
 		"fileOriginal": true,
 		"starred": 1
 	}

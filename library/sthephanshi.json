@@ -91,11 +91,11 @@
 	}, {
 		"children": [{
 			"name": "Arabic beat",
-			"codeOriginal": "t%((t&-16|t>>10)&42)<<2|t>>4",
+			"codeOriginal": "t%((t&-16|t>>10)&42)*4|t>>4",
 			"starred": 1
 		}, {
 			"name": "Arabic beat #2",
-			"codeOriginal": "t%((t&-16|t>>11)&42)<<2|t>>4"
+			"codeOriginal": "t%((t&-16|t>>11)&42)*4|t>>4"
 		}]
 	}, {
 		"name": "Game levels",
@@ -357,7 +357,7 @@
 			"date": "2023-01-09",
 			"sampleRate": 44100,
 			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "Chase in the Forest",
 			"description": "Another harmony by changing the pattern.",
@@ -532,5 +532,41 @@
 		"sampleRate": 48000,
 		"codeOriginal": "return t=>(T=9*t,b=T>>7,k=b+2&4?4:8,S=(s,p,d=0,a='0235705702357053')=>(5E3*T*2**(p+a[(T-d)/s%a.length|0]/12+((1-(T>>5&3))%2+2)/3)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+.6*S(2,0,3)+(b&&S(0,-2))+(b>1&&1.2*S(.25,1,0,'037')*(1-T%(k-2)/(k-1)))+(b>2&&.4*N(1E6)*(1-(T-k/2)%k/k))+(b>3&&48*(sin(80*(T%k)**.5)+1)+(T&k&&.8*N(280)*(1-T%k/k))))/128-1",
 		"starred": 1
+	}, {
+		"name": "3D sphere animation",
+		"description": "Shine a flashlight on the sphere from all sides. The higher the zoom, the smoother the animation, but the lower the resolution.",
+		"url": "https://www.reddit.com/r/bytebeat/comments/18yl6an/3d_sphere_animation/",
+		"remix": {
+			"author": "orion_aboy",
+			"name": "sphere",
+			"url": "https://www.reddit.com/r/bytebeat/comments/17ilipb/sphere/"
+		},
+		"date": "2024-01-05",
+		"starred": 1,
+		"children": [{
+			"name": "1/16 zoom sphere",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 4 },
+			"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,x*sin(3*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8"
+		}, {
+			"name": "light 1/16 zoom sphere",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 4 },
+			"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,max(x*sin(3*k)+y*sin(2*k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
+		}, {
+			"name": "1/32 zoom sphere",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 5 },
+			"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,x*sin(2*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8"
+		}, {
+			"name": "light 1/32 zoom sphere",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"drawing": { "mode": "Diagram", "scale": 5 },
+			"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,max(x*sin(2*k)+y*cos(k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
+		}]
 	}
 ]

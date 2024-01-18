@@ -1,0 +1,236 @@
+Fs2=92.50,
+G2=98.00,
+Gs2=103.83,
+A2=110.00,
+As2=116.54,
+B2=123.47,
+C3=130.81,
+Cs3=138.59,
+D3=146.83,
+Ds3=155.56,
+E3=164.81,
+F3=174.61,
+Fs3=185.00,
+G3=196.00,
+Gs3=207.65,
+A3=220.00,
+As3=233.08,
+B3=246.94,
+C4=261.63,
+Cs4=277.18,
+D4=293.66,
+Ds4=311.13,
+E4=329.63,
+F4=349.23,
+Fs4=369.99,
+G4=392.00,
+Gs4=415.30,
+A4=440.00,
+As4=466.16,
+B4=493.88,
+C5=523.25,
+Cs5=554.37,
+D5=587.33,
+Ds5=622.25,
+E5=659.25,
+F5=698.46,
+
+ch1p1=[
+	As3,Cs4,C4,F4,As3,0,As3,0
+],
+ch1p2=[
+	As3,0,C4,0,Cs4,0,As3,0
+],
+ch1p3=[
+	As3,0,F4,0,Gs4,0,Ds4,0
+],
+ch1p4=[
+	Ds4,0,F4,0,Gs4,0,C5,0,
+	Cs5,C5,Gs4,F4,As4,0,Ds4,0
+],
+ch1p5=[
+	Ds4,0,F4,0,Gs4,0,C5,0,
+	Cs5,C5,Gs4,F4,As4,0,0,0
+],
+ch1=[
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p1,
+	...ch1p2,
+	...ch1p2,
+	...ch1p2,
+	...ch1p2,
+	...ch1p3,
+	...ch1p3,
+	...ch1p4,
+	...ch1p2,
+	...ch1p2,
+	...ch1p2,
+	...ch1p2,
+	...ch1p3,
+	...ch1p3,
+	...ch1p5
+],
+
+
+ch2p1=[
+	As2,As2,As2,As2,F3,As2,As2,As2
+],
+ch2p2=[
+	Fs2,Fs2,Fs2,Fs2,Cs3,Fs2,Fs2,Fs2
+],
+ch2p3=[
+	Gs2,Gs2,Gs2,Gs2,Ds3,Gs2,Gs2,Gs2
+],
+ch2p4=[
+	As2,As2,As2,As2,As2,As2,As2,As2
+],
+ch2p5=[
+	Fs2,Fs2,Fs2,Fs2,Fs2,Fs2,Fs2,Fs2
+],
+ch2p6=[
+	Gs2,Gs2,Gs2,Gs2,Gs2,Gs2,Gs2,Gs2
+],
+ch2=[
+	...ch2p1,
+	...ch2p1,
+	...ch2p1,
+	...ch2p1,
+	...ch2p2,
+	...ch2p2,
+	...ch2p3,
+	...ch2p3,
+	...ch2p1,
+	...ch2p1,
+	...ch2p1,
+	...ch2p1,
+	...ch2p2,
+	...ch2p2,
+	...ch2p3,
+	...ch2p3,
+	...ch2p4,
+	...ch2p4,
+	...ch2p4,
+	...ch2p4,
+	...ch2p5,
+	...ch2p5,
+	...ch2p6,
+	...ch2p6,
+	...ch2p4,
+	...ch2p4,
+	...ch2p4,
+	...ch2p4,
+	...ch2p5,
+	...ch2p5,
+	...ch2p6,
+	...ch2p6
+],
+
+noop=[
+	0,0,0,0,0,0,0,0
+],
+ch3p1=[
+	As4,Cs5,C5,F5,As4,0,As4,0
+],
+ch3=[
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...noop,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1,
+	...ch3p1
+],
+
+/*drums=[
+	1,0,.25,0,0.75,0,.20,.30,.20,.30,1,0,.75,0,.20,.30,1,0,1,0,.75,0,.20,.30,.20,.30,1,0,.75,0,.20,.30
+], amen break drums lol */
+drmp1=[
+	.5,0,1,0,0,.5,1,0
+],
+drmp2=[
+	.5,0,1,0,.3,.3,.6,.6
+],
+drmp3=[
+	.5,0,1,0,.5,0,1,0
+],
+drums=[
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp1,
+	...drmp2,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+	...drmp3,
+],
+
+speed=1400,
+min(max((
+t/30.76*ch1[floor(t/speed)%ch1.length]%256)/4
++(t/30.76*ch2[floor(t/speed)%ch2.length]%256)/4
++random()*drums[floor(t/speed)%drums.length]*95
++(t/30.76*(ch3[floor(t/speed)%ch3.length])%256)/4
+,0),255)
