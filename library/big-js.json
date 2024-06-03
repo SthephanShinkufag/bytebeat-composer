@@ -1170,7 +1170,7 @@
 			"stereo": true,
 			"file": "May_I_Change_My_Name - 0xBADA441E chiptune version.js",
 			"fileOriginal": true,
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "Bad Apple animation with melody",
 			"description": "Implementation of the first frames. Set \"Points\" mode and zoom to 1/32 on monitors, or 1/64 on phones.",
@@ -1237,6 +1237,20 @@
 			"file": "May_I_Change_My_Name - An Extended Instrumental in a Long Year.js",
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"name": "Thrown Apple",
+			"description": "Bad Apple animation in the error console.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/comment/jirn97r/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": {
+				"name": "0xBADA441E",
+				"url": "https://www.reddit.com/r/bytebeat/comments/112ry0r/somebody_had_to_do_it/"
+			},
+			"date": "2023-12-21",
+			"sampleRate": 30720,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Thrown Apple.js",
+			"fileOriginal": true,
+			"starred": 2
 		}]
 	}, {
 		"author": "Kouzerumatsu",
@@ -1575,6 +1589,29 @@
 		"fileOriginal": true,
 		"starred": 2
 	}, {
+		"author": "Icycle-Bycicle-24",
+		"children": [{
+			"name": "hush",
+			"url": "https://www.reddit.com/r/bytebeat/comments/16cxfn5/hush/",
+			"cover": {
+				"name": "BFDI OST - Hush",
+				"url": "https://youtu.be/XCeNSQJserE"
+			},
+			"date": "2023-09-08",
+			"sampleRate": 59000,
+			"file": "Icycle-Bycicle-24 - hush.js",
+			"fileOriginal": true
+		}, {
+			"name": "Audisual",
+			"description": "Audio and visuals. Set \"Diagram\" mode and zoom to 1/8 or 1/16.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bsw9dz/so_i_made_a_bytebeat_song_that_sounds_decent_and/",
+			"date": "2024-04-01",
+			"sampleRate": 48000,
+			"file": "Icycle-Bycicle-24 - Audisual.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
 		"author": "kOLbOSa_exe",
 		"children": [{
 			"name": "TRCK v91623 - farmer type beat",
@@ -1638,5 +1675,85 @@
 		"fileMinified": true,
 		"fileOriginal": true,
 		"starred": 2
+	}, {
+		"author": "PurpuroNovo",
+		"name": "Megalovania - Undertale",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1914wki/megalovania_undertale/",
+		"cover": {
+			"name": "Undertale - Megalovania",
+			"url": "https://youtu.be/wDgQdr8ZkTw"
+		},
+		"date": "2024-01-08",
+		"file": "PurpuroNovo - Megalovania - Undertale.js",
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "WoolWL",
+		"children": [{
+			"name": "Cascade",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1aoaafx/a_bunch_of_songs_i_made/",
+			"date": "2024-01-08",
+			"sampleRate": 44100,
+			"file": "WoolWL - Cascade.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Electric anthem",
+			"description": "This was originally intended to be a 1-bit song, but decided to have multiple instruments.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1aoaafx/a_bunch_of_songs_i_made/",
+			"date": "2024-02-11",
+			"sampleRate": 44100,
+			"file": "WoolWL - Electric anthem.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
+		"author": "MarioFan171",
+		"name": "Kevvviiinnnn Stage 39",
+		"url": [
+			"https://www.reddit.com/r/bytebeat/comments/1aqeumu/kevvviiinnnn_stage_39/",
+			"https://dollchan.net/btb/res/2971.html#2984"
+		],
+		"cover": {
+			"name": "symfonikev - Stage 39 (Mega Man Rock Force OST)",
+			"url": "https://youtu.be/xrad5JjnA7w"
+		},
+		"date": "2024-02-14",
+		"sampleRate": 48400,
+		"stereo": true,
+		"file": "MarioFan171 - Kevvviiinnnn Stage 39.js",
+		"fileFormatted": true,
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "D3nschøt",
+		"name": "empty - 4mat",
+		"url": [
+			"https://www.reddit.com/r/bytebeat/comments/1b2yjmz/empty_4mat/",
+			"https://youtu.be/GggJssu1m2w"
+		],
+		"cover": {
+			"name": "Matt Simmonds - Empty (512 bytes)",
+			"url": "https://deepsid.chordian.net/?file=/MUSICIANS/0-9/4-Mat/Empty_512_bytes.sid"
+		},
+		"date": "2024-02-29",
+		"sampleRate": 44100,
+		"file": "D3nschot - empty - 4mat.js",
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "GDPlayer_1035",
+		"name": "another pcm test",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1b5a3ld/another_pcm_test/",
+		"cover": {
+			"name": "Ice Cube - It Was A Good Day",
+			"url": "https://youtu.be/h4UqMyldS7Q"
+		},
+		"date": "2024-03-03",
+		"sampleRate": 22050,
+		"file": "GDPlayer_1035 - another pcm test.js",
+		"fileOriginal": true,
+		"starred": 1
 	}
 ]

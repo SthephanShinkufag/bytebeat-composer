@@ -1,0 +1,1 @@
+A='kkkor w uut rrp oop q r   r rr  ';B='                          m mm  ';C='                          i ii  ';D='k kw wrriiiu upp';return s=>{Q=a=>2**((a.charCodeAt(s*10%a.length)-58)/12)*29*s;return Q(A)%1-Q(B)%1+Q(C)%1-Q(D)/8%1+.9*random()*!(s*40&3)}

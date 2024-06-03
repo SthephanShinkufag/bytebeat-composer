@@ -353,10 +353,10 @@ globalThis.bytebeat = new class {
 		}
 		if(cover) {
 			const { url: cUrl, name: coverName } = cover;
-			entry += ` (cover of ${ cUrl ?
+			entry += ` <span class="code-remix">(cover of ${ cUrl ?
 				`<a href="${ cUrl }" target="_blank">${ coverName }</a>` :
 				`"${ coverName }"`
-			})`;
+			})</span>`;
 		}
 		if(remix) {
 			const arr = [];
@@ -367,7 +367,7 @@ globalThis.bytebeat = new class {
 					remixName || rAuthor }</a>` : `"${ remixName }"`
 				}${ remixName && rAuthor ? ' by ' + rAuthor : '' }`);
 			}
-			entry += ` (remix of ${ arr.join(', ') })`;
+			entry += ` <span class="code-remix">(remix of ${ arr.join(', ') })</span>`;
 		}
 
 		if(date || sampleRate || mode || stereo || drawing) {
@@ -587,7 +587,7 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024011500');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024022000');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));

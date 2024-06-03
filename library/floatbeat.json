@@ -368,6 +368,18 @@
 				"(sin(-(0.1*m*t%3))/3+sin(-(0.05*m*t%3))/3+sin(-(0.075*m*t%3)))*(~t>>9&31)/31+1-sin(t*m*0.2%3)*(~t>>[7,6,7,6,7,7,6,5][(t>>14)%8]&31)/64"
 			],
 			"codeMinified": "m=[8,8,5,6][(t>>15)%4]/12,(sin(-(.1*m*t%3))/3+sin(-(.05*m*t%3))/3+sin(-(.075*m*t%3)))*(~t>>9&31)/31+1-sin(t*m*.2%3)*(~t>>[7,6,7,6,7,7,6,5][(t>>14)%8]&31)/64"
+		}, {
+			"name": "some hl1 typa music",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1am6le0/some_hl1_typa_music_crystal_cave/",
+			"remix": {
+				"name": "Crystal Cave",
+				"url": "https://www.reddit.com/r/bytebeat/comments/154me2z/crystal_cave/"
+			},
+			"date": "2024-02-08",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": "t/=48000/8000,ts=x=>tan(sin(x)),a=t=>ts(3*t/((t>>(t>>14^t>>11)&7^t>>13&6|t>>12&5)+2))*(32-(t>>6)&31)+32,(a(t+1E3)/5+a(t)/1.5+a(t-3E3)/2+a(t-6E3)/3+a(t-9E3)/4+a(t-12E3)/5)*cbrt(sin(t/8E3*PI))/200+sin(4e2/((t&4095)+1))/5+random()*(4095-(t*(((t>>14^t>>11)&1)?4:2)&4095))/32768",
+			"codeMinified": "t/=6,ts=x=>tan(sin(x)),a=x=>ts(3*x/((x>>(x>>14^x>>11)&7^x>>13&6|x>>12&5)+2))*(32-(x>>6)&31)+32,(a(t+1E3)/5+a(t)/1.5+a(t-3E3)/2+a(t-6E3)/3+a(t-9E3)/4+a(t-12E3)/5)*cbrt(sin(t/8E3*PI))/200+sin(400/((t&4095)+1))/5+random()*(4095-(t*((t>>14^t>>11)&1?4:2)&4095))/32768"
 		}]
 	}, {
 		"author": "PortablePorcelain",
@@ -620,6 +632,7 @@
 			"codeOriginal": "H=()=>{for(j=0,i=2;i<32;i++)j+=(2*(1-1/i**2)*t*440/65536-sin(t*i*PI/65536))%2-1;return j/16},H()"
 		}, {
 			"name": "True LFSR",
+			"description": "There is no feedback, so it can't be a linear feedback shift register. Since the array index that gets sent to the audio output never changes (it is always R[0]) and there are no calls to Array.shift, it's not a functional shift register. It is simply a roundabout way of calling random every 16th sample: <button class='code-text' data-songdata='{\"sampleRate\":48000,\"mode\":\"Floatbeat\"}'>t&15?n:n=2*random()&1</button>",
 			"url": "https://www.reddit.com/r/bytebeat/comments/14i1ny6/true_lfsr/",
 			"date": "2023-06-24",
 			"mode": "Floatbeat",
@@ -1269,6 +1282,19 @@
 			"file": "Decent-Manager-6169 - Grains of Sand Instrumental Recreation.js",
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"name": "Running out of Memory",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1biaguq/1/",
+			"cover": {
+				"name": "xsync3d - Running out of Memory",
+				"url": "https://youtu.be/ph58ZqupcKc"
+			},
+			"date": "2024-03-19",
+			"mode": "Floatbeat",
+			"sampleRate": 35498.66666,
+			"file": "Decent-Manager-6169 - 1.js",
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "hrllobrothers4",
@@ -1443,7 +1469,7 @@
 			"name": "strangle and hold",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/strangle_and_hold/",
 			"cover": {
-				"name": "Jeroen Tel - \"Stranglehold\"",
+				"name": "Jeroen Tel - Stranglehold",
 				"url": "https://youtu.be/FpOM4Fs08kU"
 			},
 			"date": "2023-08-05",
@@ -1653,6 +1679,24 @@
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
 			"codeOriginal": "v=x=>(t?0:a=Array(w=8192).fill(0),b=x+a[t%w],a[t%w]=b/2,b),v(sin(t/\"1234\"[t>>16&3]/\"1234\"[t>>18&3]*\"65436547\"[t>>13&7]/20)/((512+(t&8191))*.001))/3"
+		}, {
+			"name": "fik",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bjjdwq/fik/",
+			"date": "2024-03-20",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": "((sin(sqrt(t&16383)))+sin(t)/(1+t%4096/8))/2+(sin(t*PI/64)/6)+(sin(t*PI/64.02)/6)",
+			"codeMinified": "(sin(sqrt(t&16383))+sin(t)/(1+t%4096/8))/2+sin(t*PI/64)/6+sin(t*PI/64.02)/6"
+		}, {
+			"name": "i tried my best",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bogcmx/i_tried_my_best/",
+			"date": "2024-03-26",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "psubscirbe - i tried my best.js",
+			"fileOriginal": true,
+			"fileMinified": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "Weird_Arg2",
@@ -1699,20 +1743,30 @@
 		}]
 	}, {
 		"author": "May_I_Change_My_Name",
-		"name": "strangle and hold (Unsolicited remix)",
-		"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/comment/juypz6j/?utm_source=reddit&utm_medium=web2x&context=3",
-		"remix": {
-			"author": "SleepingLugia (leejh20)",
-			"name": "strangle and hold",
-			"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/strangle_and_hold/"
-		},
-		"date": "2023-08-06",
-		"mode": "Floatbeat",
-		"sampleRate": 48000,
-		"stereo": true,
-		"codeOriginal": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(e*100)*e*8),SE=(Z,e,i)=>i>16?0:e<0?0:Z(e)/2+SE(Z,e-8192/6*B+(i==0?4096/6*B:0),i+2)*0.5,n=A%16,n<8?A-F>0?(a[n]=b[n]=0):0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48e3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(b[n]*1e3,1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[(A+64-i)>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(b[i]*5*p))),M=i=>(L(i),N(i)))",
-		"codeMinified": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(100*e)*e*8),SE=(z,e,i)=>i>16?0:0>e?0:z(e)/2+SE(z,e-8192/6*B+(i==0?4096/6*B:0),i+2)/2,n=A%16,n<8&&A>F?a[n]=b[n]=0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48E3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(1E3*b[n],1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[A+64-i>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(5*b[i]*p))),M=i=>(L(i),N(i)))",
-		"starred": 2
+		"children": [{
+			"name": "strangle and hold (Unsolicited remix)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/comment/juypz6j/?utm_source=reddit&utm_medium=web2x&context=3",
+			"remix": {
+				"author": "SleepingLugia (leejh20)",
+				"name": "strangle and hold",
+				"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/strangle_and_hold/"
+			},
+			"date": "2023-08-06",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"codeOriginal": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(e*100)*e*8),SE=(Z,e,i)=>i>16?0:e<0?0:Z(e)/2+SE(Z,e-8192/6*B+(i==0?4096/6*B:0),i+2)*0.5,n=A%16,n<8?A-F>0?(a[n]=b[n]=0):0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48e3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(b[n]*1e3,1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[(A+64-i)>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(b[i]*5*p))),M=i=>(L(i),N(i)))",
+			"codeMinified": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(100*e)*e*8),SE=(z,e,i)=>i>16?0:0>e?0:z(e)/2+SE(z,e-8192/6*B+(i==0?4096/6*B:0),i+2)/2,n=A%16,n<8&&A>F?a[n]=b[n]=0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48E3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(1E3*b[n],1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[A+64-i>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(5*b[i]*p))),M=i=>(L(i),N(i)))",
+			"starred": 2
+		}, {
+			"name": "LFSR Means LFSR",
+			"description": "LFSR is a <a href='https://en.m.wikipedia.org/wiki/Linear-feedback_shift_register' target='_blank'>linear-feedback shift register</a>.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1b0el7i/lfsr_means_lfsr/",
+			"date": "2024-02-26",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t?T++:(R=Array(N=12),T=0,R[0]=1,R[1]=1),R[T%N]=R[T%N]^R[(T-1)%N]^R[(T-4)%N]^R[(T-6)%N]^R.reduce((s,n)=>s^n,0),R[T%N]"
+		}]
 	}, {
 		"author": "orion_aboy",
 		"children": [{
@@ -1759,6 +1813,89 @@
 			],
 			"codeMinified": "sr=48000,tempo=280,t?0:(R=Array(RL=floor(.3*sr)),RI=0,N1={N:0,D:0,L:0,wave:p=>4*(p%1-p%.5)-1,l:.1,d:.4},N2={N:0,D:0,L:0,wave:p=>4*(p%1-p%.5)-1,l:.05,d:.5},D={N:0,D:0,L:0,wave:random,l:0,d:.1,p:1}),nl=60*sr/tempo,ni=floor(t/nl)%32,pt=floor(t/(32*nl)),n1=[22,,20,22,15,,13,15,10,,8,10,5,,,,8,,6,8,13,,,,8,,6,8,16,,,],n2=pt&1?[-4,,-2,,0,,,,-4,,-2,,0,,,,-3,,-1,,1,,,,-7,,-5,,-3]:[-4,,-2,,0,,,,-4,,-2,,0,,,,-5,,-3,,-1,,,,-7,,-5,,-3],DA={l:.05,d:.1},DB={l:.2,d:.1},DC={l:.4,d:.04},d=[DA,,DC,DA,DB,,,DC,DA,,DC,DA,DB,,,,DA,,DC,DA,DB,,,DC,DA,,DC,DA,DB,,,,DA],U=(N,n)=>(floor(t%nl)==0?(N.p?(N.l=n[ni]?.l||N.l,N.d=n[ni]?.d||N.d):N.N=2**(n[ni]/12)||N.N,N.D=typeof n[ni]=='undefined'?N.D:sr*N.d):N.D--),P=N=>(l=N.l**(sr/48E3),N.L=(1-l)*N.L+l*N.wave(440/sr*t*N.N)*max(0,N.D/sr/N.d)),U(N1,pt<4?n1:pt<6?[]:pt<8?n1:[]),U(N2,pt<8?n2:[]),U(D,pt<4?[]:pt<8?d:[]),RI=++RI%RL,R[RI]=.3*(R[RI]||0)+.4*P(N1)+.2*P(N2)+.9*P(D)",
 			"starred": 1
+		}]
+	}, {
+		"author": "r/bytebeat users",
+		"name": "SArpnt's \"Funcbeat Example\" in Floatbeat",
+		"description": "Uses modified kick. Made and minified by several r/bytebeat users",
+		"url": "https://www.reddit.com/r/bytebeat/comments/18nyjtz/comment/khkt2ep/",
+		"remix": {
+			"author": "SArpnt",
+			"name": "Example",
+			"url": "https://bytebeat.ficial.net/"
+		},
+		"date": "2023-12-23",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"codeOriginal": "(t/=48E3)?(P=(t*2**((\"$$$000,,,,,,,,''\".charCodeAt(t*4.3&15)+22)/12)%1>t/2%1*.6+.2)/2-.25,l+=r+=(P-l-r*3)/(cos(t/5)*170+200),l+sin((t*4.3%2+.01)**.3*180)/4):l=r=0"
+	}, {
+		"author": "turblentdrink",
+		"name": "dance",
+		"url": "https://www.reddit.com/r/bytebeat/comments/18pfne0/dance_floatbeat/",
+		"date": "2023-12-23",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"codeOriginal": "f=t=>{var b=t*8000;var b1=t*8192;return sin(1E8**(-t*8%1)*20)/4*((t*4&7)==(t*(2+[0,1,-1,1][t/8&3])&3))+sin(b)*sin(t*Math.PI*8)**8/4*((t*4&7)==((t*3&3)+1))+sin(1E8**(-t*2%1)*50)/4+sin(sin(b/16)*sin(t/2)*32)*(1-t*'4446'[t&3]%1)/8},f(t/48000)",
+		"codeMinified": "f=t=>{var b=8E3*t;return sin(20*1E8**(8*-t%1))/4*((4*t&7)==(t*(2+[0,1,-1,1][t/8&3])&3))+sin(b)*sin(t*PI*8)**8/4*((4*t&7)==(3*t&3)+1)+sin(50*1E8**(2*-t%1))/4+sin(sin(b/16)*sin(t/2)*32)*(1-t*'4446'[t&3]%1)/8},f(t/48E3)"
+	}, {
+		"author": "WoolWL",
+		"name": "Blue clouds",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1aoaafx/a_bunch_of_songs_i_made/",
+		"cover": {
+			"name": "Deltarune Chapter 2 OST - Lost Girl",
+			"url": "https://youtu.be/Py0i3R3vuag"
+		},
+		"date": "2024-02-11",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"file": "WoolWL - Blue clouds.js",
+		"fileOriginal": true,
+		"starred": 1
+	}, {
+		"author": "Glebguything",
+		"name": "Guitar noises made out of boredom",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1b87yho/guitar_noises_made_out_of_boredom/",
+		"date": "2024-03-06",
+		"mode": "Floatbeat",
+		"sampleRate": 44100,
+		"codeOriginal": "THK=[1,2,1,2,0.8,1.8,0.6,0.4],sin(t/16*THK[(t>>14)%8]+sin(t*[(t>>17)%8]/16*THK[(t>>14)%8])%256*(-t/2&2047)/2E3)%256*(-t/8&2047)/2E3+sin(t/128/8)",
+		"codeMinified": "THK=[1,2,1,2,.8,1.8,.6,.4],sin(t/16*THK[(t>>14)%8]+sin(t*[(t>>17)%8]/16*THK[(t>>14)%8])%256*(-t/2&2047)/2E3)%256*(-t/8&2047)/2E3+sin(t/128/8)"
+	}, {
+		"author": "AYesUserDX",
+		"children": [{
+			"name": "House Of Many Doors",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bhamwg/comment/kvdj8ms/",
+			"cover": {
+				"name": "サイボーグDRAKON - House Of Many Doors",
+				"url": "https://youtu.be/Rl1lbyIPnmE"
+			},
+			"date": "2024-03-18",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "t?0:a=b=c=0,a+=1/128/1.02*2**([0,2,3,,3,5,3,2,0,-1,0,,-1,0,2,,0,2,3,,3,5,3,2,0,-1,0,,-1,-1,-1][t*4/5>>13&31]/12)||0,b+=c+=((a%1-.5+a*1.01%1-.5+a/2%1-.5)/4-b-c)/(16-(t*4/5>>9)%16)"
+		}, {
+			"name": "another aturned777 bytebeat remixed",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1biv9v4/another_aturned777_bytebeat_remixed/",
+			"remix": {
+				"author": "aturned777",
+				"url": "https://dollchan.net/btb/res/3.html#406"
+			},
+			"date": "2024-03-19",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "(()=>{l=0;for(x=0;x<1+(t>>9&15);x++)l+=2**x*8*t/(4+(t>>15&15))*(1+(t>>13&3))/128%2-1;return n=l/x,n/4+sin(8/(t/16384%1+.07))/2+((t%8?a:a=random())-.5)/2*(1-t/16384%1)*(t>>14&1)})()",
+			"codeMinified": "(()=>{for(x=l=0;x<1+(t>>9&15);x++)l+=8*2**x*t/(4+(t>>15&15))*(1+(t>>13&3))/128%2-1;return n=l/x,n/4+sin(8/(t/16384%1+.07))/2+((t%8?a:a=random())-.5)/2*(1-t/16384%1)*(t>>14&1)})()"
+		}, {
+			"name": "remix of sthephanshi's hard level",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1btzugr/remix_of_sthephanshis_hard_level/",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "Hard level"
+			},
+			"date": "2024-04-02",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"codeOriginal": "a=t/4*(t&65536?7:5)*(5-(3&t>>10))>>(3&-t>>(t&16384?4:18)),b=cos(a*PI/128+abs(8*sin(t*PI/1048576))*sin(a*PI/128)*(1-t/4096%1))*(t/16384%1)+sin(40/(t/2048%8+.3))*(1-t/16384%1),b/2+(random()-.5)*.998**(t%8192)+sin((t/4|0)**3)/2*.9994**(t%16384)*(t>>14&1)"
 		}]
 	}
 ]

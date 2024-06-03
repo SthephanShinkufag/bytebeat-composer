@@ -1,6 +1,6 @@
 [
 	{
-		"description": "Formulas family discovered by experimenting with \"Explosions\" <button class=\"code-text\">(t>>2)*(t>>5)|t>>5</button>",
+		"description": "Formulas family discovered by experimenting with \"Explosions\" <button class='code-text'>(t>>2)*(t>>5)|t>>5</button>",
 		"children": [{
 			"codeOriginal": "(t>>4)*(t>>3)|t>>2"
 		}, {
@@ -17,7 +17,7 @@
 			"codeOriginal": "(t>>5)*(t>>5)|t>>2"
 		}]
 	}, {
-		"name": "\"Robocop\". Cool beat discovered by experimenting with <button class=\"code-text\">(t>>2)*(t&16)|t>>2</button>",
+		"name": "\"Robocop\". Cool beat discovered by experimenting with <button class='code-text'>(t>>2)*(t&16)|t>>2</button>",
 		"children": [{
 			"name": "Very cool sound with biting blows",
 			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
@@ -40,7 +40,8 @@
 			"starred": 1
 		}, {
 			"name": "I hear the long mewing of a cat :)",
-			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)"
+			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)",
+			"starred": 1
 		}]
 	}, {
 		"name": "\"Child swings\". Cool happy tune!",
@@ -99,7 +100,7 @@
 		}]
 	}, {
 		"name": "Game levels",
-		"description": "Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class=\"code-text\">t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button>",
+		"description": "Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class='code-text'>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button>",
 		"children": [{
 			"name": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
@@ -114,7 +115,7 @@
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
 			"starred": 1
 		}, {
-			"name": "By playing with the \"Boss level\" I made a different rhythm pattern",
+			"name": "By playing with the \"Boss level\" I made a different pattern",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
 		}, {
 			"name": "\"Boss level #2\". |t>>4 rhythm sounds cool!",
@@ -210,8 +211,6 @@
 			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>3",
 			"starred": 1
 		}, {
-			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(2&t>>9)|t>>3"
-		}, {
 			"name": "\"Awesome level #2\". The next awesome level!",
 			"codeOriginal": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
 			"starred": 2
@@ -224,9 +223,6 @@
 			"codeOriginal": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
 		}, {
 			"name": "Other \"Boss level\" variation",
-			"codeOriginal": "t*(6+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)"
-		}, {
-			"name": "Previous tune with a ternary magic",
 			"codeOriginal": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
 			"starred": 1
 		}]
@@ -447,11 +443,6 @@
 			"sampleRate": 32000,
 			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((4.8*(2*abs(1-n*t%2)-1)+2*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)",
 			"starred": 1
-		}, {
-			"name": "Yah yai!",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+3*sin(3+T+2*sin(T)))+T)"
 		}, {
 			"name": "Asakagi",
 			"mode": "Floatbeat",

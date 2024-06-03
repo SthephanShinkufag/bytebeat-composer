@@ -406,27 +406,6 @@ button[name="close"] {
 
 /* ==[ Library ] ========================================================================================== */
 
-.code-text {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	border: none;
-	color: #ffcc53;
-	background: none;
-	font: var(--font-size)/16px monospace;
-	text-align: left;
-	text-decoration: none;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	word-break: break-all;
-	user-select: text;
-	cursor: pointer;
-}
-
-.code-text:hover {
-	color: #ed88fb !important;
-}
-
 .code-button {
 	margin: 1px 0 0 5px;
 	padding: 2px 5px;
@@ -453,8 +432,33 @@ button[name="close"] {
 	cursor: default;
 }
 
+.code-remix {
+	font-size: 90%;
+}
+
 .code-stereo {
 	color: #008040;
+}
+
+.code-text {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	border: none;
+	color: #ffcc53;
+	background: none;
+	font: var(--font-size)/16px monospace;
+	text-align: left;
+	text-decoration: none;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	word-break: break-all;
+	user-select: text;
+	cursor: pointer;
+}
+
+.code-text:hover {
+	color: #ed88fb !important;
 }
 
 .entry {

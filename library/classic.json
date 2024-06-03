@@ -781,6 +781,33 @@
 			"date": "2023-01-22",
 			"codeOriginal": "((t*2)+2)^(t*(1<<(((t>>8)^(t>>8)+(t>>16))+1)%7))",
 			"codeMinified": "2*t+2^t*(1<<((t>>8^(t>>8)+(t>>16))+1)%7)"
+		}, {
+			"name": "no limit basic",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1ab6j79/no_limit_basic/",
+			"remix": {
+				"author": "ryg",
+				"name": "No Limit",
+				"url": "https://www.pouet.net/topic.php?which=8357&page=10#c388986"
+			},
+			"date": "2024-01-26",
+			"sampleRate": 32000,
+			"codeOriginal": "(t*(t>>17&1?t>>16&1?24:21:16)/16)|(t>>6^t>>8)",
+			"codeMinified": "t*(t>>17&1?t>>16&1?24:21:16)>>4|t>>6^t>>8",
+			"starred": 1
+		}, {
+			"name": "C-trixtraria",
+			"url": [
+				"https://www.reddit.com/r/bytebeat/comments/1aqwcag/ctrixtraria/",
+				"https://dollchan.net/btb/res/756.html#2989"
+			],
+			"remix": {
+				"author": "lhphr",
+				"name": "Retrixtaria",
+				"url": "https://dollchan.net/btb/res/44.html#61"
+			},
+			"date": "2024-02-14",
+			"codeOriginal": "t>>17>14?0:(t>>17==5||t>>17==12||t>>17>12?((t*(t>>16&1?t>>15&1?36:38:t>>15&1?32:27)/((2-(2523490710>>(t>>10&31)&1))*(t>>17>7?3:6)))&(t>>17==14?96:192))-(t>>17>12?0:(t>>11&t&15)):(37649&1<<(t>>10&15)?(int)(((t+314)*128/((t>>5&31)+1)&255)/85)*85:0)|(t>>17?(((t*(t>>16&1?t>>15&1?36:38:t>>15&1?32:27)/(t>>17>5?((2-(2523490710>>(t>>10&31)&1))*(t>>17>7?3:6)):12))&192)+(t>>18?t&15:0))*(t>>18?128+(t>>6&127):128)/128-(t>>17>2?(t>>11&15):0):0))",
+			"starred": 1
 		}]
 	}, {
 		"author": "kOLbOSa_exe",
@@ -870,6 +897,14 @@
 			"sampleRate": 32000,
 			"codeOriginal": "t*(6+(~t>>17&3))/6^t*(6+(~t>>17&3))*(1-1/(1+(t>>14^t>>13)&6))",
 			"starred": 2
+		}, {
+			"name": "brachiosaurus pong (i twisted this paddle)",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18m62vw/veryangrysymphony/",
+			"date": "2024-01-31",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 22050,
+			"codeOriginal": "((t*4>>((t>>11|t>>12|(t>>((t>>15^t>>10)+5)))&7))*8)&64",
+			"codeMinified": "8*(4*t>>((t>>11|t>>12|t>>(t>>15^t>>10)+5)&7))&64"
 		}]
 	}, {
 		"author": "getDolphinedLol",
@@ -1360,8 +1395,7 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/1583l77/another_garbage_truck_of_unposted_things/",
 			"date": "2023-07-24",
 			"codeOriginal": "3*t^t>>1&(0xcabd1)&(t>>8%42)",
-			"codeMinified": "3*t^t>>1&0xcabd1&t>>8",
-			"starred": 1
+			"codeMinified": "3*t^t>>1&0xcabd1&t>>8"
 		}, {
 			"name": "monoxide type thing",
 			"sampleRate": 48000,
@@ -1403,7 +1437,7 @@
 			"url": "https://dollchan.net/btb/res/2628.html#2750",
 			"date": "2023-12-08",
 			"codeOriginal": "(t/(t/(3+(t>>12&3))*(3+(t>>14&6))&120)&1023)/(t>>5&127)",
-			"starred": 2
+			"starred": 1
 		}, {
 			"name": "t>>t%",
 			"url": "hhttps://dollchan.net/btb/res/2628.html#2783",
@@ -1422,8 +1456,8 @@
 			"name": "Street Surfer",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
 		}],
-		"mode": "Signed Bytebeat",
 		"date": "2023-07-19",
+		"mode": "Signed Bytebeat",
 		"codeOriginal": "a=(0.5*t*(4|t>>13&3)>>(~t>>11&1)|~t>>5)&127,b=0.5*(t*(t>>11&t>>13)*(~t>>9&3)&127)&127+128,c=((t&4096?(t*(t^t%255)|t>>5)>>1:t>>4|(t&8192?t<<1:t))&127)+64,a+b+c",
 		"codeMinified": "((t/2*(4|t>>13&3)>>(~t>>11&1)|~t>>5)&127)+(t*(t>>11&t>>13)*(~t>>9&3)&127)/2+((t&4096?(t*(t^t%255)|t>>5)>>1:t>>4|(t&8192?t<<1:t))&127)+64",
 		"starred": 1
@@ -1519,6 +1553,111 @@
 			"sampleRate": 11025,
 			"codeOriginal": "(((t&4096?t*(t^t+t/256)|t>>4:t>>3|(t&8192?t<<2:t))>>1&127)+((t*((t>>9^(t>>9)-1^1)%13)&255)>>1))*(2+(t>>16))",
 			"codeMinified": "(((t&4096?t*(t^t+t/256)|t>>4:t>>3|(t&8192?t<<2:t))>>1&127)+(((t>>9^(t>>9)-1^1)%13*t&255)>>1))*(2+(t>>16))"
+		}, {
+			"name": "zeit v2 but it's actually c compatible",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1b4b9l6/zeit_v2_but_its_actually_c_compatible/",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "The time is running out!",
+				"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/"
+			},
+			"date": "2024-03-02",
+			"sampleRate": 11025,
+			"codeOriginal": "(((t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>(-t>>20&1?8:11)))>>(3&-t>>(t&(-t&57344?4096:6144)?2:16))|(-t&24576?(t*3>>5)%192:(t>>4)%192)|(t>>20&1?t>>4:t>>(-t>>18&1)+2))&255)>>1)-(t>>18&1?((-t>>1)*(t&16384?7:5)>>(-t>>10&3)&t>>4&255)>>1:(-t>>2)*(t&16384?7:5)>>(-t>>10&3)&(t>>4&255)>>1)+(128&(int)(4e4/(1+(t&(-t&28672?4095:2047)))))+((t>>18&3)&&(-(t*(t^t%9)&255&-(t>>(t>>11&31?(-t&14336?5:4)-!(-t&28672)-!(-t&122880):6))<<2&255)>>2))+128",
+			"codeMinified": "(((t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>(-t>>20&1?8:11)))>>(3&-t>>(t&(-t&57344?4096:6144)?2:16))|(-t&24576?(3*t>>5)%192:(t>>4)%192)|(t>>20&1?t>>4:t>>(-t>>18&1)+2))&255)>>1)-(t>>18&1?((-t>>1)*(t&16384?7:5)>>(-t>>10&3)&t>>4&255)>>1:(-t>>2)*(t&16384?7:5)>>(-t>>10&3)&(t>>4&255)>>1)+(128&(int)(4E4/(1+(t&(-t&28672?4095:2047)))))+(t>>18&3&&-(t*(t^t%9)&255&-(t>>(t>>11&31?(-t&14336?5:4)-!(-t&28672)-!(-t&122880):6))<<2&255)>>2)+128",
+			"starred": 2
 		}]
+	}, {
+		"author": "Butterroach",
+		"name": "42 melody but ternary operations",
+		"url": "https://www.reddit.com/r/bytebeat/comments/191wjo9/42_melody_but_ternary_operations/",
+		"remix": {
+			"name": "the 42 melody",
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+		},
+		"date": "2024-01-08",
+		"codeOriginal": "t*((t>>11)%32==0|(t>>11)%32==2|(t>>11)%32==8|(t>>11)%32==10?0:(t>>11)%32==1|(t>>11)%32==3|(t>>11)%32==9|(t>>11)%32==11?2:(t>>11)%32==4|(t>>11)%32==6|(t>>11)%32==12|(t>>11)%32==14?8:(t>>11)%32==16|(t>>11)%32==18|(t>>11)%32==24|(t>>11)%32==26?32:(t>>11)%32==17|(t>>11)%32==19|(t>>11)%32==25|(t>>11)%32==27?34:(t>>11)%32==20|(t>>11)%32==22|(t>>11)%32==28|(t>>11)%32==30?40:(t>>11)%32==21|(t>>11)%32==23|(t>>11)%32==29|(t>>11)%32==31?42:10)"
+	}, {
+		"author": "Dr_Dogan420",
+		"name": "YAAAAY",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1939jkw/yaaaay/",
+		"date": "2024-01-10",
+		"codeOriginal": "(t*43532>>233)*(t>>325)|t>>2543"
+	}, {
+		"author": "MasterNama_12803",
+		"name": "world cup-y effect",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1apqimy/world_cupy_effect/",
+		"date": "2024-02-13",
+		"codeOriginal": "t*(((t>>7)&24)&t>>8|(t>>10)&40)|((t>>4|t)&42|(t>>2)&t>>7)|((t>>6)&4)",
+		"codeMinified": "t*(t>>7&24&t>>8|t>>10&40)|(t>>4|t)&42|t>>2&t>>7|t>>6&4"
+	}, {
+		"author": "87634218675342698753",
+		"name": "robot toothbrush",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1arusin/robot_toothbrush_in_bytebeat/",
+		"date": "2024-02-16",
+		"codeOriginal": "((t/800|10)*t&85)-t&t/4"
+	}, {
+		"author": "WoolWL",
+		"name": "Bytebreak",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1atswzl/bytebreak/?rdt=37311&onetap_auto=true",
+		"date": "2024-02-18",
+		"sampleRate": 44100,
+		"codeOriginal": "((t&32767)>>13==2|(t&65535)>>12==9?(t^-(t/8&t>>5)*(t/8&127))&(-(t>>5)&255)*((t&65535)>>12==9?2:1):(t&8191)%((t>>5&255^240)==0?1:t>>5&255^240))/4*3+(t*4/(4+(t>>15&3))&128)*(-t>>11&2)*((t&32767)>>13!=2)/3",
+		"starred": 1
+	}, {
+		"author": "Zera12873",
+		"name": "messing around with \"0x___\"",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1b19le3/messing_around_with_0x/",
+		"date": "2024-02-27",
+		"codeOriginal": "t>>2|(0xC098C098>>(t>>10))*t|t>>10"
+	}, {
+		"author": "ANON256-64-2nd",
+		"name": "Electrical Basement cacophony",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1atswzl/bytebreak/?rdt=37311&onetap_auto=true",
+		"date": "2024-03-03",
+		"sampleRate": 32000,
+		"codeOriginal": "t/(0xF0015*t&t>>12)|t*(0xF0015*t&t>>12)-1"
+	}, {
+		"author": "SamsaDev",
+		"name": "Sequen_0x6",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1bgce1u/sequen_0x6_cool_name/",
+		"date": "2024-03-16",
+		"codeOriginal": "(((t*(t>>30|t>>13)/2)) >> (t*(t>>50|t>>10)&7^t>>7|t>>82)) | (t>>4|t>>4) >> (t&(t/0x6))",
+		"codeMinified": "t*(t>>30|t>>13)/2>>(t*(t>>18|t>>10)&7^t>>7|t>>18)|t/16>>(t&t/6)"
+	}, {
+		"author": "D3nschøt",
+		"name": "acid styled dubstep",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1bhzch8/idk_what_to_call_this_either/",
+		"date": "2024-03-18",
+		"sampleRate": 44100,
+		"codeOriginal": "t*(-t>>((t>>13)%8+2)&(t>>12)%256)/4+(1048576/(t%65536)&128)",
+		"codeMinified": "t*(-t>>(t>>13)%8+2&(t>>12)%256)/4+(1048576/(t%65536)&128)"
+	}, {
+		"author": "Mydreamsarereddit",
+		"name": "the battle of the bytebeats!",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1bq70if/the_battle_of_the_bytebeats_rachet_modem_tundra/",
+		"remix": [{
+			"author": "Tundrah",
+			"name": "ass kicking vocals",
+			"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107"
+		}, {
+			"author": "visy",
+			"name": "Slow progression with 8-bit Atari inspired sounds",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250"
+		}, {
+			"name": "Wheezing modem"
+		}],
+		"date": "2024-03-28",
+		"sampleRate": 9500,
+		"codeOriginal": "((t>>5|t>>4|(t%42*(t>>4)|357052691-(t>>4))/(t>>16)^(t|t>>4))&255)/3+((t%25-(t>>2|(t&16384?21.3333333333:16)*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048))&255)/3+(100*((t<<2|t>>5|t^63)&(t<<10|t>>11)))%256/3",
+		"codeMinified": "(((t>>5|t>>4|(t%42*(t>>4)|357052691-(t>>4))/(t>>16)^(t|t>>4))&255)+((t%25-(t>>2|(t&16384?64/3:16)*t|t%227)-t>>3|(t>>5&1663*(t<<5)|(t>>3)%1544)/(t%17|t%2048))&255)+100*((t<<2|t>>5|t^63)&(t<<10|t>>11))%256)/3",
+		"starred": 1
+	}, {
+		"author": "No_Half-d01-8875",
+		"name": "for every \"loop\" it slightly changes",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1bug17o/for_every_loop_it_slightly_changes/",
+		"date": "2024-04-03",
+		"sampleRate": 22550,
+		"codeOriginal": "-t%(-t>>(t&t>>12))&-t>>5"
 	}
 ]
