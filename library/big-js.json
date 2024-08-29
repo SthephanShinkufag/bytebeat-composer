@@ -523,6 +523,26 @@
 			"file": "HypernovaHeathen - I've Come To Make An Announcement.js",
 			"fileFormatted": true,
 			"fileOriginal": true
+		}, {
+			"name": "Terminal 82041 Fans Be Like...",
+			"url": [
+				"https://dollchan.net/btb/res/77.html#2429",
+				"https://youtu.be/bru6140Wq44?si=pL0XxwG1i4VxSTfO"
+			],
+			"date": "2023-10-10",
+			"sampleRate": 44100,
+			"file": "HypernovaHeathen - Terminal 82041 Fans Be Like.js",
+			"fileOriginal": true
+		}, {
+			"name": "The PEAK Of Human Evolution!",
+			"url": [
+				"https://dollchan.net/btb/res/77.html#2681",
+				"https://youtu.be/qpaD2g_7gxk"
+			],
+			"date": "2023-11-12",
+			"sampleRate": 48000,
+			"file": "HypernovaHeathen - The PEAK Of Human Evolution!.js",
+			"fileOriginal": true
 		}]
 	}, {
 		"author": "RealZynx92",
@@ -858,6 +878,23 @@
 			"fileFormatted": true,
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"name": "Famicom Disk System registers in Bytebeat",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1ebjzw9/famicom_disk_system_registers_in_bytebeat/",
+			"date": "2024-07-25",
+			"sampleRate": 48000,
+			"file": "PortablePorcelain - Famicom Disk System registers in Bytebeat.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "IBM PC Speaker",
+			"description": "Port of a PC Speaker used for IBM computers.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1ebk47n/ibm_pc_speaker/",
+			"date": "2024-07-25",
+			"sampleRate": 48000,
+			"file": "PortablePorcelain - IBM PC Speaker.js",
+			"fileOriginal": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "kleeder",
@@ -890,6 +927,10 @@
 			"name": "bitcrushed amen break",
 			"description": "Converted 8 bit unsigned PCM data into bytebeat, with samples repeating after each 5th one.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/yc9rut/bitcrushed_amen_break/",
+			"cover": {
+				"name": "'Amen Break' from 'Winstons - Amen, Brother'",
+				"url": "https://youtu.be/NkU4hsaFglU?si=5L07GE3_q5slKI5E"
+			},
 			"date": "2022-10-24",
 			"file": "awogler9124812041 - bitcrushed amen break.js",
 			"fileOriginal": true,
@@ -1324,8 +1365,8 @@
 			"stereo": true,
 			"file": "Zackx - battle castle.js",
 			"fileFormatted": true,
-			"fileMinified": true,
 			"fileOriginal": true,
+			"fileMinified": true,
 			"starred": 1
 		}, {
 			"name": "bad apple + mrbeast sample (PCM)",
@@ -1348,6 +1389,20 @@
 			"sampleRate": 32000,
 			"file": "Zackx - bomb has been planted.js",
 			"fileOriginal": true
+		}, {
+			"name": "Bytewave/Synthbyte engine example",
+			"url": [
+				"https://dollchan.net/btb/res/204.html#3982",
+				"https://www.reddit.com/r/bytebeat/comments/1e9edwr/here_is_an_examples_how_does_work_my_engine_for/"
+			],
+			"date": "2023-07-22",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 48000,
+			"file": "Zackx - Bytewave Synthbyte engine example.js",
+			"fileFormatted": true,
+			"fileOriginal": true,
+			"fileMinified": true,
+			"starred": 1
 		}]
 	}, {
 		"author": "Yamden",
@@ -1565,7 +1620,7 @@
 		"fileFormatted": true
 	}, {
 		
-		"author": "WilliamP692",
+		"author": "ANoUserXD",
 		"name": "cover of \"Sparta Atari Base\"",
 		"url": "https://www.reddit.com/r/bytebeat/comments/155a8c0/cover_of_sparta_atari_base_completed/",
 		"cover": {
@@ -1573,11 +1628,24 @@
 			"url": "https://youtu.be/lOp5sN16DZs"
 		},
 		"date": "2023-07-21",
-		"file": "WilliamP692 - cover of Sparta Atari Base.js",
+		"file": "ANoUserXD - cover of Sparta Atari Base.js",
 		"fileFormatted": true,
 		"fileMinified": true,
 		"fileOriginal": true,
 		"starred": 1
+	}, {
+		"author": "baenhohoho",
+		"name": "remix of \"please remix this\"",
+		"url": "https://dollchan.net/btb/res/117.html#1911",
+		"remix": {
+			"author": "Decent-Manager-6169",
+			"name": "please someone remix this",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+		},
+		"date": "2023-08-15",
+		"sampleRate": 48000,
+		"file": "baenhohoho - remix of please remix this.js",
+		"fileOriginal": true
 	}, {
 		"author": "damifortune",
 		"name": "byte-sized rhapsody",
@@ -1605,6 +1673,11 @@
 			"name": "Audisual",
 			"description": "Audio and visuals. Set \"Diagram\" mode and zoom to 1/8 or 1/16.",
 			"url": "https://www.reddit.com/r/bytebeat/comments/1bsw9dz/so_i_made_a_bytebeat_song_that_sounds_decent_and/",
+			"remix": {
+				"author": "awogler9124812041",
+				"name": "spinning line",
+				"url": "https://www.reddit.com/r/bytebeat/comments/167xhpa/graphics_in_bytebeat_spinning_line/"
+			},
 			"date": "2024-04-01",
 			"sampleRate": 48000,
 			"file": "Icycle-Bycicle-24 - Audisual.js",
@@ -1755,5 +1828,42 @@
 		"file": "GDPlayer_1035 - another pcm test.js",
 		"fileOriginal": true,
 		"starred": 1
+	}, {
+		"author": "ChrisRM380",
+		"name": "cave story balcony remake",
+		"url": "https://dollchan.net/btb/res/368.html#3190",
+		"cover": {
+			"name": "Cave Story OST - T28: Balcony",
+			"url": "https://youtu.be/GoigiNs59s8"
+		},
+		"date": "2024-03-29",
+		"sampleRate": 50000,
+		"file": "ChrisRM380 - cave story balcony remake.js",
+		"fileOriginal": true
+	}, {
+		"author": "Sychamis",
+		"children": [{
+			"name": "1.03 bit per sample improved dpcm audio",
+			"description": "DPCM with better sound quality using dynamically changing amplitude value. Amplitude values from 0 to 15 are updated every 128 samples, so each 128 samples take 132 bits (128 bits for dpcm encoding and 4 additonal bits for amplitude, giving ~1.03 bit per sample).",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1e7ey8x/103_bit_per_sample_improved_dpcm_audio/",
+			"date": "2024-07-20",
+			"sampleRate": 44100,
+			"file": "Sychamis - 1.03 bit per sample improved dpcm audio.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Take on me",
+			"description": "Another DPCM with dynamic amplitude example.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1e7ey8x/103_bit_per_sample_improved_dpcm_audio/",
+			"cover": {
+				"name": "A-ha - Take On Me",
+				"url": "https://youtu.be/djV11Xbc914"
+			},
+			"date": "2024-07-24",
+			"sampleRate": 44100,
+			"file": "Sychamis - Take on me.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
 	}
 ]

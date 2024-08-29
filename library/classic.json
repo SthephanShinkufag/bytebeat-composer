@@ -1289,6 +1289,18 @@
 			}, {
 				"codeOriginal": "t>>3&127|t>>4&128|t>>3&128|(t&4096?t&8192?64:0:0)"
 			}]
+		}, {
+			"name": "non-js echo",
+			"url": "https://dollchan.net/btb/res/204.html#2187",
+			"date": "2023-09-02",
+			"codeOriginal": "t>>2&t<<(7&~t>>10)"
+		}, {
+			"name": "my last brain cell",
+			"url": "https://dollchan.net/btb/res/204.html#2444",
+			"date": "2023-10-12",
+			"sampleRate": 11025,
+			"codeOriginal": "(t*t/(t%8192)|t>>2)*(t>>12)>>4",
+			"starred": 1
 		}]
 	}, {
 		"author": "Glebguything",
@@ -1404,7 +1416,7 @@
 			"codeOriginal": "t*t%(55*0xCADE11)"
 		}]
 	}, {
-		"author": "WilliamP692",
+		"author": "ANoUserXD",
 		"children": [{
 			"name": "Atari sound discovered?",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15383dn/atari_sound_discovered/",
@@ -1569,14 +1581,22 @@
 		}]
 	}, {
 		"author": "Butterroach",
-		"name": "42 melody but ternary operations",
-		"url": "https://www.reddit.com/r/bytebeat/comments/191wjo9/42_melody_but_ternary_operations/",
-		"remix": {
-			"name": "the 42 melody",
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
-		},
-		"date": "2024-01-08",
-		"codeOriginal": "t*((t>>11)%32==0|(t>>11)%32==2|(t>>11)%32==8|(t>>11)%32==10?0:(t>>11)%32==1|(t>>11)%32==3|(t>>11)%32==9|(t>>11)%32==11?2:(t>>11)%32==4|(t>>11)%32==6|(t>>11)%32==12|(t>>11)%32==14?8:(t>>11)%32==16|(t>>11)%32==18|(t>>11)%32==24|(t>>11)%32==26?32:(t>>11)%32==17|(t>>11)%32==19|(t>>11)%32==25|(t>>11)%32==27?34:(t>>11)%32==20|(t>>11)%32==22|(t>>11)%32==28|(t>>11)%32==30?40:(t>>11)%32==21|(t>>11)%32==23|(t>>11)%32==29|(t>>11)%32==31?42:10)"
+		"children": [{
+			"name": "42 melody but ternary operations",
+			"url": "https://www.reddit.com/r/bytebeat/comments/191wjo9/42_melody_but_ternary_operations/",
+			"remix": {
+				"name": "the 42 melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"date": "2024-01-08",
+			"codeOriginal": "t*((t>>11)%32==0|(t>>11)%32==2|(t>>11)%32==8|(t>>11)%32==10?0:(t>>11)%32==1|(t>>11)%32==3|(t>>11)%32==9|(t>>11)%32==11?2:(t>>11)%32==4|(t>>11)%32==6|(t>>11)%32==12|(t>>11)%32==14?8:(t>>11)%32==16|(t>>11)%32==18|(t>>11)%32==24|(t>>11)%32==26?32:(t>>11)%32==17|(t>>11)%32==19|(t>>11)%32==25|(t>>11)%32==27?34:(t>>11)%32==20|(t>>11)%32==22|(t>>11)%32==28|(t>>11)%32==30?40:(t>>11)%32==21|(t>>11)%32==23|(t>>11)%32==29|(t>>11)%32==31?42:10)"
+		}, {
+			"name": "chip",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1e9zaxe/chip/",
+			"date": "2024-07-23",
+			"codeOriginal": "(t&1024||t&16384&&t&2048&&!(t&512))?(t&4096&&!(t&2048)?(t*t*t>>~t*t)+127:t*((t>>11&1)+1)*(1+(t>>16&1)*3))*2:0",
+			"starred": 1
+		}]
 	}, {
 		"author": "Dr_Dogan420",
 		"name": "YAAAAY",

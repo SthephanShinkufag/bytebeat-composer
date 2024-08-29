@@ -423,6 +423,12 @@ button[name="close"] {
 	color: var(--button-hover-color);
 }
 
+.code-button.children-toggle {
+	margin: 8px 0 5px 0;
+	padding: 5px 10px;
+	width: fit-content;
+}
+
 .code-buttons-container {
 	display: inline-block;
 }
@@ -465,11 +471,11 @@ button[name="close"] {
 	position: relative;
 }
 
-.entry-children > .entry:not(:last-child) {
+.entry-children .entry:not(:last-child) {
 	margin-bottom: 4px;
 }
 
-.entry-children > .entry::before {
+.entry-children .entry::before {
 	content: "\25CF";
 	position: absolute;
 	top: 2px;
@@ -478,7 +484,7 @@ button[name="close"] {
 	font-size: 12px;
 }
 
-.entry-children > .entry > .entry-children {
+.entry-children .entry > .entry-children {
 	margin-left: 11px;
 }
 

@@ -329,7 +329,7 @@ globalThis.bytebeat = new class {
 			for(let i = 0, len = authorsArr.length; i < len; ++i) {
 				const authorElem = authorsArr[i];
 				if(typeof authorElem === 'string') {
-					authorsList += name || !noArrayUrl ? authorElem :
+					authorsList += name || !noArrayUrl ? '<b>' + authorElem + '</b>':
 						`<a href="${ url }" target="_blank">${ authorElem }</a>`;
 				} else {
 					authorsList += `<a href="${ authorElem[1] }" target="_blank">${ authorElem[0] }</a>`;
@@ -438,8 +438,20 @@ globalThis.bytebeat = new class {
 		}
 		if(children) {
 			let childrenStr = '';
-			for(let i = 0, len = children.length; i < len; ++i) {
-				childrenStr += this.generateLibraryEntry(children[i]);
+			const len = children.length;
+			if(len > 8) {
+				childrenStr += `<details><summary class="code-button children-toggle">${
+					len - 5 } more bytebeats</summary>`;
+				for(let i = 0; i < len; ++i) {
+					if(i === len - 5) {
+						childrenStr += '</details>';
+					}
+					childrenStr += this.generateLibraryEntry(children[i]);
+				}
+			} else {
+				for(let i = 0; i < len; ++i) {
+					childrenStr += this.generateLibraryEntry(children[i]);
+				}
 			}
 			entry += `<div class="entry-children">${ childrenStr }</div>`;
 		}

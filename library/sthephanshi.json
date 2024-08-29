@@ -39,7 +39,7 @@
 			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>12&18)",
 			"starred": 1
 		}, {
-			"name": "I hear the long mewing of a cat :)",
+			"name": "I hear the long meowing of a cat :)",
 			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)",
 			"starred": 1
 		}]
@@ -102,50 +102,41 @@
 		"name": "Game levels",
 		"description": "Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class='code-text'>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button>",
 		"children": [{
-			"name": "Let replace (3+(1^5&t>>10)) with (2-(1&-t>>11))",
-			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)"
-		}, {
-			"name": "And just add |t>>2... The tune became cleaner",
-			"codeOriginal": "t*(2-(1&-t>>11))*(5+(3&t>>14))>>(3&t>>8)|t>>2"
-		}, {
-			"name": "Replacing 3&t>>14 with 2&t>>14 changes the period and the second tone",
+			"name": "Basic version",
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>2"
 		}, {
-			"name": "\"Boss level\". Slow down |t>>2 rhythm to |t>>3... Sounds dangerous!",
+			"name": "\"Boss level\". Slow down the rhythm to |t>>3... Sounds dangerous!",
 			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
 			"starred": 1
 		}, {
-			"name": "By playing with the \"Boss level\" I made a different pattern",
+			"name": "Different pattern using ternary operator",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
 		}, {
-			"name": "\"Boss level #2\". |t>>4 rhythm sounds cool!",
+			"name": "\"Boss level #2\". Slow down the rhythm to |t>>4",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
 		}, {
-			"name": "Replacing (1+(1&t>>12)) with 3+(1&t>>8) adds an awesome harmonics",
+			"name": "Changing the coefficients adds harmonics",
 			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
 		}, {
-			"name": "Coefficients 4-/3-/2+/3+ can slightly change them",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>4"
-		}, {
-			"name": "We can use a ternary operation for more complicated beat",
+			"name": "Complicated rhythm with ternary operator |t>>(t&4096?3:4)",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>(t&4096?3:4)"
 		}, {
 			"name": "\"Aliens on approach\". Slow down the explosions to 3&t>>9, get a heavy chiptune beat",
 			"codeOriginal": "t*(t&16384?6:5)*(3-(1&t>>8))>>(3&t>>9)|t>>4",
 			"starred": 1
 		}, {
-			"name": "\"Aliens are close\". t>>5 rhythm",
+			"name": "\"Aliens are close\", t>>5 rhythm",
 			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>9)|t>>5",
 			"starred": 1
 		}, {
-			"name": "\"Aliens are here\". t>>6 rhythm - SUPER POWERFUL ECHOES",
+			"name": "\"Aliens are here\", t>>6 gives SUPER POWERFUL ECHOES",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
 			"starred": 2
 		}, {
-			"name": "Inverted explosions give us mysterious sounds",
+			"name": "Mysterious inverted sound",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
 		}, {
-			"name": "\"Aliens attack\". Complicated (t|t*3)>>5 rhythm with explosion drums. Cool!",
+			"name": "\"Aliens attack\". Complicated (t|t*3)>>5 rhythm with explosion drums.",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
 			"starred": 1
 		}, {
@@ -157,26 +148,20 @@
 			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
 		}, {
 			"name": "\"Prepare to fight\". Long period, sound is changing from low to high",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
-			"starred": 1
-		}, {
-			"name": "\"Prepare to fight #2\". Previous formula with doubled freqency bass",
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
 			"starred": 1
 		}, {
-			"description": "<br>Suddenly I discovered that replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums. For example, a ternary 3&t>>(t&4096?2:9)"
-		}, {
-			"name": "\"Aliens encounter + drums\". Impressive sound!",
+			"name": "\"Aliens encounter + drums\"",
+			"description": "Replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums, we use it in a ternary 3&t>>(t&4096?2:9)",
 			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
 			"starred": 2
 		}, {
-			"name": "\"Prepare to fight #2 + drums\"",
+			"name": "\"Prepare to fight + drums\"",
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
 			"starred": 2
 		}, {
-			"description": "<br>Finally you can use complex ternary operators to create more complex drums:"
-		}, {
 			"name": "\"Ready to fight?\". Cool for a fighting game :)",
+			"description": "You can use more complex ternary operators to create cool drums",
 			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
 			"starred": 2
 		}, {
@@ -184,12 +169,10 @@
 			"codeOriginal": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
 			"starred": 2
 		}, {
-			"description": "<br>Let's continue our experiments:"
-		}, {
 			"name": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
 		}, {
-			"name": "\"Another level\". Adding a noise beat by using ternary operation",
+			"name": "\"Another level\". Adding a noise beat by using ternary operator",
 			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>(t&2048?4:10)))>>(3&t>>8)|t>>2",
 			"starred": 1
 		}, {
@@ -257,7 +240,6 @@
 		"name": "Death chase",
 		"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
 		"date": "2021-10-28",
-		"starred": 1,
 		"children": [{
 			"sampleRate": 44100,
 			"codeOriginal": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,4,5,5,5,4,5][(t>>12)%8])%64+64)",
@@ -272,7 +254,7 @@
 		"name": "Neurofunk",
 		"url": "https://www.reddit.com/r/bytebeat/comments/s0laz2/neurofunk/",
 		"date": "2022-01-10",
-		"starred": 1,
+		"starred": 2,
 		"children": [{
 			"codeOriginal": "t*((t&4096?t%65536<59392?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2)"
 		}, {
@@ -384,8 +366,7 @@
 			"S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),",
 			"B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]"
 		],
-		"codeMinified": "T=t/1.2,a=[0,3,5,7,0,3,-4,-2],a1=[3,7,9,11,3,7,0,2],a2=[7,10,12,14,7,10,3,5],B=a=>(.88*t*2**(a[i=7&T>>15]/12)&-T>>6)%256/5,S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]",
-		"starred": 1
+		"codeMinified": "T=t/1.2,a=[0,3,5,7,0,3,-4,-2],a1=[3,7,9,11,3,7,0,2],a2=[7,10,12,14,7,10,3,5],B=a=>(.88*t*2**(a[i=7&T>>15]/12)&-T>>6)%256/5,S=(s,p)=>.7*(.88*p*t*2**([a,a1,a2,a1][3&T>>s][i]/12)&64),B(a)+B(a1)+B(a2)+[S(14,1)+S(15,2),2*(S(9,1)+S(14,2))*(1-T%8192/9E3)][1&T>>13]"
 	}, {
 		"name": "Mouse Festival",
 		"description": "\"At night, while the cat is away, mice become masters of the house and dance together in the middle of the room.\"",
@@ -400,17 +381,6 @@
 		"fileFormatted": true,
 		"fileMinified": true,
 		"starred": 1
-	}, {
-		"name": "Warm wave generator",
-		"url": "https://www.reddit.com/r/bytebeat/comments/11fk93c/comment/jbgsq47/",
-		"remix": {
-			"author": "tribute1123",
-			"name": "an random song i made",
-			"url": "https://www.reddit.com/r/bytebeat/comments/11fk93c/an_random_song_i_made/"
-		},
-		"date": "2023-03-09",
-		"sampleRate": 40960,
-		"codeOriginal": "t*(t&2**[8,5,9,10][t>>17&3]+3)/256+t"
 	}, {
 		"name": "Voice generator",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
@@ -463,7 +433,7 @@
 		"file": "SthephanShi - Trip to Otherworld.js",
 		"fileFormatted": true,
 		"fileMinified": true,
-		"starred": 2
+		"starred": 1
 	}, {
 		"children": [{
 			"name": "Through the Star System",
@@ -559,5 +529,18 @@
 			"drawing": { "mode": "Diagram", "scale": 5 },
 			"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,max(x*sin(2*k)+y*cos(k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
 		}]
+	}, {
+		"name": "Wanderer",
+		"description": "\"You have passed through the portal, but there is no way back. You walk on the new world and think about your destiny. Sunset on the horizon, tomorrow will be a new day..\"",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Wanderer/70375/",
+			"https://www.reddit.com/r/bytebeat/comments/1eq6m9n/wanderer/"
+		],
+		"date": "2024-08-10",
+		"sampleRate": 48000,
+		"file": "SthephanShi - Wanderer.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
 	}
 ]
