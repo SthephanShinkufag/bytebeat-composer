@@ -1,17 +1,24 @@
-import { closeBrackets } from '@codemirror/closebrackets';
-import { defaultKeymap, insertNewline, indentLess } from '@codemirror/commands';
-import { commentKeymap } from '@codemirror/comment';
-import { foldGutter } from '@codemirror/fold';
-import { classHighlightStyle } from '@codemirror/highlight';
-import { lineNumbers } from '@codemirror/gutter';
-import { history, historyKeymap, redo } from '@codemirror/history';
+import { closeBrackets } from '@codemirror/autocomplete';
+import {
+	defaultKeymap,
+	history,
+	historyKeymap,
+	indentLess,
+	insertNewline,
+	redo
+} from '@codemirror/commands';
 import { javascript } from '@codemirror/lang-javascript';
-import { indentUnit } from '@codemirror/language';
-import { bracketMatching } from '@codemirror/matchbrackets';
+import { bracketMatching, foldGutter, indentUnit, syntaxHighlighting } from '@codemirror/language';
 import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import { EditorState } from '@codemirror/state';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { highlightActiveLine, highlightSpecialChars, EditorView, keymap } from '@codemirror/view';
+import {
+	highlightActiveLine,
+	highlightSpecialChars,
+	EditorView,
+	keymap,
+	lineNumbers
+} from '@codemirror/view';
+import { classHighlighter } from "@lezer/highlight";
 
 const defaultEditorElem = document.getElementById('editor-default');
 const { value } = defaultEditorElem;
@@ -23,7 +30,6 @@ globalThis.bytebeat.editorView = new EditorView({
 		doc: value,
 		extensions: [
 			bracketMatching(),
-			classHighlightStyle,
 			closeBrackets(),
 			EditorState.tabSize.of('3'),
 			EditorView.lineWrapping,
@@ -47,13 +53,12 @@ globalThis.bytebeat.editorView = new EditorView({
 					run: view => view.dispatch(view.state.replaceSelection('\t')) || true,
 					shift: indentLess
 				},
-				...commentKeymap,
 				...historyKeymap,
 				...searchKeymap,
 				...defaultKeymap
 			]),
 			lineNumbers(),
-			oneDark
+			syntaxHighlighting(classHighlighter)
 		]
 	})
 });

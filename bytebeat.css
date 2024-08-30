@@ -350,6 +350,10 @@ button[name="close"] {
 	resize: none;
 }
 
+.cm-activeLine {
+	background-color: #223039 !important;
+}
+
 .cm-content {
 	font-weight: bold;
 	caret-color: #fff !important;
@@ -360,44 +364,59 @@ button[name="close"] {
 	background-color: var(--editor);
 }
 
-.cm-scroller {
-	line-height: var(--font-size) !important;
+.cm-gutters {
+	background-color: #282c34 !important;
+	color: #7d8799 !important;
+	border: none !important;
 }
 
 .cm-matchingBracket, .cm-selectionMatch {
 	margin: -1px;
 	border: 1px solid gray;
 	border-radius: 3px;
+	background-color: #66aafe30 !important;
+}
+
+.cm-scroller {
+	line-height: var(--font-size) !important;
 }
 
 .cm-searchMatch-selected {
 	background-color: #d541ffba !important;
 }
 
-.cmt-number {
-	color: #ff8dfd;
-}
-
-.cmt-keyword, .cmt-operator {
-	color: #96cbfe;
-}
-
-.cmt-propertyName {
-	color: #ffd2a7;
-}
-
-.cmt-punctuation, .cmt-variableName {
-	color: #c5c8c6;
-}
-
-.cmt-string {
-	color: #a8ff60;
-}
-
 #error {
 	color: #f92672;
 	font: 14px/14px monospace;
 	word-break: break-all;
+}
+
+.tok-definition {
+	color: #a5a5ff !important;
+}
+
+.tok-comment {
+	color: #7d8799;
+}
+
+.tok-number {
+	color: #ff8dfd;
+}
+
+.tok-keyword, .tok-operator {
+	color: #96cbfe;
+}
+
+.tok-propertyName {
+	color: #ffd2a7;
+}
+
+.tok-punctuation, .tok-variableName {
+	color: #c5c8c6;
+}
+
+.tok-string {
+	color: #a8ff60;
 }
 
 ::selection {
