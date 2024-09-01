@@ -1,4 +1,4 @@
-/* ==[ Document ] ========================================================================================= */
+/* ==[ Themes ] =========================================================================================== */
 
 :root {
 	--button-hover-color: #badbff;
@@ -8,6 +8,17 @@
 	--canvas-button-hover: linear-gradient(to bottom, #92aeec, #181f33) !important;
 	--code-button: linear-gradient(to bottom, #424242, #171b22);
 	--code-button-hover: linear-gradient(to bottom, #3c508a, #1f2331);
+	--code-comment: #7d8799;
+	--code-definition: #b1b1ff;
+	--code-font: bold;
+	--code-keyword: #96cbfe;
+	--code-number: #ff8dfd;
+	--code-operator: #96cbfe;
+	--code-property: #ffd2a7;
+	--code-punctuation: #c5c8c6;
+	--code-string: #a8ff60;
+	--code-string2: #56b6c2;
+	--code-variable: #c5c8c6;
 	--control-button: linear-gradient(to bottom, #959595, #242a37);
 	--control-button-active: linear-gradient(to bottom, #505f84, #1c1e26);
 	--control-button-hover: linear-gradient(to bottom, #738cc1, #28314a);
@@ -26,13 +37,6 @@
 	--library-header-hover-color: #94c7ff;
 	--link: #89c2ff;
 	--link-hover: #ed88fb !important;
-}
-
-html {
-	color-scheme: dark;
-	background-color: #000;
-	color: #c5c8c6;
-	font: var(--font-size) sans-serif;
 }
 
 html[data-theme="Blue"] {
@@ -193,6 +197,40 @@ html[data-theme="Teal"] {
 	--link: #8efbff;
 }
 
+#editor-container[data-theme="One Dark"] {
+	--code-definition: #abb2bf;
+	--code-keyword: #c678dd;
+	--code-number: #e5c07b;
+	--code-operator: #56b6c2;
+	--code-property: #61afef;
+	--code-punctuation: #abb2bf;
+	--code-string: #98c379;
+	--code-variable: #e06c75;
+}
+
+#editor-container[data-theme="SArpnt"] {
+	--code-comment: #5c4;
+	--code-definition: #9de;
+	--code-font: normal;
+	--code-keyword: #e8e;
+	--code-number: #ada;
+	--code-operator: #eee;
+	--code-property: #eea;
+	--code-punctuation: #eee;
+	--code-string: #fa7;
+	--code-string2: #f78;
+	--code-variable: #9de;
+}
+
+/* ==[ Common ] =========================================================================================== */
+
+html {
+	color-scheme: dark;
+	background-color: #000;
+	color: #c5c8c6;
+	font: var(--font-size) sans-serif;
+}
+
 body {
 	margin: 0;
 }
@@ -351,11 +389,11 @@ button[name="close"] {
 }
 
 .cm-activeLine {
-	background-color: #223039 !important;
+	background-color: #1c232d !important;
 }
 
 .cm-content {
-	font-weight: bold;
+	font-weight: var(--code-font);
 	caret-color: #fff !important;
 }
 
@@ -377,6 +415,13 @@ button[name="close"] {
 	background-color: #66aafe30 !important;
 }
 
+.cm-nonmatchingBracket {
+	margin: -1px;
+	border: 1px solid #db6d6d;
+	border-radius: 3px;
+	background-color: #bb555560 !important;
+}
+
 .cm-scroller {
 	line-height: var(--font-size) !important;
 }
@@ -391,36 +436,52 @@ button[name="close"] {
 	word-break: break-all;
 }
 
-.tok-definition {
-	color: #a5a5ff !important;
+.tok-comment {
+	color: var(--code-comment);
 }
 
-.tok-comment {
-	color: #7d8799;
+.tok-definition {
+	color: var(--code-definition) !important;
+}
+
+.tok-keyword {
+	color: var(--code-keyword);
 }
 
 .tok-number {
-	color: #ff8dfd;
+	color: var(--code-number);
 }
 
-.tok-keyword, .tok-operator {
-	color: #96cbfe;
+.tok-operator {
+	color: var(--code-operator);
 }
 
 .tok-propertyName {
-	color: #ffd2a7;
+	color: var(--code-property);
 }
 
-.tok-punctuation, .tok-variableName {
-	color: #c5c8c6;
+.tok-punctuation  {
+	color: var(--code-punctuation);
+}
+
+.cm-matchingBracket > .tok-punctuation {
+	color: #faff6f;
 }
 
 .tok-string {
-	color: #a8ff60;
+	color: var(--code-string);
+}
+
+.tok-string2 {
+	color: var(--code-string2);
+}
+
+.tok-variableName {
+	color: var(--code-variable);
 }
 
 ::selection {
-	background-color: #596999 !important;
+	background-color: #445075 !important;
 }
 
 /* ==[ Library ] ========================================================================================== */
@@ -715,7 +776,7 @@ button[name="close"] {
 }
 
 #control-samplerate-select {
-	width: 22px;
+	width: 20px;
 	font-size: 0;
 	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }

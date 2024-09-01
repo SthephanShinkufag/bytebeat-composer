@@ -32,6 +32,7 @@ globalThis.bytebeat = new class {
 		this.canvasTimeCursor = null;
 		this.canvasWidth = 1024;
 		this.containerFixedElem = null;
+		this.controlCodeStyle = null;
 		this.controlColorDiagram = null;
 		this.controlColorDiagramInfo = null;
 		this.controlColorStereo = 1; // Left=G, Right=R+B
@@ -52,6 +53,7 @@ globalThis.bytebeat = new class {
 		this.colorDiagram = null;
 		this.colorWaveform = null;
 		this.defaultSettings = {
+			codeStyle: 'Atom Dark',
 			colorDiagram: '#0080ff',
 			colorStereo: 1,
 			colorTimeCursor: '#80bbff',
@@ -496,6 +498,7 @@ globalThis.bytebeat = new class {
 		switch(e.type) {
 		case 'change':
 			switch(elem.id) {
+			case 'control-code-style': this.setCodeStyle(elem.value); break;
 			case 'control-color-diagram': this.setColorDiagram(elem.value); break;
 			case 'control-color-stereo':
 				this.setColorStereo(+elem.value);
@@ -593,13 +596,13 @@ globalThis.bytebeat = new class {
 	initAfterDom() {
 		this.initElements();
 		this.parseUrl();
-		loadScript('./scripts/codemirror.min.mjs');
+		loadScript('./scripts/codemirror.min.mjs?version=2024090100');
 	}
 	async initAudioContext() {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024022000');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024090100');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -646,6 +649,17 @@ globalThis.bytebeat = new class {
 		this.onresizeWindow();
 		document.defaultView.addEventListener('resize', () => this.onresizeWindow());
 
+		// Time counter
+		this.controlTime = document.getElementById('control-counter');
+		this.controlTimeUnits = document.getElementById('control-counter-units');
+		this.setCounterUnits();
+
+		// Editor
+		this.editorContainer = document.getElementById('editor-container');
+		this.setCodeStyle();
+		this.editorElem = document.getElementById('editor-default');
+		this.errorElem = document.getElementById('error');
+
 		// Controls
 		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlColorStereo = document.getElementById('control-color-stereo');
@@ -672,15 +686,8 @@ globalThis.bytebeat = new class {
 		this.setScale(0);
 		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlThemeStyle.value = this.settings.themeStyle;
-
-		// Time counter
-		this.controlTime = document.getElementById('control-counter');
-		this.controlTimeUnits = document.getElementById('control-counter-units');
-		this.setCounterUnits();
-
-		// Editor
-		this.editorElem = document.getElementById('editor-default');
-		this.errorElem = document.getElementById('error');
+		this.controlCodeStyle = document.getElementById('control-code-style');
+		this.controlCodeStyle.value = this.settings.codeStyle;
 	}
 	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
 		this.songData.mode = this.controlPlaybackMode.value = mode = mode || 'Bytebeat';
@@ -938,6 +945,18 @@ globalThis.bytebeat = new class {
 				this.canvasPlayButton.classList.add('canvas-initial');
 			}
 		}
+	}
+	setCodeStyle(value) {
+		if(value === undefined) {
+			if((value = this.settings.codeStyle) === undefined) {
+				value = this.settings.codeStyle = this.defaultSettings.codeStyle;
+				this.saveSettings();
+			}
+			this.editorContainer.dataset.theme = value;
+			return;
+		}
+		this.editorContainer.dataset.theme = this.settings.codeStyle = value;
+		this.saveSettings();
 	}
 	setColorStereo(value) {
 		// value: Red=0, Green=1, Blue=2
