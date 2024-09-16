@@ -1,6 +1,6 @@
 import { deflateRaw, inflateRaw } from './pako.esm.min.mjs';
 
-const loadScript = src => new Promise((resolve, reject) => {
+const loadScript = src => new Promise(resolve => {
 	try {
 		const scriptElem = document.createElement('script');
 		scriptElem.type = 'module';
@@ -611,7 +611,7 @@ globalThis.bytebeat = new class {
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
 		audioRecorder.addEventListener('dataavailable', e => this.audioRecordChunks.push(e.data));
-		audioRecorder.addEventListener('stop', e => {
+		audioRecorder.addEventListener('stop', () => {
 			let file, type;
 			const types = ['audio/webm', 'audio/ogg'];
 			const files = ['track.webm', 'track.ogg'];

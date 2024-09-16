@@ -23,7 +23,7 @@ convert_freq_1 = function(value) {
 	case '0E': HIGH_BYTE_1 = 14; break;
 	case '0F': HIGH_BYTE_1 = 15; break;
 	}
-	if (freq_byte === '00') {
+	if(freq_byte === '00') {
 		return 0;
 	}
 	switch(HIGH_BYTE_1) {
@@ -35,7 +35,7 @@ convert_freq_1 = function(value) {
 	case 14: freq_byte = '6' + freq_byte; break;
 	case 15: freq_byte = '7' + freq_byte; break;
 	}
-	return (CLOCK / (16 * parseInt(freq_byte, 16) + 1));
+	return CLOCK / (16 * parseInt(freq_byte, 16) + 1);
 },
 
 convert_freq_2 = function(value) {
@@ -51,87 +51,87 @@ convert_freq_2 = function(value) {
 	case '0E': HIGH_BYTE_2 = 14; break;
 	case '0F': HIGH_BYTE_2 = 15; break;
 	}
-	if (freq_byte === '00') {
-		return 0
+	if(freq_byte === '00') {
+		return 0;
 	}
-	if (HIGH_BYTE_2 === 9) {
-		freq_byte = '1' + freq_byte
+	if(HIGH_BYTE_2 === 9) {
+		freq_byte = '1' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 10) {
-		freq_byte = '2' + freq_byte
+	if(HIGH_BYTE_2 === 10) {
+		freq_byte = '2' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 11) {
-		freq_byte = '3' + freq_byte
+	if(HIGH_BYTE_2 === 11) {
+		freq_byte = '3' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 12) {
-		freq_byte = '4' + freq_byte
+	if(HIGH_BYTE_2 === 12) {
+		freq_byte = '4' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 13) {
-		freq_byte = '5' + freq_byte
+	if(HIGH_BYTE_2 === 13) {
+		freq_byte = '5' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 14) {
-		freq_byte = '6' + freq_byte
+	if(HIGH_BYTE_2 === 14) {
+		freq_byte = '6' + freq_byte;
 	}
-	if (HIGH_BYTE_2 === 15) {
-		freq_byte = '7' + freq_byte
+	if(HIGH_BYTE_2 === 15) {
+		freq_byte = '7' + freq_byte;
 	}
 
-	return (CLOCK / (16 * parseInt(freq_byte, 16) + 1));
+	return CLOCK / (16 * parseInt(freq_byte, 16) + 1);
 },
 
 convert_freq_3 = function(value) {
 	freq_byte = value.substr(0, 2);
 	high_byte = value.substr(2, 2);
-	if (high_byte === '08') {
-		HIGH_BYTE_3 = 8
+	if(high_byte === '08') {
+		HIGH_BYTE_3 = 8;
 	}
-	if (high_byte === '09') {
-		HIGH_BYTE_3 = 9
+	if(high_byte === '09') {
+		HIGH_BYTE_3 = 9;
 	}
-	if (high_byte === '0A') {
-		HIGH_BYTE_3 = 10
+	if(high_byte === '0A') {
+		HIGH_BYTE_3 = 10;
 	}
-	if (high_byte === '0B') {
-		HIGH_BYTE_3 = 11
+	if(high_byte === '0B') {
+		HIGH_BYTE_3 = 11;
 	}
-	if (high_byte === '0C') {
-		HIGH_BYTE_3 = 12
+	if(high_byte === '0C') {
+		HIGH_BYTE_3 = 12;
 	}
-	if (high_byte === '0D') {
-		HIGH_BYTE_3 = 13
+	if(high_byte === '0D') {
+		HIGH_BYTE_3 = 13;
 	}
-	if (high_byte === '0E') {
-		HIGH_BYTE_3 = 14
+	if(high_byte === '0E') {
+		HIGH_BYTE_3 = 14;
 	}
-	if (high_byte === '0F') {
-		HIGH_BYTE_3 = 15
+	if(high_byte === '0F') {
+		HIGH_BYTE_3 = 15;
 	}
-	if (freq_byte === '00') {
-		return 0
+	if(freq_byte === '00') {
+		return 0;
 	}
-	if (HIGH_BYTE_3 === 9) {
-		freq_byte = '1' + freq_byte
+	if(HIGH_BYTE_3 === 9) {
+		freq_byte = '1' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 10) {
-		freq_byte = '2' + freq_byte
+	if(HIGH_BYTE_3 === 10) {
+		freq_byte = '2' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 11) {
-		freq_byte = '3' + freq_byte
+	if(HIGH_BYTE_3 === 11) {
+		freq_byte = '3' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 12) {
-		freq_byte = '4' + freq_byte
+	if(HIGH_BYTE_3 === 12) {
+		freq_byte = '4' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 13) {
-		freq_byte = '5' + freq_byte
+	if(HIGH_BYTE_3 === 13) {
+		freq_byte = '5' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 14) {
-		freq_byte = '6' + freq_byte
+	if(HIGH_BYTE_3 === 14) {
+		freq_byte = '6' + freq_byte;
 	}
-	if (HIGH_BYTE_3 === 15) {
-		freq_byte = '7' + freq_byte
+	if(HIGH_BYTE_3 === 15) {
+		freq_byte = '7' + freq_byte;
 	}
 
-	return ((CLOCK / (16 * parseInt(freq_byte, 16) + 1)) / 2);
+	return (CLOCK / (16 * parseInt(freq_byte, 16) + 1)) / 2;
 },
 
 noise_frequencies = [
@@ -150,69 +150,69 @@ noise_frequencies = [
 	55930.4,
 	111860.8,
 	223721.6,
-	447443.3,
+	447443.3
 ],
 
 convert_freq_4 = function(mode, value, active) {
-	if (active !== '8') {
-		return 0
+	if(active !== '8') {
+		return 0;
 	}
-	if (value === 'F') {
-		return noise_frequencies[0]
+	if(value === 'F') {
+		return noise_frequencies[0];
 	}
-	if (value === 'E') {
-		return noise_frequencies[1]
+	if(value === 'E') {
+		return noise_frequencies[1];
 	}
-	if (value === 'D') {
-		return noise_frequencies[2]
+	if(value === 'D') {
+		return noise_frequencies[2];
 	}
-	if (value === 'C') {
-		return noise_frequencies[3]
+	if(value === 'C') {
+		return noise_frequencies[3];
 	}
-	if (value === 'B') {
-		return noise_frequencies[4]
+	if(value === 'B') {
+		return noise_frequencies[4];
 	}
-	if (value === 'A') {
-		return noise_frequencies[5]
+	if(value === 'A') {
+		return noise_frequencies[5];
 	}
-	if (value === '9') {
-		return noise_frequencies[6]
+	if(value === '9') {
+		return noise_frequencies[6];
 	}
-	if (value === '8') {
-		return noise_frequencies[7]
+	if(value === '8') {
+		return noise_frequencies[7];
 	}
-	if (value === '7') {
-		return noise_frequencies[8]
+	if(value === '7') {
+		return noise_frequencies[8];
 	}
-	if (value === '6') {
-		return noise_frequencies[9]
+	if(value === '6') {
+		return noise_frequencies[9];
 	}
-	if (value === '5') {
-		return noise_frequencies[10]
+	if(value === '5') {
+		return noise_frequencies[10];
 	}
-	if (value === '4') {
-		return noise_frequencies[11]
+	if(value === '4') {
+		return noise_frequencies[11];
 	}
-	if (value === '3') {
-		return noise_frequencies[12]
+	if(value === '3') {
+		return noise_frequencies[12];
 	}
-	if (value === '2') {
-		return noise_frequencies[13]
+	if(value === '2') {
+		return noise_frequencies[13];
 	}
-	if (value === '1') {
-		return noise_frequencies[14]
+	if(value === '1') {
+		return noise_frequencies[14];
 	}
-	if (value === '0') {
-		return noise_frequencies[15]
+	if(value === '0') {
+		return noise_frequencies[15];
 	}
 	return 0;
 },
 
-convert_chan4_wave = function(mode, freq) {
-	if (mode === '0') {
-		return floor(t * (chan4_freq * 440 / SAMP_RATE) / 440)
-	} else if (mode === '8') {
-		return (floor(t * (chan4_freq * 440 / SAMP_RATE) / 440)) % 93
+convert_chan4_wave = function(mode) {
+	if(mode === '0') {
+		return floor(t * (chan4_freq * 440 / SAMP_RATE) / 440);
+	} else if(mode === '8') {
+		return floor(t * (chan4_freq * 440 / SAMP_RATE) / 440) % 93;
 	}
 	return 0;
 },
@@ -220,11 +220,11 @@ convert_chan4_wave = function(mode, freq) {
 read_data = (data, t) => (
 	current_order = data[int(t / 724) % data.length],
 
-	chan1_amp = (parseInt(current_order.charAt(1), 16) * (-2)) + 256,
+	chan1_amp = (parseInt(current_order.charAt(1), 16) * -2) + 256,
 	chan1_freq = convert_freq_1(current_order.substr(4, 4)),
 	chan1_pulse = convert_duty(current_order.charAt(0)),
 
-	chan2_amp = (parseInt(current_order.charAt(9), 16) * (-2)) + 256,
+	chan2_amp = (parseInt(current_order.charAt(9), 16) * -2) + 256,
 	chan2_freq = convert_freq_2(current_order.substr(12, 4)),
 	chan2_pulse = convert_duty(current_order.charAt(8)),
 
@@ -9280,7 +9280,7 @@ t ? 0 : DATA = [
 	'30000000300000000000000031000C080000000000000000',
 	'30000000300000000000000031000C080000000000000000',
 	'30000000300000000000000031000C080000000000000000',
-	'30000000300000000000000031000C080000000000000000',
+	'30000000300000000000000031000C080000000000000000'
 ],
 
 read_data(DATA, t);

@@ -841,7 +841,7 @@ window.channels = t > 0 ? window.channels : [
 	}, { // Channel 4: Kick
 		ndx: 0,
 		amp: 14,
-		pulse(tick) {
+		pulse() {
 			return 50;
 		},
 		notes: [
@@ -2359,7 +2359,7 @@ window.channels = t > 0 ? window.channels : [
 	}, { // Channel 8: Lead square 2
 		ndx: 0,
 		amp: 6,
-		pulse(tick) {
+		pulse() {
 			return 12;
 		},
 		notes: [
@@ -2546,7 +2546,7 @@ window.channels = t > 0 ? window.channels : [
 	}, { // Channel 11: Lead square echo 2
 		ndx: 0,
 		amp: 1.5,
-		pulse(tick) {
+		pulse() {
 			return 12;
 		},
 		delay: 13,

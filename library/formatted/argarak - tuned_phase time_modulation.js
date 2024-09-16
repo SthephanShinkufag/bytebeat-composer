@@ -22,7 +22,7 @@ bd = function(s, vol) {
 	return 0;
 },
 
-sd = function(s, vol) {
+sd = function(s) {
 	const speed = 50;
 	if((s / 50) % 200 < 20 || (s / 50) % 180 > 160) {
 		return (
@@ -33,7 +33,7 @@ sd = function(s, vol) {
 	return 0;
 },
 
-hi = function(s, vol) {
+hi = function(s) {
 	const speed = 50;
 	if((s / 50) % 200 > 100 || (s / 50) % 140 > 90) {
 		return random() * (20 - (s / speed) % 20) ** 1.77 / 50;
@@ -61,7 +61,7 @@ delayer = function(s, vol) {
 	return 0;
 },
 
-delaytest2 = (s, vol) => delayer(s, 10) + delayer(s - 6000, 5) + delayer(s - 10000, 2),
+delaytest2 = s => delayer(s, 10) + delayer(s - 6000, 5) + delayer(s - 10000, 2),
 
 C = 0.10265,
 C_ = 0.1088,
@@ -83,9 +83,9 @@ chord_seq = [
 	[A_, D * 2, F * 2, G_]
 ],
 
-subbass = (s, vol) => sin(s * 0.5 * chord_seq[int((s / 30000) % 4)][0]) * 5,
+subbass = s => sin(s * 0.5 * chord_seq[int((s / 30000) % 4)][0]) * 5,
 
-chord = function(s, vol) {
+chord = function(s) {
 	const speed = 30000;
 	return (
 		sin(

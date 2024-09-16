@@ -1,6 +1,0 @@
-{
-	"rules": {
-		"new-cap": "off",
-		"no-undef": "off"
-	}
-}

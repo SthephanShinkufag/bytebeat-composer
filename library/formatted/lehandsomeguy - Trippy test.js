@@ -3,7 +3,7 @@ fract = x => x % 1,
 mod = (a, b) => a % b,
 tri = x => 2 * asin(sin(x)) / PI,
 noise = x => sin((x + 10) * sin(pow(x + 10, fract(x) + 10))),
-main = function(x) {
+main = function(time) {
 	s = 0;
 	for(i = 0; i < 10; i++) {
 		s += tri(time * (1000 + i + (mod(floor((time + (i * 0.02)) * 8), 16) * (250 + (i * 3)))));

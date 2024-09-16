@@ -18,7 +18,7 @@ import {
 	keymap,
 	lineNumbers
 } from '@codemirror/view';
-import { classHighlighter } from "@lezer/highlight";
+import { classHighlighter } from '@lezer/highlight';
 
 const defaultEditorElem = document.getElementById('editor-default');
 const { value } = defaultEditorElem;

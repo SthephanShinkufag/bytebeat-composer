@@ -133,8 +133,8 @@ generate = (t, reverb) => {
 		const f = freq.concat === undefined ?
 			freq :
 			freq[1] * fprog + freq[0] * (1 - fprog);
-		const vib = p0wav(t, p0freq) * p0depth,
-			mod = p3wav(t, f * p3freq) * p3depth;
+		const vib = p0wav(t, p0freq) * p0depth;
+		const mod = p3wav(t, f * p3freq) * p3depth;
 		mix += window.song.mix[i] * harm(t, h, v, f + (vib + mod) / t * sample_rate, waves, p1, p2);
 	}
 	return mix;

@@ -1,7 +1,7 @@
 time = t / 22050,
 fract = x => ((x % 1) + 1) % 1,
 hash = x => fract(sin(x * 1342.874 + sin(5212.42 * x)) * 414.23),
-main = function(x) {
+main = function(time) {
 	time *= 0.46;
 	/*  _   _       _   _   __
 	 __|1|_|3|__ __|6|_|8|_|10|_

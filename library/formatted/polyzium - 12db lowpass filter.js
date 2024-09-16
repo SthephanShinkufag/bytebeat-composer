@@ -12,7 +12,7 @@ CUTOFF = l * Math.E ** (-1 / 1024 * (t & 255 * 8)), // Exp decay
 RESONANCE = 0.0,
 
 // The guts
-FB = function(u) {
+FB = function() {
 	this.lp6 = 0;
 	this.lp12 = 0;
 },

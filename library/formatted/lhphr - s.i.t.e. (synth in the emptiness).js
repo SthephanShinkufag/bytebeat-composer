@@ -24,7 +24,7 @@ t ? (
 		If you have a specific BPM on the song, you may have to tinker around with it for a while,
 		be manually trying it or just using a formula. Songs which change BPM though is a different hassle...
 		p.s. this has to be a non-negative integer to work */
-	).fill(0 /* This is to prevent NaN-related issues. 0 should be fine for most purposes. */ )
+	).fill(0 /* This is to prevent NaN-related issues. 0 should be fine for most purposes. */)
 ),
 melody = (
 	note % 64 + note % 63.8 + note % 64.15 +

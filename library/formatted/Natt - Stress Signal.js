@@ -23,7 +23,7 @@
 //                    AND mask. Resulting in some kind of bit-crush effect.
 //                    Note that period, volume and octave are all affected
 //                    by the highest bit position of this part's value.
-// 
+//
 // All 3 parts can be controlled by loops generated with this expression,
 // which allows fitting short list of small numbers in only one number
 //
@@ -89,4 +89,4 @@
 // \                      \        /     /    \             /
 + (((t / 4) - (t / 64) * ((-t >> 17) & 1)) & (((-t / 3) >> 8) & 13))
 
-+ 0
++ 0;

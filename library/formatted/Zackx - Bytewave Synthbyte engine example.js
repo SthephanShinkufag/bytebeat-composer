@@ -10,4 +10,4 @@ x = j => min(max(( // Stereo function
 		b(8) + b(8 / j)
 	) * (1 - t / 8192 % 1) * (t / 16384 % 2) // Bass decay
 ), -128), 127),
-[x(1.005), x(.995)] // Output
+[x(1.005), x(.995)]; // Output

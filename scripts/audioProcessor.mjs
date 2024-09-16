@@ -58,7 +58,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
 				` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
 	}
-	process(inputs, [chData], parameters) {
+	process(inputs, [chData]) {
 		const chDataLen = chData[0].length;
 		if(!chDataLen || !this.isPlaying) {
 			return true;
