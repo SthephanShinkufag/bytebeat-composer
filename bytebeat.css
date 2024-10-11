@@ -389,7 +389,7 @@ button[name="close"] {
 }
 
 .cm-activeLine {
-	background-color: #1c232d !important;
+	background-color: #2c3a4d50 !important;
 }
 
 .cm-content {
@@ -777,7 +777,6 @@ button[name="close"] {
 
 #control-samplerate-select {
 	width: 20px;
-	font-size: 0;
 	border-radius: 0 var(--control-corners) var(--control-corners) 0;
 }
 
