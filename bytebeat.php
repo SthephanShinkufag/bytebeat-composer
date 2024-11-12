@@ -106,7 +106,7 @@ function managementRequest() {
 	return '<fieldset style="display: flex;flex-direction: column;gap: 4px;">
 			<legend align="center">Select an action to manage the library</legend>
 			<a href="?addsong_request" class="control-button">Add a song</a>
-			<a href="?migrate" class="control-button">Migrate to database</a>
+			<a href="?migrate" class="control-button" onclick="return confirm(\'Are you sure to migrate to database?\')">Migrate to database</a>
 			<a href="?make" class="control-button">Make .json files</a>
 			<a href="?logout" class="control-button">Logout</a>
 		</fieldset>';
@@ -286,8 +286,10 @@ function jsonToDatabase() {
 			COLLATE = utf8mb4_0900_ai_ci;');
 		mysqli_query($dbLink,
 			'CREATE TABLE remixes (
+				`id` INT(10) UNSIGNED auto_increment NOT NULL,
 				`song` CHAR(32) NOT NULL,
-				`source` CHAR(32) NOT NULL
+				`source` CHAR(32) NOT NULL,
+				PRIMARY KEY (id)
 			)
 			DEFAULT CHARSET = utf8mb4
 			COLLATE = utf8mb4_0900_ai_ci;');
@@ -614,9 +616,11 @@ function addSong() {
 	// Adding sources for remixes into `remixes` table
 	$sources = $_POST['remix'];
 	foreach ($sources as $source) {
-		mysqli_query($dbLink,
-			'INSERT INTO `remixes` (song, source)
-			VALUES ("' . $hash . '", "' . $source . '");');
+		if($source) {
+			mysqli_query($dbLink,
+				'INSERT INTO `remixes` (song, source)
+				VALUES ("' . $hash . '", "' . $source . '");');
+		}
 	}
 
 	// Close database

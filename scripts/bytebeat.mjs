@@ -331,6 +331,13 @@ globalThis.bytebeat = new class {
 	expandEditor() {
 		this.containerFixedElem.classList.toggle('container-expanded');
 	}
+	formatBytes(bytes) {
+		if(bytes < 1E4) {
+			return bytes + 'B';
+		}
+		const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+		return (i ? (bytes / (1024 ** i)).toFixed(2) : bytes) + ['B', 'KB', 'MB', 'GB', 'TB'][i];
+	}
 	generateEntryHTML({
 		author, code, codeFormLen, codeLen, codeMin, codeMinLen, coverName, coverUrl, date, description,
 		drawing, fileForm, fileMin, fileOrig, hash, mode, name, rating, remix, sampleRate, songs, stereo,
@@ -429,15 +436,17 @@ globalThis.bytebeat = new class {
 		str += '<div class="code-buttons">';
 		if(codeMin || fileMin) {
 			str += `<button class="code-button code-load" data-type="minified"${ sData }${
-				fileMin ? ` data-code-file="${ hash }.js"` : '' }>min ${ codeMinLen }B</button>`;
+				fileMin ? ` data-code-file="${ hash }.js"` : '' }>min ${
+				this.formatBytes(codeMinLen) }</button>`;
 		}
 		if(code || fileOrig) {
 			str += `<button class="code-button code-load" data-type="original"${ sData }${
-				fileOrig ? `data-code-file="${ hash }.js"` : '' }>orig ${ codeLen }B</button>`;
+				fileOrig ? `data-code-file="${ hash }.js"` : '' }>orig ${
+				this.formatBytes(codeLen) }</button>`;
 		}
 		if(fileForm) {
 			str += `<button class="code-button code-load" data-type="formatted"${ sData } data-code-file="${
-				hash }.js">format ${ codeFormLen }B</button>`;
+				hash }.js">format ${ this.formatBytes(codeFormLen) }</button>`;
 		}
 		str += '</div>';
 		if(codeMin) {
@@ -1032,7 +1041,7 @@ globalThis.bytebeat = new class {
 		this.setCounterValue(this.byteSample);
 	}
 	setCodeSize(value) {
-		this.controlCodeSize.textContent = new Blob([value]).size + 'B';
+		this.controlCodeSize.textContent = this.formatBytes(new Blob([value]).size);
 	}
 	setCounterValue(value) {
 		this.controlTime.value = this.settings.isSeconds ?
