@@ -735,15 +735,6 @@
 			"fileMinified": true,
 			"fileOriginal": true
 		}, {
-			"author": "SthephanShi",
-			"name": "\"Something New\" synchronized",
-			"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157250",
-			"date": "2022-06-06",
-			"sampleRate": 44100,
-			"file": "SthephanShi - 'Something new' synchronized.js",
-			"fileMinified": true,
-			"fileFormatted": true
-		}, {
 			"name": "advanced technology",
 			"url": "https://battleofthebits.com/arena/Entry/advanced+technology+%5B44.1k+stereo_+1_337+bytes%5D/54547/",
 			"date": "2022-06-07",
@@ -1254,7 +1245,7 @@
 			"file": "May_I_Change_My_Name - Pizza Time.js",
 			"fileMinified": true,
 			"fileOriginal": true,
-			"starred": 1
+			"starred": 2
 		}, {
 			"name": "Music Theorists Rejoice!",
 			"description": "A chord parsing function designed to be used with tagged templates.",
@@ -1292,6 +1283,46 @@
 			"file": "May_I_Change_My_Name - Thrown Apple.js",
 			"fileOriginal": true,
 			"starred": 2
+		}, {
+			"name": "Playback Speed Effect",
+			"description": "A fun modifier that can be prepended to almost any bytebeat for entertainment.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1b9k62p/playback_speed_effect/",
+			"date": "2024-03-08",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Playback Speed Effect.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Convolutional Reverb",
+			"description": "Applying reverb by convolution with the kernel (the unit impulse response of MuLab's \"Large Room\" effect module).",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fd2gos/comment/lmcswra/",
+			"remix": {
+				"author": "PortablePorcelain",
+				"name": "Doom E1M1 theme recreation",
+				"url": "https://dollchan.net/btb/res/55.html#55"
+			},
+			"date": "2024-09-10",
+			"mode": "Signed Bytebeat",
+			"sampleRate": 11025,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Convolutional Reverb.js",
+			"fileOriginal": true
+		}, {
+			"name": "Bytebeat FFT",
+			"description": "The Fast Fourier Transform (FFT) in bytebeat via the Cooley–Tukey algorithm. Set \"Waveform\" mode and zoom to 1/2.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fdc4tv/bytebeat_fft/",
+			"remix": {
+				"author": "RealZynx92",
+				"name": "cool dubstep song",
+				"url": "https://www.reddit.com/r/bytebeat/comments/q6emvo/cool_dubstep_song/"
+			},
+			"date": "2024-09-10",
+			"sampleRate": 44100,
+			"stereo": true,
+			"drawing": { "mode": "Waveform", "scale": 1 },
+			"file": "May_I_Change_My_Name - Bytebeat FFT.js",
+			"fileOriginal": true
 		}]
 	}, {
 		"author": "Kouzerumatsu",
@@ -1600,13 +1631,14 @@
 		"file": "hcdphobe - Unfinished Preview Attack of the Killer Beats.js",
 		"fileOriginal": true
 	}, {
-		"author": ["kleeder", "damifortune"],
+		"author": "kleeder, damifortune",
 		"name": "Pixel Rainfall",
 		"description": "NES format (.nsf) converted to bytebeat. Used a lua script to log the APU into .csv while playing back the .nsf in fceux. Then .csv converted by a python script into a javascript array. The js logic is going through the array data and converts it on the fly for 4 channels.", 
 		"url": "https://battleofthebits.com/arena/Entry/Pixel+Rainfall/60246/",
 		"date": "2023-05-18",
 		"sampleRate": 44100,
 		"file": "kleeder, damifortune - Pixel Rainfall.js",
+		"fileFormatted": true,
 		"fileOriginal": true,
 		"starred": 2
 	}, {
@@ -1801,20 +1833,37 @@
 		"starred": 1
 	}, {
 		"author": "D3nschøt",
-		"name": "empty - 4mat",
-		"url": [
-			"https://www.reddit.com/r/bytebeat/comments/1b2yjmz/empty_4mat/",
-			"https://youtu.be/GggJssu1m2w"
-		],
-		"cover": {
-			"name": "Matt Simmonds - Empty (512 bytes)",
-			"url": "https://deepsid.chordian.net/?file=/MUSICIANS/0-9/4-Mat/Empty_512_bytes.sid"
-		},
-		"date": "2024-02-29",
-		"sampleRate": 44100,
-		"file": "D3nschot - empty - 4mat.js",
-		"fileOriginal": true,
-		"starred": 1
+		"children": [{
+			"name": "empty - 4mat",
+			"url": [
+				"https://www.reddit.com/r/bytebeat/comments/1b2yjmz/empty_4mat/",
+				"https://youtu.be/GggJssu1m2w"
+			],
+			"cover": {
+				"name": "Matt Simmonds - Empty (512 bytes)",
+				"url": "https://deepsid.chordian.net/?file=/MUSICIANS/0-9/4-Mat/Empty_512_bytes.sid"
+			},
+			"date": "2024-02-29",
+			"sampleRate": 44100,
+			"file": "D3nschot - empty - 4mat.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Changsha Acid Inferno by FΛDE",
+			"url": [
+				"https://www.reddit.com/r/bytebeat/comments/1dgw5j7/finished_it/",
+				"https://youtu.be/gRehr4myqCQ"
+			],
+			"cover": {
+				"name": "FΛDE - Changsha Acid Inferno",
+				"url": "https://youtu.be/OVG_mOf-_c8"
+			},
+			"date": "2024-06-16",
+			"sampleRate": 44100,
+			"file": "D3nschot - Changsha Acid Inferno by FΛDE.js",
+			"fileOriginal": true,
+			"starred": 2
+		}]
 	}, {
 		"author": "GDPlayer_1035",
 		"name": "another pcm test",
@@ -1830,16 +1879,30 @@
 		"starred": 1
 	}, {
 		"author": "ChrisRM380",
-		"name": "cave story balcony remake",
-		"url": "https://dollchan.net/btb/res/368.html#3190",
-		"cover": {
-			"name": "Cave Story OST - T28: Balcony",
-			"url": "https://youtu.be/GoigiNs59s8"
-		},
-		"date": "2024-03-29",
-		"sampleRate": 50000,
-		"file": "ChrisRM380 - cave story balcony remake.js",
-		"fileOriginal": true
+		"children": [{
+			"name": "cave story balcony remake",
+			"url": "https://dollchan.net/btb/res/368.html#3190",
+			"cover": {
+				"name": "Cave Story OST - T28: Balcony",
+				"url": "https://youtu.be/GoigiNs59s8"
+			},
+			"date": "2024-03-29",
+			"sampleRate": 50000,
+			"file": "ChrisRM380 - cave story balcony remake.js",
+			"fileOriginal": true
+		}, {
+			"name": "tin tin tin",
+			"url": "https://dollchan.net/btb/res/368.html#3499",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"name": "atari thingy",
+				"url": "https://www.reddit.com/r/bytebeat/comments/121ie23/dont_know_what_to_name_with_atari_thingy/"
+			},
+			"date": "2024-05-15",
+			"sampleRate": 32000,
+			"file": "ChrisRM380 - tin tin tin.js",
+			"fileOriginal": true
+		}]
 	}, {
 		"author": "Sychamis",
 		"children": [{
@@ -1864,6 +1927,46 @@
 			"file": "Sychamis - Take on me.js",
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"name": "Bytebeat cover of \"Noisy Pillars tune 1\" by Jeroen Tel",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1ffekqb/bytebeat_cover_of_noisy_pillars_tune_1_by_jeroen/",
+			"cover": {
+				"name": "Jeroen Tel - Noisy Pillars tune 1",
+				"url": "https://youtu.be/Zg0HJ-55dXs"
+			},
+			"date": "2024-09-13",
+			"sampleRate": 48000,
+			"file": "Sychamis - Bytebeat cover of Noisy Pillars tune 1 by Jeroen Tel.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "An attempt at covering Cocktail Hour by FΛDE",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g2ws6y/an_attempt_at_covering_cocktail_hour_by_f%CE%BBde/",
+			"cover": {
+				"name": "FΛDE - Cocktail Hour",
+				"url": "https://youtu.be/ucL0NTdKdb4"
+			},
+			"date": "2024-10-13",
+			"sampleRate": 48000,
+			"file": "Sychamis - An attempt at covering Cocktail Hour by FADE.js",
+			"fileOriginal": true,
+			"starred": 2
 		}]
+	}, {
+		"author": "feeshbread",
+		"description": "Powerful bass beat in style of 1788-L.",
+		"name": "W E L L / T H A T S / L O U D",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1fi2dku/comment/lnh0krp/",
+		"remix": {
+			"author": "Fenix-F",
+			"name": "Sounds like distorted teleporter sound from HL2",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fi2dku/sounds_like_distorted_teleporter_sound_from_hl2/"
+		},
+		"date": "2024-09-17",
+		"sampleRate": 48000,
+		"file": "feeshbread - W E L L T H A T S L O U D.js",
+		"fileOriginal": true,
+		"starred": 1
 	}
 ]

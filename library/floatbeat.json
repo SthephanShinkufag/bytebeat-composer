@@ -1,7 +1,7 @@
 [
 	{
 		"author": "Wiebe-Marten Wijnja",
-		"url": "http://wmmusic.nl/",
+		"url": "http://wmmusic.nl/code/",
 		"date": "2014",
 		"children": [{
 			"name": "Cover of 'Predestined Fate' from VVVVVV",
@@ -45,7 +45,6 @@
 				"name": "Game of Thrones Theme",
 				"url": "https://youtu.be/s7L2PVdrb_8"
 			},
-			"date": "2014",
 			"mode": "Floatbeat",
 			"sampleRate": 44100,
 			"file": "Wiebe-Marten Wijnja - Game of Thrones theme.js",
@@ -426,7 +425,7 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/11ie4ws/remix_of_no_limit_with_ambience/",
 			"remix": {
 				"author": "ryg",
-				"name": "No Limit",
+				"name": "another take on simplifying mu6k's thing",
 				"url": "https://www.pouet.net/topic.php?which=8357&page=10#c388986"
 			},
 			"date": "2023-03-04",
@@ -791,6 +790,19 @@
 			"sampleRate": 48000,
 			"codeOriginal": "(t*=s=.785)?(i=0,f=(pm,tm,pc,tc,o1,t1,o2,t2)=>(c[i]+=s*pm*pc+(sin(pm*o1*t*PI/256)*t1-sin(pm*o2*t*PI/256)*t2)*tm,o=sin(c[i]*PI/256)*tc*tm,i++,o),f(2**([0,1,3,5,7,8][(t>>12)%6]/12)*2**(1.25*(t>>[12,13][t/3>>12&1])&3),t/4096%1-2,1,1,4,4,2,2)/4*(t/16384%1+.5)+f(2**(([1,3,5,5,1,3,-2,-2][7&t>>16])/12),cbrt(t/((t>>17&1)+1)%65536*((t>>17&1)+1)/65536)-2,2,1,3,5,5,9)/7+sin(d+=(min(cbrt(t%4096/3072),1)-1)*+'1101011010101101'[t>>12&15]/24)/E+sin((t>>1)*sin(t>>1^t>>2*(t>>1)))*(t/4096%1-1)**2*((t>>12&3)-.5)/24+sin(t*sin(t^t*t))/4*(t>>14&1?t/16384%1-1:0)**4):c=[d=0,0]",
 			"codeMinified": "(t*=s=.785)?(i=0,f=(pm,tm,pc,tc,o1,t1,o2,t2)=>(c[i]+=s*pm*pc+(sin(pm*o1*t*PI/256)*t1-sin(pm*o2*t*PI/256)*t2)*tm,o=sin(c[i]*PI/256)*tc*tm,i++,o),f(2**([0,1,3,5,7,8][(t>>12)%6]/12)*2**(1.25*(t>>[12,13][t/3>>12&1])&3),t/4096%1-2,1,1,4,4,2,2)/4*(t/16384%1+.5)+f(2**([1,3,5,5,1,3,-2,-2][7&t>>16]/12),cbrt(t/((t>>17&1)+1)%65536*((t>>17&1)+1)/65536)-2,2,1,3,5,5,9)/7+sin(d+=(min(cbrt(t%4096/3072),1)-1)*+'1101011010101101'[t>>12&15]/24)/E+sin((t>>1)*sin(t>>1^t>>2*(t>>1)))*(t/4096%1-1)**2*((t>>12&3)-.5)/24+sin(t*sin(t^t*t))/4*(t>>14&1?t/16384%1-1:0)**4):c=[d=0,0]"
+		}, {
+			"name": "SArpnt's \"Funcbeat Example\" in Floatbeat",
+			"description": "Uses modified kick. Minified by several r/bytebeat users.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/18nyjtz/comment/khkt2ep/",
+			"remix": {
+				"author": "SArpnt",
+				"name": "Example",
+				"url": "https://bytebeat.ficial.net/"
+			},
+			"date": "2023-12-23",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": "(t/=48E3)?(P=(t*2**((\"$$$000,,,,,,,,''\".charCodeAt(t*4.3&15)+22)/12)%1>t/2%1*.6+.2)/2-.25,l+=r+=(P-l-r*3)/(cos(t/5)*170+200),l+sin((t*4.3%2+.01)**.3*180)/4):l=r=0"
 		}]
 	}, {
 		"author": "lhphr",
@@ -809,7 +821,7 @@
 			"remix": {
 				"author": "Gabriel Miceli",
 				"name": "Crude Sinewave Dubstep",
-				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+				"url": "https://youtu.be/V4GfkFbDojc?t=148"
 			},
 			"date": "2022-05-28",
 			"mode": "Floatbeat",
@@ -1006,7 +1018,7 @@
 			"name": "12db lowpass filter",
 			"url": "https://dollchan.net/btb/res/3.html#114",
 			"remix": {
-				"name": "Stimmer",
+				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
 			"date": "2022-07-24",
@@ -1055,7 +1067,7 @@
 		"codeOriginal": "t/=4,(((((((t*[1,1,1.5,2][t>>10&3])*\"2235\"[t>>14&3])|t>>3)%128)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64))/1.5)+(((t>>1)*\"2235\"[t>>14&3])%128)/Math.pow(1.0005, t&4095))/128-1",
 		"codeMinified": "t/=4,(((t*[1,1,1.5,2][t>>10&3]*'2235'[t>>14&3]|t>>3)%128+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64))/1.5+(t>>1)*'2235'[t>>14&3]%128/1.0005**(t&4095))/128-1"
 	}, {
-		"author": "GetDolphinedLol",
+		"author": "getDolphinedLol",
 		"name": "utopia",
 		"url": "https://dollchan.net/btb/res/227.html#255",
 		"date": "2022-11-19",
@@ -1068,7 +1080,7 @@
 			"name": "FM stimmer",
 			"url": "https://dollchan.net/btb/res/204.html#266",
 			"remix": {
-				"name": "Stimmer",
+				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
 			"date": "2022-11-29",
@@ -1205,7 +1217,7 @@
 			"url": "https://dollchan.net/btb/res/163.html#373",
 			"remix": {
 				"author": "viznut",
-				"name": "Running man",
+				"name": "Another attempt at melody construction",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930"
 			},
 			"date": "2023-01-22",
@@ -1412,7 +1424,7 @@
 			"fileOriginal": true
 		}]
 	}, {
-		"author": "SleepingLugia (leejh20)",
+		"author": "SleepingLugia",
 		"children": [{
 			"name": "Tune 7",
 			"url": "https://battleofthebits.com/arena/Entry/dumpster_tunes.txt/59825/",
@@ -1567,6 +1579,23 @@
 			"file": "SleepingLugia - galactic funk keyboard solo.js",
 			"fileOriginal": true,
 			"starred": 1
+		}, {
+			"name": "HOME - Resonance wip3",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g1p6x8/comment/lrjani1/",
+			"cover": {
+				"name": "HOME - Resonance",
+				"url": "https://youtu.be/8GW6sLrK40k"
+			},
+			"remix": {
+				"name": "HOME - “Resonance” wip2",
+				"url": "https://www.reddit.com/r/bytebeat/comments/156h8eu/home_resonance_wip2/"
+			},
+			"date": "2024-10-12",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "SleepingLugia - HOME - Resonance wip3.js",
+			"fileOriginal": true,
+			"starred": 2
 		}]
 	}, {
 		"author": "awogler9124812041",
@@ -1607,13 +1636,13 @@
 			"name": "Roland TB303 with clap",
 			"url": "https://www.reddit.com/r/bytebeat/comments/13oleln/comment/jlqh5pu/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": [{
-				"author": "SleepingLugia (leejh20)",
+				"author": "SleepingLugia",
 				"name": "floatbeat tolerable claps",
 				"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
 			}, {
-				"author": "SleepingLugia (leejh20)",
+				"author": "SleepingLugia",
 				"name": "what the Roland TB303 is this???",
-				"url": "https://www.reddit.com/r/bytebeat/comments/120dt3g/crave/"
+				"url": "https://www.reddit.com/r/bytebeat/comments/13oleln/what_the_roland_tb303_is_this/"
 			}],
 			"date": "2023-05-26",
 			"mode": "Floatbeat",
@@ -1709,7 +1738,7 @@
 			"name": "remix of \"alright fine by SArpnt\"",
 			"url": "https://dollchan.net/btb/res/2628.html#2834",
 			"remix": {
-				"author": "lhphr",
+				"author": "SArpnt",
 				"name": "alright fine",
 				"url": "https://www.reddit.com/r/bytebeat/comments/rwryz6/alright_fine/"
 			},
@@ -1858,7 +1887,7 @@
 			"name": "strangle and hold (Unsolicited remix)",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/comment/juypz6j/?utm_source=reddit&utm_medium=web2x&context=3",
 			"remix": {
-				"author": "SleepingLugia (leejh20)",
+				"author": "SleepingLugia",
 				"name": "strangle and hold",
 				"url": "https://www.reddit.com/r/bytebeat/comments/15ioa1o/strangle_and_hold/"
 			},
@@ -1867,7 +1896,7 @@
 			"sampleRate": 48000,
 			"stereo": true,
 			"codeOriginal": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(e*100)*e*8),SE=(Z,e,i)=>i>16?0:e<0?0:Z(e)/2+SE(Z,e-8192/6*B+(i==0?4096/6*B:0),i+2)*0.5,n=A%16,n<8?A-F>0?(a[n]=b[n]=0):0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48e3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(b[n]*1e3,1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[(A+64-i)>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(b[i]*5*p))),M=i=>(L(i),N(i)))",
-			"codeMinified": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(100*e)*e*8),SE=(z,e,i)=>i>16?0:0>e?0:z(e)/2+SE(z,e-8192/6*B+(i==0?4096/6*B:0),i+2)/2,n=A%16,n<8&&A>F?a[n]=b[n]=0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48E3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(1E3*b[n],1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[A+64-i>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(5*b[i]*p))),M=i=>(L(i),N(i)))",
+			"codeMinified": "t?(int(F=(t-3)/s/6*B),A=t/s/6*B|0,Q=(t/1500*o(r(C[A/16&3][0])%12)&202)/200-.64,W=(q,y)=>asin(sin(t/s*p*o(q)+y*sin(t/s*8*p))),l=parseInt('C7CEFEC0CEFHJHFFIEIJLJIFEEEE00EFHJHFE0EFH0FHFFEECEFEC0CCBCECB870'[A&63],36),v=l?[W(l,1),W(l,-1)]:[0,0],P=q=>(e=.2**(q/s/6*B%8),q/s/6*B&8?(2*random()-1)*e:sin(100*e)*e*8),SE=(Z,e,i)=>i>16?0:e<0?0:Z(e)/2+SE(Z,e-8192/6*B+(i==0?4096/6*B:0),i+2)/2,n=A%16,n<8&&A>F?a[n]=b[n]=0:0,M(0),M(1),M(2),M(3),M(4),M(5),M(6),M(7),[(S(0)+T(1)+S(2)+T(3)+S(4)+T(5)+S(6)+T(7)+(A>63?A>127?Q+v[0]:Q:0)+SE(P,t,0))/8,(T(0)+S(1)+T(2)+S(3)+T(4)+S(5)+T(6)+S(7)+(A>63?A>127?Q+v[1]:Q:0)+SE(P,t,1))/8]):(s=48E3,p=PI,B=25,C=['CEFJMQRV','9CEILOQU','8CEHKOQT','7CEJOQTV'],r=n=>parseInt(n,36),o=n=>357.5*2**(n/12),y=(n,m)=>Array(n).fill(m),a=y(16,0),b=y(16,s),c=y(16,0),S=n=>sin(2*p*a[n])*c[n],T=n=>cos(2*p*a[n])*c[n]*min(1E3*b[n],1),I=(i,n)=>(a[i]=(a[i]+o(n)/s)%1,b[i]+=1/s),L=i=>I(i,r(C[A+64-i>>4&3][i])-12),N=i=>c[i]=1/(1+2*b[i]+(1-cos(5*b[i]*p))),M=i=>(L(i),N(i)))",
 			"starred": 2
 		}, {
 			"name": "LFSR Means LFSR",
@@ -1877,6 +1906,194 @@
 			"mode": "Floatbeat",
 			"sampleRate": 32000,
 			"codeOriginal": "t?T++:(R=Array(N=12),T=0,R[0]=1,R[1]=1),R[T%N]=R[T%N]^R[(T-1)%N]^R[(T-4)%N]^R[(T-6)%N]^R.reduce((s,n)=>s^n,0),R[T%N]"
+		}, {
+			"name": "Maxwell the Cat",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bal25z/maxwell_the_cat/",
+			"cover": {
+				"name": "Weebls Stuff - Stockmarket",
+				"url": "https://youtu.be/Oyc1pluilgc"
+			},
+			"date": "2024-03-09",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"file": "May_I_Change_My_Name - Maxwell the Cat.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Trance Bassline Experiment",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1bay73n/trance_bassline_experiment/",
+			"remix": {
+				"author": "Decent-Manager-6169",
+				"name": "please someone remix this",
+				"url": "https://www.reddit.com/r/bytebeat/comments/11ud8tv/please_someone_remix_this/"
+			},
+			"date": "2024-03-10",
+			"mode": "Floatbeat",
+			"sampleRate": 44100,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Trance Bassline Experiment.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Daisy Bell",
+			"description": "Voice synthesis! Bytebeat sings Daisy Bell.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1d7mjgw/daisy_bell/",
+			"cover": {
+				"name": "IBM 7094: First Computer To Sing",
+				"url": "https://youtu.be/x3bPY6i8vJE"
+			},
+			"date": "2024-06-04",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Daisy Bell.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Cathedral Bell",
+			"description": "Parametric bell synthesis by stretching the harmonics of a saw wave.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1eoxoet/cathedral_bell/",
+			"date": "2024-08-10",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": [
+				"S=f=>sin(t/48000*2*PI*f),  // sine wave generator",
+				"stretch=.06,  // harmonic series stretch factor",
+				"W=(f,e=2,i=1)=>i<24&&S(f*i)+W(f*(1+stretch),e,i+1)/e,  // bell waveform generator",
+				"env=.99998**(t%1E5)*(1-.995**(t%1E5)),  // amplitude envelope",
+				"rolloff=1.7-cbrt(env)/2,  // harmonic rolloff factor curve",
+				"(",
+				"  W(118,rolloff)",
+				" +W(117.7,rolloff)",
+				" +W(118.5,rolloff)",
+				")*.15*env"
+			],
+			"codeMinified": "S=f=>sin(t/48E3*2*PI*f),stretch=.06,W=(f,e=2,i=1)=>i<24&&S(f*i)+W(f*(1+stretch),e,i+1)/e,env=.99998**(t%1E5)*(1-.995**(t%1E5)),rolloff=1.7-cbrt(env)/2,.15*(W(118,rolloff)+W(117.7,rolloff)+W(118.5,rolloff))*env"
+		}, {
+			"name": "Tiny TB303",
+			"description": "Featuring \"simple step sequencer\", inspired by \"303 on a budget\".",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1f4lyd0/tiny_tb303/",
+			"remix": {
+				"author": "neverforgettoleave",
+				"name": "simple step sequencer",
+				"url": "https://www.reddit.com/r/bytebeat/comments/jmbsoh/simple_step_sequencer/"
+			},
+			"date": "2024-08-30",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Tiny TB303.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Arbitrary Waveform Sierpinski",
+			"description": "A simple function that can synthesize Sierpinski harmonies out of any waveforms you like.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1f610e1/arbitrary_waveform_sierpinski/",
+			"date": "2024-09-01",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"file": "May_I_Change_My_Name - Arbitrary Waveform Sierpinski.js",
+			"fileOriginal": true
+		}, {
+			"name": "Amen Tracker",
+			"description": "The \"Amen Break\" in a two channel tracker with generative percussion functions.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fa5piz/amen_tracker/",
+			"cover": {
+				"name": "'Amen Break' from 'Winstons - Amen, Brother'",
+				"url": "https://youtu.be/NkU4hsaFglU?si=5L07GE3_q5slKI5E"
+			},
+			"date": "2024-09-06",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Amen Tracker.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Speech synthesis",
+			"description": "Synthesis of vowel sounds.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fe5fb7/formants_n_fourier/",
+			"date": "2024-09-11",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Speech synthesis project.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Formants 'n' Fourier",
+			"description": "\"Speech synthesis\" fed to FFT algorithm.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1fe5fb7/formants_n_fourier/",
+			"remix": [{
+				"name": "Speech synthesis",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1fe5fb7/formants_n_fourier/"
+			}, {
+				"name": "Bytebeat FFT",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1fdc4tv/bytebeat_fft/"
+			}],
+			"date": "2024-09-11",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Formants 'n' Fourier.js",
+			"fileOriginal": true
+		}, {
+			"name": "Frequency-Domain Filtering",
+			"description": "Bytebeat -> FFT -> map() -> IFFT -> filtered bytebeat.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1feketi/frequencydomain_filtering/",
+			"remix": {
+				"author": "beyon",
+				"name": "A bit long I suppose...but nice and soothing",
+				"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318081308422#c4945456935852459432"
+			},
+			"date": "2024-09-11",
+			"mode": "Floatbeat",
+			"sampleRate": 32000,
+			"file": "May_I_Change_My_Name - Frequency-Domain Filtering.js",
+			"fileOriginal": true
+		}, {
+			"name": "boxcar highpass with modulation",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1feketi/comment/lmnxjao/",
+			"remix": [{
+				"author": "Gabriel Miceli",
+				"name": "Noise Maker",
+				"url": "https://youtu.be/V4GfkFbDojc?t=51"
+			}, {
+				"name": "Frequency-Domain Filtering",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1feketi/frequencydomain_filtering/"
+			}],
+			"date": "2024-09-11",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - boxcar highpass with modulation.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "hyper atari thingy remix with a filter sweep intro",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1feketi/comment/lmok3y0/",
+			"remix": [{
+				"author": "Zackx",
+				"name": "Hyper atari thingy (banger mix)",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1dkp4ez/hyper_atari_thingy_banger_mix/"
+			}, {
+				"name": "Frequency-Domain Filtering",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1feketi/frequencydomain_filtering/"
+			}],
+			"date": "2024-09-11",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - hyper atari thingy remix with a filter sweep intro.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "polysine 21 chars fewer",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g3awfe/comment/ls049im/",
+			"remix": {
+				"author": "Ok_District2473",
+				"name": "polysine",
+				"url": "https://www.reddit.com/r/bytebeat/comments/1g3awfe/comment/ls049im/"
+			},
+			"date": "2023-10-14",
+			"mode": "Floatbeat",
+			"sampleRate": 48000,
+			"codeOriginal": "F=i=>i?sin(t*PI/256*i)*(-t/i&8191)/16E3/i+F(i-1):0,F(24)",
+			"codeMinified": "F=i=>i&&sin(t*PI/256*i)*(-t/i&8191)/16E3/i+F(i-1),F(24)"
 		}]
 	}, {
 		"author": "orion_aboy",
@@ -1925,20 +2142,6 @@
 			"codeMinified": "sr=48000,tempo=280,t?0:(R=Array(RL=floor(.3*sr)),RI=0,N1={N:0,D:0,L:0,wave:p=>4*(p%1-p%.5)-1,l:.1,d:.4},N2={N:0,D:0,L:0,wave:p=>4*(p%1-p%.5)-1,l:.05,d:.5},D={N:0,D:0,L:0,wave:random,l:0,d:.1,p:1}),nl=60*sr/tempo,ni=floor(t/nl)%32,pt=floor(t/(32*nl)),n1=[22,,20,22,15,,13,15,10,,8,10,5,,,,8,,6,8,13,,,,8,,6,8,16,,,],n2=pt&1?[-4,,-2,,0,,,,-4,,-2,,0,,,,-3,,-1,,1,,,,-7,,-5,,-3]:[-4,,-2,,0,,,,-4,,-2,,0,,,,-5,,-3,,-1,,,,-7,,-5,,-3],DA={l:.05,d:.1},DB={l:.2,d:.1},DC={l:.4,d:.04},d=[DA,,DC,DA,DB,,,DC,DA,,DC,DA,DB,,,,DA,,DC,DA,DB,,,DC,DA,,DC,DA,DB,,,,DA],U=(N,n)=>(floor(t%nl)==0?(N.p?(N.l=n[ni]?.l||N.l,N.d=n[ni]?.d||N.d):N.N=2**(n[ni]/12)||N.N,N.D=typeof n[ni]=='undefined'?N.D:sr*N.d):N.D--),P=N=>(l=N.l**(sr/48E3),N.L=(1-l)*N.L+l*N.wave(440/sr*t*N.N)*max(0,N.D/sr/N.d)),U(N1,pt<4?n1:pt<6?[]:pt<8?n1:[]),U(N2,pt<8?n2:[]),U(D,pt<4?[]:pt<8?d:[]),RI=++RI%RL,R[RI]=.3*(R[RI]||0)+.4*P(N1)+.2*P(N2)+.9*P(D)",
 			"starred": 1
 		}]
-	}, {
-		"author": "r/bytebeat users",
-		"name": "SArpnt's \"Funcbeat Example\" in Floatbeat",
-		"description": "Uses modified kick. Made and minified by several r/bytebeat users",
-		"url": "https://www.reddit.com/r/bytebeat/comments/18nyjtz/comment/khkt2ep/",
-		"remix": {
-			"author": "SArpnt",
-			"name": "Example",
-			"url": "https://bytebeat.ficial.net/"
-		},
-		"date": "2023-12-23",
-		"mode": "Floatbeat",
-		"sampleRate": 48000,
-		"codeOriginal": "(t/=48E3)?(P=(t*2**((\"$$$000,,,,,,,,''\".charCodeAt(t*4.3&15)+22)/12)%1>t/2%1*.6+.2)/2-.25,l+=r+=(P-l-r*3)/(cos(t/5)*170+200),l+sin((t*4.3%2+.01)**.3*180)/4):l=r=0"
 	}, {
 		"author": "turblentdrink",
 		"name": "dance",
@@ -2005,5 +2208,26 @@
 		"file": "MarioFan171 - Rabid Symphony with Octaver and Organ.js",
 		"fileOriginal": true,
 		"starred": 1
+	}, {
+		"author": "feeshbread",
+		"description": "Entry for ByteBattle Season 1",
+		"name": "Dead Data",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1fzb7eh/dead_data_my_entry_for_byte_battle_season_1/",
+		"date": "2024-10-09",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"stereo": true,
+		"file": "feeshbread - Dead Data.js",
+		"fileOriginal": true,
+		"starred": 2
+	}, {
+		"author": "Ok_District2473",
+		"name": "polysine",
+		"url": "https://www.reddit.com/r/bytebeat/comments/1g3awfe/comment/ls049im/",
+		"date": "2024-10-14",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"codeOriginal": "a=(n)=>sin(t*PI/256*n)%256*(-t/n/4&2047)/2E3/8,a(8)+a(7)+a(6)+a(5)+a(4)+a(3)+a(2)+a(1)",
+		"codeMinified": "a=n=>sin(t*PI/256*n)%256*(-t/n/4&2047)/16E3,a(8)+a(7)+a(6)+a(5)+a(4)+a(3)+a(2)+a(1)"
 	}
 ]

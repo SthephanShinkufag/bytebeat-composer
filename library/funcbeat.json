@@ -1,5 +1,152 @@
 [
 	{
+		"name": "wavepot.com",
+		"url": "https://wavepot.com/",
+		"date": "2014-06-17",
+		"children": [{
+			"author": "potasmic",
+			"name": "afternoon walk",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "potasmic - afternoon walk.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "potasmic",
+			"name": "dubstep dawn",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "potasmic - dubstep dawn.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"author": "stagas",
+			"name": "early morning",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - early morning.js",
+			"fileOriginal": true
+		}, {
+			"author": "potasmic",
+			"name": "go to sleep",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "potasmic - go to sleep.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "got some 303",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - got some 303.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "stagas",
+			"name": "icecream",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - icecream.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "late morning",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - late morning.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "mind swift",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - mind swift.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "stagas",
+			"name": "mind swift (seutje mix)",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - mind swift (seutje mix).js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "morning",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - morning.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "need more 303",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - need more 303.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "stagas",
+			"name": "on the verge",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - on the verge.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "on the verge (tech mix)",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - on the verge (tech mix).js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "polytropon",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - polytropon.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "polytropon (astral mix)",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - polytropon (astral mix).js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "stagas",
+			"name": "rooftop unvisited",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - rooftop unvisited.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "wavepot.com",
+			"name": "subwah",
+			"mode": "Funcbeat",
+			"sampleRate": 44100,
+			"file": "wavepot.com - subwah.js",
+			"fileOriginal": true
+		}, {
+			"author": "stagas",
+			"name": "unexpected token",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "stagas - unexpected token.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"author": "justaboutdead",
+			"name": "YAY!",
+			"mode": "Funcbeat",
+			"sampleRate": 44100,
+			"file": "justaboutdead - YAY!.js",
+			"fileOriginal": true,
+			"starred": 1
+		}]
+	}, {
 		"author": "SArpnt",
 		"children": [{
 			"name": "Example",
@@ -150,23 +297,81 @@
 			"sampleRate": 48000,
 			"file": "baenhohoho - not even an accurate pokey cover of stranglehold.js",
 			"fileOriginal": true,
-			"starred": 1
+			"starred": 2
 		}]
 	}, {
 		"author": "May_I_Change_My_Name",
-		"name": "Butterfly Funcbeat",
-		"description": "A proof of concept for an arbitrary-voice waveform generator topology. The idea is to construct generating functors that play single notes and put them in a list of active generators; when a generator finishes playing its note, it can return undefined, whereupon it will be deleted from the list.",
-		"url": "https://www.reddit.com/r/bytebeat/comments/1awlv56/butterfly_funcbeat/",
-		"cover": {
-			"name": "Chopin - Etude Op. 25 No. 9 (Butterfly)",
-			"url": "https://youtu.be/WZYHvEF84NQ"
-		},
-		"date": "2024-02-21",
-		"mode": "Funcbeat",
-		"sampleRate": 40000,
-		"file": "May_I_Change_My_Name - Butterfly Funcbeat.js",
-		"fileOriginal": true,
-		"starred": 1
+		"children": [{
+			"name": "Butterfly Funcbeat",
+			"description": "A proof of concept for an arbitrary-voice waveform generator topology. The idea is to construct generating functors that play single notes and put them in a list of active generators; when a generator finishes playing its note, it can return undefined, whereupon it will be deleted from the list.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1awlv56/butterfly_funcbeat/",
+			"cover": {
+				"name": "Chopin - Etude Op. 25 No. 9 (Butterfly)",
+				"url": "https://youtu.be/WZYHvEF84NQ"
+			},
+			"date": "2024-02-21",
+			"mode": "Funcbeat",
+			"sampleRate": 40000,
+			"file": "May_I_Change_My_Name - Butterfly Funcbeat.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Bringing Back a Classic",
+			"description": "Allow the author to introduce himself! Music with karaoke subtitles.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1beknxc/bringing_back_a_classic/",
+			"cover": {
+				"name": "Meet the Musician",
+				"url": "https://www.reddit.com/r/bytebeat/comments/108mdge/meet_the_musician/"
+			},
+			"date": "2024-03-14",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Bringing Back a Classic.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Parametric Guitar + Amp",
+			"description": "Experimenting with <a href='https://www.reddit.com/r/bytebeat/comments/1dyjink/string_noises_using_the_karplusstrong_algorithm/' target='_blank'>\"String noises using the Karplus-Strong algorithm\"</a> by Sychamis.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1f5bwuf/parametric_guitar_amp/",
+			"date": "2024-08-31",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Parametric Guitar + Amp.js",
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Chasing Moonlight",
+			"description": "ByteBattle Season 1 Entry. It's begging for a melody or something.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g01th7/chasing_moonlight_bytebattle_season_1_entry/",
+			"date": "2024-10-09",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"stereo": true,
+			"file": "May_I_Change_My_Name - Chasing Moonlight.js",
+			"fileMinified": true,
+			"fileOriginal": true,
+			"starred": 2
+		}, {
+			"name": "Karplus-Strong Piano",
+			"description": "An oscillator-driven synthesizer crossfade with the Karplus-Strong algorithm.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g32b1q/wip_karplusstrong_piano/",
+			"date": "2024-10-14",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - Karplus-Strong Piano.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "playing block chords in the lower registers",
+			"description": "An oscillator-driven synthesizer crossfade with the Karplus-Strong algorithm.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1g32b1q/wip_karplusstrong_piano/",
+			"date": "2024-10-14",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "May_I_Change_My_Name - playing block chords in the lower registers.js",
+			"fileOriginal": true,
+			"starred": 2
+		}]
 	}, {
 		"author": "Zera12873",
 		"children": [{
@@ -212,5 +417,34 @@
 		"file": "PortablePorcelain - 2,753c dance.js",
 		"fileOriginal": true,
 		"starred": 1
+	}, {
+		"author": "Sychamis",
+		"children": [{
+			"name": "Sample/Wavetable sequencer",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1cdms1z/samplewavetable_sequencer/",
+			"cover": {
+				"name": "Junichi Masuda - Pokemon Blue/Red Vermillion City",
+				"url": "https://youtu.be/h7yDXSq18mY"
+			},
+			"date": "2024-04-26",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "Sychamis - Sample Wavetable sequencer.js",
+			"fileOriginal": true,
+			"starred": 1
+		}, {
+			"name": "Lotus 1 theme port to my sequencer",
+			"url": "https://www.reddit.com/r/bytebeat/comments/1chrnap/lotus_1_theme_port_to_my_sequencer/",
+			"cover": {
+				"name": "Shaun Southern - Lotus Esprit Turbo Challenge main theme",
+				"url": "https://youtu.be/7xmGXGSnDOI"
+			},
+			"date": "2024-05-01",
+			"mode": "Funcbeat",
+			"sampleRate": 48000,
+			"file": "Sychamis - Lotus 1 theme port to my sequencer.js",
+			"fileOriginal": true,
+			"starred": 2
+		}]
 	}
 ]

@@ -1,2 +1,3 @@
-node_modules
 .htaccess
+node_modules
+settings.php

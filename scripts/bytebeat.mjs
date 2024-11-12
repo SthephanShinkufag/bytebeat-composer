@@ -61,6 +61,7 @@ globalThis.bytebeat = new class {
 			drawMode: 'Combined',
 			drawScale: 5,
 			isSeconds: false,
+			showAllSongs: false,
 			themeStyle: 'Default',
 			volume: .5
 		};
@@ -72,9 +73,12 @@ globalThis.bytebeat = new class {
 		this.isNeedClear = false;
 		this.isPlaying = false;
 		this.isRecording = false;
+		this.pathFiles = './data/songs/';
+		this.pathJSON = './data/json/';
 		this.playbackSpeed = 1;
 		this.settings = this.defaultSettings;
 		this.songData = { mode: 'Bytebeat', sampleRate: 8000 };
+		this.songs = null;
 		this.init();
 	}
 	get editorValue() {
@@ -100,6 +104,17 @@ globalThis.bytebeat = new class {
 		this.drawGraphics(this.byteSample);
 		if(this.isPlaying) {
 			this.requestAnimationFrame();
+		}
+	}
+	cacheSongs(libArr) {
+		this.songs = new Map();
+		for(let i = 0, iLen = libArr.length; i < iLen; ++i) {
+			const { author } = libArr[i];
+			for(let j = 0, jLen = libArr[i].songs.length; j < jLen; ++j) {
+				const song = libArr[i].songs[j];
+				song.author = author;
+				this.songs.set(song.hash, song);
+			}
 		}
 	}
 	clearCanvas() {
@@ -316,149 +331,123 @@ globalThis.bytebeat = new class {
 	expandEditor() {
 		this.containerFixedElem.classList.toggle('container-expanded');
 	}
-	generateLibraryEntry({
-		author, children, codeMinified, codeOriginal, cover, date, description, drawing, file, fileFormatted,
-		fileMinified, fileOriginal, mode, name, remix, sampleRate, starred, stereo, url
-	}) {
-		let entry = '';
+	generateEntryHTML({
+		author, code, codeFormLen, codeLen, codeMin, codeMinLen, coverName, coverUrl, date, description,
+		drawing, fileForm, fileMin, fileOrig, hash, mode, name, rating, remix, sampleRate, songs, stereo,
+		tags, url
+	}, libName) {
+		const notAllLib = libName !== 'all';
+		if(songs) {
+			let songsStr = '';
+			const len = songs.length;
+			const maxVisible = 10;
+			const needToHide = len - maxVisible;
+			if(notAllLib && len > maxVisible + 3) {
+				songsStr += `<details><summary class="code-button songs-toggle">${
+					needToHide } more bytebeats</summary>`;
+				for(let i = 0; i < len; ++i) {
+					if(i === needToHide) {
+						songsStr += '</details>';
+					}
+					songsStr += this.generateEntryHTML(songs[i], libName);
+				}
+			} else {
+				for(let i = 0; i < len; ++i) {
+					songsStr += this.generateEntryHTML(songs[i], libName);
+				}
+			}
+			return `<details class="songs-block"${
+				notAllLib || this.settings.showAllSongs ? ' open' : ''
+			}><summary class="songs-header"> <b>${ author }</b>${
+				author === 'SthephanShi' ? '<small style="color: #ff0;">dollchan creator</small>' : '' }${
+				len ? `<small> ${ len } song${ len > 1 ? 's' : '' }</small>` : ''
+			}</summary><div class="songs">${ songsStr }</div></details>`;
+		}
+		let str = '';
 		const noArrayUrl = url && !Array.isArray(url);
 		if(name) {
-			entry += url ? `<a href="${ noArrayUrl ? url : url[0] }" target="_blank">${ name }</a>` : name;
+			str += url ? `<a href="${ noArrayUrl ? url : url[0] }" target="_blank">${ name }</a>` : name;
 		}
 		if(author) {
-			let authorsList = '';
-			const authorsArr = Array.isArray(author) ? author : [author];
-			for(let i = 0, len = authorsArr.length; i < len; ++i) {
-				const authorElem = authorsArr[i];
-				if(typeof authorElem === 'string') {
-					authorsList += name || !noArrayUrl ? '<b>' + authorElem + '</b>':
-						`<a href="${ url }" target="_blank">${ authorElem }</a>`;
-				} else {
-					authorsList += `<a href="${ authorElem[1] }" target="_blank">${ authorElem[0] }</a>`;
-				}
-				if(i < len - 1) {
-					authorsList += ', ';
-				}
-			}
-			entry += ` <span>by ${ authorsList }</span>`;
-		}
-		if(url && (!noArrayUrl || !name && !author)) {
-			if(noArrayUrl) {
-				entry += `[<a href="${ url }" target="_blank">link</a>]`;
-			} else {
-				const urlsList = [];
-				for(let i = name ? 1 : 0, len = url.length; i < len; ++i) {
-					urlsList.push(`<a href="${ url[i] }" target="_blank">link${ i + 1 }</a>`);
-				}
-				entry += ` [${ urlsList.join(', ') }]`;
-			}
-		}
-		if(cover) {
-			const { url: cUrl, name: coverName } = cover;
-			entry += ` <span class="code-remix">(cover of ${ cUrl ?
-				`<a href="${ cUrl }" target="_blank">${ coverName }</a>` :
-				`"${ coverName }"`
-			})</span>`;
-		}
-		if(remix) {
-			const arr = [];
-			const remixArr = Array.isArray(remix) ? remix : [remix];
-			for(let i = 0, len = remixArr.length; i < len; ++i) {
-				const { url: rUrl, name: remixName, author: rAuthor } = remixArr[i];
-				arr.push(`${ rUrl ? `<a href="${ rUrl }" target="_blank">${
-					remixName || rAuthor }</a>` : `"${ remixName }"`
-				}${ remixName && rAuthor ? ' by ' + rAuthor : '' }`);
-			}
-			entry += ` <span class="code-remix">(remix of ${ arr.join(', ') })</span>`;
-		}
-
-		if(date || sampleRate || mode || stereo || drawing) {
-			let infoStr = date ? `(${ date })` : '';
-			if(sampleRate) {
-				infoStr += `${ infoStr ? ' ' : '' }${ sampleRate }Hz`;
-			}
-			if(mode) {
-				infoStr += (infoStr ? ' ' : '') + mode;
-			}
-			if(stereo) {
-				infoStr += `${ infoStr ? ' ' : '' }<span class="code-stereo">Stereo</span>`;
-			}
-			if(drawing) {
-				infoStr += `${ infoStr ? ' ' : '' } (${ drawing.mode } mode)`;
-			}
-			entry += ` <span class="code-info">${ infoStr }</span>`;
+			str += ` <span>by ${ name || !noArrayUrl ? `<b>${ author }</b>` :
+				`<a href="${ url }" target="_blank">${ author }</a>` }</span>`;
 		}
 		const songObj = { sampleRate, mode };
+		if(url && (!noArrayUrl || !name && !author)) {
+			if(noArrayUrl) {
+				str += `[<a href="${ url }" target="_blank">link</a>]`;
+			} else {
+				const urlsArr = [];
+				for(let i = name ? 1 : 0, len = url.length; i < len; ++i) {
+					urlsArr.push(`<a href="${ url[i] }" target="_blank">link${ i + 1 }</a>`);
+				}
+				str += ` [${ urlsArr.join(', ') }]`;
+			}
+		}
+		str += ' <span class="code-info">';
+		if(date) {
+			str += date;
+		}
+		if(mode) {
+			str += ' ' + mode;
+		}
+		str += ` ${ sampleRate }Hz`;
+		if(stereo) {
+			tags.push('stereo');
+		}
 		if(drawing) {
 			songObj.drawMode = drawing.mode;
 			songObj.scale = drawing.scale;
+			tags.push('drawing');
 		}
-		const songData = codeOriginal || codeMinified || file ? JSON.stringify(songObj) : '';
-		if(codeMinified) {
-			entry += ` <span class="code-length" title="Size in characters">${
-				codeMinified.length }c</span>` + (codeOriginal ? '<button class="code-button code-toggle"' +
-					' title="Minified version shown. Click to view the original version.">+</button>' : '');
-		} else if(codeOriginal) {
-			entry += ` <span class="code-length" title="Size in characters">${ codeOriginal.length }c</span>`;
+		let tagsStr = ('#' + tags.join(' #')).replace(/\s?#(?:256|1k|big)/g, '');
+		if(notAllLib) {
+			tagsStr = tagsStr.replace(/\s?#c/, '');
 		}
-		if(file) {
-			let codeBtn = '';
-			if(fileFormatted) {
-				codeBtn += `<button class="code-button code-load code-load-formatted" data-songdata='${
-					songData }' data-code-file="${ file
-				}" title="Click to load and play the formatted code">formatted</button>`;
-			}
-			if(fileOriginal) {
-				codeBtn += `<button class="code-button code-load code-load-original" data-songdata='${
-					songData }' data-code-file="${ file
-				}" title="Click to load and play the original code">original</button>`;
-			}
-			if(fileMinified) {
-				codeBtn += `<button class="code-button code-load code-load-minified" data-songdata='${
-					songData }' data-code-file="${ file
-				}" title="Click to load and play the minified code">minified</button>`;
-			}
-			if(codeBtn) {
-				entry += `<div class="code-buttons-container">${ codeBtn }</div>`;
-			}
+		if(tagsStr) {
+			str += ` <span class="code-tags">${ tagsStr }</span>`;
 		}
+		str += '</span>';
 		if(description) {
-			entry += (entry ? '<br>' : '') + description;
+			str += `<div class="code-description">${ description }</div>`;
 		}
-		if(codeOriginal) {
-			if(Array.isArray(codeOriginal)) {
-				codeOriginal = codeOriginal.join('\n');
+		if(remix) {
+			for(let i = 0, len = remix.length; i < len; ++i) {
+				const { hash: rHash, url: rUrl, name: rName, author: rAuthor } = remix[i];
+				str += '<div class="code-remix"><div class="code-remix-preview"> remix of ' +
+					`<button class="code-button code-remix-load" data-hash="${
+						rHash }" title="Show detailed source information">&gt;</button> <span>${
+						rUrl ? `<a href="${ rUrl }" target="_blank">${ rName || rAuthor }</a>` :
+						`"${ rName }"` }${ rName && rAuthor ? ' by ' + rAuthor : '' }</span></div></div>`;
 			}
-			entry += `<br><button class="code-text code-text-original${
-				codeMinified ? ' hidden' : '' }" data-songdata='${ songData }' code-length="${
-				codeOriginal.length }">${ this.escapeHTML(codeOriginal) }</button>`;
 		}
-		if(codeMinified) {
-			entry += `${ codeOriginal ? '' : '<br>' }<button class="code-text code-text-minified"` +
-				` data-songdata='${ songData }' code-length="${ codeMinified.length }">${
-					this.escapeHTML(codeMinified) }</button>`;
+		if(coverName) {
+			str += `<div class="code-cover">cover of ${ coverUrl ?
+				`<a href="${ coverUrl }" target="_blank">${ coverName }</a>` : `"${ coverName }"` }</div>`;
 		}
-		if(children) {
-			let childrenStr = '';
-			const len = children.length;
-			if(len > 8) {
-				childrenStr += `<details><summary class="code-button children-toggle">${
-					len - 5 } more bytebeats</summary>`;
-				for(let i = 0; i < len; ++i) {
-					if(i === len - 5) {
-						childrenStr += '</details>';
-					}
-					childrenStr += this.generateLibraryEntry(children[i]);
-				}
-			} else {
-				for(let i = 0; i < len; ++i) {
-					childrenStr += this.generateLibraryEntry(children[i]);
-				}
-			}
-			entry += `<div class="entry-children">${ childrenStr }</div>`;
+		const sData = ` data-songdata='${ JSON.stringify(songObj) }'`;
+		str += '<div class="code-buttons">';
+		if(codeMin || fileMin) {
+			str += `<button class="code-button code-load" data-type="minified"${ sData }${
+				fileMin ? ` data-code-file="${ hash }.js"` : '' }>min ${ codeMinLen }B</button>`;
 		}
-		return `<div class="${ codeOriginal || codeMinified || file || children ? 'entry' : 'entry-text' }${
-			starred ? ' ' + ['star-1', 'star-2'][starred - 1] : '' }">${ entry }</div>`;
+		if(code || fileOrig) {
+			str += `<button class="code-button code-load" data-type="original"${ sData }${
+				fileOrig ? `data-code-file="${ hash }.js"` : '' }>orig ${ codeLen }B</button>`;
+		}
+		if(fileForm) {
+			str += `<button class="code-button code-load" data-type="formatted"${ sData } data-code-file="${
+				hash }.js">format ${ codeFormLen }B</button>`;
+		}
+		str += '</div>';
+		if(codeMin) {
+			str += `<button class="code-text code-text-min"${ sData }>${ this.escapeHTML(codeMin) }</button>`;
+		}
+		if(code) {
+			str += `<button class="code-text code-text-orig${ codeMin ? ' hidden' : '' }"${
+				sData }>${ this.escapeHTML(code) }</button>`;
+		}
+		return `<div class="entry${ rating ? ' star-' + rating : '' }" data-hash="${ hash }">${ str }</div>`;
 	}
 	getColor(value) {
 		return [
@@ -512,6 +501,12 @@ globalThis.bytebeat = new class {
 			case 'control-samplerate':
 			case 'control-samplerate-select': this.setSampleRate(+elem.value); break;
 			case 'control-theme-style': this.setThemeStyle(elem.value); break;
+			case 'library-show-all':
+				this.settings.showAllSongs = elem.checked;
+				elem.parentNode.parentNode.querySelectorAll('.songs-block').forEach(
+					node => node.toggleAttribute('open', this.settings.showAllSongs));
+				this.saveSettings();
+				break;
 			}
 			return;
 		case 'click':
@@ -547,8 +542,8 @@ globalThis.bytebeat = new class {
 						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
 				} else if(elem.classList.contains('code-load')) {
 					this.onclickCodeLoadButton(elem);
-				} else if(elem.classList.contains('code-toggle') && !elem.getAttribute('disabled')) {
-					this.onclickCodeToggleButton(elem);
+				} else if(elem.classList.contains('code-remix-load')) {
+					this.onclickRemixLoadButton(elem);
 				} else if(elem.classList.contains('library-header')) {
 					this.onclickLibraryHeader(elem);
 				} else if(elem.parentNode.classList.contains('library-header')) {
@@ -570,8 +565,12 @@ globalThis.bytebeat = new class {
 			}
 			return;
 		case 'mouseover':
-			if(elem.classList.contains('code-text')) {
+			if(elem.classList.contains('code-load')) {
+				elem.title = `Click to play the ${ elem.dataset.type } code`;
+			} else if(elem.classList.contains('code-text')) {
 				elem.title = 'Click to play this code';
+			} else if(elem.classList.contains('songs-header')) {
+				elem.title = 'Click to show/hide the songs';
 			}
 			return;
 		}
@@ -596,13 +595,13 @@ globalThis.bytebeat = new class {
 	initAfterDom() {
 		this.initElements();
 		this.parseUrl();
-		loadScript('./scripts/codemirror.min.mjs?version=2024090100');
+		loadScript('./scripts/codemirror.min.mjs?version=2024111200');
 	}
 	async initAudioContext() {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
-		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024090100');
+		await this.audioCtx.audioWorklet.addModule('./scripts/audioProcessor.mjs?version=2024111200');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
@@ -727,26 +726,21 @@ globalThis.bytebeat = new class {
 		return ((a % b) + b) % b;
 	}
 	async onclickCodeLoadButton(buttonElem) {
-		const response = await fetch(`library/${
-			buttonElem.classList.contains('code-load-formatted') ? 'formatted' :
-			buttonElem.classList.contains('code-load-minified') ? 'minified' :
-			buttonElem.classList.contains('code-load-original') ? 'original' : ''
-		}/${ buttonElem.dataset.codeFile }`, { cache: 'no-cache' });
-		this.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
-			{ code: await response.text() }));
-	}
-	onclickCodeToggleButton(buttonElem) {
-		const parentElem = buttonElem.parentNode;
-		const origElem = parentElem.querySelector('.code-text-original');
-		const minElem = parentElem.querySelector('.code-text-minified');
-		origElem?.classList.toggle('hidden');
-		minElem?.classList.toggle('hidden');
-		const isMinified = buttonElem.textContent === '–';
-		parentElem.querySelector('.code-length').textContent =
-			`${ (isMinified ? minElem : origElem).getAttribute('code-length') }c`;
-		buttonElem.title = isMinified ? 'Minified version shown. Click to view the original version.' :
-			'Original version shown. Click to view the minified version.';
-		buttonElem.textContent = isMinified ? '+' : '–';
+		if(buttonElem.dataset.codeFile) {
+			buttonElem.insertAdjacentHTML('beforeend',
+				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
+			const waitElem = buttonElem.lastChild;
+			const response = await fetch(this.pathFiles + buttonElem.dataset.type +
+				'/' + buttonElem.dataset.codeFile);
+			this.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
+				{ code: await response.text() }));
+			waitElem.remove();
+		} else {
+			const codeTextElem = buttonElem.parentNode.parentNode
+				.querySelector(buttonElem.dataset.type === 'minified' ? '.code-text-min' : '.code-text-orig');
+			this.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
+				{ code: codeTextElem.innerText }));
+		}
 	}
 	async onclickLibraryHeader(headerElem) {
 		const containerElem = headerElem.nextElementSibling;
@@ -757,23 +751,47 @@ globalThis.bytebeat = new class {
 		state.add('loaded');
 		const waitElem = headerElem.querySelector('.loading-wait');
 		waitElem.classList.remove('hidden');
-		const response = await fetch(`./library/${ containerElem.id.replace('library-', '') }.json`,
-			{ cache: 'no-cache' });
+		const libName = containerElem.id.replace('library-', '');
+		const response = await fetch(this.pathJSON + libName + '.json', { cache: 'no-cache' });
 		const { status } = response;
-		waitElem.classList.add('hidden');
 		if(status !== 200 && status !== 304) {
 			state.remove('loaded');
-			containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
-				status } ${ response.statusText }</div>`;
+			containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${ status } ${
+				response.statusText }</div>`;
+			waitElem.classList.add('hidden');
 			return;
 		}
-		containerElem.innerHTML = '';
-		let libraryHTML = '';
-		const libraryArr = await response.json();
-		for(let i = 0, len = libraryArr.length; i < len; ++i) {
-			libraryHTML += `<div class="entry-top">${ this.generateLibraryEntry(libraryArr[i]) }</div>`;
+		containerElem.innerHTML = libName !== 'all' ? '' :
+			`<label><input type="checkbox" id="library-show-all"${
+				this.settings.showAllSongs ? ' checked' : '' }> Show all songs</label>`;
+		let libHTML = '';
+		const libArr = await response.json();
+		for(let i = 0, len = libArr.length; i < len; ++i) {
+			libHTML += this.generateEntryHTML(libArr[i], libName);
 		}
-		containerElem.insertAdjacentHTML('beforeend', libraryHTML);
+		if(!this.songs && libName === 'all') {
+			this.cacheSongs(libArr);
+		}
+		containerElem.insertAdjacentHTML('beforeend', libHTML);
+		waitElem.classList.add('hidden');
+	}
+	async onclickRemixLoadButton(elem) {
+		const parentElem = elem.parentNode;
+		if(parentElem.nextSibling) {
+			parentElem.nextSibling.remove();
+			elem.nextElementSibling.style.display = 'inline';
+			return;
+		}
+		if(!this.songs) {
+			elem.insertAdjacentHTML('beforeend',
+				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
+			const response = await fetch(this.pathJSON + 'all.json', { cache: 'no-cache' });
+			this.cacheSongs(await response.json());
+			elem.lastChild.remove();
+		}
+		parentElem.insertAdjacentHTML('afterend',
+			this.generateEntryHTML(this.songs.get(elem.dataset.hash), 'all'));
+		elem.nextElementSibling.style.display = 'none';
 	}
 	oninputCounter(e) {
 		if(e.key === 'Enter') {
@@ -914,7 +932,7 @@ globalThis.bytebeat = new class {
 				this.sendData({ errorDisplayed: true });
 			}
 			if(data.updateUrl !== true) {
-				this.setCodeSize(this.editorValue.length);
+				this.setCodeSize(this.editorValue);
 			}
 		}
 		if(data.updateUrl === true) {
@@ -1014,7 +1032,7 @@ globalThis.bytebeat = new class {
 		this.setCounterValue(this.byteSample);
 	}
 	setCodeSize(value) {
-		this.controlCodeSize.textContent = value + 'c';
+		this.controlCodeSize.textContent = new Blob([value]).size + 'B';
 	}
 	setCounterValue(value) {
 		this.controlTime.value = this.settings.isSeconds ?
@@ -1185,7 +1203,7 @@ globalThis.bytebeat = new class {
 		if(this.songData.mode !== 'Bytebeat') {
 			songData.mode = this.songData.mode;
 		}
-		this.setCodeSize(code.length);
+		this.setCodeSize(code);
 		window.location.hash = `#v3b64${ btoa(String.fromCharCode.apply(undefined,
 			deflateRaw(JSON.stringify(songData)))).replaceAll('=', '') }`;
 	}

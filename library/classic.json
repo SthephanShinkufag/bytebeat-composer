@@ -1,54 +1,399 @@
 [
 	{
+		"author": "SthephanShi",
+		"children": [{
+			"name": "Explosions",
+			"codeOriginal": "(t>>2)*(t>>5)|t>>5",
+			"starred": 1
+		}, {
+			"name": "Explosions #2",
+			"codeOriginal": "(t>>4)*(t>>3)|t>>3"
+		}, {
+			"name": "Explosive beat",
+			"description": "Obtained from combining the two formulas.",
+			"codeOriginal": "(t>>4)*(t>>3)|t>>(t&4096?3:2)",
+			"starred": 1
+		}, {
+			"name": "M-m-multiple explosion beat",
+			"codeOriginal": "(t>>4)*(t>>2)|t>>(t>>12)%4"
+		}, {
+			"name": "Wheezing modem",
+			"codeOriginal": "100*((t<<2|t>>5|t^63)&(t<<10|t>>11))"
+		}, {
+			"name": "Robocop",
+			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
+			"starred": 1
+		}, {
+			"name": "Robocop with slower tempo",
+			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&24))|t>>3",
+			"starred": 1
+		}, {
+			"name": "Toy phone",
+			"description": "Sounds similar to children's toys.",
+			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>10&18)"
+		}, {
+			"name": "Funny voice calling",
+			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>12&18)",
+			"starred": 1
+		}, {
+			"name": "Meowing cat calling",
+			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)",
+			"starred": 1
+		}, {
+			"name": "Child swings",
+			"remix": {
+				"author": "Anonymous from russian imageboards",
+				"name": "1) THE SWINGS",
+				"url": "https://arhivach.xyz/storage/a/9b/a9b7e820d10e52493570894ed002b9a5.jpg"
+			},
+			"codeOriginal": "t>>9&2*t&10*t|t>>5&6*t",
+			"starred": 2
+		}, {
+			"name": "Cat-girl",
+			"remix": {
+				"author": "Anonymous from russian imageboards",
+				"name": "4) CAT-GIRL",
+				"url": "https://arhivach.xyz/storage/a/9b/a9b7e820d10e52493570894ed002b9a5.jpg"
+			},
+			"codeOriginal": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
+			"codeMinified": "17*t|(t>>2)+(14-(t>>15&1))*t|t>>3|t>>5",
+			"starred": 1
+		}, {
+			"name": "Trance beat",
+			"remix": {
+				"author": "Anonymous from russian imageboards",
+				"name": "11) THE HIT OF THE SEASON",
+				"url": "https://arhivach.xyz/storage/a/9b/a9b7e820d10e52493570894ed002b9a5.jpg"
+			},
+			"codeOriginal": "t>>(t%16?4:6)|t>>(t%128?10:4)"
+		}, {
+			"name": "Trance beat #2",
+			"remix": {
+				"author": "Anonymous from russian imageboards",
+				"name": "11) THE HIT OF THE SEASON",
+				"url": "https://arhivach.xyz/storage/a/9b/a9b7e820d10e52493570894ed002b9a5.jpg"
+			},
+			"codeOriginal": "t>>(t%32?4:3)|(t%128?t>>3:t>>3|t>>9)"
+		}, {
+			"name": "Brain burner",
+			"codeOriginal": "129*t%(t>>7)"
+		}, {
+			"name": "Psychedelica",
+			"codeOriginal": "t^t%1001+t^t%1002"
+		}, {
+			"name": "Protoss engine",
+			"codeOriginal": "2*(-t%128|t%130)"
+		}, {
+			"name": "Harmonics",
+			"codeOriginal": "t<<2^t>>4^t<<4&t>>8|t<<1&-t>>4"
+		}, {
+			"name": "Bass beat + lead",
+			"codeOriginal": "15-t%(t&16384?26:29)&t>>4|t<<1&-t>>4"
+		}, {
+			"name": "Arabic beat",
+			"codeOriginal": "t%((t&-16|t>>10)&42)*4|t>>4",
+			"starred": 1
+		}, {
+			"name": "Arabic beat #2",
+			"codeOriginal": "t%((t&-16|t>>11)&42)*4|t>>4"
+		}, {
+			"name": "Game level",
+			"remix": {
+				"author": "viznut",
+				"name": "Another attempt at melody construction",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930"
+			},
+			"date": "2017-11-26",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>2",
+			"starred": 1
+		}, {
+			"name": "Boss level",
+			"description": "Slowing down the rhythm to |t>>3... Sounds dangerous!",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
+			"starred": 1
+		}, {
+			"name": "Boss level #2",
+			"description": "Another pattern using the ternary operator. The rhythm is slowed down to |t>>4",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?7:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
+		}, {
+			"name": "Boss level #3",
+			"description": "Changing the coefficients adds harmonics.",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?7:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
+		}, {
+			"name": "Boss level #4",
+			"description": "Complicated rhythm with ternary operator |t>>(t&4096?3:4)",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?7:5)*(4-(1&t>>8))>>(3&t>>8)|t>>(t&4096?3:4)"
+		}, {
+			"name": "Aliens on approach",
+			"description": "Slowing down the explosions to 3&t>>9, get a heavy beat.",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(3-(1&t>>8))>>(3&t>>9)|t>>4",
+			"starred": 1
+		}, {
+			"name": "Aliens are close",
+			"description": "t>>5 rhythm",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>9)|t>>5",
+			"starred": 1
+		}, {
+			"name": "Aliens are here",
+			"description": "t>>6 gives SUPER POWERFUL ECHOES.",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
+			"starred": 1
+		}, {
+			"name": "Mysterious inverted sound",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
+		}, {
+			"name": "Aliens attack",
+			"description": "Complicated (t|t*3)>>5 rhythm with explosive drums.",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
+			"starred": 1
+		}, {
+			"name": "Aliens encounter",
+			"description": "Making a ternary rhythm gives an EXTRA HARD BEAT!",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>(t&4096?3:4)",
+			"starred": 2
+		}, {
+			"name": "Funny inverted sound",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
+		}, {
+			"name": "Prepare to fight",
+			"description": "Long period, sound is changing from low to high.",
+			"date": "2017-11-26",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
+			"starred": 1
+		}, {
+			"name": "Aliens encounter + drums",
+			"date": "2017-11-26",
+			"description": "Replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums, we use it in a ternary 3&t>>(t&4096?2:9)",
+			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
+			"starred": 2
+		}, {
+			"name": "Prepare to fight + drums",
+			"date": "2017-11-26",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
+			"starred": 1
+		}, {
+			"name": "Ready to fight?",
+			"date": "2017-11-26",
+			"description": "More complex ternary operators to create cool drums.",
+			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
+			"starred": 2
+		}, {
+			"name": "Hard level",
+			"description": "My favorite formula!",
+			"date": "2017-11-26",
+			"codeOriginal": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
+			"starred": 2
+		}, {
+			"name": "Boss level #5",
+			"remix": {
+				"name": "Boss level #2"
+			},
+			"description": "With (1+(3&t>>10)) expression and t>>2 rhythm.",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?7:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
+		}, {
+			"name": "Another level",
+			"description": "Adding a noise beat by using ternary operator.",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>(t&2048?4:10)))>>(3&t>>8)|t>>2",
+			"starred": 1
+		}, {
+			"name": "Happy level",
+			"description": "slightly modified. The sound changes to a more cartoony sound.",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>(t&2048?4:9)))>>(3&t>>8)|t>>2"
+		}, {
+			"name": "Happy level #2",
+			"description": "Inverted 3&-t>>8 gives more happy tune :)",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>9))>>(3&-t>>8)|t>>4"
+		}, {
+			"name": "Happy level #3",
+			"description": "3&-t>>9 gives nice harmonics.",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(2+(3&-t>>9))>>(3&t>>8)|t>>4",
+			"starred": 1
+		}, {
+			"name": "Awesome level",
+			"description": "We can get a cool cartoon-game melody!",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
+			"starred": 2
+		}, {
+			"name": "Awesome level with slower rhythm",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>3",
+			"starred": 1
+		}, {
+			"name": "Awesome level #2",
+			"description": "The next awesome level!",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
+			"starred": 2
+		}, {
+			"name": "Alien dungeon",
+			"description": "So sinister.. t>>6 gives a fading effect.",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|t>>6",
+			"starred": 1
+		}, {
+			"name": "Boss level #6",
+			"url": "https://dollchan.net/de/res/706.html#707",
+			"date": "2019-01-12",
+			"codeOriginal": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
+			"starred": 1
+		}, {
+			"name": "The time is running out!",
+			"description": "Hurry up!",
+			"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
+			"date": "2021-10-17",
+			"sampleRate": 11025,
+			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3",
+			"starred": 2
+		}, {
+			"name": "The time is running out!!!",
+			"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
+			"description": "More complicated drums",
+			"date": "2021-10-17",
+			"sampleRate": 11025,
+			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?t&4096?2:16:2))|t>>3",
+			"codeMinified": "t*(2&t>>13?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|(t>>11)%32>28?2:16))|t>>3",
+			"starred": 2
+		}, {
+			"name": "Neurofunk",
+			"description": "A modified version of this song is used in the salinewin.exe virus.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/s0laz2/neurofunk/",
+			"date": "2022-01-10",
+			"codeOriginal": "t*((t&4096?t%65536<59392?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2)",
+			"starred": 2
+		}, {
+			"name": "Neurofunk - Fist punch version",
+			"description": "A modified version of this song is used in the salinewin.exe virus.",
+			"url": "https://www.reddit.com/r/bytebeat/comments/s0laz2/neurofunk/",
+			"date": "2022-01-10",
+			"codeOriginal": "t*((t&4096?t%65536<59392?7:t>>6:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?4:3:2)",
+			"starred": 1
+		}, {
+			"name": "42 melody with adjustable decay",
+			"url": "https://dollchan.net/btb/res/204.html#459",
+			"remix": {
+				"name": "the 42 melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"date": "2023-02-23",
+			"codeOriginal": "t*(42&t>>10)%256*(1-t%2048/3E3)"
+		}]
+	}, {
 		"author": "viznut",
 		"children": [{
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"url": [
+				"https://youtu.be/GtQdIYUtAHg?t=8",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
 			"date": "2011-09-18",
 			"codeOriginal": "t*(((t>>12)|(t>>8))&(63&(t>>4)))",
 			"codeMinified": "t*((t>>12|t>>8)&63&t>>4)"
 		}, {
 			"name": "Sin() isn't kosher, people!",
-			"url": "https://www.pouet.net/topic.php?which=8357&page=4#c388477",
+			"url": [
+				"https://www.pouet.net/topic.php?which=8357&page=4#c388477",
+				"https://youtu.be/qlrs2Vorw2Y?t=15"
+			],
 			"date": "2011-09-30",
 			"codeOriginal": "(t>>6|t|t>>(t>>16))*10+((t>>11)&7)",
 			"codeMinified": "10*(t>>6|t|t>>(t>>16))+(7&t>>11)",
 			"starred": 1
 		}, {
 			"name": "Combined xpansive's and varjohukka's stuff",
-			"url": "https://www.pouet.net/topic.php?which=8357&page=4#c388488",
+			"url": [
+				"https://www.pouet.net/topic.php?which=8357&page=4#c388488",
+				"https://youtu.be/qlrs2Vorw2Y?t=150"
+			],
 			"date": "2011-09-30",
 			"codeOriginal": "(t>>7|t|t>>6)*10+4*(t&t>>13|t>>6)",
 			"starred": 2
 		}, {
-			"name": "Another attempt at melody construction (\"Running man\")",
+			"name": "Another attempt at melody construction",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388930",
 			"date": "2011-10-04",
 			"codeOriginal": "(t*((3+(1^t>>10&5))*(5+(3&t>>14))))>>(t>>8&3)",
 			"codeMinified": "t*(3+(1^t>>10&5))*(5+(3&t>>14))>>(t>>8&3)",
 			"starred": 2
 		}, {
-			"name": "#countercomplex \"moon scanner generalization\", based on jaffa's formula",
+			"name": "moon scanner generalization",
 			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 			"date": "2011-10-06",
 			"codeOriginal": "((t>>5&t)-(t>>5)+(t>>5&t))+(t*((t>>14)&14))",
 			"codeMinified": "2*(t>>5&t)-(t>>5)+t*(t>>14&14)",
 			"starred": 1
+		}, {
+			"name": "Long Sierpinski Harmony",
+			"url": [
+				"https://youtu.be/tCRPUv8V22o?t=10",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
+			"remix": {
+				"author": "miiro",
+				"name": "Sierpinski harmony",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s"
+			},
+			"date": "2011-10-10",
+			"codeOriginal": "(t*5&t>>7)|(t*3&t>>10)",
+			"codeMinified": "5*t&t>>7|3*t&t>>10"
+		}, {
+			"name": "minimal sierpinski harmony",
+			"remix": {
+				"author": "miiro",
+				"name": "Sierpinski harmony",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s"
+			},
+			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"codeOriginal": "t&t>>8"
 		}]
 	}, {
 		"author": "tejeez",
 		"children": [{
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"url": [
+				"https://youtu.be/GtQdIYUtAHg?t=45",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
 			"date": "2011-09-18",
 			"codeOriginal": "(t*(t>>5|t>>8))>>(t>>16)",
 			"codeMinified": "t*(t>>5|t>>8)>>(t>>16)"
 		}, {
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"url": [
+				"https://youtu.be/GtQdIYUtAHg?t=123",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
 			"date": "2011-09-18",
 			"codeOriginal": "t*(((t>>11)&(t>>8))&(123&(t>>3)))",
 			"codeMinified": "t*(t>>11&t>>8&123&t>>3)"
 		}, {
 			"name": "Noisy beats",
-			"url": "https://youtu.be/GtQdIYUtAHg?t=2m55s",
+			"url": [
+				"https://youtu.be/GtQdIYUtAHg?t=175",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
 			"date": "2011-09-18",
 			"codeOriginal": "((-t&4095)*(255&t*(t&(t>>13)))>>12)+(127&t*(234&t>>8&t>>3)>>(3&t>>14))",
 			"codeMinified": "((-t&4095)*(255&t*(t&t>>13))>>12)+(127&t*(234&t>>8&t>>3)>>(3&t>>14))"
@@ -62,7 +407,10 @@
 	}, {
 		"author": "visy",
 		"children": [{
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+			"url": [
+				"https://youtu.be/GtQdIYUtAHg?t=160",
+				"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			],
 			"date": "2011-09-18",
 			"codeOriginal": "t*(t>>8*((t>>15)|(t>>8))&(20|(t>>19)*5>>t|(t>>3)))",
 			"codeMinified": "t*(t>>8*(t>>15|t>>8)&(20|5*(t>>19)>>t|t>>3))"
@@ -85,7 +433,10 @@
 		"author": "xpansive",
 		"children": [{
 			"name": "Lost in Space",
-			"url": "http://www.pouet.net/topic.php?which=8357&page=3#c388375",
+			"url": [
+				"http://www.pouet.net/topic.php?which=8357&page=3#c388375",
+				"https://youtu.be/qlrs2Vorw2Y?t=207"
+			],
 			"date": "2011-09-29",
 			"codeOriginal": "((t*(t>>8|t>>9)&46&t>>8)) ^ (t&t>>13|t>>6)",
 			"codeMinified": "t*(t>>8|t>>9)&46&t>>8^(t&t>>13|t>>6)"
@@ -95,104 +446,34 @@
 			"codeOriginal": "t%(t/(t>>9|t>>13))"
 		}]
 	}, {
+		"author": "miiro",
+		"name": "Sierpinski harmony",
+		"url": [
+			"https://youtu.be/qlrs2Vorw2Y?t=2m14s",
+			"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+		],
+		"date": "2011-09-30",
+		"codeOriginal": "t*5&(t>>7)|t*3&(t*4>>10)",
+		"codeMinified": "5*t&t>>7|3*t&4*t>>10",
+		"starred": 2
+	}, {
 		"name": "the 42 melody",
-		"children": [{
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
-			"codeOriginal": "t*(42&t>>10)",
-			"starred": 2
-		}, {
-			"author": "Zackx",
-			"name": "42 melody with decay",
-			"url": "https://dollchan.net/btb/res/204.html#439",
-			"date": "2023-02-21",
-			"codeOriginal": "t*((42&t>>10))%256*(-t&2047)/2e3",
-			"codeMinified": "t*(42&t>>10)%256*(-t&2047)/2E3"
-		}, {
-			"author": "SthephanShi",
-			"name": "42 melody with adjustable decay",
-			"url": "https://dollchan.net/btb/res/204.html#459",
-			"date": "2023-02-23",
-			"codeOriginal": "t*(42&t>>10)%256*(1-t%2048/2048)"
-		}, {
-			"author": "SthephanShi",
-			"name": "sine-nomath 42 melody",
-			"date": "2023-07-27",
-			"codeOriginal": "(t*(42&t>>10)/8&15)*(-t*(42&t>>10)/8&15)*((t*(42&t>>10)/8&16)/8-1)+128"
-		}]
+		"description": "Separately discovered by several people on irc.",
+		"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+		"codeOriginal": "t*(42&t>>10)",
+		"starred": 2
 	}, {
 		"author": "bear @ celephais",
 		"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
 		"codeOriginal": "t+(t&t^t>>6)-t*((t>>9)&(t%16?2:6)&t>>9)",
 		"codeMinified": "t+(t&t^t>>6)-t*(t>>9&(t%16?2:6)&t>>9)"
-	} , {
-		"name": "Explosions",
-		"codeOriginal": "t>>5|(t>>2)*(t>>5)",
-		"starred": 1
 	}, {
-		"name": "Wheezing modem",
-		"children": [{
-			"codeOriginal": "100*((t<<2|t>>5|t^63)&(t<<10|t>>11))"
-		}, {
-			"author": "Devan Wolf",
-			"url": "https://dollchan.net/btb/res/3.html#224",
-			"date": "2022-10-18",
-			"codeOriginal": "(t<<1&t*3&-t>>5&t>>10)-1"
-		}]
-	}, {
-		"name": "Sierpinski harmony",
-		"children": [{
-			"author": "miiro",
-			"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s",
-			"date": "2011-09-30",
-			"codeOriginal": "t*5&(t>>7)|t*3&(t*4>>10)",
-			"codeMinified": "5*t&t>>7|3*t&4*t>>10",
-			"starred": 2
-		}, {
-			"author": "stephth",
-			"name": "remix of miiro's 1-line symphony",
-			"url": "https://news.ycombinator.com/item?id=3063359#3064986",
-			"date": "2011-10-03",
-			"codeOriginal": "t*9&(t*1>>4)|t*5&(t>>7)|t*3&(t*4>>12)",
-			"codeMinified": "9*t&t>>4|5*t&t>>7|3*t&t>>10",
-			"starred": 1
-		}, {
-			"author": "viznut",
-			"name": "Long Sierpinski Harmony",
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
-			"date": "2011-10-10",
-			"codeOriginal": "(t*5&t>>7)|(t*3&t>>10)",
-			"codeMinified": "5*t&t>>7|3*t&t>>10"
-		}, {
-			"author": "radavis",
-			"name": "percussive",
-			"url": "https://github.com/radavis/bytebeat/blob/master/errie_error.c",
-			"date": "2014-08-10",
-			"codeOriginal": "(((t*9)&(t>>4))|(t*5&t>>7)|(t*3&t/1024))-1",
-			"codeMinified": "(9*t&t>>4|5*t&t>>7|3*t&t>>10)-1"
-		}, {
-			"author": "radavis",
-			"name": "magical",
-			"url": "https://github.com/radavis/bytebeat/blob/master/errie_error.c",
-			"date": "2014-08-10",
-			"codeOriginal": "((t*9)&(t>>4))|(t*5&t>>7)|(t*3&t/1024)-1",
-			"codeMinified": "9*t&t>>4|5*t&t>>7|(3*t&t>>10)-1"
-		}, {
-			"author": "May_I_Change_My_Name",
-			"name": "BM9 harmony",
-			"url": "https://www.reddit.com/r/bytebeat/comments/yi1cf9/u_wot_m9/",
-			"date": "2022-10-31",
-			"codeOriginal": "2*t&(t>>8)|5*t&(t>>7)|9*t&(t>>4)|15*t&(t>>4)",
-			"codeMinified": "2*t&t>>8|5*t&t>>7|9*t&t>>4|15*t&t>>4"
-		}, {
-			"author": "viznut",
-			"name": "minimal sierpinski harmony",
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
-			"codeOriginal": "t&t>>8"
-		}]
-	}, {
-		"author": [
-			["skurk", "http://www.pouet.net/topic.php?which=8357&page=4#c388479"],
-			["raer", "http://www.pouet.net/topic.php?which=8357&page=4#c388494"]],
+		"author": "skurk, raer",
+		"url": [
+			"http://www.pouet.net/topic.php?which=8357&page=4#c388479",
+			"http://www.pouet.net/topic.php?which=8357&page=4#c388494",
+			"https://youtu.be/qlrs2Vorw2Y?t=190"
+		],
 		"name": "Street Surfer",
 		"date": "2011-09-30",
 		"codeOriginal": "(t&4096)?((t*(t^t%255)|(t>>4))>>1):(t>>3)|((t&8192)?t<<2:t)",
@@ -216,10 +497,18 @@
 		"starred": 1
 	}, {
 		"author": "rrrola",
-		"name": "I'm late to the party",
-		"url": "https://www.pouet.net/topic.php?which=8357&page=5#c388529",
-		"date": "2011-09-30",
-		"codeOriginal": "t*(4+(t>>9)%3)&t/3>>7&224"
+		"children": [{
+			"name": "I'm late to the party",
+			"url": "https://www.pouet.net/topic.php?which=8357&page=5#c388529",
+			"date": "2011-09-30",
+			"codeOriginal": "t*(4+(t>>9)%3)&t/3>>7&224"
+		}, {
+			"name": "CA98",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902",
+			"date": "2011-10-04",
+			"codeOriginal": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8",
+			"starred": 2
+		}]
 	}, {
 		"author": "godinpants",
 		"url": "https://chipmusic.org/forums/post/79378/#p79378",
@@ -274,6 +563,22 @@
 		"codeOriginal": "(64*(t>>3|t>>4|t>>9)+(t>>11&t<<2))^2*(t>>16|t|t>>7)+32*(t>>t&32)",
 		"codeMinified": "64*(t>>3|t>>4|t>>9)+(t>>11&t<<2)^2*(t>>16|t|t>>7)+32*(t>>t&32)"
 	}, {
+		"author": "stephth",
+		"name": "remix of miiro's 1-line symphony",
+		"url": [
+			"https://news.ycombinator.com/item?id=3063359#3064986",
+			"https://youtu.be/tCRPUv8V22o?t=206"
+		],
+		"remix": {
+			"author": "miiro",
+			"name": "Sierpinski harmony",
+			"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s"
+		},
+		"date": "2011-10-03",
+		"codeOriginal": "(t*9&t>>4|t*5&t>>7|t*3&t/1024)-1",
+		"codeMinified": "(9*t&t>>4|5*t&t>>7|3*t&t>>10)-1",
+		"starred": 1
+	}, {
 		"author": "stimmer",
 		"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409",
 		"date": "2011-10-03",
@@ -295,6 +600,13 @@
 		"date": "2011-10-03",
 		"codeOriginal": "(t>>7|t*3|t>>(t>>15))*10+((t>>8)&5)",
 		"codeMinified": "10*(t>>7|3*t|t>>(t>>15))+(t>>8&5)"
+	}, {
+		"author": "216, Danharaj",
+		"name": "\"fractal trees\", 216's version",
+		"url": "http://www.reddit.com/r/programming/comments/kyj77/algorithmic_symphonies_from_one_line_of_code_how/",
+		"date": "2011-10-03",
+		"codeOriginal": "t|t%255|t%257",
+		"starred": 1
 	}, {
 		"author": "marmakoide",
 		"children": [{
@@ -318,20 +630,6 @@
 			"starred": 2
 		}]
 	}, {
-		"author": "216",
-		"children": [{
-			"author": "Danharaj & 216",
-			"name": "\"fractal trees\", 216's version",
-			"url": "http://www.reddit.com/r/programming/comments/kyj77/algorithmic_symphonies_from_one_line_of_code_how/",
-			"date": "2011-10-03",
-			"codeOriginal": "t|t%255|t%257",
-			"starred": 1
-		}, {
-			"url": "https://youtu.be/tCRPUv8V22o?t=345",
-			"date": "2011-10-10",
-			"codeOriginal": "t*(t^t+(t>>15|1)^(t-1280^t)>>10)"
-		}]
-	}, {
 		"author": "skurk",
 		"name": "music for a C64 game",
 		"url": "http://www.pouet.net/topic.php?which=8357&page=8#c388896",
@@ -341,64 +639,22 @@
 	}, {
 		"author": "kb_",
 		"name": "chip arpeggio that eats itself",
-		"url": "http://www.pouet.net/topic.php?which=8357&page=8#c388898",
+		"url": [
+			"http://www.pouet.net/topic.php?which=8357&page=8#c388898",
+			"https://youtu.be/tCRPUv8V22o?t=65"
+		],
 		"date": "2011-10-04",
 		"sampleRate": 44100,
 		"codeOriginal": "(((t>>1)*(15&(0x234568a0>>((t>>8)&28))))|((t>>1)>>(t>>11))^(t>>12))+((t>>4)&(t&24))",
 		"codeMinified": "((t>>1)*(15&0x234568a0>>(t>>8&28))|t>>1>>(t>>11)^t>>12)+(t>>4&t&24)",
 		"starred": 1
 	}, {
-		"name": "CA98",
-		"children": [{
-			"author": "rrrola",
-			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902",
-			"date": "2011-10-04",
-			"codeOriginal": "t*(0xCA98CA98>>(t>>9&30)&15)|t>>8",
-			"starred": 2
-		}, {
-			"author": "ryg",
-			"name": "slightly shorter version of rrola's",
-			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388929",
-			"date": "2011-10-04",
-			"codeOriginal": "t*(0xCA98>>(t>>9&14)&15)|t>>8",
-			"starred": 2
-		}, {
-			"author": "PB95Player",
-			"name": "slightly altered version of rrolas formula",
-			"url": "https://www.reddit.com/r/bytebeat/comments/11o46p7/too_scared_to_use/",
-			"date": "2023-03-11",
-			"codeOriginal": "(t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8)|(40000/(t&4095))",
-			"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8|40000/(t&4095)"
-		}, {
-			"author": "Kehkeown_Uai",
-			"name": "slightly improved version of rrola's",
-			"url": "https://www.reddit.com/r/bytebeat/comments/11t7y2b/slightly_improved_version_of_rrolas/",
-			"date": "2023-03-17",
-			"codeOriginal": "t*(0xCA98CA98CA98>>(t>>9&(t>>10))&15)&t>>8",
-			"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&t>>10)&15)&t>>8"
-		}]
-	}, {
+		"author": "krcko",
 		"name": "Modem melody",
-		"children": [{
-			"author": "krcko",
-			"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
-			"date": "2011-10-04",
-			"codeOriginal": "(t&t>>12)*(t>>4|t>>8)",
-			"starred": 1
-		}, {
-			"author": "Unknown",
-			"name": "The 8-bit echo",
-			"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
-			"date": "2014-03-16",
-			"codeOriginal": "(t-(t>>4&t>>8)&t>>12)-1"
-		}, {
-			"author": "SthephanShi",
-			"name": "19-character dubstep",
-			"url": "https://dollchan.net/btb/res/55.html#359",
-			"date": "2023-01-18",
-			"sampleRate": 44100,
-			"codeOriginal": "t&t>>12|t/(t&t>>12)"
-		}]
+		"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt",
+		"date": "2011-10-04",
+		"codeOriginal": "(t&t>>12)*(t>>4|t>>8)",
+		"starred": 1
 	}, {
 		"author": "tangent128",
 		"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1317761042403#c4044676811126652266",
@@ -406,22 +662,24 @@
 		"codeOriginal": "t * ( ((t>>9)&10) | ((t>>11)&24) ^((t>>10)&15&(t>>15)) )",
 		"codeMinified": "t*(t>>9&10|t>>11&24^t>>10&15&t>>15)"
 	}, {
-		"author": "droid",
-		"url": "http://www.pouet.net/topic.php?which=8357&page=10#c388999",
-		"date": "2011-10-05",
-		"codeOriginal": "t>>6&1?t>>5:-t>>4"
-	}, {
 		"author": "ryg",
 		"children": [{
+			"name": "slightly shorter version of rrola's",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388929",
+			"remix": {
+				"author": "rrrola",
+				"name": "CA98",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
+			},
+			"date": "2011-10-04",
+			"codeOriginal": "t*(0xCA98>>(t>>9&14)&15)|t>>8",
+			"starred": 2
+		}, {
 			"name": "triangle waves",
+			"description": "The general form is (t<&lt;N)^-(t<<(N-8)&1)",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=11#c389010",
 			"date": "2011-10-05",
-			"codeOriginal": "(t<<5)^-(t>>3&1)"
-		}, {
-			"name": "the general form is (t<&lt;N)^-(t<<(N-8)&1)",
 			"codeOriginal": "(t<<4)^-(t>>4&1)"
-		}, {
-			"codeOriginal": "(t<<3)^-(t>>5&1)"
 		}, {
 			"name": "a jaunty tune",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=17#c389829",
@@ -430,8 +688,22 @@
 			"codeMinified": "t*(t>>12)*64+(t>>1)*(t>>10)*(t>>11)*48>>((t>>16|t>>17)&1)"
 		}]
 	}, {
+		"author": "216",
+		"url": [
+			"https://youtu.be/tCRPUv8V22o?t=345",
+			"http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+		],
+		"date": "2011-10-10",
+		"codeOriginal": "t*(t^t+(t>>15|1)^(t-1280^t)>>10)"
+	}, {
+		"author": "droid",
+		"url": "http://www.pouet.net/topic.php?which=8357&page=10#c388999",
+		"date": "2011-10-05",
+		"codeOriginal": "t>>6&1?t>>5:-t>>4"
+	}, {
 		"author": "Tundrah",
-		"name": "ass kicking vocals (starting properly after 50s or so)",
+		"name": "ass kicking vocals",
+		"description": "Starting properly after 50s.",
 		"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107",
 		"date": "2011-10-05",
 		"codeOriginal": "(t>>5)|(t>>4)|((t%42)*(t>>4)|(0x15483113)-(t>>4))/(t>>16)^(t|(t>>4))",
@@ -446,8 +718,11 @@
 		"starred": 1
 	}, {
 		"author": "beyon",
-		"name": "A bit long I suppose...but nice and soothing. Featuring a snippet from yumeji on pouet.net",
-		"url": "http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318081308422#c4945456935852459432",
+		"name": "A bit long I suppose...but nice and soothing",
+		"url": [
+			"http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318081308422#c4945456935852459432",
+			"http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html?showComment=1318420534814#c3824894682767643057"
+		],
 		"date": "2011-10-08",
 		"codeOriginal": "t>>6^t&0x25|t+(t^t>>11)-t*((t%24?2:6)&t>>11)^t<<1&(t&0x256?t>>4:t>>10)",
 		"codeMinified": "t>>6^t&37|t+(t^t>>11)-t*((t%24?2:6)&t>>11)^t<<1&(t&598?t>>4:t>>10)",
@@ -561,10 +836,19 @@
 			"starred": 1
 		}]
 	}, {
-		"author": "Unknown",
+		"author": "r/bytebeat",
 		"url": "https://www.reddit.com/r/bytebeat/comments/20km9l/cool_equations/",
 		"date": "2014-03-16",
 		"children": [{
+			"name": "The 8-bit echo",
+			"remix": {
+				"author": "krcko",
+				"name": "Modem melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"codeOriginal": "(t-(t>>4&t>>8)&t>>12)-1",
+			"starred": 1
+		}, {
 			"name": "Wip",
 			"codeOriginal": "(((t&t*5)|t>>4)+(t|t>>4*t<<8-1))^t>>12",
 			"codeMinified": "(t&5*t|t>>4)+(t|t>>4*t<<7)^t>>12"
@@ -600,27 +884,31 @@
 		}]
 	}, {
 		"author": "Anonymous from russian imageboards",
-		"name": "2ch.so Generative Music and remixes vol.1",
-		"url": "http://abload.de/img/1405110021643uguil.jpg",
-		"date": "2014-07-11",
+		"url": "https://arhivach.xyz/storage/a/9b/a9b7e820d10e52493570894ed002b9a5.jpg",
 		"children": [{
 			"name": "1) THE SWINGS",
+			"description": "From 2ch.so Generative Music and remixes vol.1",
+			"date": "2014-07-11",
 			"codeOriginal": "(t%262144<131072)?(((t/64)>>3&t*2&t*10)|(t>>5&t*6)&(t>>4|t>>5)):(t%262144>131072&t%262144<163840)?(t>>4&t*8)&(t>>5|t>>4)|(t*3&t*10):(t%262144>163840&t%262144<196608)?(t>>4&t*8)&(t>>5|t>>4)|(t*3&t*6):(t%262144>196608&t%262144<229376)?(t>>4&t*8)&(t>>5|t>>4)|(t*4&t*6):(t%262144>229376&t%262144<245760)?(t>>4&t*8)&(t>>5|t>>4)|(t*4&t*2):(t>>4&t*8)&(t>>4)|(t*4&t*2)>>20",
 			"codeMinified": "131072>t%262144?t/64>>3&2*t&10*t|t>>5&6*t&(t>>4|t>>5):131072<t%262144&163840>t%262144?t>>4&8*t&(t>>5|t>>4)|3*t&10*t:163840<t%262144&196608>t%262144?t>>4&8*t&(t>>5|t>>4)|3*t&6*t:196608<t%262144&229376>t%262144?t>>4&8*t&(t>>5|t>>4)|4*t&6*t:229376<t%262144&245760>t%262144?t>>4&8*t&(t>>5|t>>4)|4*t&2*t:t>>4&8*t&t>>4|(4*t&2*t)>>20",
 			"starred": 2
 		}, {
 			"name": "2) ZEMFIRA",
-			"url": "http://arhivach.ng/thread/28592/#71681967",
+			"url": "http://arhivach.xyz/thread/28592/#71681967",
+			"date": "2014-07-11",
+			"date": "2014-07-11",
 			"codeOriginal": "((t*40>>430|t*40>>4)*430)",
 			"codeMinified": "430*(5*t>>11|5*t>>1)",
 			"starred": 1
 		}, {
 			"name": "4) CAT-GIRL",
+			"date": "2014-07-11",
 			"codeOriginal": "t<35000?((t*8)|(t>>2)+(t*13)|(t>>3)%t|t>>5):(t<67500?((t*9)|(t>>2)+(t*13)|(t>>3)%t|t>>5):(t<84000?((t*9)|(t>>2)+(t*12)|(t>>3)%t|t>>5):(t<98000?((t*8)|(t>>2)+(t*12)|(t>>3)%t|t>>5):(t<129000?((t*8)|(t>>2)+(t*13)|(t>>3)%t|t>>5):t%0))))",
 			"codeMinified": "129E3>t?(35E3>t?8:84E3>t?9:8)*t|(t>>2)+(67500>t?13:98E3>t?12:13)*t|t>>3|t>>5:0",
 			"starred": 2
 		}, {
 			"name": "7) RICK ROLL",
+			"date": "2014-07-11",
 			"cover": {
 				"name": "Rick Astley - Never Gonna Give You Up",
 				"url": "https://youtu.be/dQw4w9WgXcQ"
@@ -630,41 +918,53 @@
 			"starred": 1
 		}, {
 			"name": "9) SADLY",
-			"url": "http://arhivach.ng/thread/28592/#71681889",
+			"url": "http://arhivach.xyz/thread/28592/#71681889",
+			"date": "2014-07-11",
 			"codeOriginal": "((t*4>>43|t*4>>4)*43)",
 			"codeMinified": "43*(t>>41|t>>2)"
 		}, {
 			"name": "11) THE HIT OF THE SEASON",
-			"url": "http://arhivach.ng/thread/28592/#71678428",
+			"url": "http://arhivach.xyz/thread/28592/#71678428",
+			"date": "2014-07-11",
 			"codeOriginal": "(t>0&t<65535?t%32>(t/10000)?t>>4:t>>6:0+t>65535&t<65535*2?t%32>(t%43)?t>>4:t>>6:0+t>65535*2&t<65535*3?t%36>(t%43)?t>>4:t>>6:0+t>65535*3&t<65535*4?t%64>(t%43)?t>>4:t>>6:0+t>65535*4&t<65535*5?t%43>5?t<<3:t>>6:0+t>65535*5&t<65535*6?t%27>5?t<<3:t>>6:0+t>65535*6&t<65535*8?t%63>5?t<<3:t>>6:0)&(t>>4)",
 			"codeMinified": "(0<t&65535>t?t%32>t/1E4?t>>4:t>>6:65535<0+t&131070>t?t%32>t%43?t>>4:t>>6:131070<0+t&196605>t?t%36>t%43?t>>4:t>>6:196605<0+t&262140>t?t%64>t%43?t>>4:t>>6:262140<0+t&327675>t?5<t%43?t<<3:t>>6:327675<0+t&393210>t?5<t%27?t<<3:t>>6:393210<0+t&524280>t?5<t%63?t<<3:t>>6:0)&t>>4",
 			"starred": 1
 		}, {
 			"name": "12) PSYCHEDELIC",
+			"date": "2014-07-11",
 			"codeOriginal": "t<40000?((t<20000?((t%(t>>9)*10)|(t/2)&t):(t*(t>>9)*10)&t/2)|(t%(t>>9)*3)&t/16):(t*(t>>9)^t)",
 			"codeMinified": "4E4>t?(2E4>t?t%(t>>9)*10|t/2&t:t*(t>>9)*10&t/2)|t%(t>>9)*3&t/16:t*(t>>9)^t"
 		}, {
 			"name": "15) FRACTAL",
+			"date": "2014-07-11",
 			"codeOriginal": "((t*2>>43|t*3*5>>4)*19)&(t*7>>172)/2",
 			"codeMinified": "19*(2*t>>43|15*t>>4)&(7*t>>172)/2"
-		}]
-	}, {
-		"author": "Anonymous from russian imageboards",
-		"name": "Extraordinary thread of FRACTAL MUSIC",
-		"url": "http://arhivach.ng/thread/28592/",
-		"date": "2014-07-12",
-		"children": [{
-			"url": "http://arhivach.ng/thread/28592/#71678984",
+		}, {
+			"url": "http://arhivach.xyz/thread/28592/#71678984",
+			"date": "2014-07-12",
 			"codeOriginal": "((t>>4+t%34)|(t>>5+t%(43+(t/7777%8>4?3:0))))|(t/4)|((t/8)%32+3)",
 			"codeMinified": "t>>4+t%34|t>>5+t%(t/31108&1?46:43)|t/4|t/8%35",
 			"starred": 1
 		}, {
 			"name": "Electrohouse",
-			"url": "http://arhivach.ng/thread/28592/#71681785",
+			"url": "http://arhivach.xyz/thread/28592/#71681785",
+			"date": "2014-07-12",
 			"codeOriginal": "t>>(((t%2?t%((t>>13)%8>=2?((t>>13)%8>=4?41:51):61):t%34)))|(~t>>4)",
 			"codeMinified": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&t>>4",
 			"starred": 2
 		}]
+	}, {
+		"author": "radavis",
+		"name": "magical",
+		"url": "https://github.com/radavis/bytebeat/blob/master/errie_error.c",
+		"remix": {
+			"author": "miiro",
+			"name": "Sierpinski harmony",
+			"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s"
+		},
+		"date": "2014-08-10",
+		"codeOriginal": "((t*9)&(t>>4))|(t*5&t>>7)|(t*3&t/1024)-1",
+		"codeMinified": "9*t&t>>4|5*t&t>>7|(3*t&t>>10)-1"
 	}, {
 		"author": "cce",
 		"name": "fiesta",
@@ -683,19 +983,21 @@
 		"starred": 2
 	}, {
 		"author": "Gabriel Miceli",
-		"url": "https://www.youtube.com/watch?v=V4GfkFbDojc",
 		"date": "2016-07-09",
 		"children": [{
 			"name": "Techno",
+			"url": "https://youtu.be/V4GfkFbDojc?t=314",
 			"sampleRate": 11025,
 			"codeOriginal": "(t*(((t/10|0)^(t/10|0)-1280)%11)/2&127)+(t*(((t/640|0)^(t/640|0)-2)%13)/2&127)",
 			"codeMinified": "(((t/10|0)^(t/10|0)-1280)%11*t/2&127)+(((t/640|0)^(t/640|0)-2)%13*t/2&127)",
 			"starred": 1
 		}, {
 			"name": "New Sawtooth Music",
+			"url": "https://youtu.be/V4GfkFbDojc?t=351",
 			"codeOriginal": "t*((t-2296&t)>>11)"
 		}, {
 			"name": "Song by Gabriel Miceli",
+			"url": "https://youtu.be/V4GfkFbDojc?t=508",
 			"codeOriginal": "(t&t+t/256)-t*(t>>15)&64"
 		}]
 	}, {
@@ -763,13 +1065,18 @@
 			"remix": {
 				"author": "Anonymous from russian imageboards",
 				"name": "Electrohouse",
-				"url": "http://arhivach.ng/thread/28592/"
+				"url": "http://arhivach.xyz/thread/28592/"
 			},
 			"date": "2021-10-29",
 			"codeOriginal": "t>>t%(t%2?t&32768?41:t&16384?51:61:34)&(t/9&t/7|t/5&t/3|t|t*3&t*5|t*7&t*9)>>4"
 		}, {
 			"name": "Modem melody II",
 			"url": "https://www.reddit.com/r/bytebeat/comments/10bh30y/modem_melody_ii/",
+			"remix": {
+				"author": "krcko",
+				"name": "Modem melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
 			"date": "2023-01-14",
 			"sampleRate": 32000,
 			"codeOriginal": "(((((t&t>>12)*(t>>4|t>>8))&255) + (((t>>12)-1)&1?((t^(t>>t))^(t^(t>>t))+((t>>15)+1)):0)))/2",
@@ -786,7 +1093,7 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/1ab6j79/no_limit_basic/",
 			"remix": {
 				"author": "ryg",
-				"name": "No Limit",
+				"name": "another take on simplifying mu6k's thing",
 				"url": "https://www.pouet.net/topic.php?which=8357&page=10#c388986"
 			},
 			"date": "2024-01-26",
@@ -931,6 +1238,11 @@
 		}, {
 			"name": "Blobfish Party (made by experimenting with \"The time is running out!\")",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rez7uh/blobfish_party_made_by_experimenting_with_the/",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "The time is running out!",
+				"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/"
+			},
 			"date": "2021-12-12",
 			"sampleRate": 11025,
 			"codeOriginal": "(t*(t&8192?7:5)*(6-(3&t>>8)+(3&t>>9))>>(3&-t>>(t&2048?2:11))|t>>3)",
@@ -953,7 +1265,7 @@
 			"name": "stimmer but square and sawtooth are swap",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rk816x/stimmer_but_square_and_sawtooth_are_swap/",
 			"remix": {
-				"name": "Stimmer",
+				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
 			"date": "2021-12-20",
@@ -962,7 +1274,7 @@
 			"name": "stimmer but its all sawtooth",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rlcyg7/stimmer_but_its_all_sawtooth/",
 			"remix": {
-				"name": "Stimmer",
+				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
 			"date": "2021-12-21",
@@ -971,7 +1283,7 @@
 			"name": "stimmer but its all square",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rlczbs/stimmer_but_its_all_square/",
 			"remix": {
-				"name": "Stimmer",
+				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			},
 			"date": "2021-12-21",
@@ -981,7 +1293,8 @@
 			"name": "Completely Reverse of \"rrrola\"",
 			"url": "https://www.reddit.com/r/bytebeat/comments/rwdxp0/completely_reverse_of_rrrola/",
 			"remix": {
-				"name": "rrrola",
+				"author": "rrrola",
+				"name": "CA98",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
 			},
 			"date": "2022-01-05",
@@ -1003,7 +1316,7 @@
 		"remix": {
 			"author": "Gabriel Miceli",
 			"name": "Noise Maker",
-			"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+			"url": "https://youtu.be/V4GfkFbDojc?t=51"
 		},
 		"date": "2022-01-15",
 		"sampleRate": 11025,
@@ -1018,22 +1331,24 @@
 		"codeMinified": "t>>4|(t>>12)+(222&t*(1+(7685152>>(t>>12)&15)/8))"
 	}, {
 		"author": "lhphr",
-		"url": "https://dollchan.net/btb/res/44.html#44",
-		"date": "2022-04-14",
 		"children": [{
 			"name": "idk it's \"t%\"",
 			"description": "Rather small and quite over the place for what it is.",
+			"url": "https://dollchan.net/btb/res/44.html#44",
+			"date": "2022-04-14",
 			"codeOriginal": "(t%(t&t>>12))*t>>8",
 			"codeMinified": "t%(t&t>>12)*t>>8"
 		}, {
 			"name": ":arp",
 			"description": "Loops in 12 seconds and is rather basic.",
+			"url": "https://dollchan.net/btb/res/44.html#44",
 			"date": "2022-03-13",
 			"sampleRate": 44100,
 			"codeOriginal": "((t>>(1+(t>>18)%2))%256*(t%(4+((t>>15)%8))))",
 			"codeMinified": "(t>>1+(t>>18)%2)%256*(t%(4+(t>>15)%8))"
 		}, {
 			"name": "%ral",
+			"url": "https://dollchan.net/btb/res/44.html#44",
 			"date": "2022-04-14",
 			"sampleRate": 22050,
 			"codeOriginal": "t>>6^t&t>>9^t>>12|(t<<(t>>6)%4^-t&-t>>13)%128^-t>>1"
@@ -1110,12 +1425,19 @@
 			"codeOriginal": "(43*(t|t>>11)&255)*(8|~t>>6&55)>>6",
 			"starred": 1
 		}, {
+			"name": "Another cellular melody",
+			"remix": {
+				"author": "SthephanShi",
+				"name": "Wheezing modem"
+			},
+			"codeOriginal": "(t<<1&t*3&-t>>5&t>>10)-1"
+		}, {
 			"name": "Combination stimmer + Street Surfer",
 			"remix": [{
 				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			}, {
-				"author": "raer",
+				"author": "skurk, raer",
 				"name": "Street Surfer",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
 			}],
@@ -1124,12 +1446,25 @@
 		}]
 	}, {
 		"author": "May_I_Change_My_Name",
-		"name": "Bytebeat Polka",
-		"url": "https://www.reddit.com/r/bytebeat/comments/ye43du/bytebeat_polka/",
-		"date": "2022-10-26",
-		"sampleRate": 11025,
-		"codeOriginal": "~t>>3&(t>>11&1?5:4-(t>>12&1))*t&(t>>7)+t",
-		"starred": 1
+		"children": [{
+			"name": "Bytebeat Polka",
+			"url": "https://www.reddit.com/r/bytebeat/comments/ye43du/bytebeat_polka/",
+			"date": "2022-10-26",
+			"sampleRate": 11025,
+			"codeOriginal": "~t>>3&(t>>11&1?5:4-(t>>12&1))*t&(t>>7)+t",
+			"starred": 1
+		}, {
+			"name": "BM9 harmony",
+			"url": "https://www.reddit.com/r/bytebeat/comments/yi1cf9/u_wot_m9/",
+			"remix": {
+				"author": "miiro",
+				"name": "Sierpinski harmony",
+				"url": "https://youtu.be/qlrs2Vorw2Y?t=2m14s"
+			},
+			"date": "2022-10-31",
+			"codeOriginal": "2*t&(t>>8)|5*t&(t>>7)|9*t&(t>>4)|15*t&(t>>4)",
+			"codeMinified": "2*t&t>>8|5*t&t>>7|9*t&t>>4|15*t&t>>4"
+		}]
 	}, {
 		"author": "orion_aboy",
 		"name": "1fcccf1 (c compatible version)",
@@ -1160,8 +1495,16 @@
 			"codeOriginal": "((t/2/(4+(t>>13&3))*128)|t>>(t>>12&15))+400000/(t&4095)|t>>4",
 			"codeMinified": "(t/2/(4+(t>>13&3))*128|t>>(t>>12&15))+400000/(t&4095)|t>>4"
 		}, {
-			"name": "rachet modem + moon scanner generalization",
+			"name": "wheezing modem + moon scanner generalization",
 			"url": "https://www.reddit.com/r/bytebeat/comments/155p571/rachet_modem_moon_scanner_generalization/",
+			"remix": [{
+				"author": "SthephanShi",
+				"name": "Wheezing modem"
+			}, {
+				"author": "viznut",
+				"name": "moon scanner generalization",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			}],
 			"date": "2023-06-21",
 			"codeOriginal": "(t-(t^t>>5)+t*(t>>14&14)&255)/2+(100*((t<<2|t>>5|t^63)&(t<<10|t>>11))&255)/2"
 		}]
@@ -1211,6 +1554,16 @@
 	}, {
 		"author": "Zackx",
 		"children": [{
+			"name": "42 melody with decay",
+			"url": "https://dollchan.net/btb/res/204.html#439",
+			"remix": {
+				"name": "the 42 melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"date": "2023-02-21",
+			"codeOriginal": "t*((42&t>>10))%256*(-t&2047)/2e3",
+			"codeMinified": "t*(42&t>>10)%256*(-t&2047)/2E3"
+		}, {
 			"name": "combination bassline + isislovecruft",
 			"url": "https://dollchan.net/btb/res/204.html#450",
 			"remix": [{
@@ -1237,7 +1590,7 @@
 				"author": "stimmer",
 				"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 			}, {
-				"author": "raer",
+				"author": "skurk, raer",
 				"name": "Street Surfer",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
 			}],
@@ -1333,12 +1686,42 @@
 		"codeOriginal": "(t%125&t>>8)|t>>4|t*t>>8&t>>8",
 		"codeMinified": "t%125&t>>8|t>>4|t*t>>8&t>>8"
 	}, {
+		"author": "PB95Player",
+		"name": "slightly altered version of rrolas formula",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11o46p7/too_scared_to_use/",
+		"remix": {
+			"author": "rrrola",
+			"name": "CA98",
+			"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
+		},
+		"date": "2023-03-11",
+		"codeOriginal": "(t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8)|(40000/(t&4095))",
+		"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&44)&15)|t>>8|40000/(t&4095)"
+	}, {
 		"author": "Kehkeown_Uai",
-		"name": "Modem melody rhythm",
-		"url": "https://www.reddit.com/r/bytebeat/comments/11t8clc/modem_melody_rhythm/",
-		"date": "2023-03-17",
-		"codeOriginal": "(-t&(t>>4&t>>4)&t>>11)-1&-t>>4",
-		"codeMinified": "(-t&t>>4&t>>4&t>>11)-1&-t>>4"
+		"children": [{
+			"name": "slightly improved version of rrola's",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11t7y2b/slightly_improved_version_of_rrolas/",
+			"remix": {
+				"author": "rrrola",
+				"name": "CA98",
+				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
+			},
+			"date": "2023-03-17",
+			"codeOriginal": "t*(0xCA98CA98CA98>>(t>>9&(t>>10))&15)&t>>8",
+			"codeMinified": "t*(0xCA98CA98CA98>>(t>>9&t>>10)&15)&t>>8"
+		}, {
+			"name": "Modem melody rhythm",
+			"url": "https://www.reddit.com/r/bytebeat/comments/11t8clc/modem_melody_rhythm/",
+			"remix": {
+				"author": "krcko",
+				"name": "Modem melody",
+				"url": "http://viznut.fi/demos/unix/bytebeat_formulas.txt"
+			},
+			"date": "2023-03-17",
+			"codeOriginal": "(-t&(t>>4&t>>4)&t>>11)-1&-t>>4",
+			"codeMinified": "(-t&t>>4&t>>4&t>>11)-1&-t>>4"
+		}]
 	}, {
 		"author": "T_yknow",
 		"name": "chaotic craziness",
@@ -1362,7 +1745,7 @@
 		"codeOriginal": "t ^ (t/2) * (t/t) ^ t * (t/10000000)",
 		"codeMinified": "t^t/2^t*t/1E7"
 	}, {
-		"author": "SleepingLugia (leejh20)",
+		"author": "SleepingLugia",
 		"name": "Tune 5",
 		"url": "https://battleofthebits.com/arena/Entry/dumpster_tunes.txt/59825/",
 		"date": "2023-04-12",
@@ -1386,8 +1769,8 @@
 			"name": "CA98 remix",
 			"url": "https://www.reddit.com/r/bytebeat/comments/14avwx0/ca98_remix_or_smth/",
 			"remix": {
-				"name": "CA98",
 				"author": "rrrola",
+				"name": "CA98",
 				"url": "http://www.pouet.net/topic.php?which=8357&page=9#c388902"
 			},
 			"date": "2023-06-16",
@@ -1434,7 +1817,7 @@
 			"url": "https://dollchan.net/btb/res/2628.html#2730",
 			"remix": [{
 				"author": "Tundrah",
-				"name": "ass kicking vocals (starting properly after 50s or so)",
+				"name": "ass kicking vocals",
 				"url": "https://www.pouet.net/topic.php?which=8357&page=12#c389107"
 			}, {
 				"author": "visy",
@@ -1452,7 +1835,7 @@
 			"starred": 1
 		}, {
 			"name": "t>>t%",
-			"url": "hhttps://dollchan.net/btb/res/2628.html#2783",
+			"url": "https://dollchan.net/btb/res/2628.html#2783",
 			"date": "2023-12-14",
 			"codeOriginal": "((t>>t%(t%2?7:19)|t>>t%(t&16384?36:32))&65535)/(t%4096)"
 		}]
@@ -1464,7 +1847,7 @@
 			"author": "stimmer",
 			"url": "https://forum.arduino.cc/t/one-line-algorithmic-music/73409"
 		}, {
-			"author": "raer",
+			"author": "skurk, raer",
 			"name": "Street Surfer",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=4#c388494"
 		}],
@@ -1539,7 +1922,7 @@
 			"name": "C-compatible(?) Intolerable Claps",
 			"url": "https://www.reddit.com/r/bytebeat/comments/15psf4l/ccompatible_intolerable_claps/",
 			"remix": {
-				"author": "SleepingLugia (leejh20)",
+				"author": "SleepingLugia",
 				"name": "floatbeat tolerable claps",
 				"url": "https://www.reddit.com/r/bytebeat/comments/138lvxw/floatbeat_tolerable_claps/"
 			},
@@ -1559,7 +1942,7 @@
 			"remix": {
 				"author": "Gabriel Miceli",
 				"name": "Noise Maker",
-				"url": "https://www.youtube.com/watch?v=V4GfkFbDojc"
+				"url": "https://youtu.be/V4GfkFbDojc?t=51"
 			},
 			"date": "2023-09-28",
 			"sampleRate": 11025,
@@ -1631,7 +2014,7 @@
 		"date": "2024-02-27",
 		"codeOriginal": "t>>2|(0xC098C098>>(t>>10))*t|t>>10"
 	}, {
-		"author": "ANON256-64-2nd",
+		"author": "ANON256-64",
 		"name": "Electrical Basement cacophony",
 		"url": "https://www.reddit.com/r/bytebeat/comments/1atswzl/bytebreak/?rdt=37311&onetap_auto=true",
 		"date": "2024-03-03",
@@ -1665,6 +2048,7 @@
 			"name": "Slow progression with 8-bit Atari inspired sounds",
 			"url": "http://www.pouet.net/topic.php?which=8357&page=13#c389250"
 		}, {
+			"author": "SthephanShi",
 			"name": "Wheezing modem"
 		}],
 		"date": "2024-03-28",

@@ -5,7 +5,7 @@ b = 1.1 * b % 224, // Song timing
 // Generators
 gen = (del, pitch, vibr, arp = 0, k1 = 5, k2 = 5) => (t + vibr * sin(5 * (T = gT - del))) * 2 ** (
 	pitch + ('6202'[(T >> 5) % 4] - 3) / 12 +
-	(arp && int((w = abs((T / arp & 31) - 17)) / k2) - (0b1001010110011010 >> w % k1 * 4 & 15) / 12)),
+	(arp && int((w = abs((T / arp & 31) - 17)) / k2) - (0x959A >> w % k1 * 4 & 15) / 12)),
 sqr = x => (x & 128) / 4,
 tri = x => abs((x & 255) - 128) / 4,
 

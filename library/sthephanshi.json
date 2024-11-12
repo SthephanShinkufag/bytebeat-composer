@@ -1,266 +1,36 @@
-[
-	{
-		"description": "Formulas family discovered by experimenting with \"Explosions\" <button class='code-text'>(t>>2)*(t>>5)|t>>5</button>",
-		"children": [{
-			"codeOriginal": "(t>>4)*(t>>3)|t>>2"
-		}, {
-			"codeOriginal": "(t>>4)*(t>>3)|t>>3"
-		}, {
-			"name": "\"Explosive beat\". Obtained from combining the first two formulas",
-			"codeOriginal": "(t>>4)*(t>>3)|t>>(t&4096?3:2)",
-			"starred": 1
-		}, {
-			"name": "M-m-multiple explosion beat",
-			"codeOriginal": "(t>>4)*(t>>2)|t>>(t>>12)%4"
-		}, {
-			"name": "Diesel engine",
-			"codeOriginal": "(t>>5)*(t>>5)|t>>2"
-		}]
-	}, {
-		"name": "\"Robocop\". Cool beat discovered by experimenting with <button class='code-text'>(t>>2)*(t&16)|t>>2</button>",
-		"children": [{
-			"name": "Very cool sound with biting blows",
-			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2",
-			"starred": 1
-		}, {
-			"name": "Lower bass",
-			"codeOriginal": "(t>>3)*(t&(t&32768?16:24)|t>>(t>>8&28))|t>>2"
-		}, {
-			"name": "Slower tempo",
-			"codeOriginal": "(t>>2)*(t&(t&32768?16:24)|t>>(t>>8&24))|t>>3"
-		}]
-	}, {
-		"name": "\"Toy phone\". Interesting formulas, sounds similar to children's toys",
-		"children": [{
-			"name": "Someone is calling by phone",
-			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>10&18)"
-		}, {
-			"name": "Very funny voice :)",
-			"codeOriginal": "t*((t>>10|t%16*t>>5)&8*t>>12&18)",
-			"starred": 1
-		}, {
-			"name": "I hear the long meowing of a cat :)",
-			"codeOriginal": "t*((t>>10|t%16*t>>8)&8*t>>12&18)",
-			"starred": 1
-		}]
-	}, {
-		"name": "\"Child swings\". Cool happy tune!",
+[{
+	"author": "SthephanShi",
+	"children": [{
+		"name": "Remix of RealZynx92's remix",
+		"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
 		"remix": {
-			"author": "Anonymous from russian imageboards",
-			"name": "1) THE SWINGS",
-			"url": "http://abload.de/img/1405110021643uguil.jpg"
+			"author": "RealZynx92",
+			"name": "remix of \"The time is running out!\"",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/"
 		},
-		"codeOriginal": "t>>9&2*t&10*t|t>>5&6*t",
-		"starred": 2
-	}, {
-		"name": "\"Cat-girl\". Nya!",
-		"remix": {
-			"author": "Anonymous from russian imageboards",
-			"name": "4) CAT-GIRL",
-			"url": "http://abload.de/img/1405110021643uguil.jpg"
-		},
-		"codeOriginal": "17*t|(t>>2)+(t&32768?13:14)*t|t>>3|t>>5",
-		"codeMinified": "17*t|(t>>2)+(14-(t>>15&1))*t|t>>3|t>>5",
+		"date": "2021-10-25",
+		"sampleRate": 11025,
+		"codeOriginal": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536>59392?2:t&4096?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)",
+		"codeMinified": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|t%65536>59392?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)",
 		"starred": 1
-	}, {
-		"name": "\"Trance beat\". Experiments with t>>N and ternary operations",
-		"remix": {
-			"author": "Anonymous from russian imageboards",
-			"name": "11) THE HIT OF THE SEASON",
-			"url": "http://abload.de/img/1405110021643uguil.jpg"
-		},
-		"children": [{
-			"codeOriginal": "t>>(t%16?4:6)|t>>(t%128?10:4)"
-		}, {
-			"codeOriginal": "t>>(t%32?4:3)|(t%128?t>>3:t>>3|t>>9)"
-		}]
-	}, {
-		"name": "\"Brain burner\". RIP headphone users!",
-		"codeOriginal": "129*t%(t>>7)"
-	}, {
-		"name": "\"Psychedelica\". Experimenting with resonance",
-		"codeOriginal": "t^t%1001+t^t%1002"
-	}, {
-		"name": "\"Protoss engine\". Experimenting with resonance, a pretty hypnotic result",
-		"codeOriginal": "2*(-t%128|t%130)"
-	}, {
-		"name": "Harmonics",
-		"codeOriginal": "t<<2^t>>4^t<<4&t>>8|t<<1&-t>>4"
-	}, {
-		"name": "Bass beat + lead",
-		"codeOriginal": "15-t%(t&16384?26:29)&t>>4|t<<1&-t>>4"
-	}, {
-		"children": [{
-			"name": "Arabic beat",
-			"codeOriginal": "t%((t&-16|t>>10)&42)*4|t>>4",
-			"starred": 1
-		}, {
-			"name": "Arabic beat #2",
-			"codeOriginal": "t%((t&-16|t>>11)&42)*4|t>>4"
-		}]
-	}, {
-		"name": "Game levels",
-		"description": "Series of formulas discovered by experimenting with <a href='http://www.pouet.net/topic.php?which=8357&page=9#c388930' target='_blank'>\"Running man\"</a> <button class='code-text'>t*(3+(1^5&t>>10))*(5+(3&t>>14))>>(3&t>>8)</button>",
-		"children": [{
-			"name": "Basic version",
-			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>2"
-		}, {
-			"name": "\"Boss level\". Slow down the rhythm to |t>>3... Sounds dangerous!",
-			"codeOriginal": "t*(2-(1&-t>>11))*(5+(2&t>>14))>>(3&t>>8)|t>>3",
-			"starred": 1
-		}, {
-			"name": "Different pattern using ternary operator",
-			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>3"
-		}, {
-			"name": "\"Boss level #2\". Slow down the rhythm to |t>>4",
-			"codeOriginal": "t*(t&16384?6:5)*(1+(1&t>>12))>>(3&t>>8)|t>>4"
-		}, {
-			"name": "Changing the coefficients adds harmonics",
-			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>8)|t>>4"
-		}, {
-			"name": "Complicated rhythm with ternary operator |t>>(t&4096?3:4)",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>8)|t>>(t&4096?3:4)"
-		}, {
-			"name": "\"Aliens on approach\". Slow down the explosions to 3&t>>9, get a heavy chiptune beat",
-			"codeOriginal": "t*(t&16384?6:5)*(3-(1&t>>8))>>(3&t>>9)|t>>4",
-			"starred": 1
-		}, {
-			"name": "\"Aliens are close\", t>>5 rhythm",
-			"codeOriginal": "t*(t&16384?6:5)*(3+(1&t>>8))>>(3&t>>9)|t>>5",
-			"starred": 1
-		}, {
-			"name": "\"Aliens are here\", t>>6 gives SUPER POWERFUL ECHOES",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>6",
-			"starred": 2
-		}, {
-			"name": "Mysterious inverted sound",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&-t>>9)|t>>6"
-		}, {
-			"name": "\"Aliens attack\". Complicated (t|t*3)>>5 rhythm with explosion drums.",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|(t|t*3)>>5",
-			"starred": 1
-		}, {
-			"name": "\"Aliens encounter\". Making a ternary rhythm gives an EXTRA HARD BEAT!",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>9)|t>>(t&4096?3:4)",
-			"starred": 2
-		}, {
-			"name": "Funny inverted sounds :D",
-			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>7))>>(3&t>>9)|t>>(t&4096?3:4)"
-		}, {
-			"name": "\"Prepare to fight\". Long period, sound is changing from low to high",
-			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>15)|t>>(t&4096?3:4)",
-			"starred": 1
-		}, {
-			"name": "\"Aliens encounter + drums\"",
-			"description": "Replacing 3&t>>9 with 3&t>>2 in \"Aliens encounter\" gives a noise sound. This is an excellent instrument for drums, we use it in a ternary 3&t>>(t&4096?2:9)",
-			"codeOriginal": "t*(t&16384?6:5)*(4-(1&t>>8))>>(3&t>>(t&4096?2:9))|t>>(t&4096?3:4)",
-			"starred": 2
-		}, {
-			"name": "\"Prepare to fight + drums\"",
-			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&4096?3:4)",
-			"starred": 2
-		}, {
-			"name": "\"Ready to fight?\". Cool for a fighting game :)",
-			"description": "You can use more complex ternary operators to create cool drums",
-			"codeOriginal": "2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)",
-			"starred": 2
-		}, {
-			"name": "\"Hard level\". My favorite!",
-			"codeOriginal": "t*(t&16384?7:5)*(5-(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>(t&16384?t&4096?3:4:3)",
-			"starred": 2
-		}, {
-			"name": "\"Boss level #2\" variation with (1+(3&t>>10)) expression and t>>2 rhythm",
-			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>10))>>(3&t>>8)|t>>2"
-		}, {
-			"name": "\"Another level\". Adding a noise beat by using ternary operator",
-			"codeOriginal": "t*(t&16384?6:5)*(1+(3&t>>(t&2048?4:10)))>>(3&t>>8)|t>>2",
-			"starred": 1
-		}, {
-			"name": "\"Happy level\". Previous formula with slightly changed coefficitnts",
-			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>(t&2048?4:9)))>>(3&t>>8)|t>>2"
-		}, {
-			"name": "\"Happy level #2\". Inverted 3&-t>>8 gives a more happy tune :)",
-			"codeOriginal": "t*(t&16384?6:5)*(2+(3&t>>9))>>(3&-t>>8)|t>>4"
-		}, {
-			"name": "\"Happy level #3\". We can get an awesome harmonics with 3&-t>>9",
-			"codeOriginal": "t*(t&16384?6:5)*(2+(3&-t>>9))>>(3&t>>8)|t>>4",
-			"starred": 1
-		}, {
-			"name": "\"Awesome level\". We can get a cool cartoon-game melody!",
-			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>2",
-			"starred": 2
-		}, {
-			"name": "Slower rhythm...",
-			"codeOriginal": "t*(t&16384?6:5)*(3+(3&t>>(t&2048?7:14)))>>(3&t>>9)|t>>3",
-			"starred": 1
-		}, {
-			"name": "\"Awesome level #2\". The next awesome level!",
-			"codeOriginal": "t*(t&16384?6:5)*(5-(3&t>>(t&4096?7:14)))>>(3&t>>9)|t>>3",
-			"starred": 2
-		}, {
-			"name": "\"Alien dungeon\". So sinister.. t>>6 gives a fading effect",
-			"codeOriginal": "t*(t&16384?7:5)*(3+(3&t>>14))>>(3&t>>9)|t>>6",
-			"starred": 1
-		}, {
-			"name": "\"Alien dungeon\" with a complicated rhytm (t|t*3)>>5",
-			"codeOriginal": "t*(t&16384?7:5)*(4-(3&t>>14))>>(3&t>>9)|(t|t*3)>>5"
-		}, {
-			"name": "Other \"Boss level\" variation",
-			"codeOriginal": "t*((t&4096?6:16)+(1&t>>14))>>(3&t>>8)|t>>(t&4096?3:4)",
-			"starred": 1
-		}]
-	}, {
-		"name": "The time is running out!",
-		"url": "https://www.reddit.com/r/bytebeat/comments/q9owio/the_time_is_running_out/",
-		"starred": 2,
-		"children": [{
-			"date": "2021-10-17",
-			"sampleRate": 11025,
-			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096?2:16))|t>>3"
-		}, {
-			"name": "More complicated drums",
-			"date": "2021-10-17",
-			"sampleRate": 11025,
-			"codeOriginal": "t*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536<59392?t&4096?2:16:2))|t>>3",
-			"codeMinified": "t*(2&t>>13?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|(t>>11)%32>28?2:16))|t>>3"
-		}, {
-			"name": "Remix of RealZynx92's remix",
-			"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/hhzb9ft/?utm_source=reddit&utm_medium=web2x&context=3",
-			"remix": {
-				"author": "RealZynx92",
-				"name": "remix of \"The time is running out!\"",
-				"url": "https://www.reddit.com/r/bytebeat/comments/qf9meb/remix_of_the_time_is_running_out_by_stephanshi/"
-			},
-			"date": "2021-10-25",
-			"sampleRate": 11025,
-			"codeOriginal": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t%65536>59392?2:t&4096?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)",
-			"codeMinified": "((t/2*(t&16384?7:5)*(3-(3&t>>9)+(3&t>>8))>>(3&-t>>(t&4096|t%65536>59392?2:16))|t>>4)&127)+(1E5/(t&4095)&64)+random()*((-t>>(t&4096?6:5))%64+64)"
-		}]
 	}, {
 		"name": "Death chase",
 		"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
 		"date": "2021-10-28",
-		"children": [{
-			"sampleRate": 44100,
-			"codeOriginal": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,4,5,5,5,4,5][(t>>12)%8])%64+64)",
-			"codeMinified": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>'54444443444344445444444354445444'[(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>'65455545'[(t>>12)%8])%64+64)"
-		}, {
-			"name": "\"90's eurodance\" variation",
-			"sampleRate": 44100,
-			"codeOriginal": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%16])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64)",
-			"codeMinified": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>'5444444354445444'[(t>>12)%16])&127)+(3E5/(t&4095)&64)+random()*((-t>>'65554555'[(t>>12)%8])%64+64)"
-		}]
+		"sampleRate": 44100,
+		"codeOriginal": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,4,4,4,3,4,4,4,4,5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,4,5,5,5,4,5][(t>>12)%8])%64+64)",
+		"codeMinified": "t/=4,c=523.25,cs=554.36,e=659.26,g=784,((t*[cs,e,cs,g,cs,e,cs,c][(t>>14)%8]/(t&2<<16?440:220)*(3-(1&t>>9))>>(3&t>>8)|t>>'54444443444344445444444354445444'[(t>>12)%32])&127)+(3E5/(t&4095)&64)+random()*((-t>>'65455545'[(t>>12)%8])%64+64)"
 	}, {
-		"name": "Neurofunk",
-		"url": "https://www.reddit.com/r/bytebeat/comments/s0laz2/neurofunk/",
-		"date": "2022-01-10",
-		"starred": 2,
-		"children": [{
-			"codeOriginal": "t*((t&4096?t%65536<59392?7:t&7:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?10:3:2)"
-		}, {
-			"name": "Fist punch version",
-			"codeOriginal": "t*((t&4096?t%65536<59392?7:t>>6:16)+(1&t>>14))>>(3&-t>>(t&2048?2:10))|t>>(t&16384?t&4096?4:3:2)"
-		}]
+		"name": "90's eurodance",
+		"remix": {
+			"name": "Death chase",
+			"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/"
+		},
+		"url": "https://www.reddit.com/r/bytebeat/comments/qh9hhr/death_chase/",
+		"date": "2021-10-28",
+		"sampleRate": 44100,
+		"codeOriginal": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>[5,4,4,4,4,4,4,3,5,4,4,4,5,4,4,4][(t>>12)%16])&127)+(3E5/(t&4095)&64)+random()*((-t>>[6,5,5,5,4,5,5,5][(t>>12)%8])%64+64)",
+		"codeMinified": "t/=4,a=440,b=493.88,c=523.25,d=587.32,e=659.26,((t*[e,b,c,a,e,b,c,d][(t>>14)%8]/220*(3-(1&t>>9))>>(3&t>>8)|t>>'5444444354445444'[(t>>12)%16])&127)+(3E5/(t&4095)&64)+random()*((-t>>'65554555'[(t>>12)%8])%64+64)"
 	}, {
 		"name": "Frozen Planet",
 		"description": "\"Flying deep in dark space, you caught a distress signal and landed on an icy planet. In this frozen world, you have found an abandoned base of colonists. There is not a single survivor...\"",
@@ -313,6 +83,20 @@
 		"fileMinified": true,
 		"starred": 2
 	}, {
+		"name": "\"Something New\" synchronized",
+		"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157250",
+		"description": "Modified to play custom tempo and sample rates. Also brought to a single correspondence with the absolute sound of notes in Hz.",
+		"remix": {
+			"author": "maj-6",
+			"name": "\"Something New\" using functions",
+			"url": "https://battleofthebits.com/arena/Entry/Something+New/52726/#post157167"
+		},
+		"date": "2022-06-06",
+		"sampleRate": 44100,
+		"file": "SthephanShi - 'Something new' synchronized.js",
+		"fileMinified": true,
+		"fileFormatted": true
+	}, {
 		"name": "Sunrise on Mars",
 		"description": "\"You are standing in the rocky Martian desert and looking at a small pale Sun that rises from the horizon...\"",
 		"url": "https://www.reddit.com/r/bytebeat/comments/w0inwh/sunrise_on_mars_stereo/",
@@ -325,28 +109,26 @@
 		"fileMinified": true,
 		"starred": 2
 	}, {
-		"children": [{
-			"name": "Dark Forest",
-			"description": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'.",
-			"url": [
-				"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
-				"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
-			],
-			"date": "2023-01-09",
-			"sampleRate": 44100,
-			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
-			"starred": 1
-		}, {
-			"name": "Chase in the Forest",
-			"description": "Another harmony by changing the pattern.",
-			"url": [
-				"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
-				"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
-			],
-			"date": "2023-01-09",
-			"sampleRate": 44100,
-			"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?4:8,S=(s,p,d=0)=>(t*2**(p+'023'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(1,k/4)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))"
-		}]
+		"name": "Dark Forest",
+		"description": "\"You are walking in the dark through a winter forest among huge frozen trees. It seems that someone is watching you from the darkness...\"<br>The code generates chrods progressions from the initial pattern '037'.",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
+			"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
+		],
+		"date": "2023-01-09",
+		"sampleRate": 44100,
+		"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?8:4,S=(s,p,d=0)=>(t*2**(p+'037'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(.25,1)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))",
+		"starred": 1
+	}, {
+		"name": "Chase in the Forest",
+		"description": "Another harmony by changing the pattern.",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Dark+forest/57555/",
+			"https://www.reddit.com/r/bytebeat/comments/10k73al/dark_forest/"
+		],
+		"date": "2023-01-09",
+		"sampleRate": 44100,
+		"codeOriginal": "T=t/5E3,b=T>>7,k=b+2&4?4:8,S=(s,p,d=0)=>(t*2**(p+'023'[(T-d)/s%3|0]/12+((1-(T>>5&3))%2+1)/4)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+S(2,0,3)/2+(b&&S(0,-2))+(b>1&&S(1,k/4)*(1-T%16/20))+(b>2&&.4*N(1E6)*(1-(T+k/2)%k/k))+(b>3&&(64/(T%k)&64)+(T&k&&.6*N(330)*(1-T%k/k)))"
 	}, {
 		"name": "Small Mouse",
 		"url": "https://dollchan.net/btb/res/204.html#424",
@@ -383,42 +165,48 @@
 		"starred": 1
 	}, {
 		"name": "Voice generator",
+		"description": "Low talking robot.",
 		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
 		"remix": {
 			"author": "justaboutdead",
 			"name": "YAY!",
-			"url": "http://wavepot.com/"
+			"url": "https://wavepot.com/"
 		},
 		"date": "2023-03-10",
-		"children": [{
-			"name": "Low talking robot",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+7*sin(.7*T)))+T)",
-			"starred": 2
-		}, {
-			"name": "Yay yey",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+3*sin(.3*T)))+T)",
-			"starred": 1
-		}, {
-			"name": "Yaeaeae",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)"
-		}, {
-			"name": "YAEAEAE!!!",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((4.8*(2*abs(1-n*t%2)-1)+2*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)",
-			"starred": 1
-		}, {
-			"name": "Asakagi",
-			"mode": "Floatbeat",
-			"sampleRate": 32000,
-			"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+5*sin(3+.6*T+sin(.6*T)))+T)"
-		}]
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+7*sin(.7*T)))+T)",
+		"starred": 2
+	}, {
+		"name": "Yay yey",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"date": "2023-03-10",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+sin(.42*T))*(1+sin(1.13*T+3*sin(.3*T)))+T)",
+		"starred": 1
+	}, {
+		"name": "Yaeaeae",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"date": "2023-03-10",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"codeOriginal": "t/=32E3,T=2*PI*t,n=160,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)"
+	}, {
+		"name": "YAEAEAE!!!",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"date": "2023-03-10",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((4.8*(2*abs(1-n*t%2)-1)+2*sin(64*n*T))*(1+2.3*sin(1+.4*T+sin(1.1*T)))+T)",
+		"starred": 1
+	}, {
+		"name": "Asakagi",
+		"url": "https://www.reddit.com/r/bytebeat/comments/11nq8yn/voice_generator/",
+		"date": "2023-03-10",
+		"mode": "Floatbeat",
+		"sampleRate": 32000,
+		"codeOriginal": "t/=32E3,T=2*PI*t,n=176,.7*sin((3.6*(2*abs(1-n*t%2)-1)+1.5*sin(64*n*T))*(2+5*sin(3+.6*T+sin(.6*T)))+T)"
 	}, {
 		"name": "Trip to Otherworld",
 		"description": "\"You were engaged in spiritual practices and finally reached nirvana. So, your soul left your body and began to travel in another dimension.\"",
@@ -435,38 +223,37 @@
 		"fileMinified": true,
 		"starred": 1
 	}, {
-		"children": [{
-			"name": "Through the Star System",
-			"description": "\"You are traveling by the Galaxy, flying through another star system. Your path passes by its planets, asteroid belts and gas clouds, past the Red Giant in the center...\"<br>00:00 - 'Star System', 03:24 (204s) - 'Red Giant'",
-			"url": [
-				"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
-				"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
-			],
-			"remix": {
-				"author": "Gasman",
-				"name": "Steady On Tim, It's Only A Budget Game",
-				"url": "https://demozoo.org/music/305284/"
-			},
-			"date": "2023-07-25",
-			"sampleRate": 44100,
-			"stereo": true,
-			"file": "SthephanShi - Through the Star System.js",
-			"fileFormatted": true,
-			"fileMinified": true,
-			"starred": 2
-		}, {
-			"name": "Flying past the Black Hole",
-			"description": "Changing the chords to minor ones, continuing the journey.",
-			"url": [
-				"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
-				"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
-			],
-			"date": "2023-07-25",
-			"sampleRate": 44100,
-			"stereo": true,
-			"file": "SthephanShi - Flying past the Black Hole.js",
-			"fileFormatted": true
-		}]
+		"name": "Through the Star System",
+		"description": "\"You are traveling by the Galaxy, flying through another star system. Your path passes by its planets, asteroid belts and gas clouds, past the Red Giant in the center...\"<br>00:00 - 'Star System', 03:24 (204s) - 'Red Giant'",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+			"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
+		],
+		"remix": {
+			"author": "Gasman",
+			"name": "Steady On Tim, It's Only A Budget Game",
+			"url": "https://demozoo.org/music/305284/"
+		},
+		"date": "2023-07-25",
+		"sampleRate": 44100,
+		"stereo": true,
+		"file": "SthephanShi - Through the Star System.js",
+		"fileFormatted": true,
+		"fileMinified": true,
+		"starred": 2
+	}, {
+		"name": "Flying past the Black Hole",
+		"description": "Changing the chords to minor ones, continuing the journey.",
+		"url": [
+			"https://battleofthebits.com/arena/Entry/Through+the+Star+System/61058/",
+			"https://www.reddit.com/r/bytebeat/comments/15b0t6f/through_the_star_system/"
+		],
+		"date": "2023-07-25",
+		"sampleRate": 44100,
+		"stereo": true,
+		"file": "SthephanShi - Flying past the Black Hole.js",
+		"fileFormatted": true,
+		"starred": 2
 	}, {
 		"name": "Mountain Road",
 		"description": "\"You are riding your bike down a road among the mountains. A valley with forests, meadows and waterfalls rushes below.\"",
@@ -494,7 +281,7 @@
 		"codeOriginal": "return t=>(T=9*t,b=T>>7,k=b+2&4?4:8,S=(s,p,d=0,a='0235705702357053')=>(5E3*T*2**(p+a[(T-d)/s%a.length|0]/12+((1-(T>>5&3))%2+2)/3)&128)/3,N=p=>1E5*sin(T*p|0)&64,S(2,0)+.6*S(2,0,3)+(b&&S(0,-2))+(b>1&&1.2*S(.25,1,0,'037')*(1-T%(k-2)/(k-1)))+(b>2&&.4*N(1E6)*(1-(T-k/2)%k/k))+(b>3&&48*(sin(80*(T%k)**.5)+1)+(T&k&&.8*N(280)*(1-T%k/k))))/128-1",
 		"starred": 1
 	}, {
-		"name": "3D sphere animation",
+		"name": "3D sphere animation 1/16",
 		"description": "Shine a flashlight on the sphere from all sides. The higher the zoom, the smoother the animation, but the lower the resolution.",
 		"url": "https://www.reddit.com/r/bytebeat/comments/18yl6an/3d_sphere_animation/",
 		"remix": {
@@ -503,32 +290,32 @@
 			"url": "https://www.reddit.com/r/bytebeat/comments/17ilipb/sphere/"
 		},
 		"date": "2024-01-05",
-		"starred": 1,
-		"children": [{
-			"name": "1/16 zoom sphere",
-			"mode": "Floatbeat",
-			"sampleRate": 48000,
-			"drawing": { "mode": "Diagram", "scale": 4 },
-			"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,x*sin(3*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8"
-		}, {
-			"name": "light 1/16 zoom sphere",
-			"mode": "Floatbeat",
-			"sampleRate": 48000,
-			"drawing": { "mode": "Diagram", "scale": 4 },
-			"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,max(x*sin(3*k)+y*sin(2*k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
-		}, {
-			"name": "1/32 zoom sphere",
-			"mode": "Floatbeat",
-			"sampleRate": 48000,
-			"drawing": { "mode": "Diagram", "scale": 5 },
-			"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,x*sin(2*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8"
-		}, {
-			"name": "light 1/32 zoom sphere",
-			"mode": "Floatbeat",
-			"sampleRate": 48000,
-			"drawing": { "mode": "Diagram", "scale": 5 },
-			"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,max(x*sin(2*k)+y*cos(k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
-		}]
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"drawing": { "mode": "Diagram", "scale": 4 },
+		"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,x*sin(3*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8",
+		"starred": 1
+	}, {
+		"name": "3D sphere animation 1/16 light",
+		"date": "2024-01-05",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"drawing": { "mode": "Diagram", "scale": 4 },
+		"codeOriginal": "T=(t-2048)%8192,k=PI*t/262144,y=1-T%16/8,x=(T>>5)/64-1,max(x*sin(3*k)+y*sin(2*k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
+	}, {
+		"name": "3D sphere animation 1/32",
+		"date": "2024-01-05",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"drawing": { "mode": "Diagram", "scale": 5 },
+		"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,x*sin(2*k)+y*cos(k)+1.8*sqrt(1-x**2-y**2)-.8||-.8"
+	}, {
+		"name": "3D sphere animation 1/32 light",
+		"date": "2024-01-05",
+		"mode": "Floatbeat",
+		"sampleRate": 48000,
+		"drawing": { "mode": "Diagram", "scale": 5 },
+		"codeOriginal": "T=(t-4096)%16384,k=PI*t/262144,y=1-T%32/16,x=(T>>6)/64-1,max(x*sin(2*k)+y*cos(k)+sqrt(1-x**2-y**2)-1,-1)+.6||-.2"
 	}, {
 		"name": "Wanderer",
 		"description": "\"You have passed through the portal, but there is no way back. You walk on the new world and think about your destiny. Sunset on the horizon, tomorrow will be a new day..\"",
@@ -542,5 +329,5 @@
 		"fileFormatted": true,
 		"fileMinified": true,
 		"starred": 2
-	}
-]
+	}]
+}]

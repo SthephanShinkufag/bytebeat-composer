@@ -6,7 +6,9 @@
 	--canvas-button: linear-gradient(to bottom, #67789d, #181f33);
 	--canvas-button-color: #c5c8c6;
 	--canvas-button-hover: linear-gradient(to bottom, #92aeec, #181f33) !important;
+	--code-author: #2b3d69;
 	--code-button: linear-gradient(to bottom, #424242, #171b22);
+	--code-button-border: #505760;
 	--code-button-hover: linear-gradient(to bottom, #3c508a, #1f2331);
 	--code-comment: #7d8799;
 	--code-definition: #b1b1ff;
@@ -18,9 +20,11 @@
 	--code-punctuation: #c5c8c6;
 	--code-string: #a8ff60;
 	--code-string2: #56b6c2;
+	--code-tags: #5cac87;
 	--code-variable: #c5c8c6;
 	--control-button: linear-gradient(to bottom, #959595, #242a37);
 	--control-button-active: linear-gradient(to bottom, #505f84, #1c1e26);
+	--control-button-border: #5c636c;
 	--control-button-hover: linear-gradient(to bottom, #738cc1, #28314a);
 	--control-corners: 6px;
 	--control-size: 30px;
@@ -29,7 +33,8 @@
 	--control-volume: linear-gradient(to bottom, #aeaeae, #484c55);
 	--control-volume-hover: linear-gradient(to bottom, #90a7d7, #3f4c71);
 	--editor: #191c22;
-	--entry-star: #ffff00;
+	--entry: #191c22;
+	--entry-border: linear-gradient(to right, #435a91, #16202b);
 	--focus: #614fdb;
 	--font-size: 10.5pt;
 	--library-header: linear-gradient(to bottom, #202c46, #0b0d17);
@@ -43,17 +48,19 @@ html[data-theme="Blue"] {
 	--canvas-border: linear-gradient(#94beff, #94beff) 1;
 	--canvas-button: linear-gradient(to bottom, #4567b0, #121726);
 	--canvas-button-hover: linear-gradient(to bottom, #5082ee, #26335a) !important;
+	--code-author: #2b3d69;
 	--code-button: linear-gradient(to bottom, #34436f, #1f2331);
+	--code-button-border: #5769a2;
 	--code-button-hover: linear-gradient(to bottom, #526bb4, #1b2135);
 	--control-button: linear-gradient(to bottom, #4567b0, #121726);
 	--control-button-active: linear-gradient(to bottom, #35486d, #0d151f);
+	--control-button-border: #2c406d;
 	--control-button-hover: linear-gradient(to bottom, #507ee2, #1e2949);
 	--control-text: linear-gradient(to top, #435583, #131929);
 	--control-text-hover: linear-gradient(to top, #5471b9, #1c2641);
 	--control-volume: linear-gradient(to bottom, #5077cc, #1a2238);
 	--control-volume-hover: linear-gradient(to bottom, #5183ee, #23315c);
 	--editor: #12151c;
-	--entry-star: #2fffff;
 	--focus: #9782ff;
 	--library-header: linear-gradient(to bottom, #2c3e6a, #101420);
 	--library-header-hover: linear-gradient(to bottom, #405588, #192035);
@@ -65,17 +72,22 @@ html[data-theme="Cake"] {
 	--canvas-button: linear-gradient(to bottom, #72ddee, #f40bba);
 	--canvas-button-color: #62135b;
 	--canvas-button-hover: linear-gradient(to bottom, #80eeff, #ff59d5) !important;
+	--code-author: #7d2167;
 	--code-button: linear-gradient(to top, #931a81, #18676a);
+	--code-button-border: #3f7f93;
+	--code-tags: #c65fc4;
 	--code-button-hover: linear-gradient(to top, #b3239d, #259096);
 	--control-button: linear-gradient(to bottom, #d341af, #1d4246);
 	--control-button-active: linear-gradient(to bottom, #a53a8a, #0e1c1f);
+	--control-button-border: #336882;
 	--control-button-hover: linear-gradient(to bottom, #e749cd, #0b5e68);
 	--control-text: linear-gradient(to top, #972485, #257d81);
 	--control-text-hover: linear-gradient(to top, #b825a2, #1aabb3);
 	--control-volume: linear-gradient(to bottom, #e43fba, #1b4549);
 	--control-volume-hover: linear-gradient(to bottom, #f369d5, #1c8fa3);
 	--editor: #1e071c;
-	--entry-star: #ff60f5;
+	--entry: #331831;
+	--entry-border: linear-gradient(to right, #94449b, #24162b);
 	--focus: #56e6ff;
 	--library-header: linear-gradient(to bottom, #c0359d, #00353a);
 	--library-header-hover: linear-gradient(to bottom, #ee58c9, #004950);
@@ -90,8 +102,10 @@ html[data-theme="Dusk"] {
 	--canvas-button: linear-gradient(to bottom, #303048, #101018);
 	--canvas-button-color: #c0c0c0;
 	--canvas-button-hover: linear-gradient(to bottom, #606090, #303048) !important;
+	--code-author: #44446c;
 	--code-button: linear-gradient(to top, #303030, #202020);
 	--code-button-hover: linear-gradient(to top, #505050, #303030);
+	--code-tags: #489b75;
 	--control-button: linear-gradient(to bottom, #202030, #404060);
 	--control-button-active: linear-gradient(to bottom, #203020, #406040);
 	--control-button-hover: linear-gradient(to bottom, #404060, #606080);
@@ -100,7 +114,8 @@ html[data-theme="Dusk"] {
 	--control-volume: linear-gradient(to bottom, #404060, #202030);
 	--control-volume-hover: linear-gradient(to bottom, #606090, #303048);
 	--editor: #101018;
-	--entry-star: #8080c0;
+	--entry: #1d1d2b;
+	--entry-border: linear-gradient(to right, #606095, #141426);
 	--focus: #8080c0;
 	--library-header: linear-gradient(to bottom, #202030, #404060);
 	--library-header-hover: linear-gradient(to bottom, #303048, #606096);
@@ -114,17 +129,21 @@ html[data-theme="Green"] {
 	--canvas-border: linear-gradient(#a4ffcc, #a4ffcc) 1;
 	--canvas-button: linear-gradient(to bottom, #429152, #0d2814);
 	--canvas-button-hover: linear-gradient(to bottom, #51be67, #18331f) !important;
+	--code-author: #265132;
 	--code-button: linear-gradient(to bottom, #345e3d, #17221b);
+	--code-button-border: #44684d;
 	--code-button-hover: linear-gradient(to bottom, #3c8a50, #1f3123);
 	--control-button: linear-gradient(to bottom, #508453, #17351d);
 	--control-button-active: linear-gradient(to bottom, #336036, #0c1e10);
+	--control-button-border: #345e39;
 	--control-button-hover: linear-gradient(to bottom, #4ca85f, #0f2815);
 	--control-text: linear-gradient(to top, #3a5e44, #18261c);
 	--control-text-hover: linear-gradient(to top, #448b59, #1d3f27);
 	--control-volume: linear-gradient(to bottom, #5a9d5e, #17351d);
 	--control-volume-hover: linear-gradient(to bottom, #68b46d, #3f714c);
 	--editor: #0f1712;
-	--entry-star: #00ff00;
+	--entry: #19221a;
+	--entry-border: linear-gradient(to right, #388036, #112211);
 	--focus: #aaffc4;
 	--library-header: linear-gradient(to bottom, #20462c, #0b170d);
 	--library-header-hover: linear-gradient(to bottom, #326c42, #152b1b);
@@ -136,8 +155,10 @@ html[data-theme="Orange"] {
 	--button-hover-color: #ffffa5;
 	--canvas-button: linear-gradient(to bottom, #ff8f0f, #38240d);
 	--canvas-button-hover: linear-gradient(to bottom, #ffa743, #6d4313) !important;
+	--code-author: #4d4d4d;
 	--code-button: linear-gradient(to bottom, #c55c00, #221306);
 	--code-button-hover: linear-gradient(to bottom, #eb6d00, #4e2e10);
+	--code-tags: #c16f3e;
 	--control-button: linear-gradient(to bottom, #df791e, #372311);
 	--control-button-active: linear-gradient(to bottom, #9c5416, #291a0d);
 	--control-button-hover: linear-gradient(to bottom, #f89d4d, #4e2e10);
@@ -146,19 +167,23 @@ html[data-theme="Orange"] {
 	--control-volume: linear-gradient(to bottom, #ec8328, #372311);
 	--control-volume-hover: linear-gradient(to bottom, #ffaf6a, #4e2e10);
 	--editor: #171006;
+	--entry: #221e19;
+	--entry-border: linear-gradient(to right, #dc781e, #2b2016);
 	--focus: #fff2aa;
 	--library-header: linear-gradient(to bottom, #c56600, #1d1206);
 	--library-header-hover: linear-gradient(to bottom, #f58004, #3b260d);
 	--library-header-hover-color: #ffffa5;
-	--link: #d6ff8e;
+	--link: #ff998e;
 }
 
 html[data-theme="Purple"] {
 	--canvas-border: linear-gradient(#c9b0ff, #c9b0ff) 1;
 	--canvas-button: linear-gradient(to bottom, #9b3c8b, #331833);
 	--canvas-button-hover: linear-gradient(to bottom, #c765bf, #331832) !important;
+	--code-author: #54366c;
 	--code-button: linear-gradient(to bottom, #5e345e, #221722);
 	--code-button-hover: linear-gradient(to bottom, #8a3c8a, #311f30);
+	--code-tags: #ac41a9;
 	--control-button: linear-gradient(to bottom, #845084, #321735);
 	--control-button-active: linear-gradient(to bottom, #603360, #1e0c1d);
 	--control-button-hover: linear-gradient(to bottom, #a54ca8, #280f28);
@@ -167,6 +192,8 @@ html[data-theme="Purple"] {
 	--control-volume: linear-gradient(to bottom, #985a9d, #331735);
 	--control-volume-hover: linear-gradient(to bottom, #ab68b4, #693f71);
 	--editor: #1a121c;
+	--entry: #1e1922;
+	--entry-border: linear-gradient(to right, #684386, #281a33);
 	--focus: #8289ff;
 	--library-header: linear-gradient(to bottom, #432046, #170b16);
 	--library-header-hover: linear-gradient(to bottom, #65326c, #2b152a);
@@ -179,17 +206,21 @@ html[data-theme="Teal"] {
 	--canvas-border: linear-gradient(#88fbff, #88fbff) 1;
 	--canvas-button: linear-gradient(to bottom, #44aeb5, #0d2728);
 	--canvas-button-hover: linear-gradient(to bottom, #60dfdf, #1f4344) !important;
+	--code-author: #266f71;
 	--code-button: linear-gradient(to bottom, #3e938e, #172222);
+	--code-button-border: #1d5c5e;
 	--code-button-hover: linear-gradient(to bottom, #59c1bc, #183839);
 	--control-button: linear-gradient(to bottom, #6cc1c1, #244648);
 	--control-button-active: linear-gradient(to bottom, #43888c, #153133);
+	--control-button-border: #387c7d;
 	--control-button-hover: linear-gradient(to bottom, #59dbe3, #183637);
 	--control-text: linear-gradient(to top, #357379, #153639);
 	--control-text-hover: linear-gradient(to top, #3e8d94, #1d4c50);
 	--control-volume: linear-gradient(to bottom, #57b7bd, #193b3e);
 	--control-volume-hover: linear-gradient(to bottom, #4dd7e0, #1f494d);
 	--editor: #061717;
-	--entry-star: #65ff4f;
+	--entry: #1f2b2b;
+	--entry-border: linear-gradient(to right, #2a7e80, #162b2b);
 	--focus: #aafcff;
 	--library-header: linear-gradient(to bottom, #2b8082, #0e2828);
 	--library-header-hover: linear-gradient(to bottom, #3c9fa2, #214a4a);
@@ -237,6 +268,7 @@ body {
 
 a, a:visited {
 	color: var(--link);
+	text-decoration: none;
 }
 
 a:hover {
@@ -251,8 +283,17 @@ a:hover {
 	display: none !important;
 }
 
+hr {
+	margin: 10px 0;
+	clear: both;
+	border: none;
+	background-image: linear-gradient(90deg, #15202b, #607ba6, #15202b);
+	height: 2px;
+}
+
 option {
-	background: white;
+	background-color: white;
+	color: #435071;
 	font-size: var(--font-size);
 }
 
@@ -288,7 +329,7 @@ option {
 }
 
 footer {
-	margin-left: 9px;
+	margin-left: 7px;
 }
 
 /* ==[ Canvas ] =========================================================================================== */
@@ -460,7 +501,7 @@ button[name="close"] {
 	color: var(--code-property);
 }
 
-.tok-punctuation  {
+.tok-punctuation {
 	color: var(--code-punctuation);
 }
 
@@ -487,15 +528,18 @@ button[name="close"] {
 /* ==[ Library ] ========================================================================================== */
 
 .code-button {
-	margin: 1px 0 0 5px;
+	margin: 2px 0;
 	padding: 2px 5px;
 	border: none;
 	border-radius: 3px;
 	background-image: var(--code-button);
 	color: #ced5e1;
-	font: var(--font-size)/var(--font-size) sans-serif;
 	white-space: nowrap;
 	cursor: pointer;
+}
+
+.code-button:active {
+	opacity: .6;
 }
 
 .code-button:hover {
@@ -503,37 +547,76 @@ button[name="close"] {
 	color: var(--button-hover-color);
 }
 
-.code-button.children-toggle {
-	margin: 8px 0 5px 0;
+.code-button.songs-toggle {
+	margin: 4px 0;
 	padding: 5px 10px;
 	width: fit-content;
+	font: var(--font-size)/var(--font-size) sans-serif;
 }
 
-.code-buttons-container {
-	display: inline-block;
+.code-button > .loading-wait {
+	width: 14px;
+	height: 14px;
 }
 
-.code-length, .code-info {
-	color: gray;
-	cursor: default;
+.code-buttons {
+	font: 90%/var(--font-size) sans-serif;
 }
 
-.code-remix {
+.code-buttons > .code-load {
+	border-left: 1px solid var(--code-button-border);
+	border-radius: 0;
+}
+
+.code-buttons > :first-child {
+	border: none;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.code-buttons > :last-child {
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.code-cover, .code-remix {
+	border-left: 2px solid #666;
+}
+
+.code-cover, .code-remix-preview {
+	padding-left: 4px;
 	font-size: 90%;
 }
 
-.code-stereo {
-	color: #008040;
+.code-description {
+	font-size: 90%;
+}
+
+.code-info {
+	color: gray;
+	cursor: default;
+	font-size: 90%;
+}
+
+.code-remix > .entry {
+	margin-bottom: 4px;
+	padding: 0 4px;
+	border: 1px solid #444;
+	border-left: none;
+}
+
+.code-tags {
+	color: var(--code-tags);
 }
 
 .code-text {
 	display: inline-block;
 	margin: 0;
-	padding: 0;
-	border: none;
-	color: #ffcc53;
-	background: none;
-	font: var(--font-size)/16px monospace;
+	padding: 3px;
+	border: 1px dotted #555;
+	color: #dfc86b;
+	background-color: #00000060;
+	font: 90%/100% monospace;
 	text-align: left;
 	text-decoration: none;
 	white-space: pre-wrap;
@@ -548,31 +631,16 @@ button[name="close"] {
 }
 
 .entry {
-	position: relative;
-}
-
-.entry-children .entry:not(:last-child) {
+	width: fit-content;
 	margin-bottom: 4px;
-}
-
-.entry-children .entry::before {
-	content: "\25CF";
-	position: absolute;
-	top: 2px;
-	left: -11px;
-	color: #555;
-	font-size: 12px;
-}
-
-.entry-children .entry > .entry-children {
-	margin-left: 11px;
+	padding: 3px 4px 3px 6px;
+	border: 1px solid #2a2a2a;
+	background-color: var(--entry);
 }
 
 .entry.star-1::before, .entry.star-2::before {
 	content: "\2605";
-	position: absolute;
-	top: 0;
-	left: -13px;
+	margin-right: 2px;
 	font-size: var(--font-size);
 }
 
@@ -581,15 +649,7 @@ button[name="close"] {
 }
 
 .entry.star-2::before {
-	color: var(--entry-star);
-}
-
-.entry-top {
-	padding: 6px 4px 8px 16px;
-}
-
-.entry-top:not(:first-child) {
-	border-top: 1px solid #404040;
+	color: #ff0;
 }
 
 .library-content {
@@ -597,11 +657,16 @@ button[name="close"] {
 	border-right: 1px solid #444;
 	border-left: 1px solid #444;
 	border-radius: 3px;
-	background: #0a0a0a;
+	background-color: #0a0a0a;
 }
 
 .library-content[open] {
 	border-bottom: 1px solid #444;
+}
+
+.library-content[open] > .library-header, .library-header:hover, .library-header:focus-visible {
+	background-image: var(--library-header-hover);
+	color: var(--library-header-hover-color);
 }
 
 .library-header {
@@ -609,11 +674,6 @@ button[name="close"] {
 	border-radius: 3px;
 	background-image: var(--library-header);
 	cursor: pointer;
-}
-
-.library-header:hover, .library-header:focus-visible {
-	background-image: var(--library-header-hover);
-	color: var(--library-header-hover-color);
 }
 
 .library-header > h1 {
@@ -634,9 +694,33 @@ button[name="close"] {
 .loading-wait {
 	width: 16px;
 	height: 16px;
-	margin-left: 6px;
+	margin-left: 4px;
 	vertical-align: top;
 	animation: wait-anim 1s linear infinite;
+}
+
+.songs {
+	margin-top: 4px;
+	padding: 2px 0 0 6px;
+}
+
+.songs-block {
+	padding: 0 4px 4px 0;
+	border-image: var(--entry-border) 10%;
+	border-top: 2px solid;
+	background: none;
+}
+
+.songs-header {
+	display: inline list-item;
+	padding: 1px 6px 2px 8px;
+	border-radius: 0 0 8px 0;
+	background-color: var(--code-author);
+	cursor: pointer;
+}
+
+.songs-header > small {
+	margin-left: 8px;
 }
 
 /* ==[ Controls ] ========================================================================================= */
@@ -662,7 +746,7 @@ button[name="close"] {
 	color: var(--button-hover-color);
 }
 
-.control-button:not([disabled]):active, .control-select:active  {
+.control-button:not([disabled]):active, .control-select:active {
 	background-image: var(--control-button-active);
 }
 
@@ -679,7 +763,7 @@ button[name="close"] {
 
 .control-color {
 	width: 76px;
-	height: 28px;
+	height: 24px;
 	margin-right: 6px;
 	padding: 3px 6px;
 	border-radius: var(--control-corners);
@@ -792,10 +876,6 @@ button[name="close"] {
 	border: none;
 }
 
-.control-select > option {
-	color: #435071;
-}
-
 .control-text {
 	height: var(--control-size);
 	padding: 0 4px;
@@ -856,7 +936,7 @@ button[name="close"] {
 }
 
 .controls-group > .control-button {
-	border-left: 1px solid #5c636c;
+	border-left: 1px solid var(--control-button-border);
 	border-radius: 0;
 }
 
@@ -880,7 +960,7 @@ button[name="close"] {
 }
 
 .settings-block > .control-select {
-	height: 28px;
+	height: 24px;
 	margin-right: 6px;
 	padding-left: 5px;
 }

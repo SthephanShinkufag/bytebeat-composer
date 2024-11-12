@@ -8,7 +8,7 @@ b %= len, // Song looping
 // Generators
 gen = (del, pitch, vibr, arp = 0, k1 = 5, k2 = 5) => (t + vibr * sin(5 * (T = gT - del))) * 2 ** (
 	pitch + ('6202'[(T >> 5) % 4] - 3) / 12 +
-	(arp && int((w = abs((T / arp & 31) - 17)) / k2) - (0b0001010110001010 >> w % k1 * k & 15) / 12)),
+	(arp && int((w = abs((T / arp & 31) - 17)) / k2) - (0x158A >> w % k1 * k & 15) / 12)),
 sqr = x => (x & 128) / 4,
 tri = x => abs((x & 255) - 128) / 4,
 
