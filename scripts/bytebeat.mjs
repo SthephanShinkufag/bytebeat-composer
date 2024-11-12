@@ -592,9 +592,6 @@ globalThis.bytebeat = new class {
 		}
 		this.setThemeStyle();
 		await this.initAudioContext();
-		if(!window.location.hostname.includes(decodeURI('%64%6f%6c%6c%63%68%61%6e'))) {
-			return;
-		}
 		if(document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', () => this.initAfterDom());
 			return;
