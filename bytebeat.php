@@ -87,7 +87,15 @@ function addSongForm() {
 				<textarea name="code" placeholder="Code original"></textarea>
 				<textarea name="code_minified" placeholder="Code minified"></textarea>
 				<textarea name="code_formatted" placeholder="Code formatted"></textarea>
-				<input type="text" name="tags" placeholder="Tags [&quot;tag1&quot;,&quot;tag2&quot;,...]">
+				<select name="drawing_mode">
+					<option value="">None</option>
+					<option value="Points">Points</option>
+					<option value="Waveform">Waveform</option>
+					<option value="Diagram">Diagram</option>
+					<option value="Combined">Combined</option>
+				</select>
+				<input type="text" name="drawing_scale" placeholder="Drawing scale 1=1/2, 2=1/4, 3=1/8, ...">
+				<input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]">
 				<label>
 					<select name="rating">
 						<option value="0">No rating</option>
@@ -441,7 +449,7 @@ function databaseToJson() {
 		$qSources = mysqli_query($dbLink,
 			"SELECT `source` FROM remixes
 			WHERE `song` = '" . $song['hash'] . "';");
-		if (mysqli_num_rows($qSources) != 0) {
+		if (mysqli_num_rows($qSources) !== 0) {
 			while ($source = mysqli_fetch_assoc($qSources)) {
 				$sourcesArr[] = $source['source'];
 			}
@@ -451,7 +459,7 @@ function databaseToJson() {
 			$qSource = mysqli_query($dbLink,
 				"SELECT `author`, `name`, `url` FROM songs
 				WHERE `hash` = '" . $sourceHash . "';");
-			if (mysqli_num_rows($qSource) != 0) {
+			if (mysqli_num_rows($qSource) !== 0) {
 				while ($source = mysqli_fetch_assoc($qSource)) {
 					$remixStr .= ($remixStr ? ',' : '') . '{"hash":"' . $sourceHash . '"' .
 						(isset($source['author']) ? ', "author":' . json_encode($source['author']) : '') .
@@ -467,7 +475,7 @@ function databaseToJson() {
 			(isset($song['url']) ? ',"url":' . (str_starts_with($song['url'], '[') ?
 				$song['url'] : '"' . $song['url'] . '"') : '') .
 			(isset($song['date']) ? ',"date":"' . $song['date'] . '"' : '') .
-			($song['mode'] != 'Bytebeat' ? ',"mode":"' . $song['mode'] . '"' : '') .
+			($song['mode'] !== 'Bytebeat' ? ',"mode":"' . $song['mode'] . '"' : '') .
 			',"sampleRate":' . $song['samplerate'] .
 			(isset($song['stereo']) ? ',"stereo":1' : '') .
 			($fileOrig ? ',"fileOrig":1' :
@@ -577,39 +585,86 @@ function databaseToJson() {
 function addSong() {
 	$dbLink = getDBLink();
 
-	$sampleRate = $_POST['samplerate'];
+	$hash = bin2hex(random_bytes(16));
+	$author = trim($_POST['author']);
+	$name = trim($_POST['name']);
+	$description = trim($_POST['description']);
+	$url = trim($_POST['url']);
+	$date = trim($_POST['date']);
+	$coverName = trim($_POST['cover_name']);
+	$coverUrl = trim($_POST['cover_url']);
+	$drawingMode = $_POST['drawing_mode'];
+	$drawingScale = trim($_POST['drawing_scale']);
+	$isDrawing = $drawingMode || $drawingScale !== '';
+	if ($drawingScale !== '' && !is_numeric($drawingScale)) {
+		fancyDie('Error: Drawing Scale must be a nubmer!');
+	}
+	$sampleRate = trim($_POST['samplerate']);
 	if (!is_numeric($sampleRate)) {
 		fancyDie('Error: Sample Rate must be a nubmer!');
 	}
-	$hash = bin2hex(random_bytes(16));
+
+	// Set tags field
+	$tagsArr = array();
+	$codeLen = $_POST['code'] ? strlen($_POST['code']) :
+		($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
+		($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
+	if ($codeLen) {
+		if ($codeLen <= 256) {
+			$tagsArr[] = '256';
+		} else if ($codeLen <= 1024) {
+			$tagsArr[] = '1k';
+		} else {
+			$tagsArr[] = 'big';
+		}
+	}
+	if($_POST['tags']) {
+		$tags = json_decode($_POST['tags']);
+		if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
+			foreach ($tags as $tag) {
+				$tagsArr[] = $tag;
+			}
+		} else {
+			$tagsArr[] = $_POST['tags'];
+		}
+	}
 
 	// Adding song info into `songs` table
 	$query = 'INSERT INTO `songs` (hash' .
-		($_POST['author'] ? ', author' : '') .
-		($_POST['name'] ? ', name' : '') .
-		($_POST['description'] ? ', description' : '') .
-		($_POST['url'] ? ', url' : '') .
-		($_POST['date'] ? ', date' : '') .
+		($author ? ', author' : '') .
+		($name ? ', name' : '') .
+		($description ? ', description' : '') .
+		($url ? ', url' : '') .
+		($date ? ', date' : '') .
 		', mode, samplerate' .
 		(isset($_POST['stereo']) ? ', stereo' : '') .
 		($_POST['code'] ? ', code' : '') .
 		($_POST['code_minified'] ? ', code_minified' : '') . '' .
 		($_POST['code_formatted']  ? ', code_formatted' : '') .
-		($_POST['tags'] ? ', tags' : '') .
+		($coverName  ? ', cover_name' : '') .
+		($coverUrl  ? ', cover_url' : '') .
+		($isDrawing ? ', drawing' : '') .
+		', tags' .
 		($_POST['rating'] ? ', rating' : '') . ')
 	VALUES ("' . $hash . '"' .
-		($_POST['author'] ? ', "' . addslashes($_POST['author']) . '"' : '') .
-		($_POST['name'] ? ', "' . addslashes($_POST['name']) . '"' : '') .
-		($_POST['description'] ? ', "' . addslashes($_POST['description']) . '"' : '') .
-		($_POST['url'] ? ', "' . addslashes($_POST['url']) . '"' : '') .
-		($_POST['date'] ? ', "' . $_POST['date'] . '"' : '') .
+		($author ? ', "' . addslashes($author) . '"' : '') .
+		($name ? ', "' . addslashes($name) . '"' : '') .
+		($description ? ', "' . addslashes($description) . '"' : '') .
+		($url ? ', "' . addslashes($url) . '"' : '') .
+		($date ? ', "' . $date . '"' : '') .
 		', "' . ($_POST['mode'] ? $_POST['mode'] : 'Bytebeat') . '"' .
 		', ' . ($sampleRate ? $sampleRate : 8000) .
 		(isset($_POST['stereo']) ? ', 1' : '') .
 		($_POST['code'] ? ', "' . addslashes($_POST['code']) . '"' : '') .
 		($_POST['code_minified']  ? ', "' . addslashes($_POST['code_minified'] ) . '"' : '') .
 		($_POST['code_formatted'] ? ', "' . addslashes($_POST['code_formatted']) . '"' : '') .
-		($_POST['tags'] ? ', "' . addslashes($_POST['tags']) . '"' : '') .
+		($coverName ? ', "' . addslashes($coverName) . '"' : '') .
+		($coverUrl ? ', "' . addslashes($coverUrl) . '"' : '') .
+		($isDrawing ? ', "' . addslashes('{' .
+			($drawingMode ? '"mode":"' . $drawingMode . '"' : '') .
+			($drawingScale !== '' ? ($drawingMode ? ',' : '') . '"scale":"' . $drawingScale . '"' : '') .
+		'}') . '"' : '') .
+		', "' . addslashes('["' . implode('","', $tagsArr) . '"]') . '"' .
 		($_POST['rating'] ? ', ' . $_POST['rating'] : '') . ');';
 	mysqli_query($dbLink, $query);
 
