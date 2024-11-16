@@ -7,12 +7,12 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.errorDisplayed = true;
 		this.func = null;
 		this.getValues = null;
+		this.isFuncbeat = false;
 		this.isPlaying = false;
 		this.playbackSpeed = 1;
 		this.lastByteValue = [null, null];
 		this.lastFuncValue = [null, null];
 		this.lastTime = -1;
-		this.mode = 'Bytebeat';
 		this.outValue = [0, 0];
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
@@ -74,7 +74,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				let funcValue;
 				const currentSample = Math.floor(byteSample);
 				try {
-					if(this.mode === 'Funcbeat') {
+					if(this.isFuncbeat) {
 						funcValue = this.func(currentSample / this.sampleRate, this.sampleRate);
 					} else {
 						funcValue = this.func(currentSample);
@@ -166,7 +166,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.setSampleRatio(sampleRatio);
 		}
 		if(data.mode !== undefined) {
-			this.mode = data.mode;
+			this.isFuncbeat = data.mode === 'Funcbeat';
 			switch(data.mode) {
 			case 'Bytebeat':
 				this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = funcValue & 255) / 127.5 - 1;
@@ -227,7 +227,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		let isCompiled = false;
 		const oldFunc = this.func;
 		try {
-			if(this.mode === 'Funcbeat') {
+			if(this.isFuncbeat) {
 				this.func = new Function(...params, codeText).bind(globalThis, ...values);
 			} else {
 				// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
@@ -238,10 +238,12 @@ class audioProcessor extends AudioWorkletProcessor {
 					.bind(globalThis, ...values);
 			}
 			isCompiled = true;
-			if(this.mode === 'Funcbeat') {
+			if(this.isFuncbeat) {
 				this.func = this.func();
+				this.func(0, this.sampleRate);
+			} else {
+				this.func(0);
 			}
-			this.func(0);
 		} catch(err) {
 			if(!isCompiled) {
 				this.func = oldFunc;
