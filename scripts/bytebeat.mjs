@@ -758,7 +758,7 @@ globalThis.bytebeat = new class {
 		const waitElem = headerElem.querySelector('.loading-wait');
 		waitElem.classList.remove('hidden');
 		const libName = containerElem.id.replace('library-', '');
-		const response = await fetch(this.pathJSON + libName + '.json', { cache: 'no-cache' });
+		const response = await fetch(this.pathJSON + libName + '.json');
 		const { status } = response;
 		if(status !== 200 && status !== 304) {
 			state.remove('loaded');
@@ -791,7 +791,7 @@ globalThis.bytebeat = new class {
 		if(!this.songs) {
 			elem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
-			const response = await fetch(this.pathJSON + 'all.json', { cache: 'no-cache' });
+			const response = await fetch(this.pathJSON + 'all.json');
 			this.cacheSongs(await response.json());
 			elem.lastChild.remove();
 		}
@@ -837,16 +837,21 @@ globalThis.bytebeat = new class {
 			({ hash } = window.location);
 		}
 		let songData;
-		if(hash.startsWith('#v3b64')) {
-			const hashString = atob(hash.substr(6));
-			const dataBuffer = new Uint8Array(hashString.length);
-			for(const i in hashString) {
-				if(Object.prototype.hasOwnProperty.call(hashString, i)) {
-					dataBuffer[i] = hashString.charCodeAt(i);
-				}
-			}
+		if(hash.startsWith('#4')) {
+			const dataArr = Uint8Array.from(atob(hash.substring(2)), el => el.charCodeAt());
 			try {
-				songData = inflateRaw(dataBuffer, { to: 'string' });
+				songData = {
+					mode: ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'][dataArr[0]],
+					sampleRate: new DataView(dataArr.buffer).getFloat32(1, 1),
+					code: inflateRaw(new Uint8Array(dataArr.buffer, 5), { to: 'string' })
+				};
+			} catch(err) {
+				console.error(`Couldn't load data from url: ${ err }`);
+			}
+		} else if(hash.startsWith('#v3b64')) {
+			try {
+				songData = inflateRaw(
+					Uint8Array.from(atob(hash.substring(6)), el => el.charCodeAt()), { to: 'string' });
 				if(!songData.startsWith('{')) { // XXX: old format
 					songData = { code: songData, sampleRate: 8000, mode: 'Bytebeat' };
 				} else {
@@ -1079,6 +1084,9 @@ globalThis.bytebeat = new class {
 		} else if(sampleRate < 0) {
 			sampleRate = -sampleRate;
 		}
+		if(sampleRate > 3.40282347E+38) { // Max Float32 value
+			sampleRate = 8000;
+		}
 		switch(sampleRate) {
 		case 8000:
 		case 11025:
@@ -1210,7 +1218,12 @@ globalThis.bytebeat = new class {
 			songData.mode = this.songData.mode;
 		}
 		this.setCodeSize(code);
-		window.location.hash = `#v3b64${ btoa(String.fromCharCode.apply(undefined,
-			deflateRaw(JSON.stringify(songData)))).replaceAll('=', '') }`;
+		const codeArr = deflateRaw(code);
+		// First byte is mode, next 4 bytes is sampleRate, then the code
+		const outputArr = new Uint8Array(5 + codeArr.length);
+		outputArr[0] = ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'].indexOf(this.songData.mode);
+		outputArr.set(new Uint8Array(new Float32Array([this.songData.sampleRate]).buffer), 1);
+		outputArr.set(codeArr, 5);
+		window.location.hash = '#4' + btoa(String.fromCharCode.apply(null, outputArr)).replaceAll('=', '');
 	}
 }();
