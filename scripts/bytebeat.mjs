@@ -1079,12 +1079,10 @@ globalThis.bytebeat = new class {
 		buttonElem.title = `Play ${ isFast ? `fast ${ direction } x${ speed } speed` : direction }`;
 	}
 	setSampleRate(sampleRate, isSendData = true) {
-		if(!sampleRate || !isFinite(sampleRate)) {
-			sampleRate = 8000;
-		} else if(sampleRate < 0) {
-			sampleRate = -sampleRate;
-		}
-		if(sampleRate > 3.40282347E+38) { // Max Float32 value
+		if(!sampleRate || !isFinite(sampleRate) ||
+			// Float32 limit
+			(sampleRate = Number(parseFloat(Math.abs(sampleRate)).toFixed(2))) > 3.4028234663852886E+38
+		) {
 			sampleRate = 8000;
 		}
 		switch(sampleRate) {
@@ -1210,13 +1208,6 @@ globalThis.bytebeat = new class {
 	}
 	updateUrl() {
 		const code = this.editorValue;
-		const songData = { code };
-		if(this.songData.sampleRate !== 8000) {
-			songData.sampleRate = this.songData.sampleRate;
-		}
-		if(this.songData.mode !== 'Bytebeat') {
-			songData.mode = this.songData.mode;
-		}
 		this.setCodeSize(code);
 		const codeArr = deflateRaw(code);
 		// First byte is mode, next 4 bytes is sampleRate, then the code
@@ -1224,6 +1215,6 @@ globalThis.bytebeat = new class {
 		outputArr[0] = ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'].indexOf(this.songData.mode);
 		outputArr.set(new Uint8Array(new Float32Array([this.songData.sampleRate]).buffer), 1);
 		outputArr.set(codeArr, 5);
-		window.location.hash = '#4' + btoa(String.fromCharCode.apply(null, outputArr)).replaceAll('=', '');
+		window.location.hash = '4' + btoa(String.fromCharCode.apply(null, outputArr)).replaceAll('=', '');
 	}
 }();
