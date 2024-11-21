@@ -1,0 +1,13 @@
+t?0:Z=Y=Array(16384).fill(b=c=0),
+b+=(U=140/288e4),
+h=1+(i=H=0),
+l=-4.5,
+r=(M,v=b)=>{m=0;for(u of M)v>u&&(m=v-u);return m},
+lpr=(d,k)=>(t?0:Z[h]=0,t?0:Z[i]=0,g=(k,h,i)=>min(max(Z[i]+=(Z[h]+=d/4+64-Z[i])-(Z[h]/=(1+k/48000)),0),255),h+=2,i+=2,g(k,h-2,i-2)),
+lp=(d,k)=>(t?0:Z[h]=[0,0],t?0:Z[i]=0,d=min(max(d%256,Z[h][Z[i]%2]-k),Z[h][Z[i]%2]+k),Z[h][Z[i]++%2]=d,h+=2,i+=2,d),
+nan=(k,l=k)=>isNaN(k)?0:l,
+p=w=>nan(w,2**((w+l)/12)),
+acid=(x,y)=>abs(((x/256*y%y%1)<.5)*(x/256%1-1))*64,
+o=acid(t/2*p([0,1,-2,1][b/2&3]+(b*2&1?12:0)),2*(sin(b*PI/4)+2))*abs(b*4%1-2),
+lm=(a,b,c)=>(1-(a*b<1?a*b:1))**c,
+lm2=(a,b,c,d,e)=>{j=Array.from(a,k=>parseInt(k));J=0;for(I=0;I<j.length;I++){J+=j[I]?b<=I+1&&b>I?lm(c,d,e):0:0}return J},lm2(D='00100010',b*2%8,b*2%1,2,1)*(((f=k=>(lpr(lp(random()*64,8)*8,k)-128)/64))(6400)*f(3200)+f(4000))+lm2(C='10111011101111111011101110111010',b*4%32,b*4%1,2,4)*f(4000)*lm2(C,b*4%32,b*4%1,1,1)*sin(sqrt(b*4%1*4e3))+o/256

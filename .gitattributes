@@ -1,4 +1,0 @@
-# Exclude generated files from diff
-
-build -diff
-build linguist-generated=true

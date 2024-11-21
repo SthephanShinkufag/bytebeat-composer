@@ -1,1 +1,0 @@
-fm=(n,s)=>sin(sin(sin(n*PI/128)+n*PI/64)+n*PI/32)/(2+t%(4096*s)/128/s),h=n=>sin(random())/(2+t%8192/128/n),k=n=>sin(1.4*sqrt(t*(n+1)&32767))/3,bc=n=>sin(t%8?a:a=random())/(2+t%(4096*n)/128/n),mel=(t>>13&t>>14)%17%10,sh=(t>>14&t>>13)%7,kh=(t>>14&t>>15)%4,fm(t/2.9*mel,2)+h(sh)+k(kh)+bc(kh+8)-.2
