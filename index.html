@@ -9,15 +9,17 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2024111800">
-	<link rel="modulepreload" href="./scripts/audioProcessor.mjs?version=2024111800">
-	<script type="module" async src="./scripts/bytebeat.mjs?version=2024111800"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2024111800">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2024111800">
+	<script type="module" async src="./build/index.js?version=2024111800"></script>
 </head>
 <body>
 	<main id="content">
 		<section id="container-fixed">
 			<div id="editor-container">
-				<textarea id="editor-default" spellcheck="false">2*t*(t&16384?6:5)*(4-(3&t>>8))>>(3&-t>>(t&4096?2:15))|t>>(t&8192?t&4096?4:5:3)</textarea>
+				<div id="editor-default">
+					<svg><use xlink:href="#symbol-wait"></svg>
+				</div>
 			</div>
 			<div class="controls">
 				<div class="controls-group controls-grow">
@@ -294,5 +296,6 @@
 			</symbol>
 		</svg>
 	</div>
+	<a id="downloader" class="hidden"></a>
 </body>
 </html>

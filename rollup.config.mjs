@@ -1,17 +1,20 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
+
 export default [{
-	input: './scripts/codemirror-setup.mjs',
+	input: './src/audio-processor.mjs',
 	output: {
-		file: './scripts/codemirror.min.mjs',
-		format: 'es'
-	},
-	plugins: [nodeResolve(), terser()]
-}, {
-	input: './node_modules/pako/dist/pako.esm.mjs',
-	output: {
-		file: './scripts/pako.esm.min.mjs',
-		format: 'es'
+		file: './build/audio-processor.mjs',
+		format: 'es',
+		sourcemap: true
 	},
 	plugins: [terser()]
+}, {
+	input: './src/index.mjs',
+	output: {
+		dir: './build/',
+		format: 'es',
+		sourcemap: true
+	},
+	plugins: [nodeResolve(), terser()]
 }];

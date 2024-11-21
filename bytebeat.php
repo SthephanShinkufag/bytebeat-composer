@@ -27,7 +27,7 @@ function fancyDie($message) {
 	<title>Bytebeat management</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="bytebeat.css?version=2024103000">
+	<link rel="stylesheet" type="text/css" href="style.css?version=2024103000">
 </head>
 <body style="text-align: center;">
 	<div style="display: inline-block; padding: 8px 0;">
