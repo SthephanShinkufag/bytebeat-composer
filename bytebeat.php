@@ -115,133 +115,88 @@ function managementRequest() {
 			<legend align="center">Select an action to manage the library</legend>
 			<a href="?addsong_request" class="control-button">Add a song</a>
 			<a href="?migrate" class="control-button" onclick="return confirm(\'Are you sure to migrate to database?\')">Migrate to database</a>
-			<a href="?make" class="control-button">Make .json files</a>
+			<a href="?make_json" class="control-button">Make .json files</a>
 			<a href="?logout" class="control-button">Logout</a>
 		</fieldset>';
 }
 
 // Move songs from library json files to 'songs' database table
-function decodeOldJson(
-	$dbLink,
-	$libName,
-	$entries = NULL,
-	$authorStrGlob = NULL,
-	$nameStrGlob = NULL,
-	$urlStrGlob = NULL,
-	$dateStrGlob = NULL,
-	$ratingStrGlob = NULL
-) {
-	$libraryPath = './library/';
+function decodeJsonFile($dbLink, $libName) {
+	$jsonPath = './data/json/';
+	$songsPath = './data/songs/';
+	$fileName = $jsonPath . $libName . '.json';
 
-	// Get songs from the old library
-	if (!isset($entries)) {
-		$entries = json_decode(file_get_contents($libraryPath . $libName . '.json'));
+	// Check for a valid json file and get an array of songs
+	if (!file_exists($fileName)) {
+		fancyDie('File "' . $fileName . '" does not exist.');
+	}
+	$songssArr = json_decode(file_get_contents($fileName));
+	if(json_last_error() !== JSON_ERROR_NONE) {
+		fancyDie('File "' . $fileName . '" has an error: ' . json_last_error_msg());
 	}
 
-	// Write each song into the database
-	foreach ($entries as $entry) {
-		$authorStr = isset($entry->author) ? $entry->author : (isset($authorStrGlob) ? $authorStrGlob : NULL);
-		$nameStr = isset($entry->name) ? $entry->name : (isset($nameStrGlob) ? $nameStrGlob : NULL);
-		$urlStr = isset($entry->url) ?
-			(is_array($entry->url) ? '["' . implode('","', $entry->url) . '"]' :
-				(isset($urlStrGlob) ? '["' . $urlStrGlob . '","' . $entry->url . '"]' : $entry->url)) :
-			(isset($urlStrGlob) ? $urlStrGlob : NULL);
-		$dateStr = isset($entry->date) ? $entry->date : (isset($dateStrGlob) ? $dateStrGlob : NULL);
-		$codeOriginal = isset($entry->codeOriginal) ?
-			(is_array($entry->codeOriginal) ? implode(PHP_EOL, $entry->codeOriginal) : $entry->codeOriginal) :
-			(isset($entry->fileOriginal) ?
-				file_get_contents($libraryPath . 'original/' . $entry->file) : NULL);
-		$codeMinified = isset($entry->codeMinified) ? $entry->codeMinified :
-			(isset($entry->fileMinified) ?
-				file_get_contents($libraryPath . 'minified/' . $entry->file) : NULL);
-		$codeFormatted = isset($entry->fileFormatted) ?
-			file_get_contents($libraryPath . 'formatted/' . $entry->file) : NULL;
-		$ratingStr = isset($entry->starred) ? $entry->starred :
-			(isset($ratingStrGlob) ? $ratingStrGlob : NULL);
-		$codeLen = isset($codeOriginal) ? strlen($codeOriginal) :
-			(isset($codeFormatted) ? strlen($codeFormatted) :
-			(isset($codeMinified) ? strlen($codeMinified) : 0));
-		$tagsArr = array();
-		if ($codeLen) {
-			if ($codeLen <= 256) {
-				$tagsArr[] = '256';
-			} else if ($codeLen <= 1024) {
-				$tagsArr[] = '1k';
-			} else {
-				$tagsArr[] = 'big';
-			}
-		}
-		if ($libName === 'classic') {
-			$tagsArr[] = 'c';
-		}
-		if (isset($entry->children)) {
-			decodeOldJson(
-				$dbLink,
-				$libName,
-				$entry->children,
-				isset($authorStr) ? $authorStr : NULL,
-				isset($nameStr) ? $nameStr : NULL,
-				isset($urlStr) ? $urlStr : NULL,
-				isset($dateStr) ? $dateStr : NULL,
-				isset($ratingStr) ? $ratingStr : NULL);
-		} else {
-			$query = 'INSERT INTO `songs` (hash, samplerate, mode' .
-				(isset($authorStr) ? ', author' : '') .
-				(isset($nameStr) ? ', name' : '') .
-				(isset($entry->description) ? ', description' : '') .
-				(isset($urlStr) ? ', url' : '') .
-				(isset($dateStr) ? ', date' : '') .
+	// Write each song into database
+	foreach ($songssArr as $authorObj) {
+		$author = $authorObj->author;
+		$songs = $authorObj->songs;
+		foreach ($songs as $song) {
+			$url = isset($song->url) ?
+				(is_array($song->url) ? '["' . implode('","', $song->url) . '"]' : $song->url) : NULL;
+			$codeOriginal = isset($song->code) ? $song->code : (isset($song->fileOrig) ?
+				file_get_contents($songsPath . 'original/' . $song->hash . '.js') : NULL);
+			$codeMinified = isset($song->codeMin) ? $song->codeMin : (isset($song->fileMin) ?
+				file_get_contents($songsPath . 'minified/' . $song->hash . '.js') : NULL);
+			$codeFormatted = isset($song->fileForm) ?
+				file_get_contents($songsPath . 'formatted/' . $song->hash . '.js') : NULL;
+
+			$query = 'INSERT INTO `songs` (hash' .
+				($author !== '' ? ', author' : '') .
+				(isset($song->name) ? ', name' : '') .
+				(isset($song->description) ? ', description' : '') .
+				(isset($url) ? ', url' : '') .
+				(isset($song->date) ? ', date' : '') .
+				', mode, samplerate' .
+				(isset($song->stereo) ? ', stereo' : '') .
 				(isset($codeOriginal) ? ', code' : '') .
-				(isset($entry->codeMinified) || isset($entry->fileMinified) ? ', code_minified' : '') . '' .
-				(isset($entry->fileFormatted) ? ', code_formatted' : '') .
-				(isset($entry->stereo) ? ', stereo' : '') .
-				(isset($ratingStr) ? ', rating' : '') .
-				(isset($entry->remix) ? ', remix' : '') .
-				(isset($entry->cover) ? ', cover_name' : '') .
-				(isset($entry->cover) && isset($entry->cover->url) ? ', cover_url' : '') .
-				(isset($entry->drawing) ? ', drawing' : '') . 
-				(count($tagsArr) ? ', tags' : '') . ')
-			VALUES ("' .
-				bin2hex(random_bytes(16)) . '", ' .
-				(isset($entry->sampleRate) ? $entry->sampleRate : 8000) . ', "' .
-				(isset($entry->mode) ? $entry->mode : 'Bytebeat') . '"' .
-				(isset($authorStr) ? ', "' . addslashes($authorStr) . '"' : '') .
-				(isset($nameStr) ? ', "' . addslashes($nameStr) . '"' : '') .
-				(isset($entry->description) ? ', "' . addslashes($entry->description) . '"' : '') .
-				(isset($urlStr) ? ', "' . addslashes($urlStr) . '"' : '') .
-				(isset($dateStr) ? ', "' . $dateStr . '"' : '') .
+				(isset($codeMinified) ? ', code_minified' : '') . '' .
+				(isset($codeFormatted) ? ', code_formatted' : '') .
+				(isset($song->coverName) ? ', cover_name' : '') .
+				(isset($song->coverUrl) ? ', cover_url' : '') .
+				(isset($song->drawing) ? ', drawing' : '') .
+				', tags' .
+				(isset($song->rating) ? ', rating' : '') .
+			') VALUES ("' . $song->hash . '"' .
+				($author !== '' ? ', "' . addslashes($author) . '"' : '') .
+				(isset($song->name) ? ', "' . addslashes($song->name) . '"' : '') .
+				(isset($song->description) ? ', "' . addslashes($song->description) . '"' : '') .
+				(isset($url) ? ', "' . addslashes($url) . '"' : '') .
+				(isset($song->date) ? ', "' . $song->date . '"' : '') .
+				', "' . (isset($song->mode) ? $song->mode : 'Bytebeat') . '"' .
+				', ' . (isset($song->sampleRate) ? $song->sampleRate : 8000) .
+				(isset($song->stereo) ? ', 1' : '') .
 				(isset($codeOriginal) ? ', "' . addslashes($codeOriginal) . '"' : '') .
 				(isset($codeMinified) ? ', "' . addslashes($codeMinified) . '"' : '') .
 				(isset($codeFormatted) ? ', "' . addslashes($codeFormatted) . '"' : '') .
-				(isset($entry->stereo) ? ', 1' : '') .
-				(isset($ratingStr) ? ', ' . $ratingStr : '') .
-				(isset($entry->remix) ? ', "' . addslashes(json_encode($entry->remix)) . '"' : '') .
-				(isset($entry->cover) ? ', "' . addslashes($entry->cover->name) . '"' : '') .
-				(isset($entry->cover) && isset($entry->cover->url) ? 
-					', "' . $entry->cover->url . '"' : '') .
-				(isset($entry->drawing) ? ', "{\"mode\": \"' . $entry->drawing->mode . '\", \"scale\": ' .
-					$entry->drawing->scale . '}"' : '') .
-				(count($tagsArr) ? ', "' . 
-					addslashes('["' . implode('","', $tagsArr) . '"]') . '"' : '') . ');';
-			mysqli_query($dbLink, $query);
-		}
-	}
-}
+				(isset($song->coverName) ? ', "' . addslashes($song->coverName) . '"' : '') .
+				(isset($song->coverUrl) ? ', "' . $song->coverUrl . '"' : '') .
+				(isset($song->drawing) ? ', "{\"mode\": \"' . $song->drawing->mode . '\", \"scale\": ' .
+					$song->drawing->scale . '}"' : '') .
+				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
+				(isset($song->rating) ? ', ' . $song->rating : '') .
+			');';
 
-// Function to find the remixes of songs
-function findSong($dbLink, $source) {
-	$result = mysqli_query($dbLink,
-		"SELECT `hash`, `author`, `name`, `url` FROM songs
-		WHERE " .
-			(isset($source->author) ? "`author` = '" . addslashes($source->author) . "'" : '') .
-			(isset($source->name) ? (isset($source->author) ? ' AND ' : '') .
-				"`name` = '" . addslashes($source->name) . "'" : '') .
-			(isset($source->url) ? (isset($source->author) || isset($source->name) ? ' AND ' : '') .
-				"`url` LIKE '%" . addslashes($source->url) . "%'" : '') .
-		" LIMIT 1;");
-	if ($result) {
-		while ($song = mysqli_fetch_assoc($result)) {
-			return $song;
+			// Write each song into the database
+			mysqli_query($dbLink, $query);
+
+			// Find remixes of songs and write to 'remixes' database table
+			if (isset($song->remix)) {
+				$remixes = $song->remix;
+				foreach ($remixes as $remix) {
+					mysqli_query($dbLink,
+						'INSERT INTO `remixes` (song, source)
+						VALUES ("' . $song->hash . '", "' . $remix->hash . '");');
+				}
+			}
 		}
 	}
 }
@@ -281,7 +236,6 @@ function jsonToDatabase() {
 				`code` MEDIUMTEXT NULL,
 				`code_minified` TEXT NULL,
 				`code_formatted` MEDIUMTEXT NULL,
-				`remix` TEXT NULL,
 				`cover_name` VARCHAR(255) NULL,
 				`cover_url` TEXT NULL,
 				`drawing` VARCHAR(50) NULL,
@@ -309,39 +263,13 @@ function jsonToDatabase() {
 		$message .= 'Databases `songs` and `remixes` cleared.<br>';
 	}
 
-	// Move songs from library json files to 'songs' database table
-	decodeOldJson($dbLink, 'classic');
-	decodeOldJson($dbLink, 'compact-js');
-	decodeOldJson($dbLink, 'big-js');
-	decodeOldJson($dbLink, 'floatbeat');
-	decodeOldJson($dbLink, 'funcbeat');
-	decodeOldJson($dbLink, 'sthephanshi');
-	$message .= 'JSON libraries moved to `songs` database.<br>';
+	// Copy songs from library json files to 'songs' and 'remixes' database tables
+	decodeJsonFile($dbLink, 'all');
+	$message .= 'JSON libraries copied to `songs` and `remixes` databases.<br>';
 
-	// Find remixes of songs and write to 'remixes' database table
-	$remixSongs = mysqli_query($dbLink,
-		'SELECT `hash`, `name`, `remix` FROM songs WHERE `remix` IS NOT NULL;');
-	while ($remixSong = mysqli_fetch_assoc($remixSongs)) {
-		$source = json_decode($remixSong['remix']);
-		if (json_last_error() !== JSON_ERROR_NONE) {
-			continue;
-		}
-		if (is_array($source)) {
-			foreach ($source as $source_) {
-				mysqli_query($dbLink,
-					'INSERT INTO `remixes` (song, source)
-					VALUES ("' . $remixSong['hash'] . '", "' . findSong($dbLink, $source_)['hash'] . '");');
-			}
-		} else {
-			mysqli_query($dbLink,
-				'INSERT INTO `remixes` (song, source)
-				VALUES ("' . $remixSong['hash'] . '", "' . findSong($dbLink, $source)['hash'] . '");');
-		}
-	}
-	
 	// Close database
 	mysqli_close($dbLink);
-	return $message . 'Remixes found and placed to `remixes` database.';
+	return $message . 'Success!';
 }
 
 // Create JSON file on query from database
@@ -373,11 +301,12 @@ function makeJson($jsonFileName, $songsByHash, $qResult) {
 function databaseToJson() {
 	$message = '';
 	$dbLink = getDBLink();
-
-	// Create/clear folders for large songs
+	$pathJSON = './data/json/';
 	$pathOriginal = './data/songs/original/';
 	$pathMinified = './data/songs/minified/';
 	$pathFormatted = './data/songs/formatted/';
+
+	// Create/clear folders for large songs
 	if (!is_dir($pathOriginal)) {
 		mkdir($pathOriginal, 0755, true);
 		$message .= $pathOriginal . ' created.<br>';
@@ -412,7 +341,6 @@ function databaseToJson() {
 			`code`,
 			`code_minified`,
 			`code_formatted`,
-			`remix`,
 			`cover_name`,
 			`cover_url`,
 			`drawing`,
@@ -495,7 +423,6 @@ function databaseToJson() {
 	}
 
 	// Create/clear folder for JSON files
-	$pathJSON = './data/json/';
 	if (!is_dir($pathJSON)) {
 		mkdir($pathJSON, 0755, true);
 		$message .= $pathJSON . ' created.<br>';
@@ -508,7 +435,7 @@ function databaseToJson() {
 	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
 		'SELECT `hash`, `author` FROM songs
 		ORDER BY `author`, `date`, `id`;'));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with c-compatible songs
 	$jsonFileName = $pathJSON . 'classic.json';
@@ -516,7 +443,7 @@ function databaseToJson() {
 		"SELECT `hash`, `author` FROM songs
 		WHERE `tags` LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with JS songs under 256b
 	$jsonFileName = $pathJSON . 'js-256.json';
@@ -526,7 +453,7 @@ function databaseToJson() {
 			AND `tags` LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with JS songs under 1k
 	$jsonFileName = $pathJSON . 'js-1k.json';
@@ -536,7 +463,7 @@ function databaseToJson() {
 			AND `tags` LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with big JS songs
 	$jsonFileName = $pathJSON . 'js-big.json';
@@ -547,7 +474,7 @@ function databaseToJson() {
 			AND `tags` NOT LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with Floatbeat mode songs
 	$jsonFileName = $pathJSON . 'floatbeat.json';
@@ -556,7 +483,7 @@ function databaseToJson() {
 		WHERE mode = 'Floatbeat'
 			AND `tags` NOT LIKE '%\"big\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with Floatbeat mode songs
 	$jsonFileName = $pathJSON . 'floatbeat-big.json';
@@ -566,7 +493,7 @@ function databaseToJson() {
 			AND `tags` NOT LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"1k\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// JSON file with Funcbeat mode songs
 	$jsonFileName = $pathJSON . 'funcbeat.json';
@@ -574,11 +501,11 @@ function databaseToJson() {
 		"SELECT `hash`, `author` FROM songs
 		WHERE mode = 'Funcbeat'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= $jsonFileName .' file created.<br>';
+	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// Close database
 	mysqli_close($dbLink);
-	return $message;
+	return $message . 'Success!';
 }
 
 // Request to add a song to the database
@@ -618,7 +545,7 @@ function addSong() {
 			$tagsArr[] = 'big';
 		}
 	}
-	if($_POST['tags']) {
+	if ($_POST['tags']) {
 		$tags = json_decode($_POST['tags']);
 		if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
 			foreach ($tags as $tag) {
@@ -671,7 +598,7 @@ function addSong() {
 	// Adding sources for remixes into `remixes` table
 	$sources = $_POST['remix'];
 	foreach ($sources as $source) {
-		if($source) {
+		if ($source) {
 			mysqli_query($dbLink,
 				'INSERT INTO `remixes` (song, source)
 				VALUES ("' . $hash . '", "' . $source . '");');
@@ -727,7 +654,7 @@ if (isset($_GET['migrate'])) {
 }
 
 // Request to create .json libraries and big-js song files from database
-if (isset($_GET['make'])) {
+if (isset($_GET['make_json'])) {
 	fancyDie(databaseToJson());
 }
 
