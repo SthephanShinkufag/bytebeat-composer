@@ -2,12 +2,14 @@
 // To use: copy settings.default.php to settings.php and configure variables.
 
 // Database hostname
-define('CHANSTAT_DBHOST', '');
+define('BYTEBEAT_DBHOST', '');
 // Database username
-define('CHANSTAT_DBUSERNAME', '');
+define('BYTEBEAT_DBUSERNAME', '');
 // Database password
-define('CHANSTAT_DBPASSWORD', '');
+define('BYTEBEAT_DBPASSWORD', '');
 // Database name
-define('CHANSTAT_DBNAME', '');
+define('BYTEBEAT_DBNAME', '');
 // Timezone
-define('CHANSTAT_TIMEZONE', 'UTC');
+define('BYTEBEAT_TIMEZONE', 'UTC');
+// Admin password
+define('BYTEBEAT_ADMINPASS', '');
