@@ -114,25 +114,24 @@ function managementRequest() {
 	return '<fieldset style="display: flex;flex-direction: column;gap: 4px;">
 			<legend align="center">Select an action to manage the library</legend>
 			<a href="?addsong_request" class="control-button">Add a song</a>
-			<a href="?migrate" class="control-button" onclick="return confirm(\'Are you sure to migrate to database?\')">Migrate to database</a>
-			<a href="?make_json" class="control-button">Make .json files</a>
+			<a href="?files_to_db" class="control-button" onclick="return confirm(\'Are you sure to copy songs from library files into the database?\')">Migrate to database</a>
+			<a href="?db_to_files" class="control-button">Make library files</a>
 			<a href="?logout" class="control-button">Logout</a>
 		</fieldset>';
 }
 
-// Move songs from library json files to 'songs' database table
-function decodeJsonFile($dbLink, $libName) {
-	$jsonPath = './data/json/';
+// Copy songs from library files into 'songs' and 'remixes' database tables
+function decodeLibraryFile($dbLink, $libName) {
 	$songsPath = './data/songs/';
-	$fileName = $jsonPath . $libName . '.json';
+	$libFileName = './data/library/' . $libName . '.gz';
 
-	// Check for a valid json file and get an array of songs
-	if (!file_exists($fileName)) {
-		fancyDie('File "' . $fileName . '" does not exist.');
+	// Check for a valid JSON string from GZIP file and get an array of songs
+	if (!file_exists($libFileName)) {
+		fancyDie('File "' . $libFileName . '" does not exist.');
 	}
-	$songssArr = json_decode(file_get_contents($fileName));
+	$songssArr = json_decode(gzdecode(file_get_contents($libFileName)));
 	if(json_last_error() !== JSON_ERROR_NONE) {
-		fancyDie('File "' . $fileName . '" has an error: ' . json_last_error_msg());
+		fancyDie('File "' . $libFileName . '" has an error: ' . json_last_error_msg());
 	}
 
 	// Write each song into database
@@ -185,7 +184,7 @@ function decodeJsonFile($dbLink, $libName) {
 				(isset($song->rating) ? ', ' . $song->rating : '') .
 			');';
 
-			// Write each song into the database
+			// Write each song into 'songs' database table
 			mysqli_query($dbLink, $query);
 
 			// Find remixes of songs and write to 'remixes' database table
@@ -214,8 +213,8 @@ function getDBLink() {
 	return $dbLink;
 }
 
-// Migration from .json library files to the database
-function jsonToDatabase() {
+// Copy songs from library files into the database
+function filesToDatabase() {
 	$message = '';
 	$dbLink = getDBLink();
 
@@ -255,25 +254,25 @@ function jsonToDatabase() {
 			)
 			DEFAULT CHARSET = utf8mb4
 			COLLATE = utf8mb4_0900_ai_ci;');
-		$message .= 'Databases `songs` and `remixes` created.<br>';
+		$message .= 'Database tables `songs` and `remixes` created.<br>';
 	} else {
 		// Clear existed tables
 		mysqli_query($dbLink, 'TRUNCATE TABLE songs;');
 		mysqli_query($dbLink, 'TRUNCATE TABLE remixes;');
-		$message .= 'Databases `songs` and `remixes` cleared.<br>';
+		$message .= 'Database tables `songs` and `remixes` are cleared.<br>';
 	}
 
-	// Copy songs from library json files to 'songs' and 'remixes' database tables
-	decodeJsonFile($dbLink, 'all');
-	$message .= 'JSON libraries copied to `songs` and `remixes` databases.<br>';
+	// Copy songs from library files into 'songs' and 'remixes' database tables
+	decodeLibraryFile($dbLink, 'all');
+	$message .= 'Libraries are copied into the `songs` and `remixes` database tables.<br>';
 
 	// Close database
 	mysqli_close($dbLink);
 	return $message . 'Success!';
 }
 
-// Create JSON file on query from database
-function makeJson($jsonFileName, $songsByHash, $qResult) {
+// Create gzipped JSON file on query from database
+function makeLibraryFile($fileName, $songsByHash, $qResult) {
 	$songsArr = array();
 	// Group songs by authors into arrays
 	while ($song = mysqli_fetch_assoc($qResult)) {
@@ -283,7 +282,7 @@ function makeJson($jsonFileName, $songsByHash, $qResult) {
 			$songsArr[''][] = $song['hash'];
 		}
 	}
-	// Make JSON file
+	// Make JSON string
 	$outputStr = '';
 	foreach ($songsArr as $author => $hashes) {
 		$songsStr = '';
@@ -294,14 +293,15 @@ function makeJson($jsonFileName, $songsByHash, $qResult) {
 		$outputStr .= ($outputStr ? ',' : '') .
 			'{"author":' . json_encode($author) . ',"songs":[' . $songsStr . ']}';
 	}
-	file_put_contents($jsonFileName, '[' . $outputStr . ']');
+	// Compress the JSON string into the GZIP file
+	file_put_contents($fileName, gzencode('[' . $outputStr . ']'));
 }
 
-// Making .json libraries and big-js songs files from database
-function databaseToJson() {
+// Making gzipped JSON libraries and big-js songs files from database
+function databaseToFiles() {
 	$message = '';
 	$dbLink = getDBLink();
-	$pathJSON = './data/json/';
+	$pathLibrary = './data/library/';
 	$pathOriginal = './data/songs/original/';
 	$pathMinified = './data/songs/minified/';
 	$pathFormatted = './data/songs/formatted/';
@@ -309,19 +309,19 @@ function databaseToJson() {
 	// Create/clear folders for large songs
 	if (!is_dir($pathOriginal)) {
 		mkdir($pathOriginal, 0755, true);
-		$message .= $pathOriginal . ' created.<br>';
+		$message .= '"' . $pathOriginal . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathOriginal . '/*.*'));
 	}
 	if (!is_dir($pathMinified)) {
 		mkdir($pathMinified, 0755, true);
-		$message .= $pathMinified . ' created.<br>';
+		$message .= '"' . $pathMinified . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathMinified . '/*.*'));
 	}
 	if (!is_dir($pathFormatted)) {
 		mkdir($pathFormatted, 0755, true);
-		$message .= $pathFormatted . ' created.<br>';
+		$message .= '"' . $pathFormatted . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathFormatted . '/*.*'));
 	}
@@ -422,90 +422,82 @@ function databaseToJson() {
 		'}';
 	}
 
-	// Create/clear folder for JSON files
-	if (!is_dir($pathJSON)) {
-		mkdir($pathJSON, 0755, true);
-		$message .= $pathJSON . ' created.<br>';
+	// Create/clear folder for library files
+	if (!is_dir($pathLibrary)) {
+		mkdir($pathLibrary, 0755, true);
+		$message .= '"' . $pathLibrary . '" folder created.<br>';
 	} else {
-		array_map('unlink', glob($pathJSON . '/*.*'));
+		array_map('unlink', glob($pathLibrary . '/*.*'));
 	}
 
-	// JSON file with all songs sorted by authors
-	$jsonFileName = $pathJSON . 'all.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with all songs sorted by authors
+	$fileName = $pathLibrary . 'all.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		'SELECT `hash`, `author` FROM songs
 		ORDER BY `author`, `date`, `id`;'));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with c-compatible songs
-	$jsonFileName = $pathJSON . 'classic.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with c-compatible songs
+	$fileName = $pathLibrary . 'classic.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE `tags` LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with JS songs under 256b
-	$jsonFileName = $pathJSON . 'js-256.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with JS songs under 256b
+	$fileName = $pathLibrary . 'js-256.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
 			AND `tags` LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with JS songs under 1k
-	$jsonFileName = $pathJSON . 'js-1k.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with JS songs under 1k
+	$fileName = $pathLibrary . 'js-1k.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
 			AND `tags` LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with big JS songs
-	$jsonFileName = $pathJSON . 'js-big.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with big JS songs
+	$fileName = $pathLibrary . 'js-big.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
 			AND `tags` NOT LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with Floatbeat mode songs
-	$jsonFileName = $pathJSON . 'floatbeat.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with Floatbeat mode songs
+	$fileName = $pathLibrary . 'floatbeat.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE mode = 'Floatbeat'
 			AND `tags` NOT LIKE '%\"big\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with Floatbeat mode songs
-	$jsonFileName = $pathJSON . 'floatbeat-big.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with Floatbeat mode songs
+	$fileName = $pathLibrary . 'floatbeat-big.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE mode = 'Floatbeat'
 			AND `tags` NOT LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"1k\"%'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
-	// JSON file with Funcbeat mode songs
-	$jsonFileName = $pathJSON . 'funcbeat.json';
-	makeJson($jsonFileName, $songsByHash, mysqli_query($dbLink,
+	// Library file with Funcbeat mode songs
+	$fileName = $pathLibrary . 'funcbeat.gz';
+	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
 		WHERE mode = 'Funcbeat'
 		ORDER BY `date`, `author`, `id`;"));
-	$message .= '"' . $jsonFileName . '" file created.<br>';
 
 	// Close database
 	mysqli_close($dbLink);
-	return $message . 'Success!';
+	return $message . '"' . $pathLibrary . '*.gz" files created.<br>Success!';
 }
 
 // Request to add a song to the database
@@ -648,14 +640,14 @@ if (isset($_GET['logout'])) {
 	logoutRequest();
 }
 
-// Request to transfer songs from .json library files to the database
-if (isset($_GET['migrate'])) {
-	fancyDie(jsonToDatabase());
+// Request to copy songs from library files into the database
+if (isset($_GET['files_to_db'])) {
+	fancyDie(filesToDatabase());
 }
 
-// Request to create .json libraries and big-js song files from database
-if (isset($_GET['make_json'])) {
-	fancyDie(databaseToJson());
+// Request to create library files from database
+if (isset($_GET['db_to_files'])) {
+	fancyDie(databaseToFiles());
 }
 
 // Request to call the form to add a song

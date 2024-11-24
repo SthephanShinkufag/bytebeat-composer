@@ -1,3 +1,4 @@
+import { ungzip } from 'pako';
 import { formatBytes } from './utils.mjs';
 
 export class Library {
@@ -5,7 +6,7 @@ export class Library {
 		this.cacheParentElem = null;
 		this.cacheTextElem = null;
 		this.pathFiles = './data/songs/';
-		this.pathJSON = './data/json/';
+		this.pathLibrary = './data/library/';
 		this.showAllSongs = false;
 		this.songs = null;
 	}
@@ -173,7 +174,7 @@ export class Library {
 		const waitElem = headerElem.querySelector('.loading-wait');
 		waitElem.classList.remove('hidden');
 		const libName = containerElem.id.replace('library-', '');
-		const response = await fetch(this.pathJSON + libName + '.json');
+		const response = await fetch(this.pathLibrary + libName + '.gz');
 		const { status } = response;
 		if(status !== 200 && status !== 304) {
 			state.remove('loaded');
@@ -186,7 +187,7 @@ export class Library {
 			`<label><input type="checkbox" id="library-show-all"${
 				this.showAllSongs ? ' checked' : '' }> Show all songs</label>`;
 		let libHTML = '';
-		const libArr = await response.json();
+		const libArr = JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' }));
 		for(let i = 0, len = libArr.length; i < len; ++i) {
 			libHTML += this.generateEntryHTML(libArr[i], libName);
 		}
@@ -206,8 +207,8 @@ export class Library {
 		if(!this.songs) {
 			elem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
-			const response = await fetch(this.pathJSON + 'all.json');
-			this.cacheSongs(await response.json());
+			const response = await fetch(this.pathLibrary + 'all.gz');
+			this.cacheSongs(JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' })));
 			elem.lastChild.remove();
 		}
 		parentElem.insertAdjacentHTML('afterend',
