@@ -42,71 +42,22 @@ function fancyDie($message) {
 
 // Login form
 function showLoginPage() {
-	return '<form name="form_login" method="post" action="?manage">
-			<fieldset>
-				<legend align="center">Enter an administrator password</legend>
+	return '<fieldset>
+			<legend align="center">Enter an administrator password</legend>
+			<form name="form_login" method="post" action="?manage">
 				<input type="password" name="managepassword">
 				<input type="submit" value="Log In">
-			</fieldset>
-		</form>';
+			</form>
+		</fieldset>';
 }
 
 // Logout
 function logoutRequest() {
+	setcookie('bytebeat_access', '', time() - 3600, '/');
+	unset($_COOKIE['atom_access']);
 	$_SESSION['bytebeat'] = '';
 	session_destroy();
 	die('<meta http-equiv="refresh" content="0;url=' . basename($_SERVER['PHP_SELF']) . '?manage">');
-}
-
-// Form for adding a song to the database
-function addSongForm() {
-	return '<form name="form_login" method="post" action="?addsong">
-			<fieldset style="display: flex; flex-direction: column; gap: 4px; width: 320px; text-align: start;">
-				<legend align="center">Adding a song</legend>
-				<input type="text" name="author" placeholder="Author">
-				<input type="text" name="name" placeholder="Name">
-				<textarea name="description" placeholder="Description"></textarea>
-				<textarea name="url" placeholder="URL or [&quot;URL1&quot;,&quot;URL2&quot;,...]"></textarea>
-				<input type="text" name="date" placeholder="Date yyyy-mm-dd">
-				<div>
-					<input type="text" name="samplerate" placeholder="Sample rate (Hz)">
-					<label><input type="checkbox" name="stereo"> Stereo</label>
-				</div>
-				<select name="mode">
-					<option value="Bytebeat">Bytebeat</option>
-					<option value="Signed Bytebeat">Signed Bytebeat</option>
-					<option value="Floatbeat">Floatbeat</option>
-					<option value="Funcbeat">Funcbeat</option>
-				</select>
-				<div>
-					<input type="text" name="remix[]" placeholder="For remix: Source song hash" style="width: 90%;">
-					<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
-				</div>
-				<input type="text" name="cover_name" placeholder="Cover name">
-				<input type="text" name="cover_url" placeholder="Cover URL">
-				<textarea name="code" placeholder="Code original"></textarea>
-				<textarea name="code_minified" placeholder="Code minified"></textarea>
-				<textarea name="code_formatted" placeholder="Code formatted"></textarea>
-				<select name="drawing_mode">
-					<option value="">None</option>
-					<option value="Points">Points</option>
-					<option value="Waveform">Waveform</option>
-					<option value="Diagram">Diagram</option>
-					<option value="Combined">Combined</option>
-				</select>
-				<input type="text" name="drawing_scale" placeholder="Drawing scale 1=1/2, 2=1/4, 3=1/8, ...">
-				<input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]">
-				<label>
-					<select name="rating">
-						<option value="0">No rating</option>
-						<option value="1">Star</option>
-						<option value="2">Yellow star</option>
-					</select>
-					Rating
-				</label>
-				<span><input type="submit" value="Submit"></span>
-			</fieldset>
-		</form>';
 }
 
 // Management panel
@@ -120,6 +71,276 @@ function managementRequest() {
 		</fieldset>';
 }
 
+// Generating the form for adding/editing a song to the database
+function addSongForm() {
+	return '<fieldset>
+			<legend align="center">Adding a song</legend>
+			<form name="form_addsong" method="post" action="?addsong">
+				<table class="table-form"><tbody>
+					<tr>
+						<th>Author</th>
+						<td><input type="text" name="author"></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><input type="text" name="name"></td>
+					</tr>
+					<tr>
+						<th>Description</th>
+						<td><textarea name="description"></textarea></td>
+					</tr>
+					<tr>
+						<th>URL</th>
+						<td><textarea name="url" placeholder="URL or [&quot;URL1&quot;,&quot;URL2&quot;,...]"></textarea></td>
+					</tr>
+					<tr>
+						<th>Date</th>
+						<td><input type="text" name="date" placeholder="yyyy-mm-dd"></td>
+					</tr>
+					<tr>
+						<th>Mode</th>
+						<td>
+							<select name="mode">
+								<option value="Bytebeat">Bytebeat</option>
+								<option value="Signed Bytebeat">Signed Bytebeat</option>
+								<option value="Floatbeat">Floatbeat</option>
+								<option value="Funcbeat">Funcbeat</option>
+							</select>
+							<label><input type="checkbox" name="stereo"> Stereo</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Sample rate (Hz)</th>
+						<td><input type="text" name="samplerate"></td>
+					</tr>
+					<tr>
+						<th>Remix</th>
+						<td><div>
+							<input type="text" name="remix[]" placeholder="Source song hash" style="width: 88%;">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div></td>
+					</tr>
+					<tr>
+						<th>Cover name</th>
+						<td><input type="text" name="cover_name"></td>
+					</tr>
+					<tr>
+						<th>Cover URL</th>
+						<td><input type="text" name="cover_url"></td>
+					</tr>
+					<tr>
+						<th>Code original</th>
+						<td><textarea name="code"></textarea></td>
+					</tr>
+					<tr>
+						<th>Code minified</th>
+						<td><textarea name="code_minified"></textarea></td>
+					</tr>
+					<tr>
+						<th>Code formatted</th>
+						<td><textarea name="code_formatted"></textarea></td>
+					</tr>
+					<tr>
+						<th>Drawing mode</th>
+						<td><select name="drawing_mode">
+							<option value="">None</option>
+							<option value="Points">Points</option>
+							<option value="Waveform">Waveform</option>
+							<option value="Diagram">Diagram</option>
+							<option value="Combined">Combined</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th>Drawing scale</th>
+						<td><input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8, 4=1/16 ..."></td>
+					</tr>
+					<tr>
+						<th>Tags</th>
+						<td><input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]"></td>
+					</tr>
+					<tr>
+						<th>Rating</th>
+						<td><select name="rating">
+							<option value="0">No rating</option>
+							<option value="1">Star</option>
+							<option value="2">Yellow star</option>
+						</select></td>
+					</tr>
+					<tr><td><input type="submit" value="Submit"></td><td></td></tr>
+				</tbody></table>
+			</form>
+		</fieldset>';
+}
+
+// Generating the form to edit a song in the database
+function editSongForm() {
+	$dbLink = getDBLink();
+	if (!isset($_GET['hash'])) {
+		return 'Song with hash = "" not found!';
+	}
+	$hash = $_GET['hash'];
+
+	// Get a song by hash from the database
+	$songs = mysqli_query($dbLink,
+		'SELECT * FROM `songs`
+		WHERE `hash` = "' . $hash . '" LIMIT 1;');
+	if (mysqli_num_rows($songs) === 0) {
+		return 'Song with hash = "' . $hash . '" not found!';
+	}
+	while ($song = mysqli_fetch_assoc($songs)) {
+		// Find if the song is a remix then get sources hashes
+		$remixStr = '';
+		$remixResult = mysqli_query($dbLink,
+			'SELECT * FROM `remixes`
+			WHERE `song` = "' . $hash . '";');
+		if (mysqli_num_rows($remixResult) !== 0) {
+			while ($remixSource = mysqli_fetch_assoc($remixResult)) {
+				$remixStr .= '<div>
+							<input type="text" name="remix[]" placeholder="Source song hash" value="' . 
+								$remixSource['source'] . '" style="width: 88%;">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div>';
+			}
+		} else {
+			$remixStr = '<div>
+							<input type="text" name="remix[]" placeholder="Source song hash" style="width: 88%;">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div>';
+		}
+
+		// Parsing the drawing mode
+		$drawing_mode = '';
+		if (isset($song['drawing'])) {
+			$drawing = json_decode($song['drawing']);
+			if (json_last_error() === JSON_ERROR_NONE) {
+				$drawing_mode = $drawing->mode;
+				$drawing_scale = $drawing->scale;
+			}
+		}
+
+		// Form generation
+		return '<fieldset>
+			<legend align="center">Editing a song</legend>
+			<form name="form_editsong" method="post" action="?editsong">
+				<table class="table-form"><tbody>
+					<tr>
+						<th>Hash</th>
+						<td><input type="text" name="hash" value="' . $hash . '" readonly></td>
+					</tr>
+					<tr>
+						<th>Author</th>
+						<td><input type="text" name="author" value="' . $song['author'] . '"></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><input type="text" name="name" value="' . $song['name'] . '"></td>
+					</tr>
+					<tr>
+						<th>Description</th>
+						<td><textarea name="description">' . $song['description'] . '</textarea></td>
+					</tr>
+					<tr>
+						<th>URL</th>
+						<td><textarea name="url" placeholder="URL or [&quot;URL1&quot;,&quot;URL2&quot;,...]">' .
+							$song['url'] . '</textarea></td>
+					</tr>
+					<tr>
+						<th>Date</th>
+						<td><input type="text" name="date" placeholder="yyyy-mm-dd" value="' .
+							$song['date'] . '"></td>
+					</tr>
+					<tr>
+						<th>Mode</th>
+						<td>
+							<select name="mode">
+								<option value="Bytebeat"' .
+									($song['mode'] === 'Bytebeat' ? ' selected' : '') . '>Bytebeat</option>
+								<option value="Signed Bytebeat"' .
+									($song['mode'] === 'Signed Bytebeat' ? ' selected' : '') .
+									'>Signed Bytebeat</option>
+								<option value="Floatbeat"' .
+									($song['mode'] === 'Floatbeat' ? ' selected' : '') . '>Floatbeat</option>
+								<option value="Funcbeat"' .
+									($song['mode'] === 'Funcbeat' ? ' selected' : '') . '>Funcbeat</option>
+							</select>
+							<label><input type="checkbox" name="stereo"' .
+								($song['stereo'] ? ' checked' : '') . '> Stereo</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Sample rate (Hz)</th>
+						<td><input type="text" name="samplerate" value="' .
+							$song['samplerate'] . '"></td>
+					</tr>
+					<tr>
+						<th>Remix source</th>
+						<td>' . $remixStr .  '</td>
+					</tr>
+					<tr>
+						<th>Cover source name</th>
+						<td><input type="text" name="cover_name" value="' . $song['cover_name'] . '"></td>
+					</tr>
+					<tr>
+						<th>Cover source URL</th>
+						<td><input type="text" name="cover_url" value="' . $song['cover_url'] . '"></td>
+					</tr>
+					<tr>
+						<th>Code original</th>
+						<td><textarea name="code">' . $song['code'] . '</textarea></td>
+					</tr>
+					<tr>
+						<th>Code minified</th>
+						<td><textarea name="code_minified">' . $song['code_minified'] . '</textarea></td>
+					</tr>
+					<tr>
+						<th>Code formatted</th>
+						<td><textarea name="code_formatted">' . $song['code_formatted'] . '</textarea></td>
+					</tr>
+					<tr>
+						<th>Drawing mode, scale</th>
+						<td>
+							<select name="drawing_mode">
+								<option value=""' . ($drawing_mode ? ' selected' : '') . '>None</option>
+								<option value="Points"' .
+									($drawing_mode === 'Points' ? ' selected' : '') . '>Points</option>
+								<option value="Waveform"' .
+									($drawing_mode === 'Waveform' ? ' selected' : '') . '>Waveform</option>
+								<option value="Diagram"' .
+									($drawing_mode === 'Diagram' ? ' selected' : '') . '>Diagram</option>
+								<option value="Combined"' .
+									($drawing_mode === 'Combined' ? ' selected' : '') . '>Combined</option>
+							</select>
+							<input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8, ..." value="' .
+							(isset($drawing_scale) ? $drawing_scale : '' ) . '" style="width: auto;">
+						</td>
+					</tr>
+					<tr>
+						<th>Tags</th>
+						<td><input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]" value="' .
+							htmlspecialchars($song['tags']) . '"></td>
+					</tr>
+					<tr>
+						<th>Rating</th>
+						<td><select name="rating">
+							<option value="0"' .
+								($song['rating'] === '0' ? ' selected' : '') . '>No rating</option>
+							<option value="1"' .
+								($song['rating'] === '1' ? ' selected' : '') . '>Star</option>
+							<option value="2"' .
+								($song['rating'] === '2' ? ' selected' : '') . '>Yellow star</option>
+						</select></td>
+					</tr>
+				</tbody></table>
+				<input type="submit" value="Submit changes" style="float: left; margin: 2px;">
+			</form>
+			<form name="form_deletesong" method="post" action="?deletesong">
+				<input type="hidden" name="hash" value="' . $hash . '">
+				<input type="submit" value="Delete song" style="float: left; margin: 2px;" onclick="return confirm(\'Are you sure to delete this song?\')">
+			</form>
+		</fieldset>';
+	}
+}
+
 // Copy songs from library files into 'songs' and 'remixes' database tables
 function decodeLibraryFile($dbLink, $libName) {
 	$songsPath = './data/songs/';
@@ -130,7 +351,7 @@ function decodeLibraryFile($dbLink, $libName) {
 		fancyDie('File "' . $libFileName . '" does not exist.');
 	}
 	$songssArr = json_decode(gzdecode(file_get_contents($libFileName)));
-	if(json_last_error() !== JSON_ERROR_NONE) {
+	if (json_last_error() !== JSON_ERROR_NONE) {
 		fancyDie('File "' . $libFileName . '" has an error: ' . json_last_error_msg());
 	}
 
@@ -148,7 +369,8 @@ function decodeLibraryFile($dbLink, $libName) {
 			$codeFormatted = isset($song->fileForm) ?
 				file_get_contents($songsPath . 'formatted/' . $song->hash . '.js') : NULL;
 
-			$query = 'INSERT INTO `songs` (hash' .
+			// Write each song into 'songs' database table
+			mysqli_query($dbLink, 'INSERT INTO `songs` (hash' .
 				($author !== '' ? ', author' : '') .
 				(isset($song->name) ? ', name' : '') .
 				(isset($song->description) ? ', description' : '') .
@@ -182,10 +404,7 @@ function decodeLibraryFile($dbLink, $libName) {
 					$song->drawing->scale . '}"' : '') .
 				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
 				(isset($song->rating) ? ', ' . $song->rating : '') .
-			');';
-
-			// Write each song into 'songs' database table
-			mysqli_query($dbLink, $query);
+			');');
 
 			// Find remixes of songs and write to 'remixes' database table
 			if (isset($song->remix)) {
@@ -219,7 +438,7 @@ function filesToDatabase() {
 	$dbLink = getDBLink();
 
 	// Create new databsaes if not exist
-	if (mysqli_num_rows(mysqli_query($dbLink, 'SHOW TABLES LIKE "songs"')) === 0) {
+	if (mysqli_num_rows(mysqli_query($dbLink, 'SHOW TABLES LIKE "songs";')) === 0) {
 		mysqli_query($dbLink,
 			'CREATE TABLE songs (
 				`id` INT(10) UNSIGNED auto_increment NOT NULL,
@@ -266,7 +485,6 @@ function filesToDatabase() {
 	decodeLibraryFile($dbLink, 'all');
 	$message .= 'Libraries are copied into the `songs` and `remixes` database tables.<br>';
 
-	// Close database
 	mysqli_close($dbLink);
 	return $message . 'Success!';
 }
@@ -375,8 +593,8 @@ function databaseToFiles() {
 		$remixStr = '';
 		$sourcesArr = array();
 		$qSources = mysqli_query($dbLink,
-			"SELECT `source` FROM remixes
-			WHERE `song` = '" . $song['hash'] . "';");
+			'SELECT `source` FROM remixes
+			WHERE `song` = "' . $song['hash'] . '";');
 		if (mysqli_num_rows($qSources) !== 0) {
 			while ($source = mysqli_fetch_assoc($qSources)) {
 				$sourcesArr[] = $source['source'];
@@ -385,8 +603,8 @@ function databaseToFiles() {
 		// Finding sources for remixes
 		foreach ($sourcesArr as $sourceHash) {
 			$qSource = mysqli_query($dbLink,
-				"SELECT `author`, `name`, `url` FROM songs
-				WHERE `hash` = '" . $sourceHash . "';");
+				'SELECT `author`, `name`, `url` FROM songs
+				WHERE `hash` = "' . $sourceHash . '";');
 			if (mysqli_num_rows($qSource) !== 0) {
 				while ($source = mysqli_fetch_assoc($qSource)) {
 					$remixStr .= ($remixStr ? ',' : '') . '{"hash":"' . $sourceHash . '"' .
@@ -447,7 +665,7 @@ function databaseToFiles() {
 	$fileName = $pathLibrary . 'js-256.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
-		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
+		WHERE (`mode` = 'Bytebeat' OR `mode` = 'Signed Bytebeat')
 			AND `tags` LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
@@ -456,7 +674,7 @@ function databaseToFiles() {
 	$fileName = $pathLibrary . 'js-1k.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
-		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
+		WHERE (`mode` = 'Bytebeat' OR `mode` = 'Signed Bytebeat')
 			AND `tags` LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
 		ORDER BY `date`, `author`, `id`;"));
@@ -465,7 +683,7 @@ function databaseToFiles() {
 	$fileName = $pathLibrary . 'js-big.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
-		WHERE (mode = 'Bytebeat' OR mode = 'Signed Bytebeat')
+		WHERE (`mode` = 'Bytebeat' OR `mode` = 'Signed Bytebeat')
 			AND `tags` NOT LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"1k\"%'
 			AND `tags` NOT LIKE '%\"c\"%'
@@ -475,7 +693,7 @@ function databaseToFiles() {
 	$fileName = $pathLibrary . 'floatbeat.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
-		WHERE mode = 'Floatbeat'
+		WHERE `mode` = 'Floatbeat'
 			AND `tags` NOT LIKE '%\"big\"%'
 		ORDER BY `date`, `author`, `id`;"));
 
@@ -483,7 +701,7 @@ function databaseToFiles() {
 	$fileName = $pathLibrary . 'floatbeat-big.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
-		WHERE mode = 'Floatbeat'
+		WHERE `mode` = 'Floatbeat'
 			AND `tags` NOT LIKE '%\"256\"%'
 			AND `tags` NOT LIKE '%\"1k\"%'
 		ORDER BY `date`, `author`, `id`;"));
@@ -491,104 +709,139 @@ function databaseToFiles() {
 	// Library file with Funcbeat mode songs
 	$fileName = $pathLibrary . 'funcbeat.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
-		"SELECT `hash`, `author` FROM songs
-		WHERE mode = 'Funcbeat'
-		ORDER BY `date`, `author`, `id`;"));
+		'SELECT `hash`, `author` FROM songs
+		WHERE `mode` = "Funcbeat"
+		ORDER BY `date`, `author`, `id`;'));
 
-	// Close database
 	mysqli_close($dbLink);
 	return $message . '"' . $pathLibrary . '*.gz" files created.<br>Success!';
 }
 
 // Request to add a song to the database
-function addSong() {
+function addSong($isEdit) {
 	$dbLink = getDBLink();
 
-	$hash = bin2hex(random_bytes(16));
-	$author = trim($_POST['author']);
-	$name = trim($_POST['name']);
-	$description = trim($_POST['description']);
-	$url = trim($_POST['url']);
+	$hash = $isEdit ? $_POST['hash'] : bin2hex(random_bytes(16));
+	$author = addslashes(trim($_POST['author']));
+	$name = addslashes(trim($_POST['name']));
+	$description = addslashes(trim($_POST['description']));
+	$url = addslashes(trim($_POST['url']));
 	$date = trim($_POST['date']);
-	$coverName = trim($_POST['cover_name']);
-	$coverUrl = trim($_POST['cover_url']);
+	$mode = $_POST['mode'];
+	$sampleRate = trim($_POST['samplerate']);
+	$sampleRate = $sampleRate && is_numeric($sampleRate) ? $sampleRate : 8000;
+	$code = addslashes($_POST['code']);
+	$codeMinified = addslashes($_POST['code_minified']);
+	$codeFormatted = addslashes($_POST['code_formatted']);
+	$coverName = addslashes(trim($_POST['cover_name']));
+	$coverUrl = addslashes(trim($_POST['cover_url']));
+	$rating = $_POST['rating'];
+
+	// Drawing
 	$drawingMode = $_POST['drawing_mode'];
 	$drawingScale = trim($_POST['drawing_scale']);
-	$isDrawing = $drawingMode || $drawingScale !== '';
-	if ($drawingScale !== '' && !is_numeric($drawingScale)) {
-		fancyDie('Error: Drawing Scale must be a nubmer!');
-	}
-	$sampleRate = trim($_POST['samplerate']);
-	if (!is_numeric($sampleRate)) {
-		fancyDie('Error: Sample Rate must be a nubmer!');
-	}
+	$drawingScale = $drawingScale && is_numeric($drawingScale) ? $drawingScale : NULL;
+	$drawing = $drawingMode || isset($drawingScale) ? addslashes('{' .
+		($drawingMode ? '"mode":"' . $drawingMode . '"' : '') .
+		(isset($drawingScale) ? ($drawingMode ? ',' : '') . '"scale":"' . $drawingScale . '"' : '') .
+	'}') : '';
 
 	// Set tags field
-	$tagsArr = array();
-	$codeLen = $_POST['code'] ? strlen($_POST['code']) :
-		($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
-		($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
-	if ($codeLen) {
-		if ($codeLen <= 256) {
-			$tagsArr[] = '256';
-		} else if ($codeLen <= 1024) {
-			$tagsArr[] = '1k';
-		} else {
-			$tagsArr[] = 'big';
-		}
-	}
-	if ($_POST['tags']) {
-		$tags = json_decode($_POST['tags']);
-		if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
-			foreach ($tags as $tag) {
-				$tagsArr[] = $tag;
+	if ($isEdit) {
+		$tagsStr = addslashes(trim($_POST['tags']));
+	} else {
+		$tagsArr = array();
+		$codeLen = $_POST['code'] ? strlen($_POST['code']) :
+			($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
+			($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
+		if ($codeLen) {
+			if ($codeLen <= 256) {
+				$tagsArr[] = '256';
+			} else if ($codeLen <= 1024) {
+				$tagsArr[] = '1k';
+			} else {
+				$tagsArr[] = 'big';
 			}
-		} else {
-			$tagsArr[] = $_POST['tags'];
 		}
+		if ($_POST['tags']) {
+			$tags = json_decode($_POST['tags']);
+			if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
+				foreach ($tags as $tag) {
+					$tagsArr[] = $tag;
+				}
+			} else {
+				$tagsArr[] = $_POST['tags'];
+			}
+		}
+		$tagsStr = addslashes('["' . implode('","', $tagsArr) . '"]');
 	}
 
-	// Adding song info into `songs` table
-	$query = 'INSERT INTO `songs` (hash' .
-		($author ? ', author' : '') .
-		($name ? ', name' : '') .
-		($description ? ', description' : '') .
-		($url ? ', url' : '') .
-		($date ? ', date' : '') .
-		', mode, samplerate' .
-		(isset($_POST['stereo']) ? ', stereo' : '') .
-		($_POST['code'] ? ', code' : '') .
-		($_POST['code_minified'] ? ', code_minified' : '') . '' .
-		($_POST['code_formatted']  ? ', code_formatted' : '') .
-		($coverName  ? ', cover_name' : '') .
-		($coverUrl  ? ', cover_url' : '') .
-		($isDrawing ? ', drawing' : '') .
-		', tags' .
-		($_POST['rating'] ? ', rating' : '') . ')
-	VALUES ("' . $hash . '"' .
-		($author ? ', "' . addslashes($author) . '"' : '') .
-		($name ? ', "' . addslashes($name) . '"' : '') .
-		($description ? ', "' . addslashes($description) . '"' : '') .
-		($url ? ', "' . addslashes($url) . '"' : '') .
-		($date ? ', "' . $date . '"' : '') .
-		', "' . ($_POST['mode'] ? $_POST['mode'] : 'Bytebeat') . '"' .
-		', ' . ($sampleRate ? $sampleRate : 8000) .
-		(isset($_POST['stereo']) ? ', 1' : '') .
-		($_POST['code'] ? ', "' . addslashes($_POST['code']) . '"' : '') .
-		($_POST['code_minified']  ? ', "' . addslashes($_POST['code_minified'] ) . '"' : '') .
-		($_POST['code_formatted'] ? ', "' . addslashes($_POST['code_formatted']) . '"' : '') .
-		($coverName ? ', "' . addslashes($coverName) . '"' : '') .
-		($coverUrl ? ', "' . addslashes($coverUrl) . '"' : '') .
-		($isDrawing ? ', "' . addslashes('{' .
-			($drawingMode ? '"mode":"' . $drawingMode . '"' : '') .
-			($drawingScale !== '' ? ($drawingMode ? ',' : '') . '"scale":"' . $drawingScale . '"' : '') .
-		'}') . '"' : '') .
-		', "' . addslashes('["' . implode('","', $tagsArr) . '"]') . '"' .
-		($_POST['rating'] ? ', ' . $_POST['rating'] : '') . ');';
-	mysqli_query($dbLink, $query);
+	if ($isEdit) {
+		// Update existed song
+		mysqli_query($dbLink, 'UPDATE `songs` SET
+			`hash` = "' . $hash . '"' .
+			', `author` = ' . ($author ? '"' . $author . '"': 'NULL') .
+			', `name` = ' . ($name ? '"' . $name . '"' : 'NULL') .
+			', `description` = ' . ($description ? '"' . $description . '"' : 'NULL') .
+			', `url` = ' . ($url ? '"' . $url . '"' : 'NULL') .
+			', `date` = ' . ($date ? '"' . $date . '"' : 'NULL') .
+			', `mode` = "' . $mode . '"' .
+			', `sampleRate` = ' . $sampleRate .
+			', `stereo` = ' . (isset($_POST['stereo']) ? 1 : 'NULL') .
+			', `code` = ' . ($code ? '"' . $code . '"' : 'NULL') .
+			', `code_minified` = ' . ($codeMinified ? '"' . $codeMinified . '"' : 'NULL') .
+			', `code_formatted` = ' . ($codeFormatted ? '"' . $codeFormatted . '"' : 'NULL') .
+			', `cover_name` = ' . ($coverName ? '"' . $coverName . '"' : 'NULL') .
+			', `cover_url` = ' . ($coverUrl ? '"' . $coverUrl . '"' : 'NULL') .
+			', `drawing` = ' . ($drawing ? '"' . $drawing . '"' : 'NULL') .
+			', `tags` = "' . $tagsStr . '"' .
+			', `rating` = ' . ($rating ? $rating : 'NULL') . '
+		WHERE `hash` = "' . $hash . '";');
+	} else {
+		// Adding a new song
+		mysqli_query($dbLink, 'INSERT INTO `songs` (' .
+			'`hash`' .
+			($author ? ', `author`' : '') .
+			($name ? ', `name`' : '') .
+			($description ? ', `description`' : '') .
+			($url ? ', `url`' : '') .
+			($date ? ', `date`' : '') .
+			', `mode`, `samplerate`' .
+			(isset($_POST['stereo']) ? ', `stereo`' : '') .
+			($code ? ', `code`' : '') .
+			($codeMinified ? ', `code_minified`' : '') . '' .
+			($codeFormatted  ? ', `code_formatted`' : '') .
+			($coverName  ? ', `cover_name`' : '') .
+			($coverUrl  ? ', `cover_url`' : '') .
+			($drawing ? ', `drawing`' : '') .
+			', `tags`' .
+			($rating ? ', `rating`' : '') .
+		') VALUES ("' .
+			$hash . '"' .
+			($author ? ', "' . $author . '"' : '') .
+			($name ? ', "' . $name . '"' : '') .
+			($description ? ', "' . $description . '"' : '') .
+			($url ? ', "' . $url . '"' : '') .
+			($date ? ', "' . $date . '"' : '') .
+			', "' . $mode . '"' .
+			', ' . $sampleRate .
+			(isset($_POST['stereo']) ? ', 1' : '') .
+			($code ? ', "' . $code . '"' : '') .
+			($codeMinified ? ', "' . $codeMinified . '"' : '') .
+			($codeFormatted ? ', "' . $codeFormatted . '"' : '') .
+			($coverName ? ', "' . $coverName . '"' : '') .
+			($coverUrl ? ', "' . $coverUrl . '"' : '') .
+			($drawing ? ', "' . $drawing . '"' : '') .
+			', "' . $tagsStr . '"' .
+			($rating ? ', ' . $rating : '') . ');');
+	}
 
-	// Adding sources for remixes into `remixes` table
 	$sources = $_POST['remix'];
+	// Deleting old entries from `remixes` table
+	mysqli_query($dbLink,
+		'DELETE FROM `remixes`
+		WHERE `song` = "' . $hash . '";');
+	// Adding sources for remixes into `remixes` table
 	foreach ($sources as $source) {
 		if ($source) {
 			mysqli_query($dbLink,
@@ -597,9 +850,24 @@ function addSong() {
 		}
 	}
 
-	// Close database
 	mysqli_close($dbLink);
-	return 'Song added!';
+	return 'Song ' . ($isEdit ? 'added' : 'edited') . ' successfully!<br>
+		' . managementRequest();
+}
+
+// Request to delete a song from the database
+function deleteSong() {
+	$dbLink = getDBLink();
+	$hash = $_POST['hash'];
+	mysqli_query($dbLink,
+		'DELETE FROM `songs`
+		WHERE `hash` = "' . $hash . '";');
+	mysqli_query($dbLink,
+		'DELETE FROM `remixes`
+		WHERE `song` = "' . $hash . '";');
+	mysqli_close($dbLink);
+	return 'Song deleted!<br>
+		' . managementRequest();
 }
 
 /* ==[ Main ]============================================================================================== */
@@ -619,6 +887,7 @@ if (BYTEBEAT_ADMINPASS == '') {
 // Checking authorization when trying to login
 if (isset($_POST['managepassword'])) {
 	if ($_POST['managepassword'] === BYTEBEAT_ADMINPASS) {
+		setcookie('bytebeat_access', '1', time() + 2592000, '/'); // 30 days
 		$_SESSION['bytebeat'] = BYTEBEAT_ADMINPASS;
 	} else {
 		fancyDie('Login failed!');
@@ -655,9 +924,24 @@ if (isset($_GET['addsong_request'])) {
 	fancyDie(addSongForm());
 }
 
+// Request to call the form to edit a song
+if (isset($_GET['editsong_request'])) {
+	fancyDie(editSongForm());
+}
+
 // Request to add a song to the database
 if (isset($_GET['addsong'])) {
-	fancyDie(addSong());
+	fancyDie(addSong(false));
+}
+
+// Request to edit a song in the database
+if (isset($_GET['editsong'])) {
+	fancyDie(addSong(true));
+}
+
+// Request to delete a song from the database
+if (isset($_GET['deletesong'])) {
+	fancyDie(deleteSong());
 }
 
 // Redirection to Bytebeat Player page

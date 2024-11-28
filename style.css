@@ -297,6 +297,20 @@ option {
 	font-size: var(--font-size);
 }
 
+.table-form {
+	width: 500px;
+	text-align: start;
+}
+
+.table-form input[type="text"], .table-form textarea {
+	width: 100%;
+}
+
+.table-form th {
+	text-align: start;
+	background: #1f1e2b;
+}
+
 /* ==[ Containers ] ======================================================================================= */
 
 .container-expanded {
