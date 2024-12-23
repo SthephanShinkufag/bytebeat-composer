@@ -730,9 +730,9 @@ function addSong($isEdit) {
 	$mode = $_POST['mode'];
 	$sampleRate = trim($_POST['samplerate']);
 	$sampleRate = $sampleRate && is_numeric($sampleRate) ? $sampleRate : 8000;
-	$code = addslashes($_POST['code']);
-	$codeMinified = addslashes($_POST['code_minified']);
-	$codeFormatted = addslashes($_POST['code_formatted']);
+	$code = str_replace("\r", '', addslashes($_POST['code']));;
+	$codeMinified = str_replace("\r", '', addslashes($_POST['code_minified']));
+	$codeFormatted = str_replace("\r", '', addslashes($_POST['code_formatted']));
 	$coverName = addslashes(trim($_POST['cover_name']));
 	$coverUrl = addslashes(trim($_POST['cover_url']));
 	$rating = $_POST['rating'];
