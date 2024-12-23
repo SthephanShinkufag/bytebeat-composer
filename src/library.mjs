@@ -182,7 +182,8 @@ export class Library {
 			waitElem.remove();
 		} else {
 			const codeTextElem = buttonElem.parentNode.parentNode
-				.querySelector(buttonElem.dataset.type === 'minified' ? '.code-text-min' : '.code-text-orig');
+				.querySelector(buttonElem.dataset.type === 'minified' ?
+					':scope > .code-text-min' : ':scope > .code-text-orig');
 			globalThis.bytebeat.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
 				{ code: codeTextElem.innerText }));
 		}
