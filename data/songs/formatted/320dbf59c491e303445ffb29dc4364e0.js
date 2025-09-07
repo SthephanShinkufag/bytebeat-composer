@@ -16,12 +16,12 @@ fxSqr = [[
 	'4SSSSSSS4SSSSSSS4SSSSSSSSSSSSSSS'], [
 	'4CSSS0444CSSS4444CSSS0444CSSS444'], [
 	'4C   0444C   4444C   0444C   444']],
-gen = (char, octave) => 2112E4 * T / songSpeed * 2 ** ((parseInt(char, 36) + 12 * octave) / 12),
+gen = (char, octave) => 2112E4 * T / songSpeed * 2 ** (octave + parseInt(char, 36) / 12),
 tri = x => ((x ^ -(x >> 8 & 1)) & 240) * (
-		// Clicks remover
-		i = 32 * T % 32,
-		j = 32 * T % 1,
-		i < 1 || i >= 16 && i < 17 ? j : i > 31 || i > 15 && i < 16 ? 1 - j : 1),
+	// Clicks remover
+	i = 32 * T % 32,
+	j = 32 * T % 1,
+	i < 1 || i >= 16 && i < 17 ? j : i > 31 || i > 15 && i < 16 ? 1 - j : 1),
 getChar = (arr, T) => arr[T >> 5 & arr.length - 1][T & 31],
 sqr = (notesArr, fxArr, octave = 1, delay) => (
 	/* FX table:

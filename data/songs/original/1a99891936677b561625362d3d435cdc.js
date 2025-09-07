@@ -1,0 +1,96 @@
+SAMP_RATE = 48000,
+BPM = 142,
+beat = BPM * (t / SAMP_RATE) / 60,
+tick = fround(beat * 40) % 640,
+
+C = 261.63,
+Db = 277.18,
+D = 293.66,
+Eb = 311.13,
+EE = 329.63,
+F = 349.23,
+Gb = 369.99,
+G = 392.00,
+Ab = 415.30,
+A = 440.00,
+Bb = 466.16,
+B = 493.88,
+
+chan1_freq =
+	(tick >= 0 && tick < 40) * Gb + 
+	(tick >= 40 && tick < 80) * D +
+	(tick >= 80 && tick < 120) * A  + 
+	(tick >= 120 && tick < 140) * EE  +
+	(tick >= 140 && tick < 160) * Gb  + 
+	(tick >= 160 && tick < 280) * EE  +
+	(tick >= 280 && tick < 320) * G  + 
+	(tick >= 320 && tick < 360) * Gb  + 
+	(tick >= 360 && tick < 400) * G  +
+	(tick >= 400 && tick < 440) * Gb  + 
+	(tick >= 440 && tick < 460) * EE  +
+	(tick >= 460 && tick < 480) * Gb  + 
+	(tick >= 480 && tick < 600) * D  +
+	(tick >= 600 && tick < 640) * EE,
+chan1_amp = 30,
+chan1_pulse = 45,
+
+tick -= 20, 
+
+chan2_freq =
+	(tick >= 0 && tick < 40) * Gb  + 
+	(tick >= 40 && tick < 80) * D  +
+	(tick >= 80 && tick < 120) * A  + 
+	(tick >= 120 && tick < 140) * EE  +
+	(tick >= 140 && tick < 160) * Gb  + 
+	(tick >= 160 && tick < 280) * EE  +
+	(tick >= 280 && tick < 320) * G  + 
+	(tick >= 320 && tick < 360) * Gb  + 
+	(tick >= 360 && tick < 400) * G  +
+	(tick >= 400 && tick < 440) * Gb  + 
+	(tick >= 440 && tick < 460) * EE  +
+	(tick >= 460 && tick < 480) * Gb  + 
+	(tick >= 480 && tick < 600) * D  +
+	(tick >= 600 && tick < 640) * EE,
+chan2_amp = 6,
+chan2_pulse = 75,
+tick += 20,
+chan3_freq =
+	(tick >= 0 && tick < 20) * G / 8 +
+	(tick >= 20 && tick < 40) * D / 2 +
+	(tick >= 40 && tick < 60) * G / 8 +
+	(tick >= 60 && tick < 80) * D / 2 + 
+	(tick >= 80 && tick < 100) * G / 8 +
+	(tick >= 100 && tick < 120) * D / 2 +
+	(tick >= 120 && tick < 140) * G / 8 +
+	(tick >= 140 && tick < 160) * A / 4 +
+	(tick >= 160 && tick < 180) * A / 8 +
+	(tick >= 180 && tick < 200) * Gb / 2 +
+	(tick >= 200 && tick < 220) * A / 8 +
+	(tick >= 220 && tick < 240) * Gb / 2 +
+	(tick >= 240 && tick < 260) * A / 8 +
+	(tick >= 260 && tick < 280) * Gb / 2 +
+	(tick >= 280 && tick < 300) * A / 8 +
+	(tick >= 300 && tick < 320) * Db / 2 +
+	(tick >= 320 && tick < 340) * B / 8 +
+	(tick >= 340 && tick < 360) * D / 2 +
+	(tick >= 360 && tick < 380) * B / 8 +
+	(tick >= 380 && tick < 400) * D / 2 +
+	(tick >= 400 && tick < 420) * B / 8 +
+	(tick >= 420 && tick < 440) * D / 2 +
+	(tick >= 440 && tick < 460) * B / 8 +
+	(tick >= 460 && tick < 480) * Db / 2 +
+	(tick >= 480 && tick < 500) * D / 4 + 
+	(tick >= 500 && tick < 520) * A / 4 +
+	(tick >= 520 && tick < 540) * D / 4 + 
+	(tick >= 540 && tick < 560) * A / 4 +
+	(tick >= 560 && tick < 580) * D / 4 + 
+	(tick >= 580 && tick < 600) * A / 4 +
+	(tick >= 600 && tick < 620) * D / 4 + 
+	(tick >= 620 && tick < 640) * Gb / 4,
+chan3_amp = 60,
+
+128 + chan1_amp * 2 * (int(chan1_freq * t / SAMP_RATE * 256) % 256 <= chan1_pulse * 256 / 100) - chan1_amp +
+	3 / 4 * (chan1_amp / 64) * (abs(((255 * chan1_freq * 2 * t / SAMP_RATE + 128) & 255) - 128) - 64) +
+	chan2_amp * 2 * (int(chan2_freq * t / SAMP_RATE * 256) % 256 <= chan2_pulse * 256 / 100) - chan2_amp +
+	3 / 4 * (chan2_amp / 64) * (abs(((255 * chan2_freq * 2 * t / SAMP_RATE + 128) & 255) - 128) - 64) +
+	(chan3_amp / 128) * (((255 * chan3_freq * t / SAMP_RATE) & 255) - 128)
