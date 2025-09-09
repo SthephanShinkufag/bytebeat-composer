@@ -229,15 +229,19 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>Author</th>
-						<td><input type="text" name="author" value="' . $song['author'] . '"></td>
+						<td><input type="text" name="author" value="' .
+							(isset($song['author']) ? htmlspecialchars($song['author']) : '') . '"></td>
 					</tr>
 					<tr>
 						<th>Name</th>
-						<td><input type="text" name="name" value="' . $song['name'] . '"></td>
+						<td><input type="text" name="name" value="' .
+							(isset($song['name']) ? htmlspecialchars($song['name']) : '') . '"></td>
 					</tr>
 					<tr>
 						<th>Description</th>
-						<td><textarea name="description">' . $song['description'] . '</textarea></td>
+						<td><textarea name="description">' .
+							(isset($song['description']) ? htmlspecialchars($song['description']) : '') .
+							'</textarea></td>
 					</tr>
 					<tr>
 						<th>URL</th>
@@ -278,7 +282,9 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>Cover source name</th>
-						<td><input type="text" name="cover_name" value="' . $song['cover_name'] . '"></td>
+						<td><input type="text" name="cover_name" value="' .
+							(isset($song['cover_name']) ? htmlspecialchars($song['cover_name']) : '') .
+							'"></td>
 					</tr>
 					<tr>
 						<th>Cover source URL</th>
