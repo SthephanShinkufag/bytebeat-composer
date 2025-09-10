@@ -304,11 +304,28 @@ option {
 
 .table-form input[type="text"], .table-form textarea {
 	width: 100%;
+	margin: 0;
+}
+
+.table-form td {
+	display: flex;
+	gap: 4px;
 }
 
 .table-form th {
 	text-align: start;
 	background: #1f1e2b;
+}
+
+.table-form-added {
+	display: block !important;
+}
+
+.table-form-added > div {
+	display: flex;
+	gap: 4px;
+	width: 100%;
+	white-space: nowrap;
 }
 
 /* ==[ Containers ] ======================================================================================= */

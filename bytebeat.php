@@ -62,7 +62,7 @@ function logoutRequest() {
 
 // Management panel
 function managementRequest() {
-	return '<fieldset style="display: flex;flex-direction: column;gap: 4px;">
+	return '<fieldset style="display: flex; flex-direction: column;gap: 4px;">
 			<legend align="center">Select an action to manage the library</legend>
 			<a href="?addsong_request" class="control-button">Add a song</a>
 			<a href="?files_to_db" class="control-button" onclick="return confirm(\'Are you sure to copy songs from library files into the database?\')">Migrate to database</a>
@@ -78,8 +78,11 @@ function addSongForm() {
 			<form name="form_addsong" method="post" action="?addsong">
 				<table class="table-form"><tbody>
 					<tr>
-						<th>Author</th>
-						<td><input type="text" name="author"></td>
+						<th>Author, date</th>
+						<td>
+							<input type="text" name="author">
+							<input type="date" name="date" placeholder="yyyy-mm-dd">
+						</td>
 					</tr>
 					<tr>
 						<th>Name</th>
@@ -91,18 +94,14 @@ function addSongForm() {
 					</tr>
 					<tr>
 						<th>URL</th>
-						<td><div>
-							<input type="text" name="url[]" placeholder="URL" style="width: 88%;">
+						<td class="table-form-added"><div>
+							<input type="text" name="url[]" placeholder="URL">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div></td>
 					</tr>
 					<tr>
-						<th>Date</th>
-						<td><input type="date" name="date" placeholder="yyyy-mm-dd"></td>
-					</tr>
-					<tr>
 						<th>Mode</th>
-						<td style="display:flex; gap: 4px;">
+						<td>
 							<select name="mode">
 								<option value="Bytebeat">Bytebeat</option>
 								<option value="Signed Bytebeat">Signed Bytebeat</option>
@@ -114,19 +113,18 @@ function addSongForm() {
 						</td>
 					</tr>
 					<tr>
-						<th>Remix</th>
-						<td><div>
-							<input type="text" name="remix[]" placeholder="Source song hash" style="width: 88%;">
+						<th>Remix source</th>
+						<td class="table-form-added"><div>
+							<input type="text" name="remix[]" placeholder="Remix source song hash">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div></td>
 					</tr>
 					<tr>
-						<th>Cover name</th>
-						<td><input type="text" name="cover_name"></td>
-					</tr>
-					<tr>
-						<th>Cover URL</th>
-						<td><input type="text" name="cover_url"></td>
+						<th>Cover source</th>
+						<td>
+							<input type="text" name="cover_name" placeholder="Cover source name">
+							<input type="text" name="cover_url" placeholder="Cover source URL">
+						</td>
 					</tr>
 					<tr>
 						<th>Original code</th>
@@ -155,7 +153,10 @@ function addSongForm() {
 					</tr>
 					<tr>
 						<th>Tags</th>
-						<td><input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]"></td>
+						<td class="table-form-added"><div>
+							<input type="text" name="tags[]" placeholder="Tag">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div></td>
 					</tr>
 					<tr>
 						<th>Rating</th>
@@ -187,25 +188,36 @@ function editSongForm() {
 		return 'Song with hash = "' . $hash . '" not found!';
 	}
 	while ($song = mysqli_fetch_assoc($songs)) {
+		// Make URL fields
 		$urlStr = '';
 		$url = $song['url'];
-		if(isset($url) && str_starts_with($url, '["')) {
+		if (isset($url) && str_starts_with($url, '["')) {
 			$urlArr = json_decode($url);
 			if (json_last_error() === JSON_ERROR_NONE && is_array($urlArr)) {
 				foreach ($urlArr as $url_) {
 					$urlStr .= '<div>
-							<input type="text" name="url[]" placeholder="URL" value="' .
-								$url_ . '" style="width: 88%;">
+							<input type="text" name="url[]" placeholder="URL" value="' . $url_ . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 				}
 			}
 		} else {
 			$urlStr .= '<div>
-					<input type="text" name="url[]" placeholder="URL" value="' .
-						$url . '" style="width: 88%;">
-					<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
-				</div>';
+							<input type="text" name="url[]" placeholder="URL" value="' . $url . '">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div>';
+		}
+
+		// Make tags fields
+		$tagsStr = '';
+		$tags = json_decode($song['tags']);
+		if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
+			foreach ($tags as $tag) {
+				$tagsStr .= '<div>
+							<input type="text" name="tags[]" placeholder="Tag" value="' . $tag . '">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div>';
+			}
 		}
 
 		// Find if the song is a remix then get sources hashes
@@ -216,14 +228,14 @@ function editSongForm() {
 		if (mysqli_num_rows($remixResult) !== 0) {
 			while ($remixSource = mysqli_fetch_assoc($remixResult)) {
 				$remixStr .= '<div>
-							<input type="text" name="remix[]" placeholder="Source song hash" value="' .
-								$remixSource['source'] . '" style="width: 88%;">
+							<input type="text" name="remix[]" placeholder="Remix source song hash" value="' .
+								$remixSource['source'] . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 			}
 		} else {
 			$remixStr = '<div>
-							<input type="text" name="remix[]" placeholder="Source song hash" style="width: 88%;">
+							<input type="text" name="remix[]" placeholder="Remix source song hash">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 		}
@@ -248,9 +260,13 @@ function editSongForm() {
 						<td><input type="text" name="hash" value="' . $hash . '" readonly></td>
 					</tr>
 					<tr>
-						<th>Author</th>
-						<td><input type="text" name="author" value="' .
-							(isset($song['author']) ? htmlspecialchars($song['author']) : '') . '"></td>
+						<th>Author, date</th>
+						<td>
+							<input type="text" name="author" value="' .
+								(isset($song['author']) ? htmlspecialchars($song['author']) : '') . '">
+							<input type="date" name="date" placeholder="yyyy-mm-dd" value="' .
+								$song['date'] . '">
+						</td>
 					</tr>
 					<tr>
 						<th>Name</th>
@@ -265,16 +281,11 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>URL</th>
-						<td>' . $urlStr . '</td>
-					</tr>
-					<tr>
-						<th>Date</th>
-						<td><input type="date" name="date" placeholder="yyyy-mm-dd" value="' .
-							$song['date'] . '"></td>
+						<td class="table-form-added">' . $urlStr . '</td>
 					</tr>
 					<tr>
 						<th>Mode</th>
-						<td style="display:flex; gap: 4px;">
+						<td>
 							<select name="mode">
 								<option value="Bytebeat"' .
 									($song['mode'] === 'Bytebeat' ? ' selected' : '') . '>Bytebeat</option>
@@ -294,17 +305,17 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>Remix source</th>
-						<td>' . $remixStr .  '</td>
+						<td class="table-form-added">' . $remixStr .  '</td>
 					</tr>
 					<tr>
 						<th>Cover source</th>
-						<td><input type="text" name="cover_name" value="' .
-							(isset($song['cover_name']) ? htmlspecialchars($song['cover_name']) : '') .
-							'"></td>
-					</tr>
-					<tr>
-						<th>Cover source URL</th>
-						<td><input type="text" name="cover_url" value="' . $song['cover_url'] . '"></td>
+						<td>
+							<input type="text" name="cover_name" value="' .
+								(isset($song['cover_name']) ? htmlspecialchars($song['cover_name']) : '') .
+								'" placeholder="Cover source name">
+							<input type="text" name="cover_url" value="' .
+								$song['cover_url'] . '" placeholder="Cover source URL">
+						</td>
 					</tr>
 					<tr>
 						<th>Original code</th>
@@ -320,7 +331,7 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>Draw mode/scale</th>
-						<td style="display: flex; gap: 4px;">
+						<td>
 							<select name="drawing_mode">
 								<option value=""' . ($drawing_mode ? ' selected' : '') . '>None</option>
 								<option value="Points"' .
@@ -338,8 +349,7 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>Tags</th>
-						<td><input type="text" name="tags" placeholder="Tag or [&quot;tag1&quot;,&quot;tag2&quot;,...]" value="' .
-							htmlspecialchars($song['tags']) . '"></td>
+						<td class="table-form-added">' . $tagsStr .'</td>
 					</tr>
 					<tr>
 						<th>Rating</th>
@@ -771,34 +781,26 @@ function addSong($isEdit) {
 	'}') : '';
 
 	// Set tags field
-	if ($isEdit) {
-		$tagsStr = addslashes(trim($_POST['tags']));
-	} else {
-		$tagsArr = array();
-		$codeLen = $_POST['code'] ? strlen($_POST['code']) :
-			($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
-			($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
-		if ($codeLen) {
-			if ($codeLen <= 256) {
-				$tagsArr[] = '256';
-			} else if ($codeLen <= 1024) {
-				$tagsArr[] = '1k';
-			} else {
-				$tagsArr[] = 'big';
-			}
+	$tagsArr = array();
+	$codeLen = $_POST['code'] ? strlen($_POST['code']) :
+		($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
+		($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
+	if ($codeLen) {
+		if ($codeLen <= 256) {
+			$tagsArr[] = '256';
+		} else if ($codeLen <= 1024) {
+			$tagsArr[] = '1k';
+		} else {
+			$tagsArr[] = 'big';
 		}
-		if ($_POST['tags']) {
-			$tags = json_decode($_POST['tags']);
-			if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
-				foreach ($tags as $tag) {
-					$tagsArr[] = $tag;
-				}
-			} else {
-				$tagsArr[] = $_POST['tags'];
-			}
-		}
-		$tagsStr = addslashes('["' . implode('","', $tagsArr) . '"]');
 	}
+	$tags = array_filter($_POST['tags']);
+	if ($tags) {
+		foreach ($tags as $tag) {
+			$tagsArr[] = $tag;
+		}
+	}
+	$tagsStr = addslashes('["' . implode('","', array_unique($tagsArr)) . '"]');
 
 	if ($isEdit) {
 		// Update existed song
