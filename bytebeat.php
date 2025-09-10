@@ -91,27 +91,27 @@ function addSongForm() {
 					</tr>
 					<tr>
 						<th>URL</th>
-						<td><textarea name="url" placeholder="URL or [&quot;URL1&quot;,&quot;URL2&quot;,...]"></textarea></td>
+						<td><div>
+							<input type="text" name="url[]" placeholder="URL" style="width: 88%;">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div></td>
 					</tr>
 					<tr>
 						<th>Date</th>
-						<td><input type="text" name="date" placeholder="yyyy-mm-dd"></td>
+						<td><input type="date" name="date" placeholder="yyyy-mm-dd"></td>
 					</tr>
 					<tr>
 						<th>Mode</th>
-						<td>
+						<td style="display:flex; gap: 4px;">
 							<select name="mode">
 								<option value="Bytebeat">Bytebeat</option>
 								<option value="Signed Bytebeat">Signed Bytebeat</option>
 								<option value="Floatbeat">Floatbeat</option>
 								<option value="Funcbeat">Funcbeat</option>
 							</select>
-							<label><input type="checkbox" name="stereo"> Stereo</label>
+							<input type="text" name="samplerate" placeholder="Sample rate (Hz)">
+							<label style="white-space: nowrap;"><input type="checkbox" name="stereo"> Stereo</label>
 						</td>
-					</tr>
-					<tr>
-						<th>Sample rate (Hz)</th>
-						<td><input type="text" name="samplerate"></td>
 					</tr>
 					<tr>
 						<th>Remix</th>
@@ -129,30 +129,29 @@ function addSongForm() {
 						<td><input type="text" name="cover_url"></td>
 					</tr>
 					<tr>
-						<th>Code original</th>
+						<th>Original code</th>
 						<td><textarea name="code"></textarea></td>
 					</tr>
 					<tr>
-						<th>Code minified</th>
+						<th>Minified code</th>
 						<td><textarea name="code_minified"></textarea></td>
 					</tr>
 					<tr>
-						<th>Code formatted</th>
+						<th>Formatted code</th>
 						<td><textarea name="code_formatted"></textarea></td>
 					</tr>
 					<tr>
-						<th>Drawing mode</th>
-						<td><select name="drawing_mode">
-							<option value="">None</option>
-							<option value="Points">Points</option>
-							<option value="Waveform">Waveform</option>
-							<option value="Diagram">Diagram</option>
-							<option value="Combined">Combined</option>
-						</select></td>
-					</tr>
-					<tr>
-						<th>Drawing scale</th>
-						<td><input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8, 4=1/16 ..."></td>
+						<th>Draw mode/scale</th>
+						<td style="display: flex; gap: 4px;">
+							<select name="drawing_mode">
+								<option value="">None</option>
+								<option value="Points">Points</option>
+								<option value="Waveform">Waveform</option>
+								<option value="Diagram">Diagram</option>
+								<option value="Combined">Combined</option>
+							</select>
+							<input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8 ...">
+						</td>
 					</tr>
 					<tr>
 						<th>Tags</th>
@@ -188,6 +187,27 @@ function editSongForm() {
 		return 'Song with hash = "' . $hash . '" not found!';
 	}
 	while ($song = mysqli_fetch_assoc($songs)) {
+		$urlStr = '';
+		$url = $song['url'];
+		if(isset($url) && str_starts_with($url, '["')) {
+			$urlArr = json_decode($url);
+			if (json_last_error() === JSON_ERROR_NONE && is_array($urlArr)) {
+				foreach ($urlArr as $url_) {
+					$urlStr .= '<div>
+							<input type="text" name="url[]" placeholder="URL" value="' .
+								$url_ . '" style="width: 88%;">
+							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+						</div>';
+				}
+			}
+		} else {
+			$urlStr .= '<div>
+					<input type="text" name="url[]" placeholder="URL" value="' .
+						$url . '" style="width: 88%;">
+					<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
+				</div>';
+		}
+
 		// Find if the song is a remix then get sources hashes
 		$remixStr = '';
 		$remixResult = mysqli_query($dbLink,
@@ -196,7 +216,7 @@ function editSongForm() {
 		if (mysqli_num_rows($remixResult) !== 0) {
 			while ($remixSource = mysqli_fetch_assoc($remixResult)) {
 				$remixStr .= '<div>
-							<input type="text" name="remix[]" placeholder="Source song hash" value="' . 
+							<input type="text" name="remix[]" placeholder="Source song hash" value="' .
 								$remixSource['source'] . '" style="width: 88%;">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
@@ -245,17 +265,16 @@ function editSongForm() {
 					</tr>
 					<tr>
 						<th>URL</th>
-						<td><textarea name="url" placeholder="URL or [&quot;URL1&quot;,&quot;URL2&quot;,...]">' .
-							$song['url'] . '</textarea></td>
+						<td>' . $urlStr . '</td>
 					</tr>
 					<tr>
 						<th>Date</th>
-						<td><input type="text" name="date" placeholder="yyyy-mm-dd" value="' .
+						<td><input type="date" name="date" placeholder="yyyy-mm-dd" value="' .
 							$song['date'] . '"></td>
 					</tr>
 					<tr>
 						<th>Mode</th>
-						<td>
+						<td style="display:flex; gap: 4px;">
 							<select name="mode">
 								<option value="Bytebeat"' .
 									($song['mode'] === 'Bytebeat' ? ' selected' : '') . '>Bytebeat</option>
@@ -267,21 +286,18 @@ function editSongForm() {
 								<option value="Funcbeat"' .
 									($song['mode'] === 'Funcbeat' ? ' selected' : '') . '>Funcbeat</option>
 							</select>
-							<label><input type="checkbox" name="stereo"' .
+							<input type="text" name="samplerate" value="' .
+								$song['samplerate'] . '" placeholder="Sample rate (Hz)">
+							<label style="white-space: nowrap;"><input type="checkbox" name="stereo"' .
 								($song['stereo'] ? ' checked' : '') . '> Stereo</label>
 						</td>
-					</tr>
-					<tr>
-						<th>Sample rate (Hz)</th>
-						<td><input type="text" name="samplerate" value="' .
-							$song['samplerate'] . '"></td>
 					</tr>
 					<tr>
 						<th>Remix source</th>
 						<td>' . $remixStr .  '</td>
 					</tr>
 					<tr>
-						<th>Cover source name</th>
+						<th>Cover source</th>
 						<td><input type="text" name="cover_name" value="' .
 							(isset($song['cover_name']) ? htmlspecialchars($song['cover_name']) : '') .
 							'"></td>
@@ -291,20 +307,20 @@ function editSongForm() {
 						<td><input type="text" name="cover_url" value="' . $song['cover_url'] . '"></td>
 					</tr>
 					<tr>
-						<th>Code original</th>
+						<th>Original code</th>
 						<td><textarea name="code">' . $song['code'] . '</textarea></td>
 					</tr>
 					<tr>
-						<th>Code minified</th>
+						<th>Minified code</th>
 						<td><textarea name="code_minified">' . $song['code_minified'] . '</textarea></td>
 					</tr>
 					<tr>
-						<th>Code formatted</th>
+						<th>Formatted code</th>
 						<td><textarea name="code_formatted">' . $song['code_formatted'] . '</textarea></td>
 					</tr>
 					<tr>
-						<th>Drawing mode, scale</th>
-						<td>
+						<th>Draw mode/scale</th>
+						<td style="display: flex; gap: 4px;">
 							<select name="drawing_mode">
 								<option value=""' . ($drawing_mode ? ' selected' : '') . '>None</option>
 								<option value="Points"' .
@@ -317,7 +333,7 @@ function editSongForm() {
 									($drawing_mode === 'Combined' ? ' selected' : '') . '>Combined</option>
 							</select>
 							<input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8, ..." value="' .
-							(isset($drawing_scale) ? $drawing_scale : '' ) . '" style="width: auto;">
+								(isset($drawing_scale) ? $drawing_scale : '' ) . '">
 						</td>
 					</tr>
 					<tr>
@@ -731,7 +747,9 @@ function addSong($isEdit) {
 	$author = addslashes(trim($_POST['author']));
 	$name = addslashes(trim($_POST['name']));
 	$description = addslashes(trim($_POST['description']));
-	$url = addslashes(trim($_POST['url']));
+	$url = array_filter($_POST['url']);
+	$ulrStr = $url && array_key_exists(0, $url) ?
+		addslashes(count($url) > 1 ? '["' . implode('","', $url) . '"]' : trim($url[0])) : NULL;
 	$date = trim($_POST['date']);
 	$mode = $_POST['mode'];
 	$sampleRate = trim($_POST['samplerate']);
@@ -789,7 +807,7 @@ function addSong($isEdit) {
 			', `author` = ' . ($author ? '"' . $author . '"': 'NULL') .
 			', `name` = ' . ($name ? '"' . $name . '"' : 'NULL') .
 			', `description` = ' . ($description ? '"' . $description . '"' : 'NULL') .
-			', `url` = ' . ($url ? '"' . $url . '"' : 'NULL') .
+			', `url` = ' . ($ulrStr ? '"' . $ulrStr . '"' : 'NULL') .
 			', `date` = ' . ($date ? '"' . $date . '"' : 'NULL') .
 			', `mode` = "' . $mode . '"' .
 			', `sampleRate` = ' . $sampleRate .
@@ -810,7 +828,7 @@ function addSong($isEdit) {
 			($author ? ', `author`' : '') .
 			($name ? ', `name`' : '') .
 			($description ? ', `description`' : '') .
-			($url ? ', `url`' : '') .
+			($ulrStr ? ', `url`' : '') .
 			($date ? ', `date`' : '') .
 			', `mode`, `samplerate`' .
 			(isset($_POST['stereo']) ? ', `stereo`' : '') .
@@ -827,7 +845,7 @@ function addSong($isEdit) {
 			($author ? ', "' . $author . '"' : '') .
 			($name ? ', "' . $name . '"' : '') .
 			($description ? ', "' . $description . '"' : '') .
-			($url ? ', "' . $url . '"' : '') .
+			($ulrStr ? ', "' . $ulrStr . '"' : '') .
 			($date ? ', "' . $date . '"' : '') .
 			', "' . $mode . '"' .
 			', ' . $sampleRate .
