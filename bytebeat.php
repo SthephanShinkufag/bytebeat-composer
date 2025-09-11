@@ -929,7 +929,7 @@ if (BYTEBEAT_TIMEZONE != '') {
 }
 global $bytebeat_admins;
 if (!isset($bytebeat_admins) || !is_array($bytebeat_admins) || !count($bytebeat_admins)) {
-	fancyDie('settings.php: BYTEBEAT_ADMINPASS must be configured.');
+	fancyDie('settings.php: $bytebeat_admins array must be configured.');
 }
 
 // Checking authorization when trying to login
