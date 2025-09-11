@@ -35,7 +35,8 @@ function fancyDie($message) {
 	</div>
 	<br>
 	<hr>
-	<a href="javascript: window.history.go(-1);">Return</a>
+	[<a href="./">Go to player</a>]
+	[<a href="javascript: window.history.go(-1);">Return</a>]
 </body>
 </html>');
 }
@@ -64,8 +65,9 @@ function logoutRequest() {
 function managementRequest() {
 	return '<fieldset style="display: flex; flex-direction: column;gap: 4px;">
 			<legend align="center">Select an action to manage the library</legend>
-			<a href="?addsong_request" class="control-button">Add a song</a>
-			<a href="?files_to_db" class="control-button" onclick="return confirm(\'Are you sure to copy songs from library files into the database?\')">Migrate to database</a>
+			<a href="?addsong_request" class="control-button">Add a song</a>' .
+			(!BYTEBEAT_DBMAKE ? '' : '
+			<a href="?files_to_db" class="control-button" onclick="return confirm(\'Are you sure to copy songs from library files into the database?\')">Make database</a>') . '
 			<a href="?db_to_files" class="control-button">Make library files</a>
 			<a href="?logout" class="control-button">Logout</a>
 		</fieldset>';
@@ -418,6 +420,8 @@ function decodeLibraryFile($dbLink, $libName) {
 				(isset($song->drawing) ? ', drawing' : '') .
 				', tags' .
 				(isset($song->rating) ? ', rating' : '') .
+				(isset($song->user_added) ? ', user_added' : '') .
+				(isset($song->date_added) ? ', date_added' : '') .
 			') VALUES ("' . $song->hash . '"' .
 				($author !== '' ? ', "' . addslashes($author) . '"' : '') .
 				(isset($song->name) ? ', "' . addslashes($song->name) . '"' : '') .
@@ -436,6 +440,8 @@ function decodeLibraryFile($dbLink, $libName) {
 					$song->drawing->scale . '}"' : '') .
 				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
 				(isset($song->rating) ? ', ' . $song->rating : '') .
+				(isset($song->user_added) ? ', "' . addslashes($song->user_added) . '"' : '') .
+				(isset($song->date_added) ? ', "' . $song->date_added . '"' : '') .
 			');');
 
 			// Find remixes of songs and write to 'remixes' database table
@@ -491,6 +497,8 @@ function filesToDatabase() {
 				`drawing` VARCHAR(50) NULL,
 				`tags` VARCHAR(255) NULL,
 				`rating` CHAR NULL,
+				`user_added` VARCHAR(255) NULL,
+				`date_added` VARCHAR(10) NULL,
 				PRIMARY KEY (id),
 				KEY `hash` (hash)
 			)
@@ -595,7 +603,9 @@ function databaseToFiles() {
 			`cover_url`,
 			`drawing`,
 			`tags`,
-			`rating`
+			`rating`,
+			`user_added`,
+			`date_added`
 		FROM songs ORDER BY `author`, `date`, `id`;');
 
 	// Create a json string for each song and put it into an associative array by hash
@@ -669,6 +679,8 @@ function databaseToFiles() {
 			(isset($song['drawing']) ? ',"drawing":' . $song['drawing'] : '') .
 			(isset($song['tags']) ? ',"tags":' . $song['tags'] : '') .
 			(isset($song['rating']) ? ',"rating":' . $song['rating'] : '') .
+			(isset($song['user_added']) ? ',"user_added": "' . $song['user_added'] . '"' : '') .
+			(isset($song['date_added']) ? ',"date_added": "' . $song['date_added'] . '"' : '') .
 		'}';
 	}
 
@@ -751,6 +763,7 @@ function databaseToFiles() {
 
 // Request to add a song to the database
 function addSong($isEdit) {
+	global $bytebeat_admins;
 	$dbLink = getDBLink();
 
 	$hash = $isEdit ? $_POST['hash'] : bin2hex(random_bytes(16));
@@ -770,6 +783,8 @@ function addSong($isEdit) {
 	$coverName = addslashes(trim($_POST['cover_name']));
 	$coverUrl = addslashes(trim($_POST['cover_url']));
 	$rating = $_POST['rating'];
+	$userAdded = addslashes(array_search($_SESSION['bytebeat'], $bytebeat_admins, true));
+	$dateAdded = date('Y-m-d');
 
 	// Drawing
 	$drawingMode = $_POST['drawing_mode'];
@@ -821,7 +836,9 @@ function addSong($isEdit) {
 			', `cover_url` = ' . ($coverUrl ? '"' . $coverUrl . '"' : 'NULL') .
 			', `drawing` = ' . ($drawing ? '"' . $drawing . '"' : 'NULL') .
 			', `tags` = "' . $tagsStr . '"' .
-			', `rating` = ' . ($rating ? $rating : 'NULL') . '
+			', `rating` = ' . ($rating ? $rating : 'NULL') .
+			', `user_added` = "' . $userAdded . '"' .
+			', `date_added` = "' . $dateAdded . '"
 		WHERE `hash` = "' . $hash . '";');
 	} else {
 		// Adding a new song
@@ -842,7 +859,9 @@ function addSong($isEdit) {
 			($drawing ? ', `drawing`' : '') .
 			', `tags`' .
 			($rating ? ', `rating`' : '') .
-		') VALUES ("' .
+			', `user_added`' .
+			', `date_added`
+		) VALUES ("' .
 			$hash . '"' .
 			($author ? ', "' . $author . '"' : '') .
 			($name ? ', "' . $name . '"' : '') .
@@ -859,7 +878,9 @@ function addSong($isEdit) {
 			($coverUrl ? ', "' . $coverUrl . '"' : '') .
 			($drawing ? ', "' . $drawing . '"' : '') .
 			', "' . $tagsStr . '"' .
-			($rating ? ', ' . $rating : '') . ');');
+			($rating ? ', ' . $rating : '') .
+			', "' . $userAdded . '"' .
+			', "' . $dateAdded . '");');
 	}
 
 	$sources = $_POST['remix'];
@@ -906,15 +927,18 @@ require 'settings.php';
 if (BYTEBEAT_TIMEZONE != '') {
 	date_default_timezone_set(BYTEBEAT_TIMEZONE);
 }
-if (BYTEBEAT_ADMINPASS == '') {
+global $bytebeat_admins;
+if (!isset($bytebeat_admins) || !is_array($bytebeat_admins) || !count($bytebeat_admins)) {
 	fancyDie('settings.php: BYTEBEAT_ADMINPASS must be configured.');
 }
 
 // Checking authorization when trying to login
 if (isset($_POST['managepassword'])) {
-	if ($_POST['managepassword'] === BYTEBEAT_ADMINPASS) {
+	$providedPassword = $_POST['managepassword'];
+	$providedName = array_search($providedPassword, $bytebeat_admins, true);
+	if ($providedName) {
 		setcookie('bytebeat_access', '1', time() + 2592000, '/'); // 30 days
-		$_SESSION['bytebeat'] = BYTEBEAT_ADMINPASS;
+		$_SESSION['bytebeat'] = $bytebeat_admins[$providedName];
 	} else {
 		fancyDie('Login failed!');
 	}
@@ -936,7 +960,7 @@ if (isset($_GET['logout'])) {
 }
 
 // Request to copy songs from library files into the database
-if (isset($_GET['files_to_db'])) {
+if (isset($_GET['files_to_db']) && BYTEBEAT_DBMAKE) {
 	fancyDie(filesToDatabase());
 }
 
