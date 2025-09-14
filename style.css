@@ -440,6 +440,7 @@ button[name="close"] {
 }
 
 #editor-container {
+	position: relative;
 	width: calc(100% - 4px);
 	height: 256px;
 	border: 2px solid #bac2cc;
@@ -461,6 +462,39 @@ button[name="close"] {
 	top: 50%;
 	left: 50%;
 	margin: -32px 0 0 -32px;
+	animation: wait-anim 1s linear infinite;
+}
+
+.editor-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	height: 30px;
+	background-color: var(--editor);
+	border: 2px solid #bac2cc;
+	border-bottom: none;
+	color: #c5c8c6;
+	font-size: 12px;
+}
+
+#editor-container .editor-loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	border: none;
+	background-color: rgba(25, 28, 34, 0.95);
+	z-index: 1000;
+	border-radius: 0;
+	backdrop-filter: blur(2px);
+}
+
+.editor-loading .loading-spinner {
+	width: 16px;
+	height: 16px;
 	animation: wait-anim 1s linear infinite;
 }
 

@@ -53,6 +53,7 @@ export class Editor {
 		this.defaultValue = '10*(t>>7|t|t>>6)+4*(t&t>>13|t>>6)';
 		this.errorElem = null;
 		this.view = null;
+		this.loadingOverlay = null;
 	}
 	get value() {
 		return this.view ? this.view.state.doc.toString() : this.defaultValue;
@@ -62,6 +63,26 @@ export class Editor {
 		this.container = document.getElementById('editor-container');
 		this.errorElem = document.getElementById('error');
 		this.view = editorView(this.defaultValue);
+		this.createLoadingOverlay();
+	}
+	createLoadingOverlay() {
+		this.loadingOverlay = document.createElement('div');
+		this.loadingOverlay.className = 'editor-loading hidden';
+		this.loadingOverlay.innerHTML = `
+			<svg class="loading-spinner"><use xlink:href="#symbol-wait"></use></svg>
+			<span>Loading...</span>
+		`;
+		this.container.appendChild(this.loadingOverlay);
+	}
+	showLoading() {
+		if(this.loadingOverlay) {
+			this.loadingOverlay.classList.remove('hidden');
+		}
+	}
+	hideLoading() {
+		if(this.loadingOverlay) {
+			this.loadingOverlay.classList.add('hidden');
+		}
 	}
 	setValue(code) {
 		if(!this.view) {

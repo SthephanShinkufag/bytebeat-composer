@@ -17,6 +17,10 @@
 <body>
 	<main id="content">
 		<section id="container-fixed">
+			<div id="editor-loading" class="editor-loading hidden">
+				<svg class="loading-spinner"><use xlink:href="#symbol-wait"></svg>
+				<span>Loading...</span>
+			</div>
 			<div id="editor-container">
 				<div id="editor-default">
 					<svg><use xlink:href="#symbol-wait"></svg>
@@ -210,6 +214,22 @@
 					<svg class="loading-wait hidden"><use xlink:href="#symbol-wait"></svg>
 				</summary>
 				<div id="library-floatbeat-big" class="library-container"></div>
+			</details>
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>Exotic Projects</h1> &ndash; Special projects with extended features
+				</summary>
+				<article class="library-container entry loaded">
+					<p><strong>Note:</strong> These projects use extended features and custom functions that are not compatible with standard bytebeat players like Dollchan or EnBeat_NEW. They require this specific player to work correctly.</p>
+					<p>Features that may cause incompatibility:</p>
+					<ul>
+						<li>Custom functions (bitC, br, sinf, cosf, tanf, regG) (avalible on EnBeat_NEW)</li>
+						<li>Audio input functions (audioIN, audioLength)</li>
+						<li>Extended waveform generators (saw, tri, sq)</li>
+						<li>TB2/TB3 project format with embedded audio</li>
+					</ul>
+					<div id="exotic-projects"></div>
+				</article>
 			</details>
 			<details class="library-content">
 				<summary class="library-header">

@@ -38,6 +38,7 @@ globalThis.bytebeat = new class {
 		this.playbackSpeed = 1;
 		this.sampleRate = 8000;
 		this.settings = this.defaultSettings;
+		this.audioFiles = new Map();
 		this.init();
 	}
 	handleEvent(e) {
@@ -97,7 +98,11 @@ globalThis.bytebeat = new class {
 					this.loadCode(Object.assign({ code: elem.innerText },
 						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
 				} else if(elem.classList.contains('code-load')) {
-					library.onclickCodeLoadButton(elem);
+					if (elem.dataset.file) {
+						this.loadTB3FromUrl(elem.dataset.file);
+					} else {
+						library.onclickCodeLoadButton(elem);
+					}
 				} else if(elem.classList.contains('code-remix-load')) {
 					library.onclickRemixLoadButton(elem);
 				} else if(elem.classList.contains('library-header')) {
@@ -147,28 +152,44 @@ globalThis.bytebeat = new class {
 		this.initAfterDom();
 	}
 	initAfterDom() {
-		editor.init();
-		ui.initElements();
-		scope.initElements();
-		library.initElements();
-		this.setVolume(true);
-		this.setCounterUnits();
-		this.setCodeStyle();
-		this.setColorStereo();
-		this.setColorDiagram();
-		this.setColorWaveform();
-		this.setColorTimeCursor();
-		this.setScale(0);
-		this.parseUrl();
-		this.sendData({ drawMode: scope.drawMode });
-		ui.controlDrawMode.value = scope.drawMode;
-		ui.controlThemeStyle.value = this.settings.themeStyle;
-		ui.controlCodeStyle.value = this.settings.codeStyle;
-		ui.mainElem.addEventListener('click', this);
-		ui.mainElem.addEventListener('change', this);
-		ui.containerFixed.addEventListener('input', this);
-		ui.containerFixed.addEventListener('keydown', this);
-		ui.containerScroll.addEventListener('mouseover', this);
+		// Show loading overlay during editor initialization
+		const editorLoading = document.getElementById('editor-loading');
+		if (editorLoading) {
+			editorLoading.classList.remove('hidden');
+		}
+		
+		// Use setTimeout to allow loading overlay to show
+		setTimeout(() => {
+			editor.init();
+			ui.initElements();
+			scope.initElements();
+			library.initElements();
+			this.setVolume(true);
+			this.setCounterUnits();
+			this.setCodeStyle();
+			this.setColorStereo();
+			this.setColorDiagram();
+			this.setColorWaveform();
+			this.setColorTimeCursor();
+			this.setScale(0);
+			this.parseUrl();
+			this.sendData({ drawMode: scope.drawMode });
+			ui.controlDrawMode.value = scope.drawMode;
+			ui.controlThemeStyle.value = this.settings.themeStyle;
+			ui.controlCodeStyle.value = this.settings.codeStyle;
+			ui.mainElem.addEventListener('click', this);
+			ui.mainElem.addEventListener('change', this);
+			ui.containerFixed.addEventListener('input', this);
+			ui.containerFixed.addEventListener('keydown', this);
+			ui.containerScroll.addEventListener('mouseover', this);
+			this.initFileManager();
+			this.loadExoticProjects();
+			
+			// Hide the initial loading overlay
+			if (editorLoading) {
+				editorLoading.classList.add('hidden');
+			}
+		}, 50);
 	}
 	async initAudio() {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
@@ -179,6 +200,14 @@ globalThis.bytebeat = new class {
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
 		this.audioWorkletNode.port.start();
+		// Setup analyser for FFT
+		scope.analyser = this.audioCtx.createAnalyser();
+		scope.analyser.fftSize = 1024;
+		scope.analyser.smoothingTimeConstant = 0.7;
+		scope.analyserData = new Uint8Array(scope.analyser.frequencyBinCount);
+		this.analyserGain = new GainNode(this.audioCtx, { gain: 0.1 }); // scale down to 10%
+		this.audioWorkletNode.connect(this.analyserGain);
+		this.analyserGain.connect(scope.analyser);
 		this.audioWorkletNode.connect(this.audioGain);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
@@ -201,30 +230,254 @@ globalThis.bytebeat = new class {
 		});
 		this.audioGain.connect(mediaDest);
 	}
-	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
-		this.mode = ui.controlPlaybackMode.value = mode = mode || 'Bytebeat';
-		editor.setValue(code);
-		this.setSampleRate(ui.controlSampleRate.value = +sampleRate || 8000, false);
-		const data = {
-			mode,
-			sampleRate: this.sampleRate,
-			sampleRatio: this.sampleRate / this.audioCtx.sampleRate
+	initFileManager() {
+		const addFileBtn = document.getElementById('add-file');
+		const clearFilesBtn = document.getElementById('clear-files');
+		const fileInput = document.getElementById('file-input');
+		const loadTB3Btn = document.getElementById('load-tb3');
+		const tb3Input = document.getElementById('tb3-input');
+		
+		addFileBtn.addEventListener('click', () => fileInput.click());
+		clearFilesBtn.addEventListener('click', () => this.clearAllFiles());
+		fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+		loadTB3Btn.addEventListener('click', () => tb3Input.click());
+		tb3Input.addEventListener('change', (e) => this.handleTB3Select(e));
+		document.getElementById('save-tb3').addEventListener('click', () => this.saveTB3());
+	}
+	async handleFileSelect(e) {
+		const files = Array.from(e.target.files);
+		for (const file of files) {
+			if (file.type.startsWith('audio/')) {
+				await this.handleAudioFile(file);
+			}
+		}
+		this.updateFileList();
+		this.sendAudioFilesToProcessor();
+	}
+	async handleTB3Select(e) {
+		const file = e.target.files[0];
+		if (file) {
+			editor.showLoading();
+			try {
+				await this.handleTB3File(file);
+				this.updateFileList();
+				this.sendAudioFilesToProcessor();
+			} finally {
+				// Don't hide loading here since handleTB3File -> loadCode will handle it
+			}
+		}
+	}
+	async handleTB3File(file) {
+		const zip = new JSZip();
+		const zipData = await zip.loadAsync(file);
+		this.audioFiles.clear();
+		
+		// Detect format
+		let format = 'Unknown';
+		let hasAudioFolder = Object.keys(zipData.files).some(f => f.startsWith('audio/'));
+		let hasAudioJson = zipData.files['audio.json'];
+		
+		if (hasAudioFolder) format = 'TB3';
+		else if (hasAudioJson) format = 'TB2';
+		else format = 'TB3';
+		
+		// TB2/TB3 format
+		if (zipData.files['code.txt'] && zipData.files['settings.json']) {
+			const code = await zipData.files['code.txt'].async('string');
+			const settings = JSON.parse(await zipData.files['settings.json'].async('string'));
+			
+			// Don't show loading again since loadCode will handle it
+			this.loadCode({ code, ...settings, format }, true);
+			
+			// TB3: Load from audio folder
+			for (const [filename, zipEntry] of Object.entries(zipData.files)) {
+				if (filename.startsWith('audio/') && filename.endsWith('.json')) {
+					const index = +filename.match(/\/(\d+)\.json$/)[1];
+					const audioData = JSON.parse(await zipEntry.async('text'));
+					this.audioFiles.set(index, {
+						name: audioData.name,
+						data: new Float32Array(audioData.data),
+						channels: audioData.channels,
+						sampleRate: audioData.sampleRate
+					});
+				}
+			}
+			
+			// TB2: Load from audio.json
+			if (zipData.files['audio.json']) {
+				const audioData = JSON.parse(await zipData.files['audio.json'].async('string'));
+				// TB2 format: data is [sample][channel], extract first channel
+				const channelData = audioData.data.map(sample => sample[0] || 0);
+				this.audioFiles.set(0, {
+					name: 'audio.json',
+					data: new Float32Array(channelData),
+					channels: audioData.channels,
+					sampleRate: audioData.sampleRate
+				});
+			}
+		}
+	}
+	async handleAudioFile(file) {
+		const arrayBuffer = await file.arrayBuffer();
+		const audioBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
+		const audioData = {
+			name: file.name,
+			data: audioBuffer.getChannelData(0),
+			channels: audioBuffer.numberOfChannels,
+			sampleRate: audioBuffer.sampleRate,
+			duration: audioBuffer.duration
 		};
-		if(isPlay) {
-			data.playbackSpeed = this.playbackSpeed = 1;
-			this.playbackToggle(true, false);
-			data.resetTime = true;
-			data.isPlaying = isPlay;
+		this.audioFiles.set(this.audioFiles.size, audioData);
+	}
+	updateFileList() {
+		const fileList = document.getElementById('file-list') || document.getElementById('audio-list');
+		if (!fileList) return;
+		fileList.innerHTML = '';
+		this.audioFiles.forEach((file, index) => {
+			const fileItem = document.createElement('div');
+			fileItem.className = 'file-item';
+			fileItem.innerHTML = `
+				<span>${index}: ${file.name}</span>
+				<button class="remove-file" data-index="${index}">×</button>
+			`;
+			fileItem.querySelector('.remove-file').addEventListener('click', () => {
+				this.removeFile(index);
+			});
+			fileList.appendChild(fileItem);
+		});
+	}
+	removeFile(index) {
+		this.audioFiles.delete(index);
+		this.updateFileList();
+		this.sendAudioFilesToProcessor();
+	}
+	clearAllFiles() {
+		this.audioFiles.clear();
+		this.updateFileList();
+		this.sendAudioFilesToProcessor();
+	}
+	sendAudioFilesToProcessor() {
+		this.sendData({ audioFiles: Array.from(this.audioFiles.entries()) });
+	}
+	async loadTB3FromUrl(url) {
+		editor.showLoading();
+		try {
+			const response = await fetch(url);
+			const blob = await response.blob();
+			const file = new File([blob], url.split('/').pop());
+			await this.handleTB3File(file);
+			this.updateFileList();
+			this.sendAudioFilesToProcessor();
+		} finally {
+			setTimeout(() => editor.hideLoading(), 100);
 		}
-		data.setFunction = code;
-		if(drawMode) {
-			ui.controlDrawMode.value = scope.drawMode = drawMode;
-			this.saveSettings();
+	}
+	async loadExoticProjects() {
+		try {
+			const response = await fetch('./data/exotic-projects.json');
+			const projects = await response.json();
+			const container = document.getElementById('exotic-projects');
+			container.innerHTML = '';
+			for (const project of projects) {
+				const projectDiv = document.createElement('div');
+				projectDiv.className = 'song';
+				
+				if (project.codeFile.endsWith('.tb2') || project.codeFile.endsWith('.tb3')) {
+					// TB2/TB3 project file
+					const formatLabel = project.codeFile.endsWith('.tb2') ? '[TB2] ' : '[TB3] ';
+					projectDiv.innerHTML = `
+						<div class="song-title">${formatLabel}${project.name}</div>
+						<div class="song-author">${project.author} (${project.date})</div>
+						${project.description ? `<div class="song-description">${project.description}</div>` : ''}
+						${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
+						<button class="code-load" data-file="./data/songs/exotic/${project.codeFile}">Load ${project.codeFile}</button>
+					`;
+				} else {
+					// Regular JS file
+					const codeResponse = await fetch(`./data/songs/exotic/${project.codeFile}`);
+					const code = await codeResponse.text();
+					const formatLabel = project.format ? `[${project.format}] ` : '';
+					projectDiv.innerHTML = `
+						<div class="song-title">${formatLabel}${project.name}</div>
+						<div class="song-author">${project.author} (${project.date})</div>
+						${project.description ? `<div class="song-description">${project.description}</div>` : ''}
+						${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
+						<div class="code-text" data-songdata='${JSON.stringify({...project, code})}'>${code}</div>
+					`;
+				}
+				container.appendChild(projectDiv);
+			}
+		} catch (error) {
+			console.log('No exotic projects file found');
 		}
-		if(scale !== undefined) {
-			this.setScale(scale - scope.drawScale);
+	}
+	async saveTB3() {
+		const zip = new JSZip();
+		const audioFolder = zip.folder('audio');
+		
+		// Save code
+		zip.file('code.txt', editor.value);
+		
+		// Save settings
+		zip.file('settings.json', JSON.stringify({
+			mode: this.mode,
+			sampleRate: this.sampleRate,
+			drawMode: scope.drawMode,
+			scale: scope.drawScale
+		}));
+		
+		// Save audio files in audio folder
+		for (const [index, audioData] of this.audioFiles.entries()) {
+			audioFolder.file(`${index}.json`, JSON.stringify({
+				name: audioData.name,
+				data: Array.from(audioData.data),
+				channels: audioData.channels,
+				sampleRate: audioData.sampleRate
+			}));
 		}
-		this.sendData(data);
+		
+		const blob = await zip.generateAsync({ type: 'blob' });
+		const url = URL.createObjectURL(blob);
+		ui.downloader.href = url;
+		ui.downloader.download = 'project.tb3';
+		ui.downloader.click();
+		setTimeout(() => URL.revokeObjectURL(url));
+	}
+	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
+		// Show loading overlay
+		editor.showLoading();
+		
+		// Use setTimeout to allow the loading overlay to show before processing
+		setTimeout(() => {
+			this.mode = ui.controlPlaybackMode.value = mode = mode || 'Bytebeat';
+			editor.setValue(code);
+			this.setSampleRate(ui.controlSampleRate.value = +sampleRate || 8000, false);
+			const data = {
+				mode,
+				sampleRate: this.sampleRate,
+				sampleRatio: this.sampleRate / this.audioCtx.sampleRate
+			};
+			if(isPlay) {
+				data.playbackSpeed = this.playbackSpeed = 1;
+				this.playbackToggle(true, false);
+				data.resetTime = true;
+				data.isPlaying = isPlay;
+			}
+			data.setFunction = code;
+			if(drawMode) {
+				ui.controlDrawMode.value = scope.drawMode = drawMode;
+				this.saveSettings();
+			}
+			if(scale !== undefined) {
+				this.setScale(scale - scope.drawScale);
+			}
+			this.sendData(data);
+			
+			// Hide loading overlay after a short delay
+			setTimeout(() => {
+				editor.hideLoading();
+			}, 100);
+		}, 10);
 	}
 	oninputCounter(e) {
 		if(e.key === 'Enter') {
@@ -243,7 +496,23 @@ globalThis.bytebeat = new class {
 			this.updateUrl();
 			urlHash = window.location.hash;
 		}
-		this.loadCode(getCodeFromUrl(urlHash) || { code: editor.value }, false);
+		const codeData = getCodeFromUrl(urlHash) || { code: editor.value };
+		// Only show loading if we're loading code from URL (not default)
+		if(urlHash && getCodeFromUrl(urlHash)) {
+			this.loadCode(codeData, false);
+		} else {
+			// For default code, don't show loading overlay
+			this.mode = ui.controlPlaybackMode.value = codeData.mode || 'Bytebeat';
+			editor.setValue(codeData.code);
+			this.setSampleRate(ui.controlSampleRate.value = +codeData.sampleRate || 8000, false);
+			const data = {
+				mode: this.mode,
+				sampleRate: this.sampleRate,
+				sampleRatio: this.sampleRate / this.audioCtx.sampleRate,
+				setFunction: codeData.code
+			};
+			this.sendData(data);
+		}
 	}
 	playbackStop() {
 		this.playbackToggle(false, false);
@@ -292,7 +561,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	receiveData(data) {
-		const { byteSample, drawBuffer, error } = data;
+		const { byteSample, drawBuffer, fftData, error } = data;
 		if(typeof byteSample === 'number') {
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
@@ -304,6 +573,7 @@ globalThis.bytebeat = new class {
 				scope.drawBuffer = scope.drawBuffer.slice(-limit);
 			}
 		}
+
 		if(error !== undefined) {
 			let isUpdate = false;
 			if(error.isCompiled === false) {
@@ -439,6 +709,7 @@ globalThis.bytebeat = new class {
 			sampleRate = 8000;
 		}
 		switch(sampleRate) {
+		case 1000:
 		case 8000:
 		case 11025:
 		case 16000:
@@ -515,8 +786,8 @@ globalThis.bytebeat = new class {
 			colorDiagram = '#00ffff';
 			break;
 		default:
-			colorCursor = '#80c0ff';
-			colorDiagram = '#0080ff';
+			colorCursor = '#00FFFF';
+			colorDiagram = '#00a0ff';
 		}
 		this.setColorTimeCursor(colorCursor);
 		this.setColorStereo(colorStereo);
@@ -562,3 +833,36 @@ globalThis.bytebeat = new class {
 		getUrlFromCode(code, this.mode, this.sampleRate);
 	}
 }();
+
+// Add CSS for file management
+const style = document.createElement('style');
+style.textContent = `
+.file-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+	margin: 4px 0;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+}
+.file-item span {
+	flex: 1;
+	color: var(--color-text);
+}
+.remove-file {
+	background: #ff4444;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 12px;
+	margin-left: 8px;
+}
+.remove-file:hover {
+	background: #ff6666;
+}
+`;
+document.head.appendChild(style);

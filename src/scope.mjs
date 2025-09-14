@@ -18,6 +18,8 @@ export class Scope {
 		this.drawEndBuffer = [];
 		this.drawMode = 'Combined';
 		this.drawScale = 5;
+		this.analyser = null;
+		this.analyserData = null;
 	}
 	get timeCursorEnabled() {
 		return globalThis.bytebeat.sampleRate >> this.drawScale < 2000;
@@ -73,6 +75,31 @@ export class Scope {
 			for(let y = 0; y < height; ++y) {
 				data[((drawWidth * y + x) << 2) + 3] = 255;
 			}
+		}
+		// FFT visualization
+		if(this.drawMode === 'FFT_1024' && this.analyser && this.analyserData) {
+			this.analyser.getByteFrequencyData(this.analyserData);
+			this.clearCanvas();
+			this.canvasCtx.beginPath();
+			const wColor = this.colorWaveform;
+			this.canvasCtx.strokeStyle = `rgb(${ wColor[0] },${ wColor[1] },${ wColor[2] })`;
+			this.canvasCtx.lineWidth = 1;
+			const binCount = this.analyserData.length;
+			const logMin = 1;
+			const logMax = Math.log(binCount + 1);
+			for(let i = 0; i < binCount; i++) {
+				const value = this.analyserData[i];
+				const y = height - (value / 255) * height;
+				const x = (Math.log(i + logMin) / logMax) * width;
+				if(i === 0) {
+					this.canvasCtx.moveTo(x, y);
+				} else {
+					this.canvasCtx.lineTo(x, y);
+				}
+			}
+			this.canvasCtx.stroke();
+			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+			return;
 		}
 		// Drawing in a segment
 		const isCombined = this.drawMode === 'Combined';
@@ -181,6 +208,7 @@ export class Scope {
 		if(this.timeCursorEnabled) {
 			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
+
 		// Clear buffer
 		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
 	}
@@ -289,4 +317,5 @@ export class Scope {
 	toggleTimeCursor() {
 		this.canvasTimeCursor.classList.toggle('hidden', !this.timeCursorEnabled);
 	}
+
 }

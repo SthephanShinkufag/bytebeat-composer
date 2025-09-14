@@ -16,6 +16,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.outValue = [0, 0];
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
+		this.fftBuffer = [];
+		this.fftSize = 256;
+		this.audioFiles = new Map();
 		Object.seal(this);
 		audioProcessor.deleteGlobals();
 		audioProcessor.freezeGlobals();
@@ -143,6 +146,14 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(drawBuffer.length) {
 			isSend = true;
 			data.drawBuffer = drawBuffer;
+			// Collect samples for FFT
+			for(const sample of drawBuffer) {
+				this.fftBuffer.push((sample.value[0] + sample.value[1]) / 2);
+			}
+			if(this.fftBuffer.length >= this.fftSize) {
+				data.fftData = this.fftBuffer.slice(-this.fftSize);
+				this.fftBuffer = this.fftBuffer.slice(-this.fftSize);
+			}
 		}
 		if(isSend) {
 			this.sendData(data);
@@ -201,6 +212,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(data.sampleRatio !== undefined) {
 			this.setSampleRatio(data.sampleRatio);
 		}
+		if(data.audioFiles !== undefined) {
+			this.audioFiles = new Map(data.audioFiles);
+		}
 	}
 	sendData(data) {
 		this.port.postMessage(data);
@@ -220,8 +234,40 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Create shortened Math functions
 		const params = Object.getOwnPropertyNames(Math);
 		const values = params.map(k => Math[k]);
-		params.push('int', 'window');
-		values.push(Math.floor, globalThis);
+		
+		const funcs = {
+			/*bit*/        "bitC": function (x, y, z) { return x & y ? z : 0 },
+			/*bit reverse*/"br": function (x, size = 8) {
+				if (size > 32) { throw new Error("br() Size cannot be greater than 32") } else {
+					let result = 0;
+					for (let idx = 0; idx < (size - 0); idx++) {
+						result += funcs.bitC(x, 2 ** idx, 2 ** (size - (idx + 1)))
+					}
+					return result
+				}
+			},
+			/*sin that loops every 128 "steps", instead of every pi steps*/"sinf": function (x) { return Math.sin(x / (128 / Math.PI)) },
+			/*cos that loops every 128 "steps", instead of every pi steps*/"cosf": function (x) { return Math.cos(x / (128 / Math.PI)) },
+			/*tan that loops every 128 "steps", instead of every pi steps*/"tanf": function (x) { return Math.tan(x / (128 / Math.PI)) },
+			/*converts t into a string composed of it's bits, regex's that*/"regG": function (t, X) { return X.test(t.toString(2)) },
+
+			"saw": t => t % 256,
+			"tri": t => Math.abs((t % 512) - 256),
+			"sq": t => t % 256 < 128 ? 255 : 0,
+			"audioIN": (index, channel = 0, file = 0) => {
+				const audioFile = this.audioFiles.get(file);
+				if (!audioFile || !audioFile.data) return 0;
+				const sampleIndex = Math.floor(index) + (channel % audioFile.channels);
+				return audioFile.data[sampleIndex] || 0;
+			},
+			"audioLength": (file = 0) => {
+				const audioFile = this.audioFiles.get(file);
+				return audioFile ? audioFile.data.length : 0;
+			}
+		};
+		
+		params.push('int', 'window', ...Object.keys(funcs));
+		values.push(Math.floor, globalThis, ...Object.values(funcs));
 		audioProcessor.deleteGlobals();
 		// Code testing
 		let isCompiled = false;
