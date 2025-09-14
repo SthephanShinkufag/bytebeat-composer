@@ -12,7 +12,7 @@ Discussion threads: https://dollchan.net/btb/
 1. Install Node.js
 2. Run with npm:
 ```
-https://github.com/D3nschot/ThisBeat2.1.git
+git clone https://github.com/D3nschot/ThisBeat2.1.git
 cd ThisBeat2.1
 npm install
 npm start
@@ -39,5 +39,6 @@ The following management functions are provided:
 - "Migrate to database" button &ndash; to fullfill your database with songs from `/data` library files.
 - "Make library files" button &ndash; to generate `/data` library files from your database.
 - "Add a song" button &ndash; opens a form to add a new song.
+
 
 
