@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "author": "D3nschot",
+    "date": "2025-09-13",
+    "name": "Default",
+    "description": "Demonstrates audioIN function with loaded audio samples",
+    "codeFile": "Default.tb2",
+    "features": ["audioIN", "audioLength"],
+    "requires_audio": true
+  },
+  {
+    "id": 2,
+    "author": "D3nschot",
+    "date": "2025-09-14",
+    "name": "Power of Multi-saples",
+    "codeFile": "project.tb3",
+    "requires_audio": true
+  }
+]
