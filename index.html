@@ -11,6 +11,7 @@
 	<link rel="shortcut icon" href="favicon.png">
 	<link rel="stylesheet" type="text/css" href="style.css?version=2025091100">
 	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025091100">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 	<script type="module" async src="./build/index.js?version=2025091100"></script>
 </head>
 <body>
@@ -63,6 +64,7 @@
 					<option value="Waveform">Waveform</option>
 					<option value="Diagram">Diagram</option>
 					<option value="Combined">Combined</option>
+					<option value="FFT_1024">FFT 1024</option>
 				</select>
 				<select id="control-mode" class="control-select controls-grow" title="Sound mode">
 					<option value="Bytebeat" selected>Bytebeat</option>
@@ -73,6 +75,7 @@
 				<div class="controls-group controls-grow">
 					<input type="text" id="control-samplerate" class="control-text" title="Set sample rate (in Hz) then press Enter">
 					<select id="control-samplerate-select" class="control-select" title="Sample rate">
+						<option value="1000">1000Hz</option>
 						<option value="8000">8000Hz</option>
 						<option value="11025">11025Hz</option>
 						<option value="16000">16000Hz</option>
@@ -94,6 +97,9 @@
 					</button>
 					<span id="control-codesize" class="control-text" title="Code size in bytes"></span>
 				</div>
+				<button id="loadFILE" class="control-button controls-grow" title="Load a audio file for the code">
+					<div class="control-button-name">N/A</div>
+				</button>
 				<div class="controls-group controls-grow">
 					<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume">
 				</div>
@@ -109,6 +115,34 @@
 			</div>
 		</section>
 		<section id="container-scroll">
+			<details class="library-content">
+				<summary class="library-header">
+					<h1>Audio Files</h1> &ndash; Loaded audio files for audioIN function
+				</summary>
+
+					<label class="settings-block">
+						<input type="file" id="file-input" accept="audio/*" multiple style="display:none">
+						<button id="add-file" class="control-button">Add Files</button>
+						Load audio files
+					</label>
+					<label class="settings-block">
+						<button id="clear-files" class="control-button">Clear All</button>
+						Remove all loaded files
+					</label>
+					<div id="file-list"></div>
+
+					<summary class="library-header">
+						<h1>TB3 Projects</h1> &ndash; Load complete projects
+					</summary>
+					<div id="tb3-list"></div>
+						<input type="file" id="tb3-input" accept=".tb3,.tb2" style="display:none">
+						<button id="load-tb3" class="control-button">Load TB3/TB2</button>
+						Load TB3/TB2 project file
+						<br>
+						<button id="save-tb3" class="control-button">Save TB3</button>
+						Save current project as TB3 file
+					</div>
+			</details>
 			<details class="library-content">
 				<summary class="library-header">
 					<h1>Info</h1> &ndash; about bytebeat

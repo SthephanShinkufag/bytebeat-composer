@@ -2,14 +2,14 @@
 
 :root {
 	--button-hover-color: #badbff;
-	--canvas-border: linear-gradient(#fda757, #fda757) 1;
-	--canvas-button: linear-gradient(to bottom, #67789d, #181f33);
+	--canvas-border: linear-gradient(#001050, #001050) 1;
+	--canvas-button: linear-gradient(to bottom, #001050, #001050);
 	--canvas-button-color: #c5c8c6;
-	--canvas-button-hover: linear-gradient(to bottom, #92aeec, #181f33) !important;
-	--code-author: #2b3d69;
-	--code-button: linear-gradient(to bottom, #424242, #171b22);
+	--canvas-button-hover: linear-gradient(to bottom, #0020a0, #0020a0) !important;
+	--code-author: #001050;
+	--code-button: linear-gradient(to bottom, #001050, #001050);
 	--code-button-border: #505760;
-	--code-button-hover: linear-gradient(to bottom, #3c508a, #1f2331);
+	--code-button-hover: linear-gradient(to bottom, #0020a0, #0020a0);
 	--code-comment: #7d8799;
 	--code-definition: #b1b1ff;
 	--code-font: bold;
@@ -22,33 +22,33 @@
 	--code-string2: #56b6c2;
 	--code-tags: #5cac87;
 	--code-variable: #c5c8c6;
-	--control-button: linear-gradient(to bottom, #959595, #242a37);
-	--control-button-active: linear-gradient(to bottom, #505f84, #1c1e26);
+	--control-button: linear-gradient(to bottom, #001050, #001050);
+	--control-button-active: linear-gradient(to bottom, #001050, #001050);
 	--control-button-border: #5c636c;
-	--control-button-hover: linear-gradient(to bottom, #738cc1, #28314a);
+	--control-button-hover: linear-gradient(to bottom, #0020a0, #0020a0);
 	--control-corners: 6px;
 	--control-size: 30px;
-	--control-text: linear-gradient(to top, #3a445e, #181c26);
-	--control-text-hover: linear-gradient(to top, #556897, #182033);
-	--control-volume: linear-gradient(to bottom, #aeaeae, #484c55);
-	--control-volume-hover: linear-gradient(to bottom, #90a7d7, #3f4c71);
+	--control-text: linear-gradient(to top, #001050, #001050);
+	--control-text-hover: linear-gradient(to top, #0020a0, #0020a0);
+	--control-volume: linear-gradient(to bottom, #001050, #001050);
+	--control-volume-hover: linear-gradient(to bottom, #0020a0, #0020a0);
 	--editor: #191c22;
 	--entry: #191c22;
-	--entry-border: linear-gradient(to right, #435a91, #16202b);
+	--entry-border: linear-gradient(to right, #001050, #001050);
 	--focus: #614fdb;
 	--font-size: 10.5pt;
-	--library-header: linear-gradient(to bottom, #202c46, #0b0d17);
-	--library-header-hover: linear-gradient(to bottom, #32426c, #151b2b);
+	--library-header: linear-gradient(to bottom, #001050, #001050);
+	--library-header-hover: linear-gradient(to bottom, #0020a0, #0020a0);
 	--library-header-hover-color: #94c7ff;
 	--link: #89c2ff;
-	--link-hover: #ed88fb !important;
+	--link-hover: #00FFFF !important;
 }
 
 html[data-theme="Blue"] {
 	--canvas-border: linear-gradient(#94beff, #94beff) 1;
 	--canvas-button: linear-gradient(to bottom, #4567b0, #121726);
 	--canvas-button-hover: linear-gradient(to bottom, #5082ee, #26335a) !important;
-	--code-author: #2b3d69;
+	--code-author: #001050;
 	--code-button: linear-gradient(to bottom, #34436f, #1f2331);
 	--code-button-border: #5769a2;
 	--code-button-hover: linear-gradient(to bottom, #526bb4, #1b2135);
@@ -649,7 +649,7 @@ button[name="close"] {
 	margin: 0;
 	padding: 3px;
 	border: 1px dotted #555;
-	color: #dfc86b;
+	color: #00a0FF;
 	background-color: #00000060;
 	font: 90%/100% monospace;
 	text-align: left;
@@ -662,7 +662,7 @@ button[name="close"] {
 }
 
 .code-text:hover {
-	color: #ed88fb !important;
+	color: #00FFFF !important;
 }
 
 .entry {
