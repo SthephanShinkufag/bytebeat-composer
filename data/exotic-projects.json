@@ -1,20 +1,51 @@
-[
-  {
-    "id": 1,
-    "author": "D3nschot",
-    "date": "2025-09-13",
-    "name": "Default",
-    "description": "Demonstrates audioIN function with loaded audio samples",
-    "codeFile": "Default.tb2",
-    "features": ["audioIN", "audioLength"],
-    "requires_audio": true
-  },
-  {
-    "id": 2,
-    "author": "D3nschot",
-    "date": "2025-09-14",
-    "name": "Power of Multi-saples",
-    "codeFile": "project.tb3",
-    "requires_audio": true
-  }
-]
+{
+  "sections": [
+    {
+      "name": "D3nschot",
+      "count": 5,
+      "expanded": true,
+      "projects": [
+        {
+          "id": 1,
+          "name": "Default",
+          "date": "2025-09-13",
+          "description": "Demonstrates audioIN function with loaded audio samples",
+          "codeFile": "Default.tb2",
+          "features": ["audioIN", "audioLength"],
+          "requires_audio": true
+        },
+        {
+          "id": 2,
+          "name": "Power of Multi-saples",
+          "date": "2025-09-14",
+          "codeFile": "project.tb3",
+          "requires_audio": true
+        },
+        {
+          "id": 3,
+          "name": "Funni xor thing",
+          "date": "2025-09-15",
+          "sampleRate": 44100,
+          "codeFile": "Funni xor thing.js",
+          "requires_audio": false
+        },
+        {
+          "id": 4,
+          "name": "Funni xor thing 2",
+          "date": "2025-09-15",
+          "sampleRate": 44100,
+          "mode": "Floatbeat",
+          "codeFile": "Funni xor thing 2.js",
+          "requires_audio": false
+        },
+        {
+          "id": 5,
+          "name": "Hmmm CHRUNCHY",
+          "date": "2025-09-15",
+          "codeFile": "Hmmm CHRUNCHY.tb3",
+          "requires_audio": true
+        }
+      ]
+    }
+  ]
+}
