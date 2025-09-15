@@ -507,8 +507,10 @@ button[name="close"] {
 }
 
 #error {
+	max-height: calc(100% - 256px);
+	overflow-y: auto;
 	color: #f92672;
-	font: 14px/14px monospace;
+	font: 12px/12px monospace;
 	word-break: break-all;
 }
 

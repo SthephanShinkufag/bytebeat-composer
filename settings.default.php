@@ -11,8 +11,8 @@ define('BYTEBEAT_DBPASSWORD', '');
 define('BYTEBEAT_DBNAME', '');
 // Timezone
 define('BYTEBEAT_TIMEZONE', 'UTC');
-// "Make database" button to fulfill the database from library files (1 = show, 0 = hide)
-define('BYTEBEAT_DBMAKE', 0);
+// "Make database" button to fulfill the database from library files (true = show, false = hide)
+define('BYTEBEAT_DBMAKE', false);
 // Administartors
 $bytebeat_admins = array(
 	'Username1' => 'Password1',
