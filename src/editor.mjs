@@ -34,7 +34,21 @@ const editorView = initValue => new EditorView({
 				{ key: 'Enter', run: insertNewline },
 				{
 					key: 'Tab',
-					run: view => view.dispatch(view.state.replaceSelection('\t')) || true,
+					run: view => {
+						const { state } = view;
+						const { from, to } = state.selection.main;
+						if (from === to) {
+							return view.dispatch(state.replaceSelection('\t')) || true;
+						}
+						const fromLine = state.doc.lineAt(from).number;
+						const toLine = state.doc.lineAt(to).number;
+						const changes = [];
+						for (let i = fromLine; i <= toLine; i++) {
+							const line = state.doc.line(i);
+							changes.push({ from: line.from, insert: '\t' });
+						}
+						return view.dispatch({ changes }) || true;
+					},
 					shift: indentLess
 				},
 				...historyKeymap,

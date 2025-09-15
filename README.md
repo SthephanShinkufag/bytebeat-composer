@@ -1,8 +1,7 @@
 # bytebeat-composer
 Live editing algorithmic music generator with a collection of many formulas from around the internet.
 
-My composer: https://d3nschot.github.io/ThisBeat2.1 <br>
-Bytebeat Composer (original website): https://dollchan.net/bytebeat/<br>
+Bytebeat Composer: https://dollchan.net/bytebeat/<br>
 Discussion threads: https://dollchan.net/btb/
 
 ![Sierpinski triangles](https://github.com/user-attachments/assets/f8811437-c0d5-4f64-9ead-2fd621c18bb8)
@@ -12,8 +11,8 @@ Discussion threads: https://dollchan.net/btb/
 1. Install Node.js
 2. Run with npm:
 ```
-git clone https://github.com/D3nschot/ThisBeat2.1.git
-cd ThisBeat2.1
+git clone https://github.com/SthephanShinkufag/bytebeat-composer.git
+cd bytebeat-composer
 npm install
 npm start
 ```
@@ -39,6 +38,3 @@ The following management functions are provided:
 - "Migrate to database" button &ndash; to fullfill your database with songs from `/data` library files.
 - "Make library files" button &ndash; to generate `/data` library files from your database.
 - "Add a song" button &ndash; opens a form to add a new song.
-
-
-

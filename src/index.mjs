@@ -28,7 +28,8 @@ globalThis.bytebeat = new class {
 			isSeconds: false,
 			showAllSongs: library.showAllSongs,
 			themeStyle: 'Default',
-			volume: .5
+			volume: .5,
+			donotChangeScopePreferences: false
 		};
 		this.isCompilationError = false;
 		this.isNeedClear = false;
@@ -62,6 +63,10 @@ globalThis.bytebeat = new class {
 			case 'control-theme-style': this.setThemeStyle(elem.value); break;
 			case 'library-show-all':
 				library.toggleAll(elem, elem.checked);
+				this.saveSettings();
+				break;
+			case 'DONOTCHANGESCOPEPREFERENCES':
+				this.settings.donotChangeScopePreferences = elem.checked;
 				this.saveSettings();
 				break;
 			}
@@ -106,9 +111,17 @@ globalThis.bytebeat = new class {
 				} else if(elem.classList.contains('code-remix-load')) {
 					library.onclickRemixLoadButton(elem);
 				} else if(elem.classList.contains('library-header')) {
-					library.onclickLibraryHeader(elem);
+					if(elem.closest('#exotic-projects')) {
+						this.toggleExoticSection(elem);
+					} else {
+						library.onclickLibraryHeader(elem);
+					}
 				} else if(elem.parentNode.classList.contains('library-header')) {
-					library.onclickLibraryHeader(elem.parentNode);
+					if(elem.parentNode.closest('#exotic-projects')) {
+						this.toggleExoticSection(elem.parentNode);
+					} else {
+						library.onclickLibraryHeader(elem.parentNode);
+					}
 				}
 			}
 			return;
@@ -172,6 +185,7 @@ globalThis.bytebeat = new class {
 			this.setColorWaveform();
 			this.setColorTimeCursor();
 			this.setScale(0);
+			this.setScopePreferencesCheckbox();
 			this.parseUrl();
 			this.sendData({ drawMode: scope.drawMode });
 			ui.controlDrawMode.value = scope.drawMode;
@@ -375,37 +389,52 @@ globalThis.bytebeat = new class {
 	async loadExoticProjects() {
 		try {
 			const response = await fetch('./data/exotic-projects.json');
-			const projects = await response.json();
+			const data = await response.json();
 			const container = document.getElementById('exotic-projects');
 			container.innerHTML = '';
-			for (const project of projects) {
-				const projectDiv = document.createElement('div');
-				projectDiv.className = 'song';
+			
+			for (const section of data.sections) {
+				// Create section header
+				const sectionHeader = document.createElement('div');
+				sectionHeader.className = 'library-header';
+				sectionHeader.innerHTML = `<span class="library-arrow">${section.expanded ? '▼' : '▶'}</span> ${section.name} <span class="library-count">${section.count} songs</span>`;
+				container.appendChild(sectionHeader);
 				
-				if (project.codeFile.endsWith('.tb2') || project.codeFile.endsWith('.tb3')) {
-					// TB2/TB3 project file
-					const formatLabel = project.codeFile.endsWith('.tb2') ? '[TB2] ' : '[TB3] ';
-					projectDiv.innerHTML = `
-						<div class="song-title">${formatLabel}${project.name}</div>
-						<div class="song-author">${project.author} (${project.date})</div>
-						${project.description ? `<div class="song-description">${project.description}</div>` : ''}
-						${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
-						<button class="code-load" data-file="./data/songs/exotic/${project.codeFile}">Load ${project.codeFile}</button>
-					`;
-				} else {
-					// Regular JS file
-					const codeResponse = await fetch(`./data/songs/exotic/${project.codeFile}`);
-					const code = await codeResponse.text();
-					const formatLabel = project.format ? `[${project.format}] ` : '';
-					projectDiv.innerHTML = `
-						<div class="song-title">${formatLabel}${project.name}</div>
-						<div class="song-author">${project.author} (${project.date})</div>
-						${project.description ? `<div class="song-description">${project.description}</div>` : ''}
-						${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
-						<div class="code-text" data-songdata='${JSON.stringify({...project, code})}'>${code}</div>
-					`;
+				// Create projects container
+				const projectsContainer = document.createElement('div');
+				projectsContainer.className = 'library-songs';
+				projectsContainer.style.display = section.expanded ? 'block' : 'none';
+				
+				for (const project of section.projects) {
+					const projectDiv = document.createElement('div');
+					projectDiv.className = 'song';
+					
+					if (project.codeFile.endsWith('.tb2') || project.codeFile.endsWith('.tb3')) {
+						// TB2/TB3 project file
+						const formatLabel = project.codeFile.endsWith('.tb2') ? '[TB2] ' : '[TB3] ';
+						projectDiv.innerHTML = `
+							<div class="song-title">${formatLabel}${project.name}</div>
+							<div class="song-author">${section.name} (${project.date})</div>
+							${project.description ? `<div class="song-description">${project.description}</div>` : ''}
+							${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
+							<button class="code-load" data-file="./data/songs/exotic/${project.codeFile}">Load ${project.codeFile}</button>
+						`;
+					} else {
+						// Regular JS file
+						const codeResponse = await fetch(`./data/songs/exotic/${project.codeFile}`);
+						const code = await codeResponse.text();
+						const formatLabel = project.mode ? `[${project.mode}] ` : '';
+						projectDiv.innerHTML = `
+							<div class="song-title">${formatLabel}${project.name}</div>
+							<div class="song-author">${section.name} (${project.date})</div>
+							${project.description ? `<div class="song-description">${project.description}</div>` : ''}
+							${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
+							<div class="code-text" data-songdata='${JSON.stringify({...project, code})}'>${code}</div>
+						`;
+					}
+					projectsContainer.appendChild(projectDiv);
 				}
-				container.appendChild(projectDiv);
+				container.appendChild(projectsContainer);
 			}
 		} catch (error) {
 			console.log('No exotic projects file found');
@@ -443,6 +472,13 @@ globalThis.bytebeat = new class {
 		ui.downloader.click();
 		setTimeout(() => URL.revokeObjectURL(url));
 	}
+	toggleExoticSection(header) {
+		const arrow = header.querySelector('.library-arrow');
+		const songsContainer = header.nextElementSibling;
+		const isExpanded = songsContainer.style.display !== 'none';
+		arrow.textContent = isExpanded ? '▶' : '▼';
+		songsContainer.style.display = isExpanded ? 'none' : 'block';
+	}
 	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
 		// Show loading overlay
 		editor.showLoading();
@@ -464,11 +500,15 @@ globalThis.bytebeat = new class {
 				data.isPlaying = isPlay;
 			}
 			data.setFunction = code;
-			if(drawMode) {
+			
+			// Check if scope preferences should not be changed
+			const doNotChangeScopePrefs = this.settings.donotChangeScopePreferences;
+			
+			if(drawMode && !doNotChangeScopePrefs) {
 				ui.controlDrawMode.value = scope.drawMode = drawMode;
 				this.saveSettings();
 			}
-			if(scale !== undefined) {
+			if(scale !== undefined && !doNotChangeScopePrefs) {
 				this.setScale(scale - scope.drawScale);
 			}
 			this.sendData(data);
@@ -831,6 +871,12 @@ globalThis.bytebeat = new class {
 		const code = editor.value;
 		ui.setCodeSize(code);
 		getUrlFromCode(code, this.mode, this.sampleRate);
+	}
+	setScopePreferencesCheckbox() {
+		const checkbox = document.getElementById('DONOTCHANGESCOPEPREFERENCES');
+		if(checkbox) {
+			checkbox.checked = this.settings.donotChangeScopePreferences ?? false;
+		}
 	}
 }();
 
