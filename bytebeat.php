@@ -801,7 +801,7 @@ function addSong($isEdit) {
 	$coverUrl = addslashes(trim($_POST['cover_url']));
 	$rating = $_POST['rating'];
 	$user = addslashes(array_search($_SESSION['bytebeat'], $bytebeat_admins, true));
-	$date = date('Y-m-d');
+	$dateEdited = date('Y-m-d');
 
 	// Drawing
 	$drawingMode = $_POST['drawing_mode'];
@@ -855,7 +855,7 @@ function addSong($isEdit) {
 			', `tags` = "' . $tagsStr . '"' .
 			', `rating` = ' . ($rating ? $rating : 'NULL') .
 			', `user_edited` = "' . $user . '"' .
-			', `date_edited` = "' . $date . '"
+			', `date_edited` = "' . $dateEdited . '"
 		WHERE `hash` = "' . $hash . '";');
 	} else {
 		// Adding a new song
