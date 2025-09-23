@@ -27,7 +27,7 @@ function fancyDie($message) {
 	<title>Bytebeat management</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025091601">
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025092300">
 </head>
 <body style="text-align: center;">
 	<div style="display: inline-block; padding: 8px 0;">
@@ -91,15 +91,15 @@ function addSongForm() {
 						<td><input type="text" name="name"></td>
 					</tr>
 					<tr>
-						<th>Description</th>
-						<td><textarea name="description"></textarea></td>
-					</tr>
-					<tr>
 						<th>URL</th>
 						<td class="table-form-added"><div>
 							<input type="text" name="url[]" placeholder="URL">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div></td>
+					</tr>
+					<tr>
+						<th>Description</th>
+						<td><textarea name="description"></textarea></td>
 					</tr>
 					<tr>
 						<th>Mode</th>
@@ -276,14 +276,14 @@ function editSongForm() {
 							(isset($song['name']) ? htmlspecialchars($song['name']) : '') . '"></td>
 					</tr>
 					<tr>
+						<th>URL</th>
+						<td class="table-form-added">' . $urlStr . '</td>
+					</tr>
+					<tr>
 						<th>Description</th>
 						<td><textarea name="description">' .
 							(isset($song['description']) ? htmlspecialchars($song['description']) : '') .
 							'</textarea></td>
-					</tr>
-					<tr>
-						<th>URL</th>
-						<td class="table-form-added">' . $urlStr . '</td>
 					</tr>
 					<tr>
 						<th>Mode</th>
@@ -836,9 +836,7 @@ function addSong($isEdit) {
 			', `cover_url` = ' . ($coverUrl ? '"' . $coverUrl . '"' : 'NULL') .
 			', `drawing` = ' . ($drawing ? '"' . $drawing . '"' : 'NULL') .
 			', `tags` = "' . $tagsStr . '"' .
-			', `rating` = ' . ($rating ? $rating : 'NULL') .
-			', `user_added` = "' . $userAdded . '"' .
-			', `date_added` = "' . $dateAdded . '"
+			', `rating` = ' . ($rating ? $rating : 'NULL') . '
 		WHERE `hash` = "' . $hash . '";');
 	} else {
 		// Adding a new song
