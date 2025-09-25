@@ -38,7 +38,7 @@ export class Library {
 		drawing, fileForm, fileMin, fileOrig, hash, mode, name, rating, remix, sampleRate, songs, stereo,
 		tags, url
 	}, libName) {
-		const notAllLib = libName !== 'all';
+		const notAllLib = libName !== 'all' && libName !== 'recent';
 		if(songs) {
 			let songsStr = '';
 			const len = songs.length;
@@ -134,7 +134,9 @@ export class Library {
 				str += '<div class="code-remix"><div class="code-remix-preview"> remix of ' +
 					`<button class="code-button code-remix-load" data-hash="${
 						rHash }" title="Show detailed source information">&gt;</button> <span>${
-						rUrl ? `<a href="${ rUrl }" target="_blank">${ rName || rAuthor }</a>` :
+						rUrl ? `<a href="${
+							rUrl.startsWith('[') ? rUrl.match(/"([^"]+)"/)[1] : rUrl }" target="_blank">${
+							rName || rAuthor }</a>` :
 						`"${ rName }"` }${ rName && rAuthor ? ' by ' + rAuthor : '' }</span></div></div>`;
 			}
 		}
