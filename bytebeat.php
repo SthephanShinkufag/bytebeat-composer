@@ -420,9 +420,9 @@ function decodeLibraryFile($dbLink, $libName) {
 				(isset($song->drawing) ? ', drawing' : '') .
 				', tags' .
 				(isset($song->rating) ? ', rating' : '') .
-				(isset($song->user_added) ? ', user_added' : '') .
+				# (isset($song->user_added) ? ', user_added' : '') .
 				(isset($song->date_added) ? ', date_added' : '') .
-				(isset($song->user_edited) ? ', user_edited' : '') .
+				# (isset($song->user_edited) ? ', user_edited' : '') .
 				(isset($song->date_edited) ? ', date_edited' : '') .
 			') VALUES ("' . $song->hash . '"' .
 				($author !== '' ? ', "' . addslashes($author) . '"' : '') .
@@ -442,9 +442,9 @@ function decodeLibraryFile($dbLink, $libName) {
 					$song->drawing->scale . '}"' : '') .
 				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
 				(isset($song->rating) ? ', ' . $song->rating : '') .
-				(isset($song->user_added) ? ', "' . addslashes($song->user_added) . '"' : '') .
+				# (isset($song->user_added) ? ', "' . addslashes($song->user_added) . '"' : '') .
 				(isset($song->date_added) ? ', "' . $song->date_added . '"' : '') .
-				(isset($song->user_edited) ? ', "' . addslashes($song->user_edited) . '"' : '') .
+				# (isset($song->user_edited) ? ', "' . addslashes($song->user_edited) . '"' : '') .
 				(isset($song->date_edited) ? ', "' . $song->date_edited . '"' : '') .
 			');');
 
@@ -687,9 +687,9 @@ function databaseToFiles() {
 			(isset($song['drawing']) ? ',"drawing":' . $song['drawing'] : '') .
 			(isset($song['tags']) ? ',"tags":' . $song['tags'] : '') .
 			(isset($song['rating']) ? ',"rating":' . $song['rating'] : '') .
-			(isset($song['user_added']) ? ',"user_added": "' . $song['user_added'] . '"' : '') .
+			# (isset($song['user_added']) ? ',"user_added": "' . $song['user_added'] . '"' : '') .
 			(isset($song['date_added']) ? ',"date_added": "' . $song['date_added'] . '"' : '') .
-			(isset($song['user_edited']) ? ',"user_edited": "' . $song['user_edited'] . '"' : '') .
+			# (isset($song['user_edited']) ? ',"user_edited": "' . $song['user_edited'] . '"' : '') .
 			(isset($song['date_edited']) ? ',"date_edited": "' . $song['date_edited'] . '"' : '') .
 		'}';
 	}
