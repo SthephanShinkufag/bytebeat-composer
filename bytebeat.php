@@ -806,7 +806,7 @@ function addSong($isEdit) {
 	// Drawing
 	$drawingMode = $_POST['drawing_mode'];
 	$drawingScale = trim($_POST['drawing_scale']);
-	$drawingScale = $drawingScale && is_numeric($drawingScale) ? $drawingScale : NULL;
+	$drawingScale = isset($drawingScale) && is_numeric($drawingScale) ? $drawingScale : NULL;
 	$drawing = $drawingMode || isset($drawingScale) ? addslashes('{' .
 		($drawingMode ? '"mode":"' . $drawingMode . '"' : '') .
 		(isset($drawingScale) ? ($drawingMode ? ',' : '') . '"scale":"' . $drawingScale . '"' : '') .
