@@ -27,6 +27,7 @@ globalThis.bytebeat = new class {
 			drawScale: scope.drawScale,
 			isSeconds: false,
 			showAllSongs: library.showAllSongs,
+			srDivisor: 1,
 			themeStyle: 'Default',
 			volume: .5
 		};
@@ -90,6 +91,8 @@ globalThis.bytebeat = new class {
 			case 'control-scale': this.setScale(-scope.drawScale); break;
 			case 'control-scaledown': this.setScale(-1, elem); break;
 			case 'control-scaleup': this.setScale(1); break;
+			case 'control-srdivisor-down': this.setSRDivisor(-1); break;
+			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
 			default:
@@ -205,6 +208,7 @@ globalThis.bytebeat = new class {
 		this.mode = ui.controlPlaybackMode.value = mode = mode || 'Bytebeat';
 		editor.setValue(code);
 		this.setSampleRate(ui.controlSampleRate.value = +sampleRate || 8000, false);
+		this.setSRDivisor(0);
 		const data = {
 			mode,
 			sampleRate: this.sampleRate,
@@ -477,6 +481,15 @@ globalThis.bytebeat = new class {
 		} else {
 			ui.controlScaleDown.removeAttribute('disabled');
 		}
+	}
+	setSRDivisor(increment) {
+		const value = (this.settings.srDivisor || 1) + increment;
+		if(value === 0) {
+			return;
+		}
+		ui.controlSRDivisor.textContent = this.settings.srDivisor = value;
+		this.saveSettings();
+		this.sendData({ srDivisor: value });
 	}
 	setThemeStyle(value) {
 		if(value === undefined) {

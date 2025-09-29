@@ -9,9 +9,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025092600">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025092600">
-	<script type="module" async src="./build/index.js?version=2025092600"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025092902">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025092902">
+	<script type="module" async src="./build/index.js?version=2025092902"></script>
 </head>
 <body>
 	<main id="content">
@@ -71,8 +71,8 @@
 					<option value="Funcbeat">Funcbeat</option>
 				</select>
 				<div class="controls-group controls-grow">
-					<input type="text" id="control-samplerate" class="control-text" title="Set sample rate (in Hz) then press Enter">
-					<select id="control-samplerate-select" class="control-select" title="Sample rate">
+					<input type="text" id="control-samplerate" class="control-text" title="Set the sample rate (in Hz) then press Enter">
+					<select id="control-samplerate-select" class="control-select" title="Select the sample rate (in Hz)">
 						<option value="8000">8000Hz</option>
 						<option value="11025">11025Hz</option>
 						<option value="16000">16000Hz</option>
@@ -81,13 +81,18 @@
 						<option value="44100">44100Hz</option>
 						<option value="48000">48000Hz</option>
 					</select>
+					<span id="control-srdivisor" class="control-text" title="Sample rate divisor">1</span>
+					<div id="control-srdivisor-buttons">
+						<button id="control-srdivisor-up" class="control-button" title="Increase the sample rate divisor">^</button>
+						<button id="control-srdivisor-down" class="control-button" title="Decrease the sample rate divisor">^</button>
+					</div>
 				</div>
 				<div class="controls-group">
-					<button id="control-rec" class="control-button" title="Record to the file">
-						<svg><use xlink:href="#symbol-rec"></use></svg>
-					</button>
 					<button id="control-link" class="control-button" title="Copy the song link">
 						<svg><use xlink:href="#symbol-link"></use></svg>
+					</button>
+					<button id="control-rec" class="control-button" title="Record to the file">
+						<svg><use xlink:href="#symbol-rec"></use></svg>
 					</button>
 					<button id="control-expand" class="control-button" title="Expand the code editor">
 						<svg><use xlink:href="#symbol-expand"></use></svg>

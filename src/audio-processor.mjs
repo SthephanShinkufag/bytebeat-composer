@@ -9,13 +9,14 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.getValues = null;
 		this.isFuncbeat = false;
 		this.isPlaying = false;
-		this.playbackSpeed = 1;
 		this.lastByteValue = [null, null];
 		this.lastFuncValue = [null, null];
 		this.lastTime = -1;
 		this.outValue = [0, 0];
+		this.playbackSpeed = 1;
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
+		this.srDivisor = 1;
 		Object.seal(this);
 		audioProcessor.deleteGlobals();
 		audioProcessor.freezeGlobals();
@@ -69,13 +70,14 @@ class audioProcessor extends AudioWorkletProcessor {
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 		for(let i = 0; i < chDataLen; ++i) {
 			time += this.sampleRatio;
-			const currentTime = Math.floor(time);
+			const currentTime = Math.floor(time / this.srDivisor) * this.srDivisor;
 			if(this.lastTime !== currentTime) {
 				let funcValue;
-				const currentSample = Math.floor(byteSample);
+				const currentSample = Math.floor(byteSample / this.srDivisor) * this.srDivisor;
 				try {
 					if(this.isFuncbeat) {
-						funcValue = this.func(currentSample / this.sampleRate, this.sampleRate);
+						funcValue = this.func(currentSample / this.sampleRate,
+							this.sampleRate / this.srDivisor);
 					} else {
 						funcValue = this.func(currentSample);
 					}
@@ -159,6 +161,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
+		}
+		if(data.srDivisor !== undefined) {
+			this.srDivisor = data.srDivisor;
 		}
 		if(data.playbackSpeed !== undefined) {
 			const sampleRatio = this.sampleRatio / this.playbackSpeed;

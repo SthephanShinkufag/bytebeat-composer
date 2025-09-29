@@ -900,8 +900,8 @@ button[name="close"] {
 }
 
 #control-samplerate-select {
-	width: 20px;
-	border-radius: 0 var(--control-corners) var(--control-corners) 0;
+	width: 18px;
+	border-radius: 0;
 }
 
 #control-scale {
@@ -916,6 +916,31 @@ button[name="close"] {
 	border: none;
 }
 
+#control-srdivisor {
+	flex-grow: 0;
+	width: 16px;
+	cursor: default;
+}
+
+#control-srdivisor-buttons {
+	display: flex;
+	flex-direction: column;
+	width: 16px;
+}
+
+#control-srdivisor-up {
+	height: 15px !important;
+	font: unset;
+	border-radius: 0 var(--control-corners) 0 0;
+}
+
+#control-srdivisor-down {
+	height: 15px !important;
+	font: unset;
+	border-radius: var(--control-corners) 0 0 0;
+	transform: rotate(180deg);
+}
+
 .control-text {
 	height: var(--control-size);
 	padding: 0 4px;
@@ -927,6 +952,7 @@ button[name="close"] {
 }
 
 #control-volume {
+	width: 120px;
 	flex-grow: 1;
 	appearance: none;
 	height: 10px;

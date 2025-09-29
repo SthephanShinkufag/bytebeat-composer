@@ -53,6 +53,9 @@ export class UI {
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScale = document.getElementById('control-scale');
 		this.controlScaleDown = document.getElementById('control-scaledown');
+		this.controlSRDivisor = document.getElementById('control-srdivisor');
+		this.controlSRDivisorUp = document.getElementById('control-srdivisor-up');
+		this.controlSRDivisorDown = document.getElementById('control-srdivisor-down');
 		this.controlTime = document.getElementById('control-counter');
 		this.controlTimeUnits = document.getElementById('control-counter-units');
 		this.controlThemeStyle = document.getElementById('control-theme-style');
