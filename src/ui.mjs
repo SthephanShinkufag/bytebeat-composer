@@ -6,6 +6,7 @@ export class UI {
 		this.containerScroll = null;
 		this.controlCodeSize = null;
 		this.controlCodeStyle = null;
+		this.controlFontFamily = null;
 		this.controlColorDiagram = null;
 		this.controlColorDiagramInfo = null;
 		this.controlColorStereo = null;
@@ -33,11 +34,31 @@ export class UI {
 	expandEditor() {
 		this.containerFixed.classList.toggle('container-expanded');
 	}
+	toggleErrorPosition() {
+		const originalError = document.getElementById('error');
+		const errorConsole = document.getElementById('error-console');
+		const button = document.getElementById('control-error-position');
+		
+		if (originalError.classList.contains('hidden')) {
+			// Show original, hide console
+			originalError.classList.remove('hidden');
+			errorConsole.classList.add('hidden');
+			button.title = 'Move error console to the right';
+		} else {
+			// Hide original, show console
+			originalError.classList.add('hidden');
+			errorConsole.classList.remove('hidden');
+			// Copy content from original to console
+			errorConsole.innerText = originalError.innerText;
+			button.title = 'Move error console back to bottom';
+		}
+	}
 	initElements() {
 		this.containerFixed = document.getElementById('container-fixed');
 		this.containerScroll = document.getElementById('container-scroll');
 		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlCodeStyle = document.getElementById('control-code-style');
+		this.controlFontFamily = document.getElementById('control-font-family');
 		this.controlColorDiagram = document.getElementById('control-color-diagram');
 		this.controlColorDiagramInfo = document.getElementById('control-color-diagram-info');
 		this.controlColorStereo = document.getElementById('control-color-stereo');
@@ -53,6 +74,9 @@ export class UI {
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScale = document.getElementById('control-scale');
 		this.controlScaleDown = document.getElementById('control-scaledown');
+		this.controlSRDivisor = document.getElementById('control-srdivisor');
+		this.controlSRDivisorUp = document.getElementById('control-srdivisor-up');
+		this.controlSRDivisorDown = document.getElementById('control-srdivisor-down');
 		this.controlTime = document.getElementById('control-counter');
 		this.controlTimeUnits = document.getElementById('control-counter-units');
 		this.controlThemeStyle = document.getElementById('control-theme-style');

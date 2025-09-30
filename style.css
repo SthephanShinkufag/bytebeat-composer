@@ -1,5 +1,53 @@
 @import url('https://fonts.cdnfonts.com/css/nk57-monospace');
 
+@font-face {
+	font-family: 'PTMono-Regular';
+	src: url('./Fonts/PTMono-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'OCR-B';
+	src: url('./Fonts/OCR-B.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Ticketing';
+	src: url('./Fonts/ticketing.regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'RobotoMono';
+	src: url('./Fonts/RobotoMono-Medium.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Tomo';
+	src: url('./Fonts/tomo.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'VCR';
+	src: url('./Fonts/vcr.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'ticketing-regular';
+	src: url('./Fonts/ticketing.regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 /* ==[ Themes ] =========================================================================================== */
 
 :root {
@@ -24,6 +72,9 @@
 	--code-string2: #56b6c2;
 	--code-tags: #5cac87;
 	--code-variable: #c5c8c6;
+	--editor-font-family: 'NK57 Monospace', monospace;
+	--editor-font-size: 1;
+	--custom-font-family: monospace;
 	--control-button: linear-gradient(to bottom, #001050, #001050);
 	--control-button-active: linear-gradient(to bottom, #001050, #001050);
 	--control-button-border: #5c636c;
@@ -253,6 +304,49 @@ html[data-theme="Teal"] {
 	--code-string: #fa7;
 	--code-string2: #f78;
 	--code-variable: #9de;
+}
+
+#editor-container[data-font="default"] {
+	--editor-font-family: monospace;
+}
+
+#editor-container[data-font="nk57-monospace"] {
+	--editor-font-family: 'NK57 Monospace', monospace;
+	--editor-font-size: 0.65;
+}
+
+#editor-container[data-font="PTMono-Regular"] {
+	--editor-font-family: 'PTMono-Regular', monospace;
+	--editor-font-size: 0.92;
+}
+
+#editor-container[data-font="OCR-B"] {
+	--editor-font-family: 'OCR-B', monospace;
+	--editor-font-size: 0.65;
+}
+
+#editor-container[data-font="Ticketing"] {
+	--editor-font-family: 'Ticketing', monospace;
+	--editor-font-size: 1.2;
+}
+
+#editor-container[data-font="RobotoMono"] {
+	--editor-font-family: 'RobotoMono', monospace;
+	--editor-font-size: 0.9;
+}
+
+#editor-container[data-font="Tomo"] {
+	--editor-font-family: 'Tomo', monospace;
+	--editor-font-size: 0.75;
+}
+
+#editor-container[data-font="VCR"] {
+	--editor-font-family: 'VCR', monospace;
+	--editor-font-size: 0.95;
+}
+
+#editor-container[data-font="custom"] {
+	--editor-font-family: var(--custom-font-family, monospace);
 }
 
 /* ==[ Common ] =========================================================================================== */
@@ -506,6 +600,7 @@ button[name="close"] {
 }
 
 .cm-content {
+	font-family: var(--editor-font-family) !important;
 	font-weight: var(--code-font);
 	caret-color: #fff !important;
 }
@@ -513,7 +608,10 @@ button[name="close"] {
 .cm-editor {
 	height: 100%;
 	background-color: var(--editor);
+	font-size: calc(var(--font-size) * var(--editor-font-size)) !important;
 }
+
+
 
 .cm-gutters {
 	background-color: #282c34 !important;
@@ -549,8 +647,49 @@ button[name="close"] {
 	max-height: calc(100% - 256px);
 	overflow-y: scroll;
 	color: #f92672;
-	font: 10px/10px 'NK57 Monospace', monospace;
+	font: 14px/14px monospace;
 	letter-spacing:-1px;
+}
+
+#error-console {
+	margin: 0;
+	overflow-y: scroll;
+	color: #f92672;
+	font: 14px/14px monospace;
+	letter-spacing:-1px;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	width: 60%;
+	height: 80%;
+	background-color: var(--editor);
+	border: 2px solid #bac2cc;
+	z-index: 1000;
+	resize: both;
+}
+
+/* Error console right positioning */
+.error-console-right #container-fixed {
+	display: flex;
+	flex-direction: row;
+	max-width: none;
+}
+
+.error-console-right .editor-and-canvas {
+	display: flex;
+	flex-direction: column;
+	width: 1028px;
+	flex-shrink: 0;
+}
+
+.error-console-right #error {
+	width: 300px;
+	flex-shrink: 0;
+	height: 100%;
+	max-height: none;
+	margin: 0 0 0 6px;
+	border: 2px solid #bac2cc;
+	background-color: var(--editor);
 }
 
 .tok-comment {
@@ -936,8 +1075,8 @@ button[name="close"] {
 }
 
 #control-samplerate-select {
-	width: 20px;
-	border-radius: 0 var(--control-corners) var(--control-corners) 0;
+	width: 18px;
+	border-radius: 0;
 }
 
 #control-scale {
@@ -952,6 +1091,31 @@ button[name="close"] {
 	border: none;
 }
 
+#control-srdivisor {
+	flex-grow: 0;
+	width: 16px;
+	cursor: default;
+}
+
+#control-srdivisor-buttons {
+	display: flex;
+	flex-direction: column;
+	width: 16px;
+}
+
+#control-srdivisor-up {
+	height: 15px !important;
+	font: unset;
+	border-radius: 0 var(--control-corners) 0 0;
+}
+
+#control-srdivisor-down {
+	height: 15px !important;
+	font: unset;
+	border-radius: var(--control-corners) 0 0 0;
+	transform: rotate(180deg);
+}
+
 .control-text {
 	height: var(--control-size);
 	padding: 0 4px;
@@ -963,6 +1127,7 @@ button[name="close"] {
 }
 
 #control-volume {
+	width: 120px;
 	flex-grow: 1;
 	appearance: none;
 	height: 10px;

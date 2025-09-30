@@ -19,6 +19,9 @@ globalThis.bytebeat = new class {
 		this.byteSample = 0;
 		this.defaultSettings = {
 			codeStyle: 'Atom Dark',
+			fontFamily: 'default',
+			customFont: 'monospace',
+			fontSize: 1,
 			colorDiagram: '#0080ff',
 			colorStereo: 1,
 			colorTimeCursor: '#80bbff',
@@ -27,6 +30,7 @@ globalThis.bytebeat = new class {
 			drawScale: scope.drawScale,
 			isSeconds: false,
 			showAllSongs: library.showAllSongs,
+			srDivisor: 1,
 			themeStyle: 'Default',
 			volume: .5,
 			donotChangeScopePreferences: false
@@ -48,6 +52,8 @@ globalThis.bytebeat = new class {
 		case 'change':
 			switch(elem.id) {
 			case 'control-code-style': this.setCodeStyle(elem.value); break;
+			case 'control-font-family': this.setFontFamily(elem.value); break;
+			case 'control-font-size': this.setFontSize(+elem.value); break;
 			case 'control-color-diagram': this.setColorDiagram(elem.value); break;
 			case 'control-color-stereo':
 				this.setColorStereo(+elem.value);
@@ -88,6 +94,7 @@ globalThis.bytebeat = new class {
 			case 'control-counter':
 			case 'control-pause': this.playbackToggle(false); break;
 			case 'control-expand': ui.expandEditor(); break;
+			case 'control-error-position': ui.toggleErrorPosition(); break;
 			case 'control-link': ui.copyLink(); break;
 			case 'control-play-backward': this.playbackToggle(true, true, -1); break;
 			case 'control-play-forward': this.playbackToggle(true, true, 1); break;
@@ -96,6 +103,8 @@ globalThis.bytebeat = new class {
 			case 'control-scale': this.setScale(-scope.drawScale); break;
 			case 'control-scaledown': this.setScale(-1, elem); break;
 			case 'control-scaleup': this.setScale(1); break;
+			case 'control-srdivisor-down': this.setSRDivisor(-1); break;
+			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
 			default:
@@ -128,6 +137,8 @@ globalThis.bytebeat = new class {
 		case 'input':
 			switch(elem.id) {
 			case 'control-counter': this.oninputCounter(e); break;
+			case 'control-custom-font': this.setCustomFont(elem.value); break;
+			case 'control-font-size': this.setFontSize(+elem.value); break;
 			case 'control-volume': this.setVolume(false); break;
 			}
 			return;
@@ -167,7 +178,7 @@ globalThis.bytebeat = new class {
 	initAfterDom() {
 		// Show loading overlay during editor initialization
 		const editorLoading = document.getElementById('editor-loading');
-		if (editorLoading) {
+		if(editorLoading) {
 			editorLoading.classList.remove('hidden');
 		}
 		
@@ -180,6 +191,9 @@ globalThis.bytebeat = new class {
 			this.setVolume(true);
 			this.setCounterUnits();
 			this.setCodeStyle();
+			this.setFontFamily();
+			this.setCustomFont();
+			this.setFontSize();
 			this.setColorStereo();
 			this.setColorDiagram();
 			this.setColorWaveform();
@@ -191,6 +205,9 @@ globalThis.bytebeat = new class {
 			ui.controlDrawMode.value = scope.drawMode;
 			ui.controlThemeStyle.value = this.settings.themeStyle;
 			ui.controlCodeStyle.value = this.settings.codeStyle;
+			if(ui.controlFontFamily) ui.controlFontFamily.value = this.settings.fontFamily;
+			if(ui.controlCustomFont) ui.controlCustomFont.value = this.settings.customFont;
+			if(ui.controlFontSize) ui.controlFontSize.value = this.settings.fontSize;
 			ui.mainElem.addEventListener('click', this);
 			ui.mainElem.addEventListener('change', this);
 			ui.containerFixed.addEventListener('input', this);
@@ -200,7 +217,7 @@ globalThis.bytebeat = new class {
 			this.loadExoticProjects();
 			
 			// Hide the initial loading overlay
-			if (editorLoading) {
+			if(editorLoading) {
 				editorLoading.classList.add('hidden');
 			}
 		}, 50);
@@ -253,15 +270,15 @@ globalThis.bytebeat = new class {
 		
 		addFileBtn.addEventListener('click', () => fileInput.click());
 		clearFilesBtn.addEventListener('click', () => this.clearAllFiles());
-		fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+		fileInput.addEventListener('change', e => this.handleFileSelect(e));
 		loadTB3Btn.addEventListener('click', () => tb3Input.click());
-		tb3Input.addEventListener('change', (e) => this.handleTB3Select(e));
+		tb3Input.addEventListener('change', e => this.handleTB3Select(e));
 		document.getElementById('save-tb3').addEventListener('click', () => this.saveTB3());
 	}
 	async handleFileSelect(e) {
 		const files = Array.from(e.target.files);
-		for (const file of files) {
-			if (file.type.startsWith('audio/')) {
+		for(const file of files) {
+			if(file.type.startsWith('audio/')) {
 				await this.handleAudioFile(file);
 			}
 		}
@@ -270,7 +287,7 @@ globalThis.bytebeat = new class {
 	}
 	async handleTB3Select(e) {
 		const file = e.target.files[0];
-		if (file) {
+		if(file) {
 			editor.showLoading();
 			try {
 				await this.handleTB3File(file);
@@ -288,15 +305,15 @@ globalThis.bytebeat = new class {
 		
 		// Detect format
 		let format = 'Unknown';
-		let hasAudioFolder = Object.keys(zipData.files).some(f => f.startsWith('audio/'));
-		let hasAudioJson = zipData.files['audio.json'];
+		const hasAudioFolder = Object.keys(zipData.files).some(f => f.startsWith('audio/'));
+		const hasAudioJson = zipData.files['audio.json'];
 		
-		if (hasAudioFolder) format = 'TB3';
-		else if (hasAudioJson) format = 'TB2';
+		if(hasAudioFolder) format = 'TB3';
+		else if(hasAudioJson) format = 'TB2';
 		else format = 'TB3';
 		
 		// TB2/TB3 format
-		if (zipData.files['code.txt'] && zipData.files['settings.json']) {
+		if(zipData.files['code.txt'] && zipData.files['settings.json']) {
 			const code = await zipData.files['code.txt'].async('string');
 			const settings = JSON.parse(await zipData.files['settings.json'].async('string'));
 			
@@ -304,8 +321,8 @@ globalThis.bytebeat = new class {
 			this.loadCode({ code, ...settings, format }, true);
 			
 			// TB3: Load from audio folder
-			for (const [filename, zipEntry] of Object.entries(zipData.files)) {
-				if (filename.startsWith('audio/') && filename.endsWith('.json')) {
+			for(const [filename, zipEntry] of Object.entries(zipData.files)) {
+				if(filename.startsWith('audio/') && filename.endsWith('.json')) {
 					const index = +filename.match(/\/(\d+)\.json$/)[1];
 					const audioData = JSON.parse(await zipEntry.async('text'));
 					this.audioFiles.set(index, {
@@ -318,7 +335,7 @@ globalThis.bytebeat = new class {
 			}
 			
 			// TB2: Load from audio.json
-			if (zipData.files['audio.json']) {
+			if(zipData.files['audio.json']) {
 				const audioData = JSON.parse(await zipData.files['audio.json'].async('string'));
 				// TB2 format: data is [sample][channel], extract first channel
 				const channelData = audioData.data.map(sample => sample[0] || 0);
@@ -345,14 +362,14 @@ globalThis.bytebeat = new class {
 	}
 	updateFileList() {
 		const fileList = document.getElementById('file-list') || document.getElementById('audio-list');
-		if (!fileList) return;
+		if(!fileList) return;
 		fileList.innerHTML = '';
 		this.audioFiles.forEach((file, index) => {
 			const fileItem = document.createElement('div');
 			fileItem.className = 'file-item';
 			fileItem.innerHTML = `
-				<span>${index}: ${file.name}</span>
-				<button class="remove-file" data-index="${index}">×</button>
+				<span>${ index }: ${ file.name }</span>
+				<button class="remove-file" data-index="${ index }">×</button>
 			`;
 			fileItem.querySelector('.remove-file').addEventListener('click', () => {
 				this.removeFile(index);
@@ -393,11 +410,15 @@ globalThis.bytebeat = new class {
 			const container = document.getElementById('exotic-projects');
 			container.innerHTML = '';
 			
-			for (const section of data.sections) {
+			for(const section of data.sections) {
 				// Create section header
 				const sectionHeader = document.createElement('div');
 				sectionHeader.className = 'library-header';
-				sectionHeader.innerHTML = `<span class="library-arrow">${section.expanded ? '▼' : '▶'}</span> ${section.name} <span class="library-count">${section.count} songs</span>`;
+				sectionHeader.innerHTML = `<span class="library-arrow">${
+					section.expanded ? '▼' : '▶'
+				}</span> ${ section.name } <span class="library-count">${
+					section.count
+				} songs</span>`;
 				container.appendChild(sectionHeader);
 				
 				// Create projects container
@@ -405,38 +426,74 @@ globalThis.bytebeat = new class {
 				projectsContainer.className = 'library-songs';
 				projectsContainer.style.display = section.expanded ? 'block' : 'none';
 				
-				for (const project of section.projects) {
+				for(const project of section.projects) {
 					const projectDiv = document.createElement('div');
 					projectDiv.className = 'song';
 					
-					if (project.codeFile.endsWith('.tb2') || project.codeFile.endsWith('.tb3')) {
+					if(project.codeFile.endsWith('.tb2') || project.codeFile.endsWith('.tb3')) {
 						// TB2/TB3 project file
 						const formatLabel = project.codeFile.endsWith('.tb2') ? '[TB2] ' : '[TB3] ';
 						projectDiv.innerHTML = `
-							<div class="song-title">${formatLabel}${project.name}</div>
-							<div class="song-author">${section.name} (${project.date})</div>
-							${project.description ? `<div class="song-description">${project.description}</div>` : ''}
-							${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
-							<button class="code-load" data-file="./data/songs/exotic/${project.codeFile}">Load ${project.codeFile}</button>
+							<div class="song-title">${ formatLabel }${
+								project.name
+							}</div>
+							<div class="song-author">${ section.name } (${
+								project.date
+							})</div>
+							${
+								project.description
+									? `<div class="song-description">${
+										project.description
+									}</div>`
+									: ''
+							}
+							${
+								project.features
+									? `<div class="song-features">Features: ${
+										project.features.join(', ')
+									}</div>`
+									: ''
+							}
+							<button class="code-load" data-file="./data/songs/exotic/${
+								project.codeFile
+							}">Load ${ project.codeFile }</button>
 						`;
 					} else {
 						// Regular JS file
-						const codeResponse = await fetch(`./data/songs/exotic/${project.codeFile}`);
+						const codeResponse = await fetch(`./data/songs/exotic/${ project.codeFile }`);
 						const code = await codeResponse.text();
-						const formatLabel = project.mode ? `[${project.mode}] ` : '';
+						const formatLabel = project.mode ? `[${ project.mode }] ` : '';
 						projectDiv.innerHTML = `
-							<div class="song-title">${formatLabel}${project.name}</div>
-							<div class="song-author">${section.name} (${project.date})</div>
-							${project.description ? `<div class="song-description">${project.description}</div>` : ''}
-							${project.features ? `<div class="song-features">Features: ${project.features.join(', ')}</div>` : ''}
-							<div class="code-text" data-songdata='${JSON.stringify({...project, code})}'>${code}</div>
+							<div class="song-title">${ formatLabel }${
+								project.name
+							}</div>
+							<div class="song-author">${ section.name } (${
+								project.date
+							})</div>
+							${
+								project.description
+									? `<div class="song-description">${
+										project.description
+									}</div>`
+									: ''
+							}
+							${
+								project.features
+									? `<div class="song-features">Features: ${
+										project.features.join(', ')
+									}</div>`
+									: ''
+							}
+							<div class="code-text" data-songdata='${
+								JSON.stringify({ ...project, code })
+							}'>${ code }</div>
 						`;
 					}
 					projectsContainer.appendChild(projectDiv);
 				}
 				container.appendChild(projectsContainer);
 			}
-		} catch (error) {
+		} catch(error) {
 			console.log('No exotic projects file found');
 		}
 	}
@@ -456,8 +513,8 @@ globalThis.bytebeat = new class {
 		}));
 		
 		// Save audio files in audio folder
-		for (const [index, audioData] of this.audioFiles.entries()) {
-			audioFolder.file(`${index}.json`, JSON.stringify({
+		for(const [index, audioData] of this.audioFiles.entries()) {
+			audioFolder.file(`${ index }.json`, JSON.stringify({
 				name: audioData.name,
 				data: Array.from(audioData.data),
 				channels: audioData.channels,
@@ -479,19 +536,27 @@ globalThis.bytebeat = new class {
 		arrow.textContent = isExpanded ? '▶' : '▼';
 		songsContainer.style.display = isExpanded ? 'none' : 'block';
 	}
-	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
+	loadCode(params = {}, isPlay = true) {
+		const { code, sampleRate, inputMode, drawMode, scale, srDivisor: paramSrDivisor } = params;
+		const mode = inputMode || 'Bytebeat';
+		const savedSrDivisor = paramSrDivisor !== undefined ? paramSrDivisor : (this.settings.srDivisor || 1);
+		
 		// Show loading overlay
 		editor.showLoading();
 		
 		// Use setTimeout to allow the loading overlay to show before processing
 		setTimeout(() => {
-			this.mode = ui.controlPlaybackMode.value = mode = mode || 'Bytebeat';
-			editor.setValue(code);
+			this.mode = ui.controlPlaybackMode.value = mode;
+			editor.setValue(code || editor.value);
 			this.setSampleRate(ui.controlSampleRate.value = +sampleRate || 8000, false);
+			
+			// Set UI and send saved/parameter srDivisor
+			ui.controlSRDivisor.textContent = savedSrDivisor;
 			const data = {
 				mode,
 				sampleRate: this.sampleRate,
-				sampleRatio: this.sampleRate / this.audioCtx.sampleRate
+				sampleRatio: this.sampleRate / this.audioCtx.sampleRate,
+				srDivisor: savedSrDivisor
 			};
 			if(isPlay) {
 				data.playbackSpeed = this.playbackSpeed = 1;
@@ -499,7 +564,7 @@ globalThis.bytebeat = new class {
 				data.resetTime = true;
 				data.isPlaying = isPlay;
 			}
-			data.setFunction = code;
+			data.setFunction = code || editor.value;
 			
 			// Check if scope preferences should not be changed
 			const doNotChangeScopePrefs = this.settings.donotChangeScopePreferences;
@@ -537,21 +602,14 @@ globalThis.bytebeat = new class {
 			urlHash = window.location.hash;
 		}
 		const codeData = getCodeFromUrl(urlHash) || { code: editor.value };
+		const savedSrDivisor = this.settings.srDivisor || 1;
+		ui.controlSRDivisor.textContent = savedSrDivisor;
 		// Only show loading if we're loading code from URL (not default)
 		if(urlHash && getCodeFromUrl(urlHash)) {
-			this.loadCode(codeData, false);
+			this.loadCode({ ...codeData, srDivisor: savedSrDivisor }, false);
 		} else {
 			// For default code, don't show loading overlay
-			this.mode = ui.controlPlaybackMode.value = codeData.mode || 'Bytebeat';
-			editor.setValue(codeData.code);
-			this.setSampleRate(ui.controlSampleRate.value = +codeData.sampleRate || 8000, false);
-			const data = {
-				mode: this.mode,
-				sampleRate: this.sampleRate,
-				sampleRatio: this.sampleRate / this.audioCtx.sampleRate,
-				setFunction: codeData.code
-			};
-			this.sendData(data);
+			this.loadCode({ ...codeData, srDivisor: savedSrDivisor }, false);
 		}
 	}
 	playbackStop() {
@@ -601,7 +659,7 @@ globalThis.bytebeat = new class {
 		}
 	}
 	receiveData(data) {
-		const { byteSample, drawBuffer, fftData, error } = data;
+		const { byteSample, drawBuffer, error } = data; // fftData unused
 		if(typeof byteSample === 'number') {
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
@@ -627,6 +685,11 @@ globalThis.bytebeat = new class {
 			}
 			if(isUpdate) {
 				editor.errorElem.innerText = error.message;
+				// Also update the floating error console if it's visible
+				const errorConsole = document.getElementById('error-console');
+				if(errorConsole && !errorConsole.classList.contains('hidden')) {
+					errorConsole.innerText = error.message;
+				}
 				this.sendData({ errorDisplayed: true });
 			}
 			if(data.updateUrl !== true) {
@@ -789,6 +852,19 @@ globalThis.bytebeat = new class {
 			ui.controlScaleDown.removeAttribute('disabled');
 		}
 	}
+	setSRDivisor(increment) {
+		const oldValue = this.settings.srDivisor || 1;
+		let value = oldValue + increment;
+		value = Math.max(1, value); // Prevent 0 or negative
+		if(value === oldValue) {
+			return;
+		}
+		// Update UI immediately
+		ui.controlSRDivisor.textContent = value;
+		this.settings.srDivisor = value;
+		this.saveSettings();
+		this.sendData({ srDivisor: value });
+	}
 	setThemeStyle(value) {
 		if(value === undefined) {
 			if((value = this.settings.themeStyle) === undefined) {
@@ -878,6 +954,52 @@ globalThis.bytebeat = new class {
 			checkbox.checked = this.settings.donotChangeScopePreferences ?? false;
 		}
 	}
+	setFontFamily(value) {
+		if(value === undefined) {
+			if((value = this.settings.fontFamily) === undefined) {
+				value = this.settings.fontFamily = this.defaultSettings.fontFamily;
+				this.saveSettings();
+			}
+			editor.container.dataset.font = value;
+			return;
+		}
+		editor.container.dataset.font = this.settings.fontFamily = value;
+		this.saveSettings();
+	}
+	setCustomFont(value) {
+		if(value === undefined) {
+			if((value = this.settings.customFont) === undefined) {
+				value = this.settings.customFont = this.defaultSettings.customFont;
+				this.saveSettings();
+			}
+		} else {
+			this.settings.customFont = value;
+			this.saveSettings();
+		}
+		if(value && value.includes('http')) {
+			document.documentElement.style.setProperty('--custom-font-url', `"${ value }"` );
+			const fontName = value.split('family=')[1]?.split('&')[0]?.replace(/\+/g, ' ') || 'monospace';
+			document.documentElement.style.setProperty('--custom-font-family', fontName);
+		} else {
+			document.documentElement.style.setProperty('--custom-font-url', '');
+			document.documentElement.style.setProperty('--custom-font-family', value || 'monospace');
+		}
+	}
+	setFontSize(value) {
+		if(value === undefined) {
+			if((value = this.settings.fontSize) === undefined) {
+				value = this.settings.fontSize = this.defaultSettings.fontSize;
+				this.saveSettings();
+			}
+		} else {
+			this.settings.fontSize = value;
+			this.saveSettings();
+		}
+		if(editor.container) {
+			editor.container.style.fontSize = `calc(10.5pt * ${ value })`;
+		}
+		if(ui.fontSizeValue) ui.fontSizeValue.textContent = value.toFixed(1) + 'x';
+	}
 }();
 
 // Add CSS for file management
@@ -912,3 +1034,4 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<!--todo: add a way to move the error console to the top of the page-->
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -9,12 +9,12 @@
 	<title>Bytebeat composer</title>
 	<!-- JSZip for TB3 project save/load (tb2/tb3)-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.js"></script>
-	
+
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025091602">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025091602">
-	<script type="module" async src="./build/index.js?version=2025091602"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025092902">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025092902">
+	<script type="module" async src="./build/index.js?version=2025092902"></script>
 </head>
 <body>
 	<main id="content">
@@ -79,8 +79,8 @@
 					<option value="Funcbeat">Funcbeat</option>
 				</select>
 				<div class="controls-group controls-grow">
-					<input type="text" id="control-samplerate" class="control-text" title="Set sample rate (in Hz) then press Enter">
-					<select id="control-samplerate-select" class="control-select" title="Sample rate">
+					<input type="text" id="control-samplerate" class="control-text" title="Set the sample rate (in Hz) then press Enter">
+					<select id="control-samplerate-select" class="control-select" title="Select the sample rate (in Hz)">
 						<option value="1000">1000Hz</option>
 						<option value="8000">8000Hz</option>
 						<option value="11025">11025Hz</option>
@@ -90,13 +90,18 @@
 						<option value="44100">44100Hz</option>
 						<option value="48000">48000Hz</option>
 					</select>
+					<span id="control-srdivisor" class="control-text" title="Sample rate divisor">1</span>
+					<div id="control-srdivisor-buttons">
+						<button id="control-srdivisor-up" class="control-button" title="Increase the sample rate divisor">^</button>
+						<button id="control-srdivisor-down" class="control-button" title="Decrease the sample rate divisor">^</button>
+					</div>
 				</div>
 				<div class="controls-group">
-					<button id="control-rec" class="control-button" title="Record to the file">
-						<svg><use xlink:href="#symbol-rec"></use></svg>
-					</button>
 					<button id="control-link" class="control-button" title="Copy the song link">
 						<svg><use xlink:href="#symbol-link"></use></svg>
+					</button>
+					<button id="control-rec" class="control-button" title="Record to the file">
+						<svg><use xlink:href="#symbol-rec"></use></svg>
 					</button>
 					<button id="control-expand" class="control-button" title="Expand the code editor">
 						<svg><use xlink:href="#symbol-expand"></use></svg>
@@ -106,8 +111,15 @@
 				<div class="controls-group controls-grow">
 					<input id="control-volume" type="range" min="0" max="1" value=".5" step="any" title="Volume">
 				</div>
+				<br>
+				<div class="control-expand">
+					<button id="control-error-position" class="control-button" title="Move error console to the right">
+						<svg><use xlink:href="#symbol-expand"></use></svg>
+					</button>
+				</div>
 			</div>
 			<pre id="error"></pre>
+			<pre id="error-console" class="hidden"></pre>
 			<div id="canvas-container" title="Click to play">
 				<canvas id="canvas-main" width="1024" height="256"></canvas>
 				<div id="canvas-timecursor"></div>
@@ -158,19 +170,19 @@
 					It's simply a single-line formula that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
 					If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
 					Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.<br>
-					<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a><br>
+					<a href="http://canonical.org/~kragen/bytebeat/" target="_blank" rel="noopener">History of bytebeat</a><br>
 					<br>
 					Original blog posts and videos from Viznut:<br>
-					<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a><br>
-					<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a><br>
-					<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a><br>
-					<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a><br>
-					<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
+					<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank" rel="noopener">Blog posts #1</a><br>
+					<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank" rel="noopener">Blog posts #2</a><br>
+					<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank" rel="noopener">YouTube video #1</a><br>
+					<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank" rel="noopener">YouTube video #2</a><br>
+					<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank" rel="noopener">YouTube video #3</a><br>
 					<br>
 					This website is a live editing bytebeats player. It has a collection of bytebeat music I found on the internet, and also the music I created.<br>
 					You can choose between bytebeat, signed bytebeat and floatbeat formats. Bytebeat expects output is an unsigned 8bit value (0 to 255). Signed bytebeat assumes output is a signed 8bit value (-127 to 128). Floatbeat assumes output is -1.0 to 1.0.<br>
 					<br>
-					This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
+					This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank" rel="noopener">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank" rel="noopener">@paul_hayes</a>.<br>
 					Forked by SthephanShi aka Viraya.
 				</article>
 			</details>
@@ -273,6 +285,20 @@
 						Code style
 					</label>
 					<label class="settings-block">
+						<select id="control-font-family" class="control-select" title="Editor font family">
+							<option value="default" selected>Default (Monospace)</option>
+							<option value="nk57-monospace">NK57-Monospace</option>
+							<option value="PTMono-Regular">PTMono-Regular</option>
+							<option value="OCR-B">OCR-B</option>
+							<option value="Ticketing">Ticketing</option>
+							<option value="RobotoMono">RobotoMono</option>
+							<option value="Tomo">Tomo</option>
+							<option value="VCR">VCR</option>
+
+						</select>
+						Editor font
+					</label>
+					<label class="settings-block">
 						<input type="color" id="control-color-timecursor" class="control-color" title="Click to pick the time cursor color">
 						Time cursor color in the scope
 					</label>
@@ -300,8 +326,8 @@
 				</article>
 			</details>
 			<footer>
-				<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank">Discussion board</a><br>
-				<a class="link" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">Source code</a>
+				<a class="link" href="/btb/" title="Bytebeat discussion threads" target="_blank" rel="noopener">Discussion board</a><br>
+				<a class="link" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank" rel="noopener">Source code</a>
 			</footer>
 		</section>
 	</main>
@@ -354,7 +380,6 @@
 	<a id="downloader" class="hidden"></a>
 </body>
 </html>
-
 
 
 

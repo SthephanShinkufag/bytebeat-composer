@@ -196,7 +196,7 @@ export class Library {
 		}
 		state.add('loaded');
 		const waitElem = headerElem.querySelector('.loading-wait');
-		waitElem.classList.remove('hidden');
+		if(waitElem) waitElem.classList.remove('hidden');
 		const libName = containerElem.id.replace('library-', '');
 		const response = await fetch(this.pathLibrary + libName + '.gz');
 		const { status } = response;
@@ -219,7 +219,7 @@ export class Library {
 			this.cacheSongs(libArr);
 		}
 		containerElem.insertAdjacentHTML('beforeend', libHTML);
-		waitElem.classList.add('hidden');
+		if(waitElem) waitElem.classList.add('hidden');
 	}
 	async onclickRemixLoadButton(elem) {
 		const parentElem = elem.parentNode;
