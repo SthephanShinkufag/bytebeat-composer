@@ -897,7 +897,7 @@ function addSong($isEdit) {
 			', "' . $tagsStr . '"' .
 			($rating ? ', ' . $rating : '') .
 			', "' . $user . '"' .
-			', "' . $date . '");');
+			', "' . $dateEdited . '");');
 	}
 
 	$sources = $_POST['remix'];
