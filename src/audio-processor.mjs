@@ -125,8 +125,9 @@ class audioProcessor extends AudioWorkletProcessor {
 					}
 				}
 				if(hasValue) {
-					drawBuffer.push({ t: currentSample, value: [...this.lastByteValue] });
+					drawBuffer.push({ t: byteSample, value: [...this.lastByteValue] });
 				}
+
 				byteSample += currentTime - this.lastTime;
 				this.lastFuncValue = funcValue;
 				this.lastTime = currentTime;
