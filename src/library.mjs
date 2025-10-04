@@ -123,7 +123,8 @@ export class Library {
 		}
 		str += '</span>';
 		if(this.isAdmin) {
-			str += ` <a href="bytebeat.php?editsong_request&hash=${ hash }" target="_blank">Edit</a>`;
+			str += ` <a href="bytebeat.php?editsong_request&hash=${ hash }" target="_blank">Edit</a> / ` +
+				`<a class="song-hash" href="#" data-hash="${ hash }">Hash</a>`;
 		}
 		if(description) {
 			str += `<div class="code-description">${ description }</div>`;

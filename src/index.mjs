@@ -107,6 +107,9 @@ globalThis.bytebeat = new class {
 					library.onclickLibraryHeader(elem);
 				} else if(elem.parentNode.classList.contains('library-header')) {
 					library.onclickLibraryHeader(elem.parentNode);
+				} else if(elem.classList.contains('song-hash')) {
+					navigator.clipboard.writeText(elem.dataset.hash);
+					e.preventDefault();
 				}
 			}
 			return;
@@ -128,6 +131,8 @@ globalThis.bytebeat = new class {
 				elem.title = 'Click to play this code';
 			} else if(elem.classList.contains('songs-header')) {
 				elem.title = 'Click to show/hide the songs';
+			} else if(elem.classList.contains('song-hash')) {
+				elem.title = 'Click to copy the song hash into clipboard';
 			}
 			return;
 		}

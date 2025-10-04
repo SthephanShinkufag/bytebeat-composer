@@ -35,6 +35,7 @@ function fancyDie($message) {
 	</div>
 	<br>
 	<hr>
+	[<a href="https://github.com/SthephanShinkufag/bytebeat-composer/wiki/Library-moderation-instructions">Instructions</a>]
 	[<a href="./">Go to player</a>]
 	[<a href="javascript: window.history.go(-1);">Return</a>]
 </body>
