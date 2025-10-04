@@ -891,7 +891,14 @@ button[name="close"] {
 	cursor: pointer;
 }
 
-.library-header > h1 {
+.ui-section-header {
+	padding: 4px 8px;
+	border-radius: 3px;
+	background-image: var(--library-header);
+	cursor: pointer;
+}
+
+.library-header > h1, .ui-section-header > h1 {
 	display: inline;
 	margin: inherit;
 	font-size: var(--font-size);
