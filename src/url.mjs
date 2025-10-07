@@ -6,9 +6,9 @@ export function getCodeFromUrl(hash) {
 		const dataArr = Uint8Array.from(atob(hash.substring(2)), el => el.charCodeAt());
 		try {
 			songData = {
-				mode: ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'][dataArr[0]],
-				sampleRate: new DataView(dataArr.buffer).getFloat32(1, 1),
-				code: inflateRaw(new Uint8Array(dataArr.buffer, 5), { to: 'string' })
+			  inputMode: ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'][dataArr[0]],
+			  sampleRate: new DataView(dataArr.buffer).getFloat32(1, 1),
+			  code: inflateRaw(new Uint8Array(dataArr.buffer, 5), { to: 'string' })
 			};
 		} catch(err) {
 			console.error(`Couldn't load data from url: ${ err }`);

@@ -109,8 +109,9 @@ globalThis.bytebeat = new class {
 			case 'control-counter-units': this.toggleCounterUnits(); break;
 			default:
 				if(elem.classList.contains('code-text')) {
-					this.loadCode(Object.assign({ code: elem.innerText },
-						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
+					const songData = elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {};
+					const inputMode = elem.dataset.inputmode || songData.inputMode || songData.mode || 'Bytebeat';
+					this.loadCode(Object.assign({ code: elem.innerText, inputMode }, songData));
 				} else if(elem.classList.contains('code-load')) {
 					if (elem.dataset.file) {
 						this.loadTB3FromUrl(elem.dataset.file);
@@ -537,8 +538,8 @@ globalThis.bytebeat = new class {
 		songsContainer.style.display = isExpanded ? 'none' : 'block';
 	}
 	loadCode(params = {}, isPlay = true) {
-		const { code, sampleRate, inputMode, drawMode, scale, srDivisor: paramSrDivisor } = params;
-		const mode = inputMode || 'Bytebeat';
+		const { code, sampleRate, inputMode, mode: paramMode, drawMode, scale, srDivisor: paramSrDivisor } = params;
+		const mode = inputMode || paramMode || this.mode || 'Bytebeat';
 		const savedSrDivisor = paramSrDivisor !== undefined ? paramSrDivisor : (this.settings.srDivisor || 1);
 		
 		// Show loading overlay

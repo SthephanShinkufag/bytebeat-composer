@@ -74,7 +74,7 @@ export class Library {
 			str += ` <span>by ${ name || !noArrayUrl ? `<b>${ author }</b>` :
 				`<a href="${ url }" target="_blank">${ author }</a>` }</span>`;
 		}
-		const songObj = { sampleRate, mode, inputMode: 'Bytebeat' };
+		const songObj = { sampleRate, mode, inputMode: mode || 'Bytebeat' };
 		if(url && (!noArrayUrl || !name && !author)) {
 			if(noArrayUrl) {
 				str += `[<a href="${ url }" target="_blank">link</a>]`;
@@ -142,7 +142,7 @@ export class Library {
 			str += `<div class="code-cover">cover of ${ coverUrl ?
 				`<a href="${ coverUrl }" target="_blank">${ coverName }</a>` : `"${ coverName }"` }</div>`;
 		}
-		const sData = ` data-songdata='${ JSON.stringify({ ...songObj, inputMode: 'Bytebeat' }) }'`;
+		const sData = ` data-songdata='${ JSON.stringify({ ...songObj, inputMode: mode }) }'`;
 		str += '<div class="code-buttons">';
 		if(codeMin || fileMin) {
 			str += `<button class="code-button code-load" data-type="minified"${ sData }${
@@ -158,11 +158,11 @@ export class Library {
 		}
 		str += '</div>';
 		if(codeMin) {
-			str += `<button class="code-text code-text-min" data-inputmode="Bytebeat"${ sData }>${ this.escapeHTML(codeMin) }</button>`;
+			str += `<button class="code-text code-text-min" data-inputmode="${ mode }"${ sData }>${ this.escapeHTML(codeMin) }</button>`;
 		}
 		if(code) {
 			str += `<button class="code-text code-text-orig${ codeMin ? ' hidden' : '' }"${
-				sData }>${ this.escapeHTML(code) }</button>`;
+				sData } data-inputmode="${ mode || 'Bytebeat' }">${ this.escapeHTML(code) }</button>`;
 		}
 		return `<div class="entry${ rating ? ' star-' + rating : '' }">${ str }</div>`;
 	}

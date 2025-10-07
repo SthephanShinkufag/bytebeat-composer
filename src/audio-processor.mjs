@@ -185,6 +185,24 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		if(data.mode !== undefined) {
 			this.isFuncbeat = data.mode === 'Funcbeat';
+			if (this.isFuncbeat) {
+			    this.getValues = (funcValue, ch) => {
+			        const outValue = Math.max(Math.min(funcValue, 1), -1);
+			        this.lastByteValue[ch] = Math.round((outValue + 1) * 127.5);
+			        return outValue;
+			    };
+			} else {
+			    this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
+			}
+			if (this.isFuncbeat) {
+			    this.getValues = (funcValue, ch) => {
+			        const outValue = Math.max(Math.min(funcValue, 1), -1);
+			        this.lastByteValue[ch] = Math.round((outValue + 1) * 127.5);
+			        return outValue;
+			    };
+			} else {
+			    this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
+			}
 			switch(data.mode) {
 			case 'Bytebeat':
 				this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = funcValue & 255) / 127.5 - 1;
