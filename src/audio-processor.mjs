@@ -76,8 +76,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				const currentSample = Math.floor(byteSample / this.srDivisor) * this.srDivisor;
 				try {
 					if(this.isFuncbeat) {
-						funcValue = this.func(currentSample / this.sampleRate,
-							this.sampleRate / this.srDivisor);
+						funcValue = this.func(currentSample / this.sampleRate, this.sampleRate);
 					} else {
 						funcValue = this.func(currentSample);
 					}
