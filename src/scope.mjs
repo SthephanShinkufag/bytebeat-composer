@@ -83,10 +83,7 @@ export class Scope {
 		const isWaveform = this.drawMode === 'Waveform';
 		const { colorDiagram } = this;
 		const colorPoints = this.colorWaveform;
-		const colorWaveform = [
-			Math.floor(.6 * colorPoints[0] | 0),
-			Math.floor(.6 * colorPoints[1] | 0),
-			Math.floor(.6 * colorPoints[2] | 0)];
+		const colorWaveform = [.65 * colorPoints[0] | 0, .65 * colorPoints[1] | 0, .65 * colorPoints[2] | 0];
 		let ch, drawPoint;
 		for(let i = 0; i < bufferLen; ++i) {
 			const curY = buffer[i].value;

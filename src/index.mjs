@@ -511,12 +511,12 @@ globalThis.bytebeat = new class {
 		switch(value) {
 		case 'Cake':
 			colorCursor = '#40ffff';
-			colorDiagram = '#ff00ff';
+			colorDiagram = '#c000c0';
 			colorStereo = 0;
 			break;
 		case 'Green':
 			colorCursor = '#ff0000';
-			colorDiagram = '#00c080';
+			colorDiagram = '#00a080';
 			break;
 		case 'Orange':
 			colorCursor = '#ffff80';
@@ -530,7 +530,7 @@ globalThis.bytebeat = new class {
 			break;
 		case 'Teal':
 			colorCursor = '#80c0ff';
-			colorDiagram = '#00ffff';
+			colorDiagram = '#00a0c0';
 			break;
 		default:
 			colorCursor = '#80c0ff';
