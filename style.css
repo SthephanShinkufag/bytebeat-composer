@@ -136,7 +136,7 @@ html[data-theme="Green"] {
 	--control-button: linear-gradient(to bottom, #508453, #17351d);
 	--control-button-active: linear-gradient(to bottom, #336036, #0c1e10);
 	--control-button-border: #345e39;
-	--control-button-hover: linear-gradient(to bottom, #4ca85f, #0f2815);
+	--control-button-hover: linear-gradient(to bottom, #4a4b4a, #0f2815);
 	--control-text: linear-gradient(to top, #3a5e44, #18261c);
 	--control-text-hover: linear-gradient(to top, #448b59, #1d3f27);
 	--control-volume: linear-gradient(to bottom, #5a9d5e, #17351d);
@@ -153,25 +153,25 @@ html[data-theme="Green"] {
 
 html[data-theme="Orange"] {
 	--button-hover-color: #ffffa5;
-	--canvas-button: linear-gradient(to bottom, #ff8f0f, #38240d);
-	--canvas-button-hover: linear-gradient(to bottom, #ffa743, #6d4313) !important;
-	--code-author: #4d4d4d;
-	--code-button: linear-gradient(to bottom, #c55c00, #221306);
-	--code-button-hover: linear-gradient(to bottom, #eb6d00, #4e2e10);
+	--canvas-button: linear-gradient(to bottom, #ff8f0f, #930000);
+	--canvas-button-hover: linear-gradient(to bottom, #ffa743, #d00000) !important;
+	--code-author: #bf2400;
+	--code-button: linear-gradient(to bottom, #c55c00, #600000);
+	--code-button-hover: linear-gradient(to bottom, #eb6d00, #930000);
 	--code-tags: #c16f3e;
-	--control-button: linear-gradient(to bottom, #df791e, #372311);
-	--control-button-active: linear-gradient(to bottom, #9c5416, #291a0d);
-	--control-button-hover: linear-gradient(to bottom, #f89d4d, #4e2e10);
-	--control-text: linear-gradient(to top, #b35d1f, #392415);
-	--control-text-hover: linear-gradient(to top, #e08341, #583821);
-	--control-volume: linear-gradient(to bottom, #ec8328, #372311);
-	--control-volume-hover: linear-gradient(to bottom, #ffaf6a, #4e2e10);
+	--control-button: linear-gradient(to bottom, #df791e, #930000);
+	--control-button-active: linear-gradient(to bottom, #9c5416, #6a0000);
+	--control-button-hover: linear-gradient(to bottom, #f89d4d, #b20303);
+	--control-text: linear-gradient(to top, #b35d1f, #570000);
+	--control-text-hover: linear-gradient(to top, #e08341, #841b1b);
+	--control-volume: linear-gradient(to bottom, #ec8328, #930000);
+	--control-volume-hover: linear-gradient(to bottom, #ffaf6a, #b20303);
 	--editor: #171006;
 	--entry: #221e19;
 	--entry-border: linear-gradient(to right, #dc781e, #2b2016);
 	--focus: #fff2aa;
-	--library-header: linear-gradient(to bottom, #c56600, #1d1206);
-	--library-header-hover: linear-gradient(to bottom, #f58004, #3b260d);
+	--library-header: linear-gradient(to bottom, #e55701, #680000);
+	--library-header-hover: linear-gradient(to bottom, #f58004, #930000);
 	--library-header-hover-color: #ffffa5;
 	--link: #ff998e;
 }
