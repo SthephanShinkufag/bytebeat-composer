@@ -35,8 +35,7 @@ export class Library {
 	}
 	generateEntryHTML({
 		author, code, codeFormLen, codeLen, codeMin, codeMinLen, coverName, coverUrl, date, description,
-		drawing, fileForm, fileMin, fileOrig, hash, mode, name, rating, remix, sampleRate, songs, stereo,
-		tags, url
+		drawing, fileForm, fileMin, fileOrig, hash, mode, name, remix, sampleRate, songs, stereo, tags, url
 	}, libName) {
 		const notAllLib = libName !== 'all' && libName !== 'recent';
 		if(songs) {
@@ -167,7 +166,7 @@ export class Library {
 			str += `<button class="code-text code-text-orig${ codeMin ? ' hidden' : '' }"${
 				sData }>${ this.escapeHTML(code) }</button>`;
 		}
-		return `<div class="entry${ rating ? ' star-' + rating : '' }">${ str }</div>`;
+		return `<div class="entry">${ str }</div>`;
 	}
 	initElements() {
 		this.cacheParentElem = document.createElement('div');

@@ -27,7 +27,7 @@ function fancyDie($message) {
 	<title>Bytebeat management</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025103100">
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025103102">
 </head>
 <body style="text-align: center;">
 	<div style="display: inline-block; padding: 8px 0;">
@@ -160,14 +160,6 @@ function addSongForm() {
 							<input type="text" name="tags[]" placeholder="Tag">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div></td>
-					</tr>
-					<tr>
-						<th>Rating</th>
-						<td><select name="rating">
-							<option value="0">No rating</option>
-							<option value="1">Star</option>
-							<option value="2">Yellow star</option>
-						</select></td>
 					</tr>
 					<tr><td><input type="submit" value="Submit"></td><td></td></tr>
 				</tbody></table>
@@ -354,17 +346,6 @@ function editSongForm() {
 						<th>Tags</th>
 						<td class="table-form-added">' . $tagsStr .'</td>
 					</tr>
-					<tr>
-						<th>Rating</th>
-						<td><select name="rating">
-							<option value="0"' .
-								($song['rating'] === '0' ? ' selected' : '') . '>No rating</option>
-							<option value="1"' .
-								($song['rating'] === '1' ? ' selected' : '') . '>Star</option>
-							<option value="2"' .
-								($song['rating'] === '2' ? ' selected' : '') . '>Yellow star</option>
-						</select></td>
-					</tr>
 				</tbody></table>
 				<input type="submit" value="Submit changes" style="float: left; margin: 2px;">
 			</form>
@@ -420,7 +401,6 @@ function decodeLibraryFile($dbLink, $libName) {
 				(isset($song->coverUrl) ? ', cover_url' : '') .
 				(isset($song->drawing) ? ', drawing' : '') .
 				', tags' .
-				(isset($song->rating) ? ', rating' : '') .
 				# (isset($song->user_added) ? ', user_added' : '') .
 				(isset($song->date_added) ? ', date_added' : '') .
 				# (isset($song->user_edited) ? ', user_edited' : '') .
@@ -442,7 +422,6 @@ function decodeLibraryFile($dbLink, $libName) {
 				(isset($song->drawing) ? ', "{\"mode\": \"' . $song->drawing->mode . '\", \"scale\": ' .
 					$song->drawing->scale . '}"' : '') .
 				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
-				(isset($song->rating) ? ', ' . $song->rating : '') .
 				# (isset($song->user_added) ? ', "' . addslashes($song->user_added) . '"' : '') .
 				(isset($song->date_added) ? ', "' . $song->date_added . '"' : '') .
 				# (isset($song->user_edited) ? ', "' . addslashes($song->user_edited) . '"' : '') .
@@ -501,7 +480,6 @@ function filesToDatabase() {
 				`cover_url` TEXT NULL,
 				`drawing` VARCHAR(50) NULL,
 				`tags` VARCHAR(255) NULL,
-				`rating` CHAR NULL,
 				`user_added` VARCHAR(255) NULL,
 				`date_added` VARCHAR(10) NULL,
 				`user_edited` VARCHAR(255) NULL,
@@ -610,7 +588,6 @@ function databaseToFiles() {
 			`cover_url`,
 			`drawing`,
 			`tags`,
-			`rating`,
 			`user_added`,
 			`date_added`,
 			`user_edited`,
@@ -687,7 +664,6 @@ function databaseToFiles() {
 			(isset($song['cover_url']) ? ',"coverUrl":"' . $song['cover_url'] . '"' : '') .
 			(isset($song['drawing']) ? ',"drawing":' . $song['drawing'] : '') .
 			(isset($song['tags']) ? ',"tags":' . $song['tags'] : '') .
-			(isset($song['rating']) ? ',"rating":' . $song['rating'] : '') .
 			# (isset($song['user_added']) ? ',"user_added": "' . $song['user_added'] . '"' : '') .
 			(isset($song['date_added']) ? ',"date_added": "' . $song['date_added'] . '"' : '') .
 			# (isset($song['user_edited']) ? ',"user_edited": "' . $song['user_edited'] . '"' : '') .
@@ -800,7 +776,6 @@ function addSong($isEdit) {
 	$codeFormatted = str_replace("\r", '', addslashes($_POST['code_formatted']));
 	$coverName = addslashes(trim($_POST['cover_name']));
 	$coverUrl = addslashes(trim($_POST['cover_url']));
-	$rating = $_POST['rating'];
 	$user = addslashes(array_search($_SESSION['bytebeat'], $bytebeat_admins, true));
 	$dateEdited = date('Y-m-d');
 
@@ -854,7 +829,6 @@ function addSong($isEdit) {
 			', `cover_url` = ' . ($coverUrl ? '"' . $coverUrl . '"' : 'NULL') .
 			', `drawing` = ' . ($drawing ? '"' . $drawing . '"' : 'NULL') .
 			', `tags` = "' . $tagsStr . '"' .
-			', `rating` = ' . ($rating ? $rating : 'NULL') .
 			', `user_edited` = "' . $user . '"' .
 			', `date_edited` = "' . $dateEdited . '"
 		WHERE `hash` = "' . $hash . '";');
@@ -876,7 +850,6 @@ function addSong($isEdit) {
 			($coverUrl  ? ', `cover_url`' : '') .
 			($drawing ? ', `drawing`' : '') .
 			', `tags`' .
-			($rating ? ', `rating`' : '') .
 			', `user_added`' .
 			', `date_added`
 		) VALUES ("' .
@@ -896,7 +869,6 @@ function addSong($isEdit) {
 			($coverUrl ? ', "' . $coverUrl . '"' : '') .
 			($drawing ? ', "' . $drawing . '"' : '') .
 			', "' . $tagsStr . '"' .
-			($rating ? ', ' . $rating : '') .
 			', "' . $user . '"' .
 			', "' . $dateEdited . '");');
 	}
