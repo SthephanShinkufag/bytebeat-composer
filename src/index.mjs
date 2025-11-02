@@ -447,6 +447,7 @@ globalThis.bytebeat = new class {
 		) {
 			sampleRate = 8000;
 		}
+		sampleRate = Math.max(0.001, sampleRate);
 		switch(sampleRate) {
 		case 8000:
 		case 11025:
