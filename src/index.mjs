@@ -136,6 +136,14 @@ globalThis.bytebeat = new class {
 				elem.title = 'Click to show/hide the songs';
 			} else if(elem.classList.contains('song-hash')) {
 				elem.title = 'Click to copy the song hash into clipboard';
+			} else if(elem.classList.contains('tag-c')) {
+				elem.title = 'C-compatible code';
+			} else if(elem.classList.contains('tag-console')) {
+				elem.title = 'Outputs messages in the error console';
+			} else if(elem.classList.contains('tag-drawing')) {
+				elem.title = 'Generates art in the visualiser\'s scope';
+			} else if(elem.classList.contains('tag-slow')) {
+				elem.title = 'May be performance issues. Try switching Chrome/Firefox.';
 			}
 			return;
 		}
