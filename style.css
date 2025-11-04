@@ -856,6 +856,17 @@ button[name="close"] {
 	position: absolute;
 }
 
+#control-lag {
+	width: 30px;
+	border-radius: var(--control-corners);
+	text-align: right;
+	cursor: default;
+}
+
+.control-lag-red {
+	background: linear-gradient(to top, #aa0020, #300) !important;
+}
+
 #control-play-backward, #control-play-forward {
 	position: relative;
 }

@@ -9,9 +9,9 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025110200">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025110200">
-	<script type="module" async src="./build/index.js?version=2025110200"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025110400">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025110400">
+	<script type="module" async src="./build/index.js?version=2025110400"></script>
 </head>
 <body>
 	<main id="content">
@@ -25,6 +25,9 @@
 				<div class="controls-group controls-grow">
 					<button id="control-counter-units" class="control-button" title="Time units">t</button>
 					<input type="text" id="control-counter" class="control-text" value="0" title="Set time to jump along the timeline then press Enter">
+				</div>
+				<div class="controls-group">
+					<span id="control-lag" class="control-text" title="Computing lag (freezes) factor">---</span>
 				</div>
 				<div class="controls-group">
 					<button id="control-stop" class="control-button" title="Stop and reset">

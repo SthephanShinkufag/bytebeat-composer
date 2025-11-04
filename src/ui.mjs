@@ -13,6 +13,7 @@ export class UI {
 		this.controlColorWaveform = null;
 		this.controlColorWaveformInfo = null;
 		this.controlDrawMode = null;
+		this.controlLag = null;
 		this.controlPlaybackMode = null;
 		this.controlPlayBackward = null;
 		this.controlPlayForward = null;
@@ -21,6 +22,9 @@ export class UI {
 		this.controlSampleRateSelect = null;
 		this.controlScale = null;
 		this.controlScaleDown = null;
+		this.controlSRDivisor = null;
+		this.controlSRDivisorUp = null;
+		this.controlSRDivisorDown = null;
 		this.controlThemeStyle = null;
 		this.controlTime = null;
 		this.controlTimeUnits = null;
@@ -45,6 +49,7 @@ export class UI {
 		this.controlColorWaveform = document.getElementById('control-color-waveform');
 		this.controlColorWaveformInfo = document.getElementById('control-color-waveform-info');
 		this.controlDrawMode = document.getElementById('control-drawmode');
+		this.controlLag = document.getElementById('control-lag');
 		this.controlPlaybackMode = document.getElementById('control-mode');
 		this.controlPlayBackward = document.getElementById('control-play-backward');
 		this.controlPlayForward = document.getElementById('control-play-forward');
@@ -56,9 +61,9 @@ export class UI {
 		this.controlSRDivisor = document.getElementById('control-srdivisor');
 		this.controlSRDivisorUp = document.getElementById('control-srdivisor-up');
 		this.controlSRDivisorDown = document.getElementById('control-srdivisor-down');
+		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlTime = document.getElementById('control-counter');
 		this.controlTimeUnits = document.getElementById('control-counter-units');
-		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlVolume = document.getElementById('control-volume');
 		this.downloader = document.getElementById('downloader');
 		this.mainElem = document.getElementById('content');
