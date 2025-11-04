@@ -94,31 +94,36 @@ export class Library {
 		}
 		str += ` ${ sampleRate }Hz`;
 		const outTags = [];
-		let i = tags.length;
-		while(i--) {
-			switch(tags[i]) {
-			case 'c':
-				if(notAllLib) {
-					continue;
-				}
-				break;
-			case '1k':
-			case '256':
-			case 'big': continue;
-			}
-			outTags.push(tags[i]);
-
-		}
 		if(stereo) {
-			outTags.push('stereo');
+			outTags.push('<span class="tag-stereo">stereo</span>');
 		}
 		if(drawing) {
 			songObj.drawMode = drawing.mode;
 			songObj.scale = drawing.scale;
-			outTags.push('drawing');
+			outTags.push('<span class="tag-drawing">drawing</span>');
+		}
+		for(let i = 0, len = tags.length; i < len; ++i) {
+			switch(tags[i]) {
+			case '1k':
+			case '256':
+			case 'big': continue;
+			case 'c':
+				if(!notAllLib) {
+					outTags.push('<span class="tag-c">c</span>');
+				}
+				continue;
+			case 'console':
+				outTags.push('<span class="tag-console">console</span>');
+				continue;
+			case 'slow':
+				outTags.push('<span class="tag-slow">slow</span>');
+				continue;
+			}
+			outTags.push('#' + tags[i]);
+
 		}
 		if(outTags.length) {
-			str += ` <span class="code-tags">#${ outTags.join(' #') }</span>`;
+			str += ` <span class="code-tags">${ outTags.join(' ') }</span>`;
 		}
 		str += '</span>';
 		if(this.isAdmin) {

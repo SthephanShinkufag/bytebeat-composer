@@ -763,6 +763,33 @@ button[name="close"] {
 	margin-left: 8px;
 }
 
+.code-tags > span {
+	padding: 0 3px;
+	border-radius: 4px;
+	color: #b7b8c6;
+	font-weight: bold;
+}
+
+.tag-c {
+	background-color: #0a529e;
+}
+
+.tag-console {
+	background-color: #0d684f;
+}
+
+.tag-drawing {
+	background-color: #66209f;
+}
+
+.tag-slow {
+	background-color: #b72222;
+}
+
+.tag-stereo {
+	background-image: linear-gradient(to right, #047700, #7b0074);
+}
+
 /* ==[ Controls ] ========================================================================================= */
 
 .control-button, .control-select {
