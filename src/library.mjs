@@ -115,6 +115,9 @@ export class Library {
 			case 'console':
 				outTags.push('<span class="tag-console">console</span>');
 				continue;
+			case 'sample':
+				outTags.push('<span class="tag-sample">sample</span>');
+				continue;
 			case 'slow':
 				outTags.push('<span class="tag-slow">slow</span>');
 				continue;

@@ -142,6 +142,8 @@ globalThis.bytebeat = new class {
 				elem.title = 'Outputs messages in the error console';
 			} else if(elem.classList.contains('tag-drawing')) {
 				elem.title = 'Generates art in the visualiser\'s scope';
+			} else if(elem.classList.contains('tag-sample')) {
+				elem.title = 'Uses encoded audio samples (PCM, for example)';
 			} else if(elem.classList.contains('tag-slow')) {
 				elem.title = 'May be performance issues. Try switching Chrome/Firefox.';
 			}

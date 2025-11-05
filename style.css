@@ -775,11 +775,15 @@ button[name="close"] {
 }
 
 .tag-console {
-	background-color: #0d684f;
+	background-color: #48638e;
 }
 
 .tag-drawing {
-	background-color: #66209f;
+	background-color: #64209b;
+}
+
+.tag-sample {
+	background-color: #0d684f;
 }
 
 .tag-slow {
