@@ -338,12 +338,19 @@ globalThis.bytebeat = new class {
 			// TB2: Load from audio.json
 			if(zipData.files['audio.json']) {
 				const audioData = JSON.parse(await zipData.files['audio.json'].async('string'));
-				// TB2 format: data is [sample][channel], extract first channel
-				const channelData = audioData.data.map(sample => sample[0] || 0);
+				// TB2 format: data is [sample][channel], interleave channels
+				const numChannels = audioData.channels;
+				const length = audioData.data.length;
+				const interleaved = new Float32Array(length * numChannels);
+				for (let i = 0; i < length; i++) {
+					for (let ch = 0; ch < numChannels; ch++) {
+						interleaved[i * numChannels + ch] = audioData.data[i][ch] || 0;
+					}
+				}
 				this.audioFiles.set(0, {
 					name: 'audio.json',
-					data: new Float32Array(channelData),
-					channels: audioData.channels,
+					data: interleaved,
+					channels: numChannels,
 					sampleRate: audioData.sampleRate
 				});
 			}
@@ -352,10 +359,18 @@ globalThis.bytebeat = new class {
 	async handleAudioFile(file) {
 		const arrayBuffer = await file.arrayBuffer();
 		const audioBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
+		const numChannels = audioBuffer.numberOfChannels;
+		const length = audioBuffer.length;
+		const interleaved = new Float32Array(length * numChannels);
+		for (let i = 0; i < length; i++) {
+			for (let ch = 0; ch < numChannels; ch++) {
+				interleaved[i * numChannels + ch] = audioBuffer.getChannelData(ch)[i];
+			}
+		}
 		const audioData = {
 			name: file.name,
-			data: audioBuffer.getChannelData(0),
-			channels: audioBuffer.numberOfChannels,
+			data: interleaved,
+			channels: numChannels,
 			sampleRate: audioBuffer.sampleRate,
 			duration: audioBuffer.duration
 		};
@@ -539,7 +554,8 @@ globalThis.bytebeat = new class {
 	}
 	loadCode(params = {}, isPlay = true) {
 		const { code, sampleRate, inputMode, mode: paramMode, drawMode, scale, srDivisor: paramSrDivisor } = params;
-		const mode = inputMode || paramMode || this.mode || 'Bytebeat';
+		let mode = inputMode || paramMode || this.mode || 'Bytebeat';
+		if (mode === '') mode = 'Bytebeat';
 		const savedSrDivisor = paramSrDivisor !== undefined ? paramSrDivisor : (this.settings.srDivisor || 1);
 		
 		// Show loading overlay

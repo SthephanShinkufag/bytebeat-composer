@@ -282,12 +282,12 @@ class audioProcessor extends AudioWorkletProcessor {
 			"audioIN": (index, channel = 0, file = 0) => {
 				const audioFile = this.audioFiles.get(file);
 				if (!audioFile || !audioFile.data) return 0;
-				const sampleIndex = Math.floor(index) + (channel % audioFile.channels);
+				const sampleIndex = Math.floor(index) * audioFile.channels + (channel % audioFile.channels);
 				return audioFile.data[sampleIndex] || 0;
 			},
 			"audioLength": (file = 0) => {
 				const audioFile = this.audioFiles.get(file);
-				return audioFile ? audioFile.data.length : 0;
+				return audioFile ? audioFile.data.length/audioFile.channels : 0;
 			}
 		};
 		
