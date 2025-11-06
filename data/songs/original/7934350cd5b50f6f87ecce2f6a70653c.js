@@ -1,4 +1,3 @@
-
 /*!
  *
  * stagas - polytropon (astral mix)

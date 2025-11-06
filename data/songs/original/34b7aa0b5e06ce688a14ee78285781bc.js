@@ -2,7 +2,7 @@
 T=t,
 
 /* Variables you can change */
-BPM = 130,
+BPM = 132,
 sR = sampleRate = 48e3,
 sPB = samplesPerBeat = 32768,
 r = t * abs(BPM / ((60 * sampleRate) / samplesPerBeat)),
@@ -75,7 +75,7 @@ bass2=((k2>>8&1?(k2>>~k2/8)-255:(~k2>>k2/8)+255)%256/128)*dec(.5,4,2e4),
 
 /* Mix & Mastering */
 master=h=>(
-+dly(min(2,max(-2,ins1)),rvrbHeads[h],.4,x=>tanh(bpf(x,.01,.8)/200)*100)*3
++dly(min(2,max(-2,ins1)),rvrbHeads[h],.5,x=>tanh(bpf(x,.01,.8)/200)*100)*3
 +dly(bpf(m(lead,.55),.01,.8),rvrbHeads[h],.3,x=>tanh(bpf(x,.01,.8)/200)*100)*3
 +dly(lpf(bass,.1)+lpf(m(bass2,.675),.2),rvrbHeads[h],.25,x=>tanh(bpf(x,.01,.8)/200)*100)*dec(1,8,12288)*1.5
 +dly(bpf(chrd,.01,.5),rvrbHeads[h],.55,x=>tanh(bpf(x,.01,.8)/180)*100)*dec(1,8,12288)*2

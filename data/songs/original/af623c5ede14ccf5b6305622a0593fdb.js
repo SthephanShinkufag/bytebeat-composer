@@ -1,3 +1,5 @@
+/// updated on 10/2/2025 to reflect alternate sample rates
+
 t || (_ => {
 
 ///
@@ -577,7 +579,9 @@ let filter = (cutoff = 10300, order = 1, lpf = true, mono = false) => ({
 
 let delay = (time, fdbk, mix = 0.5, mod = 0, modfreq = 1) => ({
 	func: function(samp) {
-		let pos = this.idx + 50*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR));
+			let pos = this.idx + SR/960*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR));
+		
+		/// let pos = this.idx + 50*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR));
 
 		if (typeof(samp) == "number") {
 			samp = [samp, samp];
@@ -618,7 +622,9 @@ let delayMult = (time, fdbk, mix = 0.5, mod = 0, modfreq = 1, chns = 8) => ({
 
 		for (let i = 0; i < this.chns; i++) {
 			let buf = this.buffers[i];
-			let bufpos = this.idx + 50*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR/pow(2, i/this.chns)));
+			let bufpos = this.idx + SR/960*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR/pow(2, i/this.chns)));
+		
+			/// let bufpos = this.idx + 50*this.mod*(1 - cos(this.modfreq*2*PI*this.idx/SR/pow(2, i/this.chns)));
 
 			dlyd[i] = lerp(buf[floor(bufpos) % buf.length], buf[(floor(bufpos) + 1) % buf.length], bufpos % 1);
 		}
