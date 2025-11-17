@@ -888,7 +888,7 @@ function addSong($isEdit) {
 	}
 
 	mysqli_close($dbLink);
-	return 'Song ' . ($isEdit ? 'added' : 'edited') . ' successfully!<br>
+	return 'Song ' . ($isEdit ? 'edited' : 'added') . ' successfully!<br>
 		' . managementRequest();
 }
 
