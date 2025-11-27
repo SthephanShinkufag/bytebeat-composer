@@ -36,17 +36,17 @@ globalThis.bytebeat = new class {
 		this.isLagging = false;
 		this.isPlaying = false;
 		this.isRecording = false;
+		this.lastUpdateTime = 0;
 		this.mode = 'Bytebeat';
 		this.playbackSpeed = 1;
 		this.sampleRate = 8000;
 		this.settings = this.defaultSettings;
-		this.lastUpdateTime = 0;
 		this.updateCounter = 0;
 		this.init();
 	}
-	handleEvent(e) {
-		let elem = e.target;
-		switch(e.type) {
+	handleEvent(event) {
+		let elem = event.target;
+		switch(event.type) {
 		case 'change':
 			switch(elem.id) {
 			case 'control-code-style': this.setCodeStyle(elem.value); break;
@@ -112,19 +112,19 @@ globalThis.bytebeat = new class {
 					library.onclickLibraryHeader(elem.parentNode);
 				} else if(elem.classList.contains('song-hash')) {
 					navigator.clipboard.writeText(elem.dataset.hash);
-					e.preventDefault();
+					event.preventDefault();
 				}
 			}
 			return;
 		case 'input':
 			switch(elem.id) {
-			case 'control-counter': this.oninputCounter(e); break;
+			case 'control-counter': this.oninputCounter(event); break;
 			case 'control-volume': this.setVolume(false); break;
 			}
 			return;
 		case 'keydown':
 			if(elem.id === 'control-counter') {
-				this.oninputCounter(e);
+				this.oninputCounter(event);
 			}
 			return;
 		case 'mouseover':
@@ -198,12 +198,12 @@ globalThis.bytebeat = new class {
 		await this.audioCtx.audioWorklet.addModule('./build/audio-processor.mjs');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
-		this.audioWorkletNode.port.addEventListener('message', e => this.receiveData(e.data));
+		this.audioWorkletNode.port.addEventListener('message', event => this.receiveData(event.data));
 		this.audioWorkletNode.port.start();
 		this.audioWorkletNode.connect(this.audioGain);
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
-		audioRecorder.addEventListener('dataavailable', e => this.audioRecordChunks.push(e.data));
+		audioRecorder.addEventListener('dataavailable', event => this.audioRecordChunks.push(event.data));
 		audioRecorder.addEventListener('stop', () => {
 			let fileName, type;
 			const types = ['audio/webm', 'audio/ogg'];
@@ -248,8 +248,8 @@ globalThis.bytebeat = new class {
 		}
 		this.sendData(data);
 	}
-	oninputCounter(e) {
-		if(e.key === 'Enter') {
+	oninputCounter(event) {
+		if(event.key === 'Enter') {
 			ui.controlTime.blur();
 			this.playbackToggle(true);
 			return;
@@ -476,7 +476,7 @@ globalThis.bytebeat = new class {
 	setPlaybackMode(mode) {
 		this.mode = mode;
 		this.updateUrl();
-		this.sendData({ mode });
+		this.sendData({ mode, setFunction: editor.value });
 	}
 	setSampleRate(sampleRate, isSendData = true) {
 		if(!sampleRate || !isFinite(sampleRate) ||
