@@ -512,7 +512,7 @@ globalThis.bytebeat = new class {
 		if(buttonElem?.getAttribute('disabled')) {
 			return;
 		}
-		const scale = Math.max(scope.drawScale + amount, 0);
+		const scale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
 		scope.drawScale = scale;
 		ui.controlScale.innerHTML = !scale ? '1x' :
 			scale < 7 ? `1/${ 2 ** scale }${ scale < 4 ? 'x' : '' }` :
@@ -524,6 +524,11 @@ globalThis.bytebeat = new class {
 			ui.controlScaleDown.setAttribute('disabled', true);
 		} else {
 			ui.controlScaleDown.removeAttribute('disabled');
+		}
+		if(scope.drawScale >= 20) {
+			ui.controlScaleUp.setAttribute('disabled', true);
+		} else {
+			ui.controlScaleUp.removeAttribute('disabled');
 		}
 	}
 	setSRDivisor(increment) {

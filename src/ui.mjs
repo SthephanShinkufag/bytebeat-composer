@@ -22,6 +22,7 @@ export class UI {
 		this.controlSampleRateSelect = null;
 		this.controlScale = null;
 		this.controlScaleDown = null;
+		this.controlScaleUp = null;
 		this.controlSRDivisor = null;
 		this.controlSRDivisorUp = null;
 		this.controlSRDivisorDown = null;
@@ -58,6 +59,7 @@ export class UI {
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScale = document.getElementById('control-scale');
 		this.controlScaleDown = document.getElementById('control-scaledown');
+		this.controlScaleUp = document.getElementById('control-scaleup');
 		this.controlSRDivisor = document.getElementById('control-srdivisor');
 		this.controlSRDivisorUp = document.getElementById('control-srdivisor-up');
 		this.controlSRDivisorDown = document.getElementById('control-srdivisor-down');
