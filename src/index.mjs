@@ -46,6 +46,7 @@ globalThis.bytebeat = new class {
 	}
 	handleEvent(event) {
 		let elem = event.target;
+		const { classList } = elem;
 		switch(event.type) {
 		case 'change':
 			switch(elem.id) {
@@ -74,7 +75,7 @@ globalThis.bytebeat = new class {
 			case 'svg': elem = elem.parentNode; break;
 			case 'use': elem = elem.parentNode.parentNode; break;
 			default:
-				if(elem.classList.contains('control-fast-multiplier')) {
+				if(classList.contains('control-fast-multiplier')) {
 					elem = elem.parentNode;
 				}
 			}
@@ -99,20 +100,21 @@ globalThis.bytebeat = new class {
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
 			default:
-				if(elem.classList.contains('code-text')) {
+				switch(true) {
+				case classList.contains('code-text'):
 					this.loadCode(Object.assign({ code: elem.innerText },
 						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
-				} else if(elem.classList.contains('code-load')) {
-					library.onclickCodeLoadButton(elem);
-				} else if(elem.classList.contains('code-remix-load')) {
-					library.onclickRemixLoadButton(elem);
-				} else if(elem.classList.contains('library-header')) {
-					library.onclickLibraryHeader(elem);
-				} else if(elem.parentNode.classList.contains('library-header')) {
+					break;
+				case classList.contains('code-load'): library.onclickCodeLoadButton(elem); break;
+				case classList.contains('code-remix-load'): library.onclickRemixLoadButton(elem); break;
+				case classList.contains('library-header'): library.onclickLibraryHeader(elem); break;
+				case elem.parentNode.classList.contains('library-header'):
 					library.onclickLibraryHeader(elem.parentNode);
-				} else if(elem.classList.contains('song-hash')) {
+					break;
+				case classList.contains('song-hash'):
 					navigator.clipboard.writeText(elem.dataset.hash);
 					event.preventDefault();
+					break;
 				}
 			}
 			return;
@@ -128,24 +130,28 @@ globalThis.bytebeat = new class {
 			}
 			return;
 		case 'mouseover':
-			if(elem.classList.contains('code-load')) {
+			switch(true) {
+			case classList.contains('code-load'):
 				elem.title = `Click to play the ${ elem.dataset.type } code`;
-			} else if(elem.classList.contains('code-text')) {
-				elem.title = 'Click to play this code';
-			} else if(elem.classList.contains('songs-header')) {
-				elem.title = 'Click to show/hide the songs';
-			} else if(elem.classList.contains('song-hash')) {
+				break;
+			case classList.contains('code-text'): elem.title = 'Click to play this code'; break;
+			case classList.contains('songs-header'): elem.title = 'Click to show/hide the songs'; break;
+			case classList.contains('song-hash'):
 				elem.title = 'Click to copy the song hash into clipboard';
-			} else if(elem.classList.contains('tag-c')) {
-				elem.title = 'C-compatible code';
-			} else if(elem.classList.contains('tag-console')) {
+				break;
+			case classList.contains('tag-c'): elem.title = 'C-compatible code'; break;
+			case classList.contains('tag-console'):
 				elem.title = 'Outputs messages in the error console';
-			} else if(elem.classList.contains('tag-drawing')) {
+				break;
+			case classList.contains('tag-drawing'):
 				elem.title = 'Generates art in the visualiser\'s scope';
-			} else if(elem.classList.contains('tag-sample')) {
+				break;
+			case classList.contains('tag-sample'):
 				elem.title = 'Uses encoded audio samples (PCM, for example)';
-			} else if(elem.classList.contains('tag-slow')) {
+				break;
+			case classList.contains('tag-slow'):
 				elem.title = 'May be performance issues. Try switching Chrome/Firefox.';
+				break;
 			}
 			return;
 		}
@@ -195,12 +201,28 @@ globalThis.bytebeat = new class {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });
 		this.audioGain = new GainNode(this.audioCtx);
 		this.audioGain.connect(this.audioCtx.destination);
+		// Analyser for FFT mode
+		scope.analyser = [this.audioCtx.createAnalyser(), this.audioCtx.createAnalyser()];
+		scope.analyser[0].minDecibels = scope.analyser[1].minDecibels = scope.minDecibels;
+		scope.analyser[0].maxDecibels = scope.analyser[1].maxDecibels = scope.maxDecibels;
+		scope.analyser[0].fftSize = scope.analyser[1].fftSize = 1024;
+		scope.analyserData = [
+			new Uint8Array(scope.analyser[0].frequencyBinCount),
+			new Uint8Array(scope.analyser[1].frequencyBinCount)];
+		const splitter = this.audioCtx.createChannelSplitter(2);
+		splitter.connect(scope.analyser[0], 0);
+		splitter.connect(scope.analyser[1], 1);
+		const analyserGain = new GainNode(this.audioCtx);
+		analyserGain.connect(splitter);
+		// AudioWorklet for main calculations processing
 		await this.audioCtx.audioWorklet.addModule('./build/audio-processor.mjs');
 		this.audioWorkletNode = new AudioWorkletNode(this.audioCtx, 'audioProcessor',
 			{ outputChannelCount: [2] });
 		this.audioWorkletNode.port.addEventListener('message', event => this.receiveData(event.data));
 		this.audioWorkletNode.port.start();
 		this.audioWorkletNode.connect(this.audioGain);
+		this.audioWorkletNode.connect(analyserGain);
+		// Recorder for recording audio files
 		const mediaDest = this.audioCtx.createMediaStreamDestination();
 		const audioRecorder = this.audioRecorder = new MediaRecorder(mediaDest.stream);
 		audioRecorder.addEventListener('dataavailable', event => this.audioRecordChunks.push(event.data));
@@ -241,6 +263,8 @@ globalThis.bytebeat = new class {
 		data.setFunction = code;
 		if(drawMode) {
 			ui.controlDrawMode.value = scope.drawMode = drawMode;
+			scope.toggleTimeCursor();
+			scope.clearCanvas();
 			this.saveSettings();
 		}
 		if(scale !== undefined) {
@@ -372,8 +396,8 @@ globalThis.bytebeat = new class {
 		if(this.isNeedClear && value === 0) {
 			this.isNeedClear = false;
 			scope.drawBuffer = [];
-			scope.clearCanvas();
 			scope.canvasTimeCursor.style.left = 0;
+			scope.clearCanvas();
 			if(!this.isPlaying) {
 				scope.canvasPlayButton.classList.add('canvas-initial');
 			}
@@ -406,6 +430,9 @@ globalThis.bytebeat = new class {
 		case 0: scope.colorChannels = [0, 1, 2]; break;
 		case 2: scope.colorChannels = [2, 0, 1]; break;
 		default: scope.colorChannels = [1, 0, 2];
+		}
+		if(scope.colorWaveform) {
+			scope.setStereoColors();
 		}
 	}
 	setColorDiagram(value) {
@@ -440,6 +467,7 @@ globalThis.bytebeat = new class {
 		}
 		ui.controlColorWaveform.value = value;
 		ui.controlColorWaveformInfo.innerHTML = scope.getColorTest('colorWaveform', value);
+		scope.setStereoColors();
 	}
 	setCounterUnits() {
 		ui.controlTimeUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
@@ -470,6 +498,8 @@ globalThis.bytebeat = new class {
 	}
 	setDrawMode(drawMode) {
 		scope.drawMode = drawMode;
+		scope.toggleTimeCursor();
+		scope.clearCanvas();
 		this.saveSettings();
 		this.sendData({ drawMode });
 	}
@@ -513,13 +543,13 @@ globalThis.bytebeat = new class {
 			return;
 		}
 		const scale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
-		scope.drawScale = scale;
 		ui.controlScale.innerHTML = !scale ? '1x' :
 			scale < 7 ? `1/${ 2 ** scale }${ scale < 4 ? 'x' : '' }` :
 			`<sub>2</sub>-${ scale }`;
-		this.saveSettings();
-		scope.clearCanvas();
+		scope.drawScale = scale;
 		scope.toggleTimeCursor();
+		scope.clearCanvas();
+		this.saveSettings();
 		if(scope.drawScale <= 0) {
 			ui.controlScaleDown.setAttribute('disabled', true);
 		} else {

@@ -4,6 +4,8 @@ function mod(a, b) {
 
 export class Scope {
 	constructor() {
+		this.analyser = [null, null];
+		this.analyserData = [null, null];
 		this.canvasContainer = null;
 		this.canvasCtx = null;
 		this.canvasElem = null;
@@ -13,17 +15,21 @@ export class Scope {
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
 		this.colorDiagram = null;
+		this.colorStereoRGB = [null, null];
 		this.colorWaveform = null;
 		this.drawBuffer = [];
 		this.drawEndBuffer = [];
 		this.drawMode = 'Combined';
 		this.drawScale = 5;
+		this.minDecibels = -120;
+		this.maxDecibels = -20;
 	}
 	get timeCursorEnabled() {
 		return globalThis.bytebeat.sampleRate >> this.drawScale < 2000;
 	}
 	clearCanvas() {
 		this.canvasCtx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+		this.canvasCtx.globalCompositeOperation = this.drawMode === 'FFT' ? 'lighter' : 'source-over';
 	}
 	drawGraphics(endTime) {
 		if(!isFinite(endTime)) {
@@ -35,10 +41,71 @@ export class Scope {
 		if(!bufferLen) {
 			return;
 		}
+		const ctx = this.canvasCtx;
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
+		// FFT graph drawing
+		if(this.drawMode === 'FFT') {
+			this.clearCanvas();
+			// Detect stereo signal
+			let isStereo = false;
+			let i = Math.min(bufferLen, 100);
+			while(i--) {
+				if(buffer[i].value[0] !== buffer[i].value[1]) {
+					isStereo = true;
+					break;
+				}
+			}
+			// Build the chart
+			let ch = isStereo ? 2 : 1;
+			while(ch--) {
+				ctx.beginPath();
+				ctx.strokeStyle = isStereo ? this.colorStereoRGB[ch] :
+					`rgb(${ this.colorWaveform.join(',') })`;
+				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
+				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
+					ctx[i ? 'lineTo' : 'moveTo'](width * Math.log(i) / Math.log(len),
+						height * (1 - this.analyserData[ch][i] / 256));
+				}
+				ctx.stroke();
+			}
+			// Vertical grid and Hz labels
+			ctx.beginPath();
+			ctx.strokeStyle = '#444';
+			ctx.fillStyle = '#faca63';
+			ctx.font = '11px monospace';
+			const minFreq = 47; // minFreq = resolution = sampleRate / fftSize = 48000 / 1024 = 46.875Hz
+			const maxFreq = 24000; // maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
+			let freq = 10; // Start building from 10Hz
+			while(freq <= maxFreq) {
+				for(let i = 1; i < 10; ++i) {
+					const curFreq = freq * i;
+					const x = width * Math.log(curFreq / minFreq) / Math.log(maxFreq / minFreq);
+					ctx.moveTo(x, 0);
+					ctx.lineTo(x, height);
+					if(i < 4 || i === 5) {
+						ctx.fillText(freq < 1000 ? curFreq + 'Hz' : curFreq / 1000 + 'kHz', x + 1, 10);
+					}
+				}
+				freq *= 10;
+			}
+			// Horizontal grid
+			const dbRange = this.maxDecibels - this.minDecibels;
+			for(let i = 10; i < dbRange; i += 10) {
+				const y = i * height / dbRange;
+				ctx.moveTo(0, y);
+				ctx.lineTo(width, y);
+			}
+			ctx.stroke();
+			// Horizontal dB labels
+			for(let i = 0; i <= dbRange; i += 10) {
+				ctx.fillText(this.maxDecibels - i + 'dB', 2, i * height / dbRange - 2);
+			}
+			// Clear buffer
+			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+			return;
+		}
 		const scale = this.drawScale;
-		const isReverse = globalThis.bytebeat.playbackSpeed < 0;
 		let startTime = buffer[0].t;
 		let startX = mod(this.getX(startTime), width);
 		let endX = Math.floor(startX + this.getX(endTime - startTime));
@@ -54,8 +121,9 @@ export class Scope {
 		}
 		startX = Math.min(startX, endX);
 		// Restoring the last points of a previous segment
-		const imageData = this.canvasCtx.createImageData(drawWidth, height);
+		const imageData = ctx.createImageData(drawWidth, height);
 		const { data } = imageData;
+		const isReverse = globalThis.bytebeat.playbackSpeed < 0;
 		const status = [];
 		if(scale) {
 			const x = isReverse ? drawWidth - 1 : 0;
@@ -82,6 +150,7 @@ export class Scope {
 		const isDiagram = this.drawMode === 'Diagram';
 		const isWaveform = this.drawMode === 'Waveform';
 		const { colorDiagram } = this;
+		const colorCh = this.colorChannels;
 		const colorPoints = this.colorWaveform;
 		const colorWaveform = [.65 * colorPoints[0] | 0, .65 * colorPoints[1] | 0, .65 * colorPoints[2] | 0];
 		let ch, drawPoint;
@@ -118,7 +187,6 @@ export class Scope {
 			}
 			while(ch--) {
 				const curYCh = curY[ch];
-				const colorCh = this.colorChannels;
 				if(!isNaNCurY[ch] && !isDiagram) {
 					// Points drawing
 					for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
@@ -177,11 +245,11 @@ export class Scope {
 			}
 		}
 		// Placing a segment on the canvas
-		this.canvasCtx.putImageData(imageData, startX, 0);
+		ctx.putImageData(imageData, startX, 0);
 		if(endX >= width) {
-			this.canvasCtx.putImageData(imageData, startX - width, 0);
+			ctx.putImageData(imageData, startX - width, 0);
 		} else if(endX <= 0) {
-			this.canvasCtx.putImageData(imageData, startX + width, 0);
+			ctx.putImageData(imageData, startX + width, 0);
 		}
 		// Move the cursor to the end of the segment
 		if(this.timeCursorEnabled) {
@@ -267,7 +335,16 @@ export class Scope {
 			}
 		});
 	}
+	setStereoColors() {
+		const ch = this.colorChannels;
+		const colorLeft = [0, 0, 0];
+		const colorRight = [0, 0, 0];
+		colorLeft[ch[0]] = this.colorWaveform[ch[0]];
+		colorRight[ch[1]] = this.colorWaveform[ch[1]];
+		colorRight[ch[2]] = this.colorWaveform[ch[2]];
+		this.colorStereoRGB = [`rgb(${ colorLeft.join(',') })`, `rgb(${ colorRight.join(',') })`];
+	}
 	toggleTimeCursor() {
-		this.canvasTimeCursor.classList.toggle('hidden', !this.timeCursorEnabled);
+		this.canvasTimeCursor.classList.toggle('hidden', this.drawMode === 'FFT' || !this.timeCursorEnabled);
 	}
 }
