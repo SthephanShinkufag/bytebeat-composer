@@ -49,7 +49,7 @@ export class Scope {
 			this.clearCanvas();
 			// Detect stereo signal
 			let isStereo = false;
-			let i = Math.min(bufferLen, 100);
+			let i = Math.min(bufferLen, 200);
 			while(i--) {
 				if(buffer[i].value[0] !== buffer[i].value[1]) {
 					isStereo = true;
