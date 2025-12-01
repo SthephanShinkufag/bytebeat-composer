@@ -94,15 +94,15 @@ export class Scope {
 			}
 			// Horizontal grid
 			const dbRange = this.maxDecibels - this.minDecibels;
-			for(let i = 10; i < dbRange; i += 20) {
-				const y = (i + 5) * height / dbRange;
+			for(let i = 10; i <= dbRange; i += 10) {
+				const y = (i - 5) * height / dbRange;
 				ctx.moveTo(0, y);
 				ctx.lineTo(width, y);
 			}
 			ctx.stroke();
 			// Horizontal dB labels
-			for(let i = 0; i <= dbRange; i += 20) {
-				ctx.fillText(((this.maxDecibels - i)/2 + 10) + 'dB', 2, i * height / dbRange);
+			for(let i = 0; i <= dbRange; i += 10) {
+				ctx.fillText((this.maxDecibels - i + 5 + 15) + 'dB', 2, i * height / dbRange);
 			}
 			// Clear buffer
 			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
