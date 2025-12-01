@@ -12,6 +12,7 @@ export class Scope {
 		this.canvasHeight = 256;
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
+		this.fftSize = 1024;
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
 		this.colorDiagram = null;
@@ -74,8 +75,10 @@ export class Scope {
 			ctx.strokeStyle = '#444';
 			ctx.fillStyle = '#faca63';
 			ctx.font = '11px monospace';
-			const minFreq = 47; // minFreq = resolution = sampleRate / fftSize = 48000 / 1024 = 46.875Hz
-			const maxFreq = 24000; // maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
+			// minFreq = resolution = sampleRate / fftSize
+			// maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
+			const minFreq = 48000 / this.fftSize;
+			const maxFreq = 24000;
 			let freq = 10; // Start building from 10Hz
 			while(freq <= maxFreq) {
 				for(let i = 1; i < 10; ++i) {

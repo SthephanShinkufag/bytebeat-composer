@@ -92,7 +92,7 @@ globalThis.bytebeat = new class {
 			case 'control-play-forward': this.playbackToggle(true, true, 1); break;
 			case 'control-rec': this.toggleRecording(); break;
 			case 'control-reset': this.resetTime(); break;
-			case 'control-scale': this.setScale(-scope.drawScale); break;
+			case 'control-scale': this.resetScale(); break;
 			case 'control-scaledown': this.setScale(-1, elem); break;
 			case 'control-scaleup': this.setScale(1); break;
 			case 'control-srdivisor-down': this.setSRDivisor(-1); break;
@@ -205,7 +205,7 @@ globalThis.bytebeat = new class {
 		scope.analyser = [this.audioCtx.createAnalyser(), this.audioCtx.createAnalyser()];
 		scope.analyser[0].minDecibels = scope.analyser[1].minDecibels = scope.minDecibels;
 		scope.analyser[0].maxDecibels = scope.analyser[1].maxDecibels = scope.maxDecibels;
-		scope.analyser[0].fftSize = scope.analyser[1].fftSize = 1024;
+		scope.fftSize = scope.analyser[0].fftSize = scope.analyser[1].fftSize = 1024;
 		scope.analyserData = [
 			new Uint8Array(scope.analyser[0].frequencyBinCount),
 			new Uint8Array(scope.analyser[1].frequencyBinCount)];
@@ -496,8 +496,27 @@ globalThis.bytebeat = new class {
 		}
 		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
 	}
+	updateScaleDisplay() {
+		if(scope.drawMode === 'FFT') {
+			ui.controlScaleDown.title = 'Use less FFT bins';
+			ui.controlScaleUp.title = 'Use more FFT bins';
+			ui.controlScale.title = 'FFT bins. Click to reset to 1024';
+			ui.controlScale.innerHTML = scope.drawScale < 10 ?
+				(2**scope.drawScale).toLocaleString() :
+				`<sub>2</sub>${ scope.drawScale }`;
+		} else {
+			ui.controlScaleDown.title = 'Zoom in the scope';
+			ui.controlScaleUp.title = 'Zoom out the scope';
+			ui.controlScale.title = 'Scope zoom factor. Click to reset to 1.';
+			ui.controlScale.innerHTML = !scope.drawScale ? '1x' :
+				scope.drawScale < 7 ?
+					`1/${ 2 ** scope.drawScale }${ scope.drawScale < 4 ? 'x' : '' }` :
+					`<sub>2</sub>-${ scope.drawScale }`;
+		}
+	}
 	setDrawMode(drawMode) {
 		scope.drawMode = drawMode;
+		this.setScale(0);
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
 		this.saveSettings();
@@ -542,23 +561,35 @@ globalThis.bytebeat = new class {
 		if(buttonElem?.getAttribute('disabled')) {
 			return;
 		}
-		const scale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
-		ui.controlScale.innerHTML = !scale ? '1x' :
-			scale < 7 ? `1/${ 2 ** scale }${ scale < 4 ? 'x' : '' }` :
-			`<sub>2</sub>-${ scale }`;
+		const isFFT = scope.drawMode === 'FFT';
+		const scale = Math.min(Math.max(scope.drawScale + amount, isFFT ? 5 : 0), isFFT ? 15 : 20);
 		scope.drawScale = scale;
+		this.updateScaleDisplay();
+		if(isFFT) {
+			scope.fftSize = scope.analyser[0].fftSize = scope.analyser[1].fftSize = 2**scope.drawScale;
+			scope.analyserData = [
+				new Uint8Array(scope.analyser[0].frequencyBinCount),
+				new Uint8Array(scope.analyser[1].frequencyBinCount)];
+		}
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
 		this.saveSettings();
-		if(scope.drawScale <= 0) {
+		if(scope.drawScale <= (isFFT ? 5 : 0)) {
 			ui.controlScaleDown.setAttribute('disabled', true);
 		} else {
 			ui.controlScaleDown.removeAttribute('disabled');
 		}
-		if(scope.drawScale >= 20) {
+		if(scope.drawScale >= (isFFT ? 15 : 20)) {
 			ui.controlScaleUp.setAttribute('disabled', true);
 		} else {
 			ui.controlScaleUp.removeAttribute('disabled');
+		}
+	}
+	resetScale() {
+		if(scope.drawMode === 'FFT') {
+			this.setScale(-scope.drawScale+10);
+		} else {
+			this.setScale(-scope.drawScale);
 		}
 	}
 	setSRDivisor(increment) {
