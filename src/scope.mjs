@@ -77,7 +77,7 @@ export class Scope {
 			ctx.font = '11px monospace';
 			// minFreq = resolution = sampleRate / fftSize
 			// maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
-			const minFreq = 48000 / this.fftSize;
+			const minFreq = 48000 / 2 ** this.fftSize;
 			const maxFreq = 24000;
 			let freq = 10; // Start building from 10Hz
 			while(freq <= maxFreq) {
