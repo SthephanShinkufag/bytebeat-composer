@@ -542,19 +542,6 @@ globalThis.bytebeat = new class {
 			});
 		}
 	}
-	adjustScope(amount, buttonElem) {
-		if(scope.drawMode === 'FFT') {
-			ui.controlScaleDown.title = 'Use less FFT bins';
-			ui.controlScaleUp.title = 'Use more FFT bins';
-			ui.controlScale.title = 'FFT bins. Click to reset to 1024';
-			this.setFFTBins(amount, buttonElem);
-		} else {
-			ui.controlScaleDown.title = 'Zoom in the scope';
-			ui.controlScaleUp.title = 'Zoom out the scope';
-			ui.controlScale.title = 'Scope zoom factor. Click to reset to 1.';
-			this.setScale(amount, buttonElem);
-		}
-	}
 	setFFTBins(amount, buttonElem) {
 		if(buttonElem?.getAttribute('disabled')) {
 			return;
@@ -571,14 +558,14 @@ globalThis.bytebeat = new class {
 		scope.clearCanvas();
 		this.saveSettings();
 		if(scope.fftSize <= 5) {
-			ui.controlScaleDown.setAttribute('disabled', true);
-		} else {
-			ui.controlScaleDown.removeAttribute('disabled');
-		}
-		if(scope.fftSize >= 15) {
 			ui.controlScaleUp.setAttribute('disabled', true);
 		} else {
 			ui.controlScaleUp.removeAttribute('disabled');
+		}
+		if(scope.fftSize >= 15) {
+			ui.controlScaleDown.setAttribute('disabled', true);
+		} else {
+			ui.controlScaleDown.removeAttribute('disabled');
 		}
 	}
 	setScale(amount, buttonElem) {
@@ -603,6 +590,19 @@ globalThis.bytebeat = new class {
 			ui.controlScaleUp.setAttribute('disabled', true);
 		} else {
 			ui.controlScaleUp.removeAttribute('disabled');
+		}
+	}
+	adjustScope(amount, buttonElem) {
+		if(scope.drawMode === 'FFT') {
+			ui.controlScaleDown.title = 'Use more FFT bins';
+			ui.controlScaleUp.title = 'Use less FFT bins';
+			ui.controlScale.title = 'FFT bins. Click to reset to 1024';
+			this.setFFTBins(-amount, buttonElem);
+		} else {
+			ui.controlScaleDown.title = 'Zoom in the scope';
+			ui.controlScaleUp.title = 'Zoom out the scope';
+			ui.controlScale.title = 'Scope zoom factor. Click to reset to 1.';
+			this.setScale(amount, buttonElem);
 		}
 	}
 	resetScopeAdjustment() {
