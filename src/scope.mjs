@@ -12,7 +12,7 @@ export class Scope {
 		this.canvasHeight = 256;
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
-		this.fftSize = 1024;
+		this.fftSize = 10;
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
 		this.colorDiagram = null;
@@ -94,15 +94,15 @@ export class Scope {
 			}
 			// Horizontal grid
 			const dbRange = this.maxDecibels - this.minDecibels;
-			for(let i = 10; i <= dbRange; i += 10) {
-				const y = (i - 5) * height / dbRange;
+			for(let i = 10; i < dbRange; i += 10) {
+				const y = i * height / dbRange;
 				ctx.moveTo(0, y);
 				ctx.lineTo(width, y);
 			}
 			ctx.stroke();
 			// Horizontal dB labels
 			for(let i = 0; i <= dbRange; i += 10) {
-				ctx.fillText((this.maxDecibels - i + 5 + 15) + 'dB', 2, i * height / dbRange);
+				ctx.fillText(this.maxDecibels - i + 'dB', 2, i * height / dbRange - 2);
 			}
 			// Clear buffer
 			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
