@@ -162,7 +162,7 @@ globalThis.bytebeat = new class {
 			this.settings = JSON.parse(localStorage.settings);
 			scope.drawMode = this.settings.drawMode;
 			scope.drawScale = this.settings.drawScale;
-			scope.fftSize = this.settings.fftSize;
+			scope.fftSize = Math.max(5, Math.min(15, +this.settings.fftSize||10));
 			library.showAllSongs = this.settings.showAllSongs;
 		} catch(err) {
 			this.saveSettings();
