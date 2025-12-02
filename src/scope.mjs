@@ -52,15 +52,17 @@ export class Scope {
 			let isStereo = false;
 			let i = Math.min(bufferLen, 200);
 			while(i--) {
-				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) continue;
+				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) {
+					continue;
+				}
 				if(buffer[i].value[0] !== buffer[i].value[1]) {
 					isStereo = true;
 					break;
 				}
 			}
-			const minFreq = 10;
-			const maxFreq = 24000;
 			// Build the chart
+			const minFreq = Math.max(48000 / 2 ** this.fftSize, 10);
+			const maxFreq = 24000; // audioCtx.sampleRate / 2 = 48000 / 2
 			let ch = isStereo ? 2 : 1;
 			while(ch--) {
 				ctx.beginPath();
@@ -68,11 +70,13 @@ export class Scope {
 					`rgb(${ this.colorWaveform.join(',') })`;
 				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
 				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
-					const x = i?
-						width * (Math.log(i/len*maxFreq)-Math.log(minFreq)) /
-									(Math.log(maxFreq)-Math.log(minFreq))
-						: 0;
-					ctx[i ? 'lineTo' : 'moveTo'](x, height * (1 - this.analyserData[ch][i] / 256));
+					const y = height * (1 - this.analyserData[ch][i] / 256);
+					if(i) {
+						const ratio = maxFreq / minFreq;
+						ctx.lineTo(width * Math.log(i / len * ratio) / Math.log(ratio), y);
+						continue;
+					}
+					ctx.moveTo(0, y);
 				}
 				ctx.stroke();
 			}
@@ -339,6 +343,15 @@ export class Scope {
 				this.requestAnimationFrame();
 			}
 		});
+	}
+	setFFTAnalyzer() {
+		this.analyser[0].fftSize = this.analyser[1].fftSize = 2 ** this.fftSize;
+		this.analyserData = [
+			new Uint8Array(this.analyser[0].frequencyBinCount),
+			new Uint8Array(this.analyser[1].frequencyBinCount)];
+	}
+	setFFTSize(value) {
+		this.fftSize = Math.min(Math.max(value, 5), 15);
 	}
 	setStereoColors() {
 		const ch = this.colorChannels;

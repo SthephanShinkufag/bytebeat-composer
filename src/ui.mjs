@@ -73,6 +73,19 @@ export class UI {
 	setCodeSize(value) {
 		this.controlCodeSize.textContent = formatBytes(new Blob([value]).size);
 	}
+	setControlScale(isDisableDown, isDisableUp, value) {
+		this.controlScale.innerHTML = value;
+		if(isDisableDown) {
+			this.controlScaleDown.setAttribute('disabled', true);
+		} else {
+			this.controlScaleDown.removeAttribute('disabled');
+		}
+		if(isDisableUp) {
+			this.controlScaleUp.setAttribute('disabled', true);
+		} else {
+			this.controlScaleUp.removeAttribute('disabled');
+		}
+	}
 	setPlayButton(buttonElem, speed) {
 		const isFast = speed !== 1;
 		buttonElem.classList.toggle('control-fast', isFast);

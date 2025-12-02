@@ -94,8 +94,8 @@ globalThis.bytebeat = new class {
 			case 'control-rec': this.toggleRecording(); break;
 			case 'control-reset': this.resetTime(); break;
 			case 'control-scale': this.resetScopeAdjustment(); break;
-			case 'control-scaledown': this.adjustScope(-1, elem); break;
-			case 'control-scaleup': this.adjustScope(1); break;
+			case 'control-scaledown': this.setScopeAdjustment(-1, elem); break;
+			case 'control-scaleup': this.setScopeAdjustment(1); break;
 			case 'control-srdivisor-down': this.setSRDivisor(-1); break;
 			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
@@ -162,7 +162,7 @@ globalThis.bytebeat = new class {
 			this.settings = JSON.parse(localStorage.settings);
 			scope.drawMode = this.settings.drawMode;
 			scope.drawScale = this.settings.drawScale;
-			scope.fftSize = Math.max(5, Math.min(15, +this.settings.fftSize||10));
+			scope.setFFTSize(+this.settings.fftSize || 10);
 			library.showAllSongs = this.settings.showAllSongs;
 		} catch(err) {
 			this.saveSettings();
@@ -187,7 +187,7 @@ globalThis.bytebeat = new class {
 		this.setColorDiagram();
 		this.setColorWaveform();
 		this.setColorTimeCursor();
-		this.adjustScope(0);
+		this.setScopeAdjustment(0);
 		this.parseUrl();
 		this.sendData({ drawMode: scope.drawMode });
 		ui.controlDrawMode.value = scope.drawMode;
@@ -207,10 +207,7 @@ globalThis.bytebeat = new class {
 		scope.analyser = [this.audioCtx.createAnalyser(), this.audioCtx.createAnalyser()];
 		scope.analyser[0].minDecibels = scope.analyser[1].minDecibels = scope.minDecibels;
 		scope.analyser[0].maxDecibels = scope.analyser[1].maxDecibels = scope.maxDecibels;
-		scope.analyser[0].fftSize = scope.analyser[1].fftSize = 2 ** scope.fftSize;
-		scope.analyserData = [
-			new Uint8Array(scope.analyser[0].frequencyBinCount),
-			new Uint8Array(scope.analyser[1].frequencyBinCount)];
+		scope.setFFTAnalyzer();
 		const splitter = this.audioCtx.createChannelSplitter(2);
 		splitter.connect(scope.analyser[0], 0);
 		splitter.connect(scope.analyser[1], 1);
@@ -380,6 +377,13 @@ globalThis.bytebeat = new class {
 			this.updateUrl();
 		}
 	}
+	resetScopeAdjustment() {
+		if(scope.drawMode === 'FFT') {
+			this.setFFTBins(-scope.fftSize + 10);
+		} else {
+			this.setScale(-scope.drawScale);
+		}
+	}
 	resetTime() {
 		this.isNeedClear = true;
 		this.sendData({ resetTime: true, playbackSpeed: this.playbackSpeed });
@@ -418,6 +422,17 @@ globalThis.bytebeat = new class {
 		editor.container.dataset.theme = this.settings.codeStyle = value;
 		this.saveSettings();
 	}
+	setColorDiagram(value) {
+		if(value !== undefined) {
+			this.settings.colorDiagram = value;
+			this.saveSettings();
+		} else if((value = this.settings.colorDiagram) === undefined) {
+			value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
+			this.saveSettings();
+		}
+		ui.controlColorDiagram.value = value;
+		ui.controlColorDiagramInfo.innerHTML = scope.getColorTest('colorDiagram', value);
+	}
 	setColorStereo(value) {
 		// value: Red=0, Green=1, Blue=2
 		if(value !== undefined) {
@@ -437,17 +452,6 @@ globalThis.bytebeat = new class {
 		if(scope.colorWaveform) {
 			scope.setStereoColors();
 		}
-	}
-	setColorDiagram(value) {
-		if(value !== undefined) {
-			this.settings.colorDiagram = value;
-			this.saveSettings();
-		} else if((value = this.settings.colorDiagram) === undefined) {
-			value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
-			this.saveSettings();
-		}
-		ui.controlColorDiagram.value = value;
-		ui.controlColorDiagramInfo.innerHTML = scope.getColorTest('colorDiagram', value);
 	}
 	setColorTimeCursor(value) {
 		if(value !== undefined) {
@@ -501,11 +505,22 @@ globalThis.bytebeat = new class {
 	}
 	setDrawMode(drawMode) {
 		scope.drawMode = drawMode;
-		this.adjustScope(0);
+		this.setScopeAdjustment(0);
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
 		this.saveSettings();
 		this.sendData({ drawMode });
+	}
+	setFFTBins(amount, buttonElem) {
+		if(buttonElem?.getAttribute('disabled')) {
+			return;
+		}
+		scope.setFFTSize(scope.fftSize + amount);
+		scope.setFFTAnalyzer();
+		scope.clearCanvas();
+		this.saveSettings();
+		ui.setControlScale(scope.fftSize >= 15, scope.fftSize <= 5,
+			scope.fftSize < 10 ? 2 ** scope.fftSize : `<sub>2</sub>${ scope.fftSize }`);
 	}
 	setPlaybackMode(mode) {
 		this.mode = mode;
@@ -542,57 +557,20 @@ globalThis.bytebeat = new class {
 			});
 		}
 	}
-	setFFTBins(amount, buttonElem) {
-		if(buttonElem?.getAttribute('disabled')) {
-			return;
-		}
-		const bins = Math.min(Math.max(scope.fftSize + amount, 5), 15);
-		scope.fftSize = bins;
-		ui.controlScale.innerHTML = scope.fftSize < 10 ?
-			(2**scope.fftSize).toLocaleString() :
-			`<sub>2</sub>${ scope.fftSize }`;
-		scope.analyser[0].fftSize = scope.analyser[1].fftSize = 2**scope.fftSize;
-		scope.analyserData = [
-			new Uint8Array(scope.analyser[0].frequencyBinCount),
-			new Uint8Array(scope.analyser[1].frequencyBinCount)];
-		scope.clearCanvas();
-		this.saveSettings();
-		if(scope.fftSize <= 5) {
-			ui.controlScaleUp.setAttribute('disabled', true);
-		} else {
-			ui.controlScaleUp.removeAttribute('disabled');
-		}
-		if(scope.fftSize >= 15) {
-			ui.controlScaleDown.setAttribute('disabled', true);
-		} else {
-			ui.controlScaleDown.removeAttribute('disabled');
-		}
-	}
 	setScale(amount, buttonElem) {
 		if(buttonElem?.getAttribute('disabled')) {
 			return;
 		}
-		const scale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
-		scope.drawScale = scale;
-		ui.controlScale.innerHTML = !scope.drawScale ? '1x' :
-			scope.drawScale < 7 ?
-				`1/${ 2 ** scope.drawScale }${ scope.drawScale < 4 ? 'x' : '' }` :
-				`<sub>2</sub>-${ scope.drawScale }`;
+		scope.drawScale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
 		this.saveSettings();
-		if(scope.drawScale <= 0) {
-			ui.controlScaleDown.setAttribute('disabled', true);
-		} else {
-			ui.controlScaleDown.removeAttribute('disabled');
-		}
-		if(scope.drawScale >= 20) {
-			ui.controlScaleUp.setAttribute('disabled', true);
-		} else {
-			ui.controlScaleUp.removeAttribute('disabled');
-		}
+		ui.setControlScale(scope.drawScale <= 0, scope.drawScale >= 20,
+			!scope.drawScale ? '1x' :
+			scope.drawScale < 7 ? `1/${ 2 ** scope.drawScale }${ scope.drawScale < 4 ? 'x' : '' }` :
+			`<sub>2</sub>-${ scope.drawScale }`);
 	}
-	adjustScope(amount, buttonElem) {
+	setScopeAdjustment(amount, buttonElem) {
 		if(scope.drawMode === 'FFT') {
 			ui.controlScaleDown.title = 'Use more FFT bins';
 			ui.controlScaleUp.title = 'Use less FFT bins';
@@ -603,13 +581,6 @@ globalThis.bytebeat = new class {
 			ui.controlScaleUp.title = 'Zoom out the scope';
 			ui.controlScale.title = 'Scope zoom factor. Click to reset to 1.';
 			this.setScale(amount, buttonElem);
-		}
-	}
-	resetScopeAdjustment() {
-		if(scope.drawMode === 'FFT') {
-			this.setFFTBins(-scope.fftSize+10);
-		} else {
-			this.setScale(-scope.drawScale);
 		}
 	}
 	setSRDivisor(increment) {
