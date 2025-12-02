@@ -57,6 +57,8 @@ export class Scope {
 					break;
 				}
 			}
+			const minFreq = 20;
+			const maxFreq = 24000;
 			// Build the chart
 			let ch = isStereo ? 2 : 1;
 			while(ch--) {
@@ -65,8 +67,11 @@ export class Scope {
 					`rgb(${ this.colorWaveform.join(',') })`;
 				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
 				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
-					ctx[i ? 'lineTo' : 'moveTo'](width * Math.log(i) / Math.log(len),
-						height * (1 - this.analyserData[ch][i] / 256));
+					const x = i?
+						width * (Math.log(i/len*maxFreq)-Math.log(minFreq)) /
+									(Math.log(maxFreq)-Math.log(minFreq))
+						: 0;
+					ctx[i ? 'lineTo' : 'moveTo'](x, height * (1 - this.analyserData[ch][i] / 256));
 				}
 				ctx.stroke();
 			}
@@ -75,10 +80,6 @@ export class Scope {
 			ctx.strokeStyle = '#444';
 			ctx.fillStyle = '#faca63';
 			ctx.font = '11px monospace';
-			// minFreq = resolution = sampleRate / fftSize
-			// maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
-			const minFreq = 48000 / 2 ** this.fftSize;
-			const maxFreq = 24000;
 			let freq = 10; // Start building from 10Hz
 			while(freq <= maxFreq) {
 				for(let i = 1; i < 10; ++i) {
