@@ -23,7 +23,7 @@ export class Scope {
 		this.drawMode = 'Combined';
 		this.drawScale = 5;
 		this.minDecibels = -120;
-		this.maxDecibels = -20;
+		this.maxDecibels = -10;
 	}
 	get timeCursorEnabled() {
 		return globalThis.bytebeat.sampleRate >> this.drawScale < 2000;
