@@ -52,12 +52,13 @@ export class Scope {
 			let isStereo = false;
 			let i = Math.min(bufferLen, 200);
 			while(i--) {
+				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) continue;
 				if(buffer[i].value[0] !== buffer[i].value[1]) {
 					isStereo = true;
 					break;
 				}
 			}
-			const minFreq = 20;
+			const minFreq = 10;
 			const maxFreq = 24000;
 			// Build the chart
 			let ch = isStereo ? 2 : 1;
