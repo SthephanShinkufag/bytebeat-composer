@@ -12,6 +12,7 @@ export class Scope {
 		this.canvasHeight = 256;
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
+		this.fftSize = 10;
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
 		this.colorDiagram = null;
@@ -51,11 +52,14 @@ export class Scope {
 			let isStereo = false;
 			let i = Math.min(bufferLen, 200);
 			while(i--) {
+				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) continue;
 				if(buffer[i].value[0] !== buffer[i].value[1]) {
 					isStereo = true;
 					break;
 				}
 			}
+			const minFreq = 10;
+			const maxFreq = 24000;
 			// Build the chart
 			let ch = isStereo ? 2 : 1;
 			while(ch--) {
@@ -64,8 +68,11 @@ export class Scope {
 					`rgb(${ this.colorWaveform.join(',') })`;
 				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
 				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
-					ctx[i ? 'lineTo' : 'moveTo'](width * Math.log(i) / Math.log(len),
-						height * (1 - this.analyserData[ch][i] / 256));
+					const x = i?
+						width * (Math.log(i/len*maxFreq)-Math.log(minFreq)) /
+									(Math.log(maxFreq)-Math.log(minFreq))
+						: 0;
+					ctx[i ? 'lineTo' : 'moveTo'](x, height * (1 - this.analyserData[ch][i] / 256));
 				}
 				ctx.stroke();
 			}
@@ -74,8 +81,6 @@ export class Scope {
 			ctx.strokeStyle = '#444';
 			ctx.fillStyle = '#faca63';
 			ctx.font = '11px monospace';
-			const minFreq = 47; // minFreq = resolution = sampleRate / fftSize = 48000 / 1024 = 46.875Hz
-			const maxFreq = 24000; // maxFreq = sampleRate / 2 = 48000 / 2 = 24000Hz
 			let freq = 10; // Start building from 10Hz
 			while(freq <= maxFreq) {
 				for(let i = 1; i < 10; ++i) {
