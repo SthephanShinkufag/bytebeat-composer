@@ -291,6 +291,19 @@ hr {
 	height: 2px;
 }
 
+#info p {
+	margin: 0 0 4px 0;
+}
+
+#info section {
+	margin-bottom: 10px;
+}
+
+#info ul {
+	margin: 0;
+	padding-left: 15px;
+}
+
 option {
 	background-color: white;
 	color: #435071;

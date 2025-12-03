@@ -9,14 +9,14 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025120301">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025120301">
-	<script type="module" async src="./build/index.js?version=2025120301"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025120302">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025120302">
+	<script type="module" async src="./build/index.js?version=2025120302"></script>
 </head>
 <body>
 	<main id="content">
 		<section id="container-fixed">
-			<div id="editor-container">
+			<div id="editor-container" aria-label="Code editor">
 				<div id="editor-default">
 					<svg><use xlink:href="#symbol-wait"></svg>
 				</div>
@@ -109,7 +109,7 @@
 			</div>
 			<pre id="error"></pre>
 			<div id="canvas-container" title="Click to play">
-				<canvas id="canvas-main" width="1024" height="256"></canvas>
+				<canvas id="canvas-main" width="1024" height="256" aria-label="Oscillioscope"></canvas>
 				<div id="canvas-timecursor"></div>
 				<div id="canvas-play" class="canvas-initial canvas-play">
 					<svg id="svg-canvas-play"><use xlink:href="#symbol-play"></use></svg>
@@ -123,25 +123,50 @@
 					<h1>Info</h1> &ndash; about bytebeat
 				</summary>
 				<article id="info" class="library-container entry loaded">
-					Bytebeat music (or one-liner music) was invented in September 2011.
-					They're generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
-					It's simply a single-line formula that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
-					If you put that formula into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
-					Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.<br>
-					<a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a><br>
-					<br>
-					Original blog posts and videos from Viznut:<br>
-					<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a><br>
-					<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a><br>
-					<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a><br>
-					<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a><br>
-					<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a><br>
-					<br>
-					This website is a live editing bytebeats player. It has a collection of bytebeat music I found on the internet, and also the music I created.<br>
-					You can choose between bytebeat, signed bytebeat and floatbeat formats. Bytebeat expects output is an unsigned 8bit value (0 to 255). Signed bytebeat assumes output is a signed 8bit value (-127 to 128). Floatbeat assumes output is -1.0 to 1.0.<br>
-					<br>
-					This website is the fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by <a href="http://twitter.com/paul_hayes/" target="_blank">@paul_hayes</a>.<br>
-					Forked by SthephanShi aka Viraya.
+					<section>
+						<p>Bytebeat music was invented in September 2011.</p>
+						<p>
+							Classic simple bytebeats are generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
+							It's simply an expression that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
+							If you put that expression into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
+							Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.
+						</p>
+						<p>Initially, expressions were typically written in C or were C-compatible, written in JavaScript. But bytebeat music has evolved over the years, and modern songs with complex JavaScript code are now popular. You'll find examples in the library on this site.</p>
+					</section>
+					<section>
+						<p><a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a></p>
+						<p>
+							Original blog posts and videos from Viznut:
+							<ul>
+								<li><a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a></li>
+								<li><a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a></li>
+								<li><a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a></li>
+								<li><a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a></li>
+								<li><a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a></li>
+							<ul>
+						</p>
+					</section>
+					<section>
+						<p>This website is a live editing bytebeats player, it has a collection of bytebeat music. Online JavaScript players:</p>
+						<ul>
+							<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
+							<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
+							<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
+							<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
+						</ul>
+					</section>
+					<section>
+						<p>Playback modes are:</p>
+						<ul>
+							<li><b>Bytebeat</b> &mdash; output is an unsigned 8bit integer from 0 to 255, values outside this are wrapped, and non-integers are floored.</li>
+							<li><b>Signed Bytebeat</b> &mdash; output is a signed 8bit integer from -127 to 128, values outside this are wrapped, and non-integers are floored.</li>
+							<li><b>Floatbeat</b> &mdash; output is -1.0 to 1.0. Allows higher quality audio since it is not limited to 255 values, unlike the previous ones.</li>
+							<li><b>Funcbeat</b> &mdash; the code is run only once and is not an expression, it expects the function to return. The returned function is ran with time in seconds, output is -1.0 to 1.0.
+						</ul>
+					</section>
+					<section>
+						<p>This project is made by SthephanShi, and is a fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer by Paul Hayes</a>.</p>
+					</section>
 				</article>
 			</details>
 			<details class="library-content">
