@@ -12,6 +12,7 @@ export class Scope {
 		this.canvasHeight = 256;
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
+		this.fftGridData = null;
 		this.fftSize = 10;
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
@@ -48,6 +49,45 @@ export class Scope {
 		// FFT graph drawing
 		if(this.drawMode === 'FFT') {
 			this.clearCanvas();
+			const minFreq = Math.max(48000 / 2 ** this.fftSize, 10);
+			const maxFreq = 24000; // audioCtx.sampleRate / 2 = 48000 / 2
+			// Grid and labels
+			if(this.fftGridData) {
+				ctx.putImageData(this.fftGridData, 0, 0);
+			} else {
+				// Vertical grid and Hz labels
+				ctx.beginPath();
+				ctx.strokeStyle = '#444';
+				ctx.fillStyle = '#faca63';
+				ctx.font = '11px monospace';
+				let freq = 10; // Start building from 10Hz
+				while(freq <= maxFreq) {
+					for(let i = 1; i < 10; ++i) {
+						const curFreq = freq * i;
+						const x = width * Math.log(curFreq / minFreq) / Math.log(maxFreq / minFreq);
+						ctx.moveTo(x, 0);
+						ctx.lineTo(x, height);
+						if(i < 4 || i === 5) {
+							ctx.fillText(freq < 1000 ? curFreq + 'Hz' : curFreq / 1000 + 'kHz', x + 1, 10);
+						}
+					}
+					freq *= 10;
+				}
+				// Horizontal grid
+				const dbRange = this.maxDecibels - this.minDecibels;
+				for(let i = 10; i < dbRange; i += 10) {
+					const y = i * height / dbRange;
+					ctx.moveTo(0, y);
+					ctx.lineTo(width, y);
+				}
+				ctx.stroke();
+				// Horizontal dB labels
+				for(let i = 0; i <= dbRange; i += 10) {
+					ctx.fillText(this.maxDecibels - i + 'dB', 2, i * height / dbRange - 2);
+				}
+				// Save to the buffer
+				this.fftGridData = ctx.getImageData(0, 0, width, height);
+			}
 			// Detect stereo signal
 			let isStereo = false;
 			let i = Math.min(bufferLen, 200);
@@ -61,8 +101,6 @@ export class Scope {
 				}
 			}
 			// Build the chart
-			const minFreq = Math.max(48000 / 2 ** this.fftSize, 10);
-			const maxFreq = 24000; // audioCtx.sampleRate / 2 = 48000 / 2
 			let ch = isStereo ? 2 : 1;
 			while(ch--) {
 				ctx.beginPath();
@@ -79,36 +117,6 @@ export class Scope {
 					ctx.moveTo(0, y);
 				}
 				ctx.stroke();
-			}
-			// Vertical grid and Hz labels
-			ctx.beginPath();
-			ctx.strokeStyle = '#444';
-			ctx.fillStyle = '#faca63';
-			ctx.font = '11px monospace';
-			let freq = 10; // Start building from 10Hz
-			while(freq <= maxFreq) {
-				for(let i = 1; i < 10; ++i) {
-					const curFreq = freq * i;
-					const x = width * Math.log(curFreq / minFreq) / Math.log(maxFreq / minFreq);
-					ctx.moveTo(x, 0);
-					ctx.lineTo(x, height);
-					if(i < 4 || i === 5) {
-						ctx.fillText(freq < 1000 ? curFreq + 'Hz' : curFreq / 1000 + 'kHz', x + 1, 10);
-					}
-				}
-				freq *= 10;
-			}
-			// Horizontal grid
-			const dbRange = this.maxDecibels - this.minDecibels;
-			for(let i = 10; i < dbRange; i += 10) {
-				const y = i * height / dbRange;
-				ctx.moveTo(0, y);
-				ctx.lineTo(width, y);
-			}
-			ctx.stroke();
-			// Horizontal dB labels
-			for(let i = 0; i <= dbRange; i += 10) {
-				ctx.fillText(this.maxDecibels - i + 'dB', 2, i * height / dbRange - 2);
 			}
 			// Clear buffer
 			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
@@ -349,6 +357,7 @@ export class Scope {
 		this.analyserData = [
 			new Uint8Array(this.analyser[0].frequencyBinCount),
 			new Uint8Array(this.analyser[1].frequencyBinCount)];
+		this.fftGridData = null;
 	}
 	setFFTSize(value) {
 		this.fftSize = Math.min(Math.max(value, 5), 15);
