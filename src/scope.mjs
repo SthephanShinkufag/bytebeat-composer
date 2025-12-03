@@ -39,7 +39,7 @@ export class Scope {
 		}
 		const buffer = this.drawBuffer;
 		const bufferLen = buffer.length;
-		if(!bufferLen) {
+		if(!bufferLen || bufferLen === 1) {
 			return;
 		}
 		const ctx = this.canvasCtx;
