@@ -277,8 +277,8 @@ globalThis.bytebeat = new class {
 			this.playbackToggle(true);
 			return;
 		}
-		const { value } = ui.controlTime;
-		const byteSample = this.settings.isSeconds ? Math.round(value * this.sampleRate) : value;
+		const byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * this.sampleRate) :
+			ui.controlTime.value;
 		this.setByteSample(byteSample);
 		this.sendData({ byteSample });
 	}
@@ -481,6 +481,8 @@ globalThis.bytebeat = new class {
 		this.setCounterValue(this.byteSample);
 	}
 	setCounterValue(value) {
+		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
+		// Lag detection
 		this.updateCounter++;
 		if(this.updateCounter === 400) {
 			this.updateCounter = 0;
@@ -501,7 +503,6 @@ globalThis.bytebeat = new class {
 			}
 			this.lastUpdateTime = time;
 		}
-		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
 	}
 	setDrawMode(drawMode) {
 		scope.drawMode = drawMode;
@@ -545,16 +546,24 @@ globalThis.bytebeat = new class {
 		case 48000: ui.controlSampleRateSelect.value = sampleRate; break;
 		default: ui.controlSampleRateSelect.selectedIndex = -1;
 		}
+		const oldSampleRate = this.sampleRate;
 		ui.controlSampleRate.value = this.sampleRate = sampleRate;
 		ui.controlSampleRate.blur();
 		ui.controlSampleRateSelect.blur();
 		scope.toggleTimeCursor();
 		if(isSendData) {
-			this.updateUrl();
-			this.sendData({
+			const data = {
 				sampleRate: this.sampleRate,
 				sampleRatio: this.sampleRate / this.audioCtx.sampleRate
-			});
+			}
+			if(this.mode === 'Funcbeat') {
+				data.byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * sampleRate) :
+					Math.round(ui.controlTime.value * sampleRate / oldSampleRate);
+				this.setCounterValue(data.byteSample);
+				this.setByteSample(data.byteSample);
+			}
+			this.updateUrl();
+			this.sendData(data);
 		}
 	}
 	setScale(amount, buttonElem) {
