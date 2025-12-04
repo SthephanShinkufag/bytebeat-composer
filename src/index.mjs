@@ -344,12 +344,10 @@ globalThis.bytebeat = new class {
 	receiveData(data) {
 		const { byteSample, drawBuffer, error } = data;
 		if(typeof byteSample === 'number') {
-			scope.isStereo = data.isStereo;
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
 		}
 		if(Array.isArray(drawBuffer)) {
-			scope.isStereo = data.isStereo;
 			scope.drawBuffer = scope.drawBuffer.concat(drawBuffer);
 			const limit = scope.canvasWidth * (1 << scope.drawScale) - 1;
 			if(scope.drawBuffer.length > limit) {

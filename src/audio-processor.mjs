@@ -66,7 +66,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 		let time = this.sampleRatio * this.audioSample;
 		let { byteSample } = this;
-		let isStereo = false;
 		const drawBuffer = [];
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 		for(let i = 0; i < chDataLen; ++i) {
@@ -130,9 +129,6 @@ class audioProcessor extends AudioWorkletProcessor {
 			}
 			chData[0][i] = this.outValue[0];
 			chData[1][i] = this.outValue[1];
-			if(this.outValue[0] !== this.outValue[1]) {
-				isStereo = true;
-			}
 		}
 		if(Math.abs(byteSample) > Number.MAX_SAFE_INTEGER) {
 			this.resetTime();
@@ -150,7 +146,6 @@ class audioProcessor extends AudioWorkletProcessor {
 			data.drawBuffer = drawBuffer;
 		}
 		if(isSend) {
-			data.isStereo = isStereo;
 			this.sendData(data);
 		}
 		return true;

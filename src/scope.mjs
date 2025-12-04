@@ -23,7 +23,6 @@ export class Scope {
 		this.drawScale = 5;
 		this.fftGridData = null;
 		this.fftSize = 10;
-		this.isStereo = false;
 		this.maxDecibels = -10;
 		this.minDecibels = -120;
 	}
@@ -88,11 +87,23 @@ export class Scope {
 				// Save to the buffer
 				this.fftGridData = ctx.getImageData(0, 0, width, height);
 			}
+			// Detect stereo signal
+			let isStereo = false;
+			let i = Math.min(bufferLen, 200);
+			while(i--) {
+				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) {
+					continue;
+				}
+				if(buffer[i].value[0] !== buffer[i].value[1]) {
+					isStereo = true;
+					break;
+				}
+			}
 			// Build the chart
-			let ch = this.isStereo ? 2 : 1;
+			let ch = isStereo ? 2 : 1;
 			while(ch--) {
 				ctx.beginPath();
-				ctx.strokeStyle = this.isStereo ? this.colorStereoRGB[ch] :
+				ctx.strokeStyle = isStereo ? this.colorStereoRGB[ch] :
 					`rgb(${ this.colorWaveform.join(',') })`;
 				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
 				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
@@ -106,8 +117,8 @@ export class Scope {
 				}
 				ctx.stroke();
 			}
-			// Clear buffer
-			this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+			// Truncate buffer
+			this.drawBuffer = this.drawBuffer.slice(-200);
 			return;
 		}
 		const scale = this.drawScale;
