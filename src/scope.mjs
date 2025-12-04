@@ -12,8 +12,6 @@ export class Scope {
 		this.canvasHeight = 256;
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
-		this.fftGridData = null;
-		this.fftSize = 10;
 		this.canvasWidth = 1024;
 		this.colorChannels = null;
 		this.colorDiagram = null;
@@ -23,8 +21,11 @@ export class Scope {
 		this.drawEndBuffer = [];
 		this.drawMode = 'Combined';
 		this.drawScale = 5;
-		this.minDecibels = -120;
+		this.fftGridData = null;
+		this.fftSize = 10;
+		this.isStereo = false;
 		this.maxDecibels = -10;
+		this.minDecibels = -120;
 	}
 	get timeCursorEnabled() {
 		return globalThis.bytebeat.sampleRate >> this.drawScale < 2000;
@@ -40,7 +41,7 @@ export class Scope {
 		}
 		const buffer = this.drawBuffer;
 		const bufferLen = buffer.length;
-		if(!bufferLen || bufferLen === 1) {
+		if(!bufferLen) {
 			return;
 		}
 		const ctx = this.canvasCtx;
@@ -73,38 +74,25 @@ export class Scope {
 					}
 					freq *= 10;
 				}
-				// Horizontal grid
+				// Horizontal grid and  dB labels
 				const dbRange = this.maxDecibels - this.minDecibels;
-				for(let i = 10; i < dbRange; i += 10) {
+				for(let i = 10; i <= dbRange; i += 10) {
 					const y = i * height / dbRange;
-					ctx.moveTo(0, y);
-					ctx.lineTo(width, y);
+					if(i < dbRange) {
+						ctx.moveTo(0, y);
+						ctx.lineTo(width, y);
+					}
+					ctx.fillText(this.maxDecibels - i + 'dB', 1, i * height / dbRange - 2);
 				}
 				ctx.stroke();
-				// Horizontal dB labels
-				for(let i = 0; i <= dbRange; i += 10) {
-					ctx.fillText(this.maxDecibels - i + 'dB', 2, i * height / dbRange - 2);
-				}
 				// Save to the buffer
 				this.fftGridData = ctx.getImageData(0, 0, width, height);
 			}
-			// Detect stereo signal
-			let isStereo = false;
-			let i = Math.min(bufferLen, 200);
-			while(i--) {
-				if(isNaN(buffer[i].value[0]) && isNaN(buffer[i].value[1])) {
-					continue;
-				}
-				if(buffer[i].value[0] !== buffer[i].value[1]) {
-					isStereo = true;
-					break;
-				}
-			}
 			// Build the chart
-			let ch = isStereo ? 2 : 1;
+			let ch = this.isStereo ? 2 : 1;
 			while(ch--) {
 				ctx.beginPath();
-				ctx.strokeStyle = isStereo ? this.colorStereoRGB[ch] :
+				ctx.strokeStyle = this.isStereo ? this.colorStereoRGB[ch] :
 					`rgb(${ this.colorWaveform.join(',') })`;
 				this.analyser[ch].getByteFrequencyData(this.analyserData[ch]);
 				for(let i = 0, len = this.analyserData[ch].length; i < len; ++i) {
@@ -360,7 +348,7 @@ export class Scope {
 		this.fftGridData = null;
 	}
 	setFFTSize(value) {
-		this.fftSize = Math.min(Math.max(value, 5), 15);
+		this.fftSize = Math.min(Math.max(value, 6), 15);
 	}
 	setStereoColors() {
 		const ch = this.colorChannels;
