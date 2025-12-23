@@ -601,14 +601,14 @@ function databaseToFiles() {
 		$fileOrig = 0;
 		$fileForm = 0;
 		if (isset($song['code_minified']) && mb_strlen($song['code_minified']) > 1024) {
-			// Save big minified code into file
+			// Save minified larger than 1024 bytes code into file
 			file_put_contents($pathMinified . $song['hash'] . '.js', $song['code_minified']);
 			$fileMin = 1;
 		}
 		if (isset($song['code']) &&
-			(substr_count($song['code'], PHP_EOL) > 4 || mb_strlen($song['code']) > 1024)
+			(substr_count($song['code'], PHP_EOL) > 8 || mb_strlen($song['code']) > 1024)
 		) {
-			// Save big original code into file
+			// Save original code larger than 1024 bytes or 8 lines into file
 			file_put_contents($pathOriginal . $song['hash'] . '.js', $song['code']);
 			$fileOrig = 1;
 		}

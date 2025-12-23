@@ -9,9 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2025120404">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025120404">
-	<script type="module" async src="./build/index.js?version=2025120404"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2025121200">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2025121200">
+	<script type="module" async src="./build/index.js?version=2025121200"></script>
+	<script src="./build/theme.js?version=2025121200"></script>
 </head>
 <body>
 	<main id="content">
@@ -56,26 +57,30 @@
 					<button id="control-scaledown" class="control-button" title="Zoom in the scope">
 						<svg><use xlink:href="#symbol-scaledown"></use></svg>
 					</button>
-					<div id="control-scale" class="control-button" title="Scope zoom factor. Click to reset."></div>
+					<div id="control-scale" class="control-button" title="Scope zoom factor. Click to reset.">1/32</div>
 					<button id="control-scaleup" class="control-button" title="Zoom out the scope">
 						<svg><use xlink:href="#symbol-scaleup"></use></svg>
 					</button>
 				</div>
-				<select id="control-drawmode" class="control-select controls-grow" title="Drawing mode">
-					<option value="Points" selected>Points</option>
-					<option value="Waveform">Waveform</option>
-					<option value="Diagram">Diagram</option>
-					<option value="Combined">Combined</option>
-					<option value="FFT">FFT</option>
-				</select>
-				<select id="control-mode" class="control-select controls-grow" title="Sound mode">
-					<option value="Bytebeat" selected>Bytebeat</option>
-					<option value="Signed Bytebeat">Signed Bytebeat</option>
-					<option value="Floatbeat">Floatbeat</option>
-					<option value="Funcbeat">Funcbeat</option>
-				</select>
+				<div class="controls-group">
+					<select id="control-drawmode" class="control-select controls-grow" title="Drawing mode">
+						<option value="Points">Points</option>
+						<option value="Waveform">Waveform</option>
+						<option value="Diagram">Diagram</option>
+						<option value="Combined" selected>Combined</option>
+						<option value="FFT">FFT</option>
+					</select>
+				</div>
+				<div class="controls-group">
+					<select id="control-mode" class="control-select controls-grow" title="Sound mode">
+						<option value="Bytebeat" selected>Bytebeat</option>
+						<option value="Signed Bytebeat">Signed Bytebeat</option>
+						<option value="Floatbeat">Floatbeat</option>
+						<option value="Funcbeat">Funcbeat</option>
+					</select>
+				</div>
 				<div class="controls-group controls-grow">
-					<input type="text" id="control-samplerate" class="control-text" title="Set the sample rate (in Hz) then press Enter">
+					<input type="text" id="control-samplerate" class="control-text" value="8000" title="Set the sample rate (in Hz) then press Enter">
 					<select id="control-samplerate-select" class="control-select" title="Select the sample rate (in Hz)">
 						<option value="8000">8000Hz</option>
 						<option value="11025">11025Hz</option>
@@ -239,24 +244,38 @@
 				<article id="settings" class="library-container entry loaded">
 					<label class="settings-block">
 						<select id="control-theme-style" class="control-select" title="Player theme style">
-							<option value="Default" selected>Default</option>
-							<option value="Blue">Blue</option>
-							<option value="Cake">Cake</option>
-							<option value="Dusk">Dusk</option>
-							<option value="Green">Green</option>
-							<option value="Orange">Orange</option>
-							<option value="Purple">Purple</option>
-							<option value="Teal">Teal</option>
+							<option value="Default Dark" selected>Default Dark</option>
+							<option value="Blue Dark">Blue Dark</option>
+							<option value="Cake Dark">Cake Dark</option>
+							<option value="Dusk Dark">Dusk Dark</option>
+							<option value="Green Dark">Green Dark</option>
+							<option value="Orange Dark">Orange Dark</option>
+							<option value="Purple Dark">Purple Dark</option>
+							<option value="Teal Dark">Teal Dark</option>
+							<option disabled>──────────</option>
+							<option value="Default Light">Default Light</option>
+							<option value="Blue Light">Blue Light</option>
+							<option value="Green Light">Green Light</option>
 						</select>
 						Theme style
 					</label>
 					<label class="settings-block">
 						<select id="control-code-style" class="control-select" title="Code highlight style">
 							<option value="Atom Dark" selected>Atom Dark</option>
+							<option value="Github Dark">Github Dark</option>
+							<option value="Github v2 Dark">Github v2 Dark</option>
+							<option value="Monokai">Monokai</option>
 							<option value="One Dark">One Dark</option>
-							<option value="SArpnt">SArpnt</option>
+							<option value="Retro Green">Retro Green</option>
+							<option value="VSCode Dark">VSCode Dark</option>
+							<option disabled>──────────</option>
+							<option value="Atom Light">Atom Light</option>
+							<option value="Github Light">Github Light</option>
+							<option value="Github v2 Light">Github v2 Light</option>
+							<option value="One Light">One Light</option>
+							<option value="VSCode Light">VSCode Light</option>
 						</select>
-						Code style
+						Code highlight style
 					</label>
 					<label class="settings-block">
 						<input type="color" id="control-color-timecursor" class="control-color" title="Click to pick the time cursor color">

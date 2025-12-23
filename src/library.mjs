@@ -93,14 +93,14 @@ export class Library {
 			str += ' ' + mode;
 		}
 		str += ` ${ sampleRate }Hz`;
-		const outTags = [];
+		const tagsArr = [];
 		if(stereo) {
-			outTags.push('<span class="tag-stereo">stereo</span>');
+			tagsArr.push('<span class="tag-stereo">stereo</span>');
 		}
 		if(drawing) {
 			songObj.drawMode = drawing.mode;
 			songObj.scale = drawing.scale;
-			outTags.push('<span class="tag-drawing">drawing</span>');
+			tagsArr.push('<span class="tag-drawing">drawing</span>');
 		}
 		for(let i = 0, len = tags.length; i < len; ++i) {
 			switch(tags[i]) {
@@ -109,24 +109,24 @@ export class Library {
 			case 'big': continue;
 			case 'c':
 				if(!notAllLib) {
-					outTags.push('<span class="tag-c">c</span>');
+					tagsArr.push('<span class="tag-c">c</span>');
 				}
 				continue;
 			case 'console':
-				outTags.push('<span class="tag-console">console</span>');
+				tagsArr.push('<span class="tag-console">console</span>');
 				continue;
 			case 'sample':
-				outTags.push('<span class="tag-sample">sample</span>');
+				tagsArr.push('<span class="tag-sample">sample</span>');
 				continue;
 			case 'slow':
-				outTags.push('<span class="tag-slow">slow</span>');
+				tagsArr.push('<span class="tag-slow">slow</span>');
 				continue;
 			}
-			outTags.push('#' + tags[i]);
+			tagsArr.push(`<span class="tag-custom">${ tags[i] }</span>`);
 
 		}
-		if(outTags.length) {
-			str += ` <span class="code-tags">${ outTags.join(' ') }</span>`;
+		if(tagsArr.length) {
+			str += ` <span class="code-tags">${ tagsArr.join('') }</span>`;
 		}
 		str += '</span>';
 		if(this.isAdmin) {
@@ -217,7 +217,7 @@ export class Library {
 			waitElem.classList.add('hidden');
 			return;
 		}
-		containerElem.innerHTML = libName !== 'all' ? '' :
+		containerElem.innerHTML = libName !== 'all' && libName !== 'recent' ? '' :
 			`<label><input type="checkbox" id="library-show-all"${
 				this.showAllSongs ? ' checked' : '' }> Show all songs</label>`;
 		let libHTML = '';

@@ -29,7 +29,7 @@ globalThis.bytebeat = new class {
 			isSeconds: false,
 			showAllSongs: library.showAllSongs,
 			srDivisor: 1,
-			themeStyle: 'Default',
+			themeStyle: 'Default Dark',
 			volume: .5
 		};
 		this.isCompilationError = false;
@@ -411,16 +411,15 @@ globalThis.bytebeat = new class {
 		}
 	}
 	setCodeStyle(value) {
-		if(value === undefined) {
-			if((value = this.settings.codeStyle) === undefined) {
-				value = this.settings.codeStyle = this.defaultSettings.codeStyle;
-				this.saveSettings();
-			}
-			editor.container.dataset.theme = value;
-			return;
+		if(value !== undefined) {
+			this.settings.codeStyle = value;
+			this.saveSettings();
+		} else if((value = this.settings.codeStyle) === undefined) {
+			value = this.settings.codeStyle = this.defaultSettings.codeStyle;
+			this.saveSettings();
 		}
-		editor.container.dataset.theme = this.settings.codeStyle = value;
-		this.saveSettings();
+		document.documentElement.dataset.syntax = value;
+		document.documentElement.dataset.syntaxType = value.endsWith('Light') ? 'light' : 'dark';
 	}
 	setColorDiagram(value) {
 		if(value !== undefined) {
@@ -555,10 +554,10 @@ globalThis.bytebeat = new class {
 			const data = {
 				sampleRate: this.sampleRate,
 				sampleRatio: this.sampleRate / this.audioCtx.sampleRate
-			}
+			};
 			if(this.mode === 'Funcbeat') {
-				data.byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * sampleRate) :
-					Math.round(ui.controlTime.value * sampleRate / oldSampleRate);
+				data.byteSample = Math.round(ui.controlTime.value * sampleRate /
+					(this.settings.isSeconds ? 1 : oldSampleRate));
 				this.setCounterValue(data.byteSample);
 				this.setByteSample(data.byteSample);
 			}
@@ -608,36 +607,38 @@ globalThis.bytebeat = new class {
 				this.saveSettings();
 			}
 			document.documentElement.dataset.theme = value;
+			document.documentElement.dataset.themeType = value.endsWith('Light') ? 'light' : 'dark';
 			return;
 		}
 		document.documentElement.dataset.theme = this.settings.themeStyle = value;
+		document.documentElement.dataset.themeType = value.endsWith('Light') ? 'light' : 'dark';
 		let colorCursor, colorDiagram;
 		let colorStereo = 1; // Red=0, Green=1, Blue=2
 		switch(value) {
-		case 'Cake':
+		case 'Cake Dark':
 			colorCursor = '#40ffff';
 			colorDiagram = '#c000c0';
 			colorStereo = 0;
 			break;
-		case 'Green':
-			colorCursor = '#ff0000';
+		case 'Green Dark':
+			colorCursor = '#00ffa8';
 			colorDiagram = '#00a080';
 			break;
-		case 'Orange':
+		case 'Orange Dark':
 			colorCursor = '#ffff80';
 			colorDiagram = '#8000ff';
 			colorStereo = 0;
 			break;
-		case 'Purple':
+		case 'Purple Dark':
 			colorCursor = '#ff50ff';
 			colorDiagram = '#a040ff';
 			colorStereo = 0;
 			break;
-		case 'Teal':
+		case 'Teal Dark':
 			colorCursor = '#80c0ff';
 			colorDiagram = '#00a0c0';
 			break;
-		default:
+		default: // Blue Dark, Dusk Dark, Default Dark, Default Light
 			colorCursor = '#80c0ff';
 			colorDiagram = '#0080ff';
 		}

@@ -6,7 +6,7 @@ import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import { EditorState } from '@codemirror/state';
 import { highlightActiveLine, highlightSpecialChars, EditorView, keymap, lineNumbers }
 	from '@codemirror/view';
-import { classHighlighter } from '@lezer/highlight';
+import { tagHighlighter, tags } from '@lezer/highlight';
 
 const editorView = initValue => new EditorView({
 	parent: document.getElementById('editor-container'),
@@ -42,7 +42,22 @@ const editorView = initValue => new EditorView({
 				...defaultKeymap
 			]),
 			lineNumbers(),
-			syntaxHighlighting(classHighlighter)
+			syntaxHighlighting(tagHighlighter([
+				{ tag: tags.bool, class: 'tok-bool' },
+				{ tag: tags.comment, class: 'tok-comment' },
+				{ tag: tags.definition(tags.variableName), class: 'tok-definition' },
+				{ tag: tags.function(tags.variableName), class: 'tok-function' },
+				{ tag: tags.function(tags.propertyName), class: 'tok-function' },
+				{ tag: tags.keyword, class: 'tok-keyword' },
+				{ tag: tags.number, class: 'tok-number' },
+				{ tag: tags.operator, class: 'tok-operator' },
+				{ tag: tags.propertyName, class: 'tok-property' },
+				{ tag: tags.punctuation, class: 'tok-punctuation' },
+				{ tag: tags.regexp, class: 'tok-string2' },
+				{ tag: tags.special(tags.string), class: 'tok-string2' },
+				{ tag: tags.string, class: 'tok-string' },
+				{ tag: tags.variableName, class: 'tok-variable' }
+			]))
 		]
 	})
 });
