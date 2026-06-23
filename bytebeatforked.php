@@ -56,7 +56,7 @@ function showLoginPage() {
 // Logout
 function logoutRequest() {
 	setcookie('bytebeat_access', '', time() - 3600, '/');
-	unset($_COOKIE['atom_access']);
+	unset($_COOKIE['bytebeat_access']);
 	$_SESSION['bytebeat'] = '';
 	session_destroy();
 	die('<meta http-equiv="refresh" content="0;url=' . basename($_SERVER['PHP_SELF']) . '?manage">');
@@ -173,16 +173,27 @@ function editSongForm() {
 	if (!isset($_GET['hash'])) {
 		return 'Song with hash = "" not found!';
 	}
-	$hash = $_GET['hash'];
-
-	// Get a song by hash from the database
-	$songs = mysqli_query($dbLink,
-		'SELECT * FROM `songs`
-		WHERE `hash` = "' . $hash . '" LIMIT 1;');
-	if (mysqli_num_rows($songs) === 0) {
-		return 'Song with hash = "' . $hash . '" not found!';
+	$hash = trim($_GET['hash']);
+	
+	// Validate hash format (32 hex characters)
+	if (!preg_match('/^[a-f0-9]{32}$/i', $hash)) {
+		return 'Invalid hash format!';
 	}
-	while ($song = mysqli_fetch_assoc($songs)) {
+
+	// Get a song by hash from the database using prepared statement
+	$stmt = $dbLink->prepare('SELECT * FROM `songs` WHERE `hash` = ? LIMIT 1');
+	if (!$stmt) {
+		return 'Database error: ' . $dbLink->error;
+	}
+	$stmt->bind_param('s', $hash);
+	$stmt->execute();
+	$songs = $stmt->get_result();
+	
+	if ($songs->num_rows === 0) {
+		return 'Song with hash = "' . htmlspecialchars($hash) . '" not found!';
+	}
+	
+	while ($song = $songs->fetch_assoc()) {
 		// Make URL fields
 		$urlStr = '';
 		$url = $song['url'];
@@ -191,14 +202,14 @@ function editSongForm() {
 			if (json_last_error() === JSON_ERROR_NONE && is_array($urlArr)) {
 				foreach ($urlArr as $url_) {
 					$urlStr .= '<div>
-							<input type="text" name="url[]" placeholder="URL" value="' . $url_ . '">
+							<input type="text" name="url[]" placeholder="URL" value="' . htmlspecialchars($url_) . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 				}
 			}
 		} else {
 			$urlStr .= '<div>
-							<input type="text" name="url[]" placeholder="URL" value="' . $url . '">
+							<input type="text" name="url[]" placeholder="URL" value="' . htmlspecialchars($url) . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 		}
@@ -209,22 +220,24 @@ function editSongForm() {
 		if (json_last_error() === JSON_ERROR_NONE && is_array($tags)) {
 			foreach ($tags as $tag) {
 				$tagsStr .= '<div>
-							<input type="text" name="tags[]" placeholder="Tag" value="' . $tag . '">
+							<input type="text" name="tags[]" placeholder="Tag" value="' . htmlspecialchars($tag) . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 			}
 		}
 
-		// Find if the song is a remix then get sources hashes
+		// Find if the song is a remix then get sources hashes using prepared statement
 		$remixStr = '';
-		$remixResult = mysqli_query($dbLink,
-			'SELECT * FROM `remixes`
-			WHERE `song` = "' . $hash . '";');
-		if (mysqli_num_rows($remixResult) !== 0) {
-			while ($remixSource = mysqli_fetch_assoc($remixResult)) {
+		$stmtRemix = $dbLink->prepare('SELECT * FROM `remixes` WHERE `song` = ?');
+		$stmtRemix->bind_param('s', $hash);
+		$stmtRemix->execute();
+		$remixResult = $stmtRemix->get_result();
+		
+		if ($remixResult->num_rows !== 0) {
+			while ($remixSource = $remixResult->fetch_assoc()) {
 				$remixStr .= '<div>
 							<input type="text" name="remix[]" placeholder="Remix source song hash" value="' .
-								$remixSource['source'] . '">
+								htmlspecialchars($remixSource['source']) . '">
 							<button onclick="this.parentNode.insertAdjacentHTML(\'afterend\', this.parentNode.outerHTML); event.preventDefault();" title="Click to add more sources.">+</button>
 						</div>';
 			}
@@ -237,11 +250,12 @@ function editSongForm() {
 
 		// Parsing the drawing mode
 		$drawing_mode = '';
+		$drawing_scale = '';
 		if (isset($song['drawing'])) {
 			$drawing = json_decode($song['drawing']);
 			if (json_last_error() === JSON_ERROR_NONE) {
-				$drawing_mode = $drawing->mode;
-				$drawing_scale = $drawing->scale;
+				$drawing_mode = $drawing->mode ?? '';
+				$drawing_scale = $drawing->scale ?? '';
 			}
 		}
 
@@ -252,7 +266,7 @@ function editSongForm() {
 				<table class="table-form"><tbody>
 					<tr>
 						<th>Hash</th>
-						<td><input type="text" name="hash" value="' . $hash . '" readonly></td>
+						<td><input type="text" name="hash" value="' . htmlspecialchars($hash) . '" readonly></td>
 					</tr>
 					<tr>
 						<th>Author, date</th>
@@ -260,7 +274,7 @@ function editSongForm() {
 							<input type="text" name="author" value="' .
 								(isset($song['author']) ? htmlspecialchars($song['author']) : '') . '">
 							<input type="date" name="date" placeholder="yyyy-mm-dd" value="' .
-								$song['date'] . '">
+								htmlspecialchars($song['date']) . '">
 						</td>
 					</tr>
 					<tr>
@@ -293,7 +307,7 @@ function editSongForm() {
 									($song['mode'] === 'Funcbeat' ? ' selected' : '') . '>Funcbeat</option>
 							</select>
 							<input type="text" name="samplerate" value="' .
-								$song['samplerate'] . '" placeholder="Sample rate (Hz)">
+								htmlspecialchars($song['samplerate']) . '" placeholder="Sample rate (Hz)">
 							<label style="white-space: nowrap;"><input type="checkbox" name="stereo"' .
 								($song['stereo'] ? ' checked' : '') . '> Stereo</label>
 						</td>
@@ -309,26 +323,26 @@ function editSongForm() {
 								(isset($song['cover_name']) ? htmlspecialchars($song['cover_name']) : '') .
 								'" placeholder="Cover source name">
 							<input type="text" name="cover_url" value="' .
-								$song['cover_url'] . '" placeholder="Cover source URL">
+								htmlspecialchars($song['cover_url']) . '" placeholder="Cover source URL">
 						</td>
 					</tr>
 					<tr>
 						<th>Original code</th>
-						<td><textarea name="code">' . $song['code'] . '</textarea></td>
+						<td><textarea name="code">' . htmlspecialchars($song['code']) . '</textarea></td>
 					</tr>
 					<tr>
 						<th>Minified code</th>
-						<td><textarea name="code_minified">' . $song['code_minified'] . '</textarea></td>
+						<td><textarea name="code_minified">' . htmlspecialchars($song['code_minified']) . '</textarea></td>
 					</tr>
 					<tr>
 						<th>Formatted code</th>
-						<td><textarea name="code_formatted">' . $song['code_formatted'] . '</textarea></td>
+						<td><textarea name="code_formatted">' . htmlspecialchars($song['code_formatted']) . '</textarea></td>
 					</tr>
 					<tr>
 						<th>Draw mode/scale</th>
 						<td>
 							<select name="drawing_mode">
-								<option value=""' . ($drawing_mode ? ' selected' : '') . '>None</option>
+								<option value=""' . (!$drawing_mode ? ' selected' : '') . '>None</option>
 								<option value="Points"' .
 									($drawing_mode === 'Points' ? ' selected' : '') . '>Points</option>
 								<option value="Waveform"' .
@@ -339,7 +353,7 @@ function editSongForm() {
 									($drawing_mode === 'Combined' ? ' selected' : '') . '>Combined</option>
 							</select>
 							<input type="text" name="drawing_scale" placeholder="1=1/2, 2=1/4, 3=1/8, ..." value="' .
-								(isset($drawing_scale) ? $drawing_scale : '' ) . '">
+								htmlspecialchars($drawing_scale) . '">
 						</td>
 					</tr>
 					<tr>
@@ -350,7 +364,7 @@ function editSongForm() {
 				<input type="submit" value="Submit changes" style="float: left; margin: 2px;">
 			</form>
 			<form name="form_deletesong" method="post" action="?deletesong">
-				<input type="hidden" name="hash" value="' . $hash . '">
+				<input type="hidden" name="hash" value="' . htmlspecialchars($hash) . '">
 				<input type="submit" value="Delete song" style="float: left; margin: 2px;" onclick="return confirm(\'Are you sure to delete this song?\')">
 			</form>
 		</fieldset>';
@@ -360,24 +374,24 @@ function editSongForm() {
 // Copy songs from library files into 'songs' and 'remixes' database tables
 function decodeLibraryFile($dbLink, $libName) {
 	$songsPath = './data/songs/';
-	$libFileName = './data/library/' . $libName . '.gz';
+	$libFileName = './data/library/' . preg_replace('/[^a-z0-9_-]/', '', $libName) . '.gz';
 
 	// Check for a valid JSON string from GZIP file and get an array of songs
 	if (!file_exists($libFileName)) {
-		fancyDie('File "' . $libFileName . '" does not exist.');
+		fancyDie('File "' . htmlspecialchars($libFileName) . '" does not exist.');
 	}
 	$songssArr = json_decode(gzdecode(file_get_contents($libFileName)));
 	if (json_last_error() !== JSON_ERROR_NONE) {
-		fancyDie('File "' . $libFileName . '" has an error: ' . json_last_error_msg());
+		fancyDie('File "' . htmlspecialchars($libFileName) . '" has an error: ' . json_last_error_msg());
 	}
 
-	// Write each song into database
+	// Write each song into database using prepared statements
 	foreach ($songssArr as $authorObj) {
 		$author = $authorObj->author;
 		$songs = $authorObj->songs;
 		foreach ($songs as $song) {
 			$url = isset($song->url) ?
-				(is_array($song->url) ? '["' . implode('","', $song->url) . '"]' : $song->url) : NULL;
+				(is_array($song->url) ? '["' . implode('","', array_map('addslashes', $song->url)) . '"]' : $song->url) : NULL;
 			$codeOriginal = isset($song->code) ? $song->code : (isset($song->fileOrig) ?
 				file_get_contents($songsPath . 'original/' . $song->hash . '.js') : NULL);
 			$codeMinified = isset($song->codeMin) ? $song->codeMin : (isset($song->fileMin) ?
@@ -385,57 +399,45 @@ function decodeLibraryFile($dbLink, $libName) {
 			$codeFormatted = isset($song->fileForm) ?
 				file_get_contents($songsPath . 'formatted/' . $song->hash . '.js') : NULL;
 
-			// Write each song into 'songs' database table
-			mysqli_query($dbLink, 'INSERT INTO `songs` (hash' .
-				($author !== '' ? ', author' : '') .
-				(isset($song->name) ? ', name' : '') .
-				(isset($song->description) ? ', description' : '') .
-				(isset($url) ? ', url' : '') .
-				(isset($song->date) ? ', date' : '') .
-				', mode, samplerate' .
-				(isset($song->stereo) ? ', stereo' : '') .
-				(isset($codeOriginal) ? ', code' : '') .
-				(isset($codeMinified) ? ', code_minified' : '') . '' .
-				(isset($codeFormatted) ? ', code_formatted' : '') .
-				(isset($song->coverName) ? ', cover_name' : '') .
-				(isset($song->coverUrl) ? ', cover_url' : '') .
-				(isset($song->drawing) ? ', drawing' : '') .
-				', tags' .
-				# (isset($song->user_added) ? ', user_added' : '') .
-				(isset($song->date_added) ? ', date_added' : '') .
-				# (isset($song->user_edited) ? ', user_edited' : '') .
-				(isset($song->date_edited) ? ', date_edited' : '') .
-			') VALUES ("' . $song->hash . '"' .
-				($author !== '' ? ', "' . addslashes($author) . '"' : '') .
-				(isset($song->name) ? ', "' . addslashes($song->name) . '"' : '') .
-				(isset($song->description) ? ', "' . addslashes($song->description) . '"' : '') .
-				(isset($url) ? ', "' . addslashes($url) . '"' : '') .
-				(isset($song->date) ? ', "' . $song->date . '"' : '') .
-				', "' . (isset($song->mode) ? $song->mode : 'Bytebeat') . '"' .
-				', ' . (isset($song->sampleRate) ? $song->sampleRate : 8000) .
-				(isset($song->stereo) ? ', 1' : '') .
-				(isset($codeOriginal) ? ', "' . addslashes($codeOriginal) . '"' : '') .
-				(isset($codeMinified) ? ', "' . addslashes($codeMinified) . '"' : '') .
-				(isset($codeFormatted) ? ', "' . addslashes($codeFormatted) . '"' : '') .
-				(isset($song->coverName) ? ', "' . addslashes($song->coverName) . '"' : '') .
-				(isset($song->coverUrl) ? ', "' . $song->coverUrl . '"' : '') .
-				(isset($song->drawing) ? ', "{\"mode\": \"' . $song->drawing->mode . '\", \"scale\": ' .
-					$song->drawing->scale . '}"' : '') .
-				', "' . addslashes('["' . implode('","', $song->tags) . '"]') . '"' .
-				# (isset($song->user_added) ? ', "' . addslashes($song->user_added) . '"' : '') .
-				(isset($song->date_added) ? ', "' . $song->date_added . '"' : '') .
-				# (isset($song->user_edited) ? ', "' . addslashes($song->user_edited) . '"' : '') .
-				(isset($song->date_edited) ? ', "' . $song->date_edited . '"' : '') .
-			');');
+			// Prepare values
+			$hash = $song->hash;
+			$name = $song->name ?? NULL;
+			$description = $song->description ?? NULL;
+			$date = $song->date ?? NULL;
+			$mode = $song->mode ?? 'Bytebeat';
+			$samplerate = $song->sampleRate ?? 8000;
+			$stereo = $song->stereo ?? 0;
+			$coverName = $song->coverName ?? NULL;
+			$coverUrl = $song->coverUrl ?? NULL;
+			$drawing = isset($song->drawing) ? json_encode($song->drawing) : NULL;
+			$tags = json_encode($song->tags ?? []);
+			$dateAdded = $song->date_added ?? NULL;
+			$dateEdited = $song->date_edited ?? NULL;
+
+			// Insert using prepared statement
+			$stmt = $dbLink->prepare(
+				'INSERT INTO `songs` (hash, author, name, description, url, date, mode, samplerate, stereo, code, code_minified, code_formatted, cover_name, cover_url, drawing, tags, date_added, date_edited)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+			);
+			
+			$stmt->bind_param(
+				'sssssssdisssssss',
+				$hash, $author, $name, $description, $url, $date, $mode, $samplerate, $stereo,
+				$codeOriginal, $codeMinified, $codeFormatted, $coverName, $coverUrl, $drawing, $tags, $dateAdded, $dateEdited
+			);
+			
+			$stmt->execute();
 
 			// Find remixes of songs and write to 'remixes' database table
 			if (isset($song->remix)) {
 				$remixes = $song->remix;
+				$stmtRemix = $dbLink->prepare('INSERT INTO `remixes` (song, source) VALUES (?, ?)');
 				foreach ($remixes as $remix) {
-					mysqli_query($dbLink,
-						'INSERT INTO `remixes` (song, source)
-						VALUES ("' . $song->hash . '", "' . $remix->hash . '");');
+					$remixHash = $remix->hash;
+					$stmtRemix->bind_param('ss', $hash, $remixHash);
+					$stmtRemix->execute();
 				}
+				$stmtRemix->close();
 			}
 		}
 	}
@@ -459,7 +461,7 @@ function filesToDatabase() {
 	$message = '';
 	$dbLink = getDBLink();
 
-	// Create new databsaes if not exist
+	// Create new databases if not exist
 	if (mysqli_num_rows(mysqli_query($dbLink, 'SHOW TABLES LIKE "songs";')) === 0) {
 		mysqli_query($dbLink,
 			'CREATE TABLE songs (
@@ -552,19 +554,19 @@ function databaseToFiles() {
 	// Create/clear folders for large songs
 	if (!is_dir($pathOriginal)) {
 		mkdir($pathOriginal, 0755, true);
-		$message .= '"' . $pathOriginal . '" folder created.<br>';
+		$message .= '"' . htmlspecialchars($pathOriginal) . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathOriginal . '/*.*'));
 	}
 	if (!is_dir($pathMinified)) {
 		mkdir($pathMinified, 0755, true);
-		$message .= '"' . $pathMinified . '" folder created.<br>';
+		$message .= '"' . htmlspecialchars($pathMinified) . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathMinified . '/*.*'));
 	}
 	if (!is_dir($pathFormatted)) {
 		mkdir($pathFormatted, 0755, true);
-		$message .= '"' . $pathFormatted . '" folder created.<br>';
+		$message .= '"' . htmlspecialchars($pathFormatted) . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathFormatted . '/*.*'));
 	}
@@ -617,31 +619,39 @@ function databaseToFiles() {
 			file_put_contents($pathFormatted . $song['hash'] . '.js', $song['code_formatted']);
 			$fileForm = 1;
 		}
-		// Finding remixes
+		// Finding remixes using prepared statement
 		$remixStr = '';
 		$sourcesArr = array();
-		$qSources = mysqli_query($dbLink,
-			'SELECT `source` FROM remixes
-			WHERE `song` = "' . $song['hash'] . '";');
-		if (mysqli_num_rows($qSources) !== 0) {
-			while ($source = mysqli_fetch_assoc($qSources)) {
+		$hash = $song['hash'];
+		$stmtSources = $dbLink->prepare('SELECT `source` FROM remixes WHERE `song` = ?');
+		$stmtSources->bind_param('s', $hash);
+		$stmtSources->execute();
+		$qSources = $stmtSources->get_result();
+		
+		if ($qSources->num_rows !== 0) {
+			while ($source = $qSources->fetch_assoc()) {
 				$sourcesArr[] = $source['source'];
 			}
 		}
 		// Finding sources for remixes
 		foreach ($sourcesArr as $sourceHash) {
-			$qSource = mysqli_query($dbLink,
-				'SELECT `author`, `name`, `url` FROM songs
-				WHERE `hash` = "' . $sourceHash . '";');
-			if (mysqli_num_rows($qSource) !== 0) {
-				while ($source = mysqli_fetch_assoc($qSource)) {
+			$stmtSource = $dbLink->prepare('SELECT `author`, `name`, `url` FROM songs WHERE `hash` = ?');
+			$stmtSource->bind_param('s', $sourceHash);
+			$stmtSource->execute();
+			$qSource = $stmtSource->get_result();
+			
+			if ($qSource->num_rows !== 0) {
+				while ($source = $qSource->fetch_assoc()) {
 					$remixStr .= ($remixStr ? ',' : '') . '{"hash":"' . $sourceHash . '"' .
 						(isset($source['author']) ? ', "author":' . json_encode($source['author']) : '') .
 						(isset($source['name']) ? ', "name":' . json_encode($source['name']) : '') .
 						(isset($source['url']) ? ', "url":' . json_encode($source['url']) : '') . '}';
 				}
 			}
+			$stmtSource->close();
 		}
+		$stmtSources->close();
+		
 		// Making a json string for a song
 		$songsByHash[$song['hash']] = '{"hash":"' . $song['hash'] . '"' .
 			(isset($song['name']) ? ',"name":' . json_encode($song['name']) : '') .
@@ -664,9 +674,7 @@ function databaseToFiles() {
 			(isset($song['cover_url']) ? ',"coverUrl":"' . $song['cover_url'] . '"' : '') .
 			(isset($song['drawing']) ? ',"drawing":' . $song['drawing'] : '') .
 			(isset($song['tags']) ? ',"tags":' . $song['tags'] : '') .
-			# (isset($song['user_added']) ? ',"user_added": "' . $song['user_added'] . '"' : '') .
 			(isset($song['date_added']) ? ',"date_added": "' . $song['date_added'] . '"' : '') .
-			# (isset($song['user_edited']) ? ',"user_edited": "' . $song['user_edited'] . '"' : '') .
 			(isset($song['date_edited']) ? ',"date_edited": "' . $song['date_edited'] . '"' : '') .
 		'}';
 	}
@@ -674,7 +682,7 @@ function databaseToFiles() {
 	// Create/clear folder for library files
 	if (!is_dir($pathLibrary)) {
 		mkdir($pathLibrary, 0755, true);
-		$message .= '"' . $pathLibrary . '" folder created.<br>';
+		$message .= '"' . htmlspecialchars($pathLibrary) . '" folder created.<br>';
 	} else {
 		array_map('unlink', glob($pathLibrary . '/*.*'));
 	}
@@ -735,7 +743,7 @@ function databaseToFiles() {
 			AND `tags` NOT LIKE '%\"big\"%'
 		ORDER BY `date`, `author`, `id`;"));
 
-	// Library file with Floatbeat mode songs
+	// Library file with Floatbeat mode songs (big)
 	$fileName = $pathLibrary . 'floatbeat-big.gz';
 	makeLibraryFile($fileName, $songsByHash, mysqli_query($dbLink,
 		"SELECT `hash`, `author` FROM songs
@@ -752,7 +760,7 @@ function databaseToFiles() {
 		ORDER BY `date`, `author`, `id`;'));
 
 	mysqli_close($dbLink);
-	return $message . '"' . $pathLibrary . '*.gz" files created.<br>Success!';
+	return $message . '"' . htmlspecialchars($pathLibrary) . '*.gz" files created.<br>Success!';
 }
 
 // Request to add a song to the database
@@ -760,151 +768,174 @@ function addSong($isEdit) {
 	global $bytebeat_admins;
 	$dbLink = getDBLink();
 
-	$hash = $isEdit ? $_POST['hash'] : bin2hex(random_bytes(16));
-	$author = addslashes(trim($_POST['author']));
-	$name = addslashes(trim($_POST['name']));
-	$description = addslashes(trim($_POST['description']));
-	$url = array_filter($_POST['url']);
-	$ulrStr = $url && array_key_exists(0, $url) ?
-		addslashes(count($url) > 1 ? '["' . implode('","', $url) . '"]' : trim($url[0])) : NULL;
-	$date = trim($_POST['date']);
-	$mode = $_POST['mode'];
-	$sampleRate = trim($_POST['samplerate']);
-	$sampleRate = $sampleRate && is_numeric($sampleRate) ? $sampleRate : 8000;
-	$code = str_replace("\r", '', addslashes($_POST['code']));;
-	$codeMinified = str_replace("\r", '', addslashes($_POST['code_minified']));
-	$codeFormatted = str_replace("\r", '', addslashes($_POST['code_formatted']));
-	$coverName = addslashes(trim($_POST['cover_name']));
-	$coverUrl = addslashes(trim($_POST['cover_url']));
-	$user = addslashes(array_search($_SESSION['bytebeat'], $bytebeat_admins, true));
+	// Validate and sanitize inputs
+	$hash = $isEdit ? trim($_POST['hash']) : bin2hex(random_bytes(16));
+	
+	if ($isEdit && !preg_match('/^[a-f0-9]{32}$/i', $hash)) {
+		return 'Invalid hash format!';
+	}
+
+	$author = trim($_POST['author'] ?? '');
+	$name = trim($_POST['name'] ?? '');
+	$description = trim($_POST['description'] ?? '');
+	$url = array_filter($_POST['url'] ?? []);
+	$date = trim($_POST['date'] ?? '');
+	$mode = $_POST['mode'] ?? 'Bytebeat';
+	$sampleRate = trim($_POST['samplerate'] ?? '8000');
+	$sampleRate = is_numeric($sampleRate) ? floatval($sampleRate) : 8000;
+	$code = str_replace("\r", '', $_POST['code'] ?? '');
+	$codeMinified = str_replace("\r", '', $_POST['code_minified'] ?? '');
+	$codeFormatted = str_replace("\r", '', $_POST['code_formatted'] ?? '');
+	$coverName = trim($_POST['cover_name'] ?? '');
+	$coverUrl = trim($_POST['cover_url'] ?? '');
+	$stereo = isset($_POST['stereo']) ? 1 : 0;
+	$user = array_search($_SESSION['bytebeat'], $bytebeat_admins, true);
 	$dateEdited = date('Y-m-d');
 
+	// Process URLs
+	$urlStr = NULL;
+	if (!empty($url)) {
+		$urlStr = count($url) > 1 ? '["' . implode('","', array_map(function($u) { return trim($u); }, $url)) . '"]' : trim($url[0]);
+	}
+
 	// Drawing
-	$drawingMode = $_POST['drawing_mode'];
-	$drawingScale = trim($_POST['drawing_scale']);
-	$drawingScale = isset($drawingScale) && is_numeric($drawingScale) ? $drawingScale : NULL;
-	$drawing = $drawingMode || isset($drawingScale) ? addslashes('{' .
-		($drawingMode ? '"mode":"' . $drawingMode . '"' : '') .
-		(isset($drawingScale) ? ($drawingMode ? ',' : '') . '"scale":"' . $drawingScale . '"' : '') .
-	'}') : '';
+	$drawingMode = $_POST['drawing_mode'] ?? '';
+	$drawingScale = trim($_POST['drawing_scale'] ?? '');
+	$drawingScale = is_numeric($drawingScale) ? $drawingScale : NULL;
+	$drawing = NULL;
+	if ($drawingMode || isset($drawingScale)) {
+		$drawing = json_encode([
+			'mode' => $drawingMode ?: null,
+			'scale' => $drawingScale
+		]);
+	}
 
 	// Set tags field
 	$tagsArr = array();
-	$codeLen = $_POST['code'] ? strlen($_POST['code']) :
-		($_POST['code_formatted'] ? strlen($_POST['code_formatted']) :
-		($_POST['code_minified'] ? strlen($_POST['code_minified']) : 0));
+	$codeLen = strlen($code) ?: (strlen($codeFormatted) ?: strlen($codeMinified));
 	if ($codeLen) {
 		if ($codeLen <= 256) {
 			$tagsArr[] = '256';
-		} else if ($codeLen <= 1024) {
+		} elseif ($codeLen <= 1024) {
 			$tagsArr[] = '1k';
 		} else {
 			$tagsArr[] = 'big';
 		}
 	}
-	$tags = array_filter($_POST['tags']);
-	if ($tags) {
-		foreach ($tags as $tag) {
-			$tagsArr[] = $tag;
-		}
+	$tags = array_filter($_POST['tags'] ?? []);
+	foreach ($tags as $tag) {
+		$tagsArr[] = trim($tag);
 	}
-	$tagsStr = addslashes('["' . implode('","', array_unique($tagsArr)) . '"]');
+	$tagsStr = json_encode(array_unique($tagsArr));
+
+	// Validate mode
+	$validModes = ['Bytebeat', 'Signed Bytebeat', 'Floatbeat', 'Funcbeat'];
+	if (!in_array($mode, $validModes)) {
+		return 'Invalid mode!';
+	}
 
 	if ($isEdit) {
 		// Update existed song
-		mysqli_query($dbLink, 'UPDATE `songs` SET
-			`hash` = "' . $hash . '"' .
-			', `author` = ' . ($author ? '"' . $author . '"': 'NULL') .
-			', `name` = ' . ($name ? '"' . $name . '"' : 'NULL') .
-			', `description` = ' . ($description ? '"' . $description . '"' : 'NULL') .
-			', `url` = ' . ($ulrStr ? '"' . $ulrStr . '"' : 'NULL') .
-			', `date` = ' . ($date ? '"' . $date . '"' : 'NULL') .
-			', `mode` = "' . $mode . '"' .
-			', `sampleRate` = ' . $sampleRate .
-			', `stereo` = ' . (isset($_POST['stereo']) ? 1 : 'NULL') .
-			', `code` = ' . ($code ? '"' . $code . '"' : 'NULL') .
-			', `code_minified` = ' . ($codeMinified ? '"' . $codeMinified . '"' : 'NULL') .
-			', `code_formatted` = ' . ($codeFormatted ? '"' . $codeFormatted . '"' : 'NULL') .
-			', `cover_name` = ' . ($coverName ? '"' . $coverName . '"' : 'NULL') .
-			', `cover_url` = ' . ($coverUrl ? '"' . $coverUrl . '"' : 'NULL') .
-			', `drawing` = ' . ($drawing ? '"' . $drawing . '"' : 'NULL') .
-			', `tags` = "' . $tagsStr . '"' .
-			', `user_edited` = "' . $user . '"' .
-			', `date_edited` = "' . $dateEdited . '"
-		WHERE `hash` = "' . $hash . '";');
+		$stmt = $dbLink->prepare(
+			'UPDATE `songs` SET
+				`author` = ?,
+				`name` = ?,
+				`description` = ?,
+				`url` = ?,
+				`date` = ?,
+				`mode` = ?,
+				`samplerate` = ?,
+				`stereo` = ?,
+				`code` = ?,
+				`code_minified` = ?,
+				`code_formatted` = ?,
+				`cover_name` = ?,
+				`cover_url` = ?,
+				`drawing` = ?,
+				`tags` = ?,
+				`user_edited` = ?,
+				`date_edited` = ?
+			WHERE `hash` = ?'
+		);
+		
+		if (!$stmt) {
+			return 'Database error: ' . $dbLink->error;
+		}
+		
+		$stmt->bind_param(
+			'ssssssdisssssss',
+			$author, $name, $description, $urlStr, $date, $mode, $sampleRate, $stereo,
+			$code, $codeMinified, $codeFormatted, $coverName, $coverUrl, $drawing, $tagsStr, $user, $dateEdited, $hash
+		);
+		$stmt->execute();
+		$stmt->close();
 	} else {
 		// Adding a new song
-		mysqli_query($dbLink, 'INSERT INTO `songs` (' .
-			'`hash`' .
-			($author ? ', `author`' : '') .
-			($name ? ', `name`' : '') .
-			($description ? ', `description`' : '') .
-			($ulrStr ? ', `url`' : '') .
-			($date ? ', `date`' : '') .
-			', `mode`, `samplerate`' .
-			(isset($_POST['stereo']) ? ', `stereo`' : '') .
-			($code ? ', `code`' : '') .
-			($codeMinified ? ', `code_minified`' : '') . '' .
-			($codeFormatted  ? ', `code_formatted`' : '') .
-			($coverName  ? ', `cover_name`' : '') .
-			($coverUrl  ? ', `cover_url`' : '') .
-			($drawing ? ', `drawing`' : '') .
-			', `tags`' .
-			', `user_added`' .
-			', `date_added`
-		) VALUES ("' .
-			$hash . '"' .
-			($author ? ', "' . $author . '"' : '') .
-			($name ? ', "' . $name . '"' : '') .
-			($description ? ', "' . $description . '"' : '') .
-			($ulrStr ? ', "' . $ulrStr . '"' : '') .
-			($date ? ', "' . $date . '"' : '') .
-			', "' . $mode . '"' .
-			', ' . $sampleRate .
-			(isset($_POST['stereo']) ? ', 1' : '') .
-			($code ? ', "' . $code . '"' : '') .
-			($codeMinified ? ', "' . $codeMinified . '"' : '') .
-			($codeFormatted ? ', "' . $codeFormatted . '"' : '') .
-			($coverName ? ', "' . $coverName . '"' : '') .
-			($coverUrl ? ', "' . $coverUrl . '"' : '') .
-			($drawing ? ', "' . $drawing . '"' : '') .
-			', "' . $tagsStr . '"' .
-			', "' . $user . '"' .
-			', "' . $dateEdited . '");');
+		$stmt = $dbLink->prepare(
+			'INSERT INTO `songs` (
+				`hash`, `author`, `name`, `description`, `url`, `date`, `mode`, `samplerate`, `stereo`,
+				`code`, `code_minified`, `code_formatted`, `cover_name`, `cover_url`, `drawing`, `tags`,
+				`user_added`, `date_added`
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+		);
+		
+		if (!$stmt) {
+			return 'Database error: ' . $dbLink->error;
+		}
+		
+		$stmt->bind_param(
+			'ssssssdisssssss',
+			$hash, $author, $name, $description, $urlStr, $date, $mode, $sampleRate, $stereo,
+			$code, $codeMinified, $codeFormatted, $coverName, $coverUrl, $drawing, $tagsStr, $user, $dateEdited
+		);
+		$stmt->execute();
+		$stmt->close();
 	}
 
-	$sources = $_POST['remix'];
-	// Deleting old entries from `remixes` table
-	mysqli_query($dbLink,
-		'DELETE FROM `remixes`
-		WHERE `song` = "' . $hash . '";');
-	// Adding sources for remixes into `remixes` table
+	// Handle remix sources
+	$stmtDelete = $dbLink->prepare('DELETE FROM `remixes` WHERE `song` = ?');
+	$stmtDelete->bind_param('s', $hash);
+	$stmtDelete->execute();
+	$stmtDelete->close();
+
+	$sources = $_POST['remix'] ?? [];
+	$stmtInsertRemix = $dbLink->prepare('INSERT INTO `remixes` (song, source) VALUES (?, ?)');
+	
 	foreach ($sources as $source) {
-		if ($source) {
-			mysqli_query($dbLink,
-				'INSERT INTO `remixes` (song, source)
-				VALUES ("' . $hash . '", "' . $source . '");');
+		$source = trim($source);
+		if ($source && preg_match('/^[a-f0-9]{32}$/i', $source)) {
+			$stmtInsertRemix->bind_param('ss', $hash, $source);
+			$stmtInsertRemix->execute();
 		}
 	}
+	$stmtInsertRemix->close();
 
 	mysqli_close($dbLink);
-	return 'Song ' . ($isEdit ? 'edited' : 'added') . ' successfully!<br>
-		' . managementRequest();
+	return 'Song ' . ($isEdit ? 'edited' : 'added') . ' successfully!<br>' . managementRequest();
 }
 
 // Request to delete a song from the database
 function deleteSong() {
 	$dbLink = getDBLink();
-	$hash = $_POST['hash'];
-	mysqli_query($dbLink,
-		'DELETE FROM `songs`
-		WHERE `hash` = "' . $hash . '";');
-	mysqli_query($dbLink,
-		'DELETE FROM `remixes`
-		WHERE `song` = "' . $hash . '";');
+	$hash = trim($_POST['hash'] ?? '');
+	
+	// Validate hash format
+	if (!preg_match('/^[a-f0-9]{32}$/i', $hash)) {
+		return 'Invalid hash format!';
+	}
+	
+	$stmt = $dbLink->prepare('DELETE FROM `songs` WHERE `hash` = ?');
+	$stmt->bind_param('s', $hash);
+	$stmt->execute();
+	$stmt->close();
+	
+	$stmtRemix = $dbLink->prepare('DELETE FROM `remixes` WHERE `song` = ?');
+	$stmtRemix->bind_param('s', $hash);
+	$stmtRemix->execute();
+	$stmtRemix->close();
+	
 	mysqli_close($dbLink);
-	return 'Song deleted!<br>
-		' . managementRequest();
+	return 'Song deleted!<br>' . managementRequest();
 }
 
 /* ==[ Main ]============================================================================================== */
@@ -934,7 +965,7 @@ if (isset($_POST['managepassword'])) {
 	}
 }
 
-// Show login form if not logined yet
+// Show login form if not logged in yet
 if (!isset($_SESSION['bytebeat'])) {
 	fancyDie(showLoginPage());
 }
@@ -987,3 +1018,4 @@ if (isset($_GET['deletesong'])) {
 // Redirection to Bytebeat Player page
 header('Location: index.html', true, 307);
 exit();
+?>
