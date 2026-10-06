@@ -56,5 +56,5 @@ snare=hpf(tanh(+2/((b>>6)+127&255)*(sin((t*sin(t>>5)&250)/6)+1)*.2), 0.1)*70,
 mix=kick+bass+ins+snare+hats,
 mix=(tanh(mix/255-.1))*255, // subtle asymetric saturation
 mix=hbf(lbf(mix,.001,11),.25,2), // low & high boost
-mix=(tanh(hpf(mix, .001)/128*1.4)+1)*127 // cut DC offset + soft cliping
+mix=(tanh(hpf(mix, .001)/128*1.4)+1)*127, // cut DC offset + soft cliping
 mix

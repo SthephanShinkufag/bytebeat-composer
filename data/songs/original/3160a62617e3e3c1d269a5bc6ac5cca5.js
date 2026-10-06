@@ -1,0 +1,111 @@
+// Amazing Dreams
+// Author: Two2Fall
+// State: Finished
+// Sequel of "Fantastic Dreams"
+
+// I hope you like my song created in bytebeat!
+// Core and configuration stuff
+
+SampleRate = 48000,
+Tuning = 440,
+Speed = 0.63,
+
+tt = t * (2 ** (-9 / 12)) * Tuning * 128 / SampleRate,
+ts = t * Speed,
+
+Sequence = (Sequence, Speed, fts=ts) => Sequence[(fts >> Speed) % Sequence.length],
+SequenceNote = (Notes, Speed, fts, Transpose=0) => tt * 2 ** ((parseInt(Sequence(Notes, Speed, fts), 36) + Transpose)/ 12),
+Reverb = (Func, Level=12, Key=3e3, Divisor=2) => {
+	Out = Func(ts);
+	for (let Iterations = 1; Iterations <= Level; Iterations++) {
+		Out += Func(ts - (Key * Iterations)) / (1 + Divisor)
+	};
+	return Out
+},
+Clamp = (Input) => min(max(Input, -128), 127),
+Mix = (Arr, Vol) => (
+	Arr = Arr.map(x => x % 256 / 256 * Vol),
+	Clamp(Arr.reduce((Accumulator, NextItem) => Accumulator + NextItem, 0))
+),
+
+// Instrument/Channel Sequences
+
+MelodyNotes = [['G O G OJ', 'G N G QO'][ts >> 18 & 1], 'G  G  LO'],
+ChordData = ['59CG', '47BG', '47BE', '259C'],
+BassSequences = ['479947BB47BB2595', '49C5'],
+
+// === SONG ===
+// Melody Stuff
+
+Song = j => (
+
+MelodyIndex = Index => (
+	MelodyReverb = ts => ts > 0 && (
+		MelodyFrequences = SequenceNote(MelodyNotes[Index], 13, ts)  || 0, 
+		(MelodyFrequences & 128) / 2 % 256 * max(.5, 1 - ts / 8192 % 1)
+	),
+	Reverb(MelodyReverb, 12, 12288) / 1.2
+),
+Melody = MelodyIndex(0),
+SecondMelody = MelodyIndex(1),
+
+// Chords stuff
+// DAMNIT THIS SOUNDS SO GOOD
+
+ChordIndex = Index => (
+	Index == 1 ? ChordData = ['59CG', '59CG', '47BE', '47BE', '259C', '259C', '59EH', '59CG'] : 0,
+	Index = [...ChordData[Index == 1 ? ts >> 16 & 7 : ts >> 17 & 3]],
+	ChordChorus = Detune => Index.reduce((Accumulator, NextItem) => Accumulator + SequenceNote(NextItem, 16) * Detune % 256 / 4, 0),
+	(ChordChorus(1) + ChordChorus(j)) / 2
+),
+Chords = ChordIndex(0),
+SecondChords = ChordIndex(1),
+
+// Bass stuff
+// This sounds pretty nice i guess
+
+BassIndex = Index => (
+	BassDetune = a => ((SequenceNote(BassSequences[Index], 15, ts, -12) * a & 192) % 256 / 2 - 64),
+	(BassDetune(1) + BassDetune(j)) / 1.5
+),
+Bass = BassIndex(0),
+SecondBass = BassIndex(1),
+
+// Drums
+Drums = 32 * sin(8 * cbrt(ts % 16384)) * (1 - ts / 16384 % 1) ** 1.5 + ((random() - .5) * 64 * (1 - ts / 8192 % 1) ** 3) / 2 + ((t * sin(t >> 2) & 128) - 64) * (1 - ts / 16384 % 1) * !!(ts & 16384) / 4,
+Transition = (Start, End, Env) => (random() - .5) * 128 * ((t > Start * 48000 && t < End * 48000) * Env),
+Drum$ = 128 * sin(8 * cbrt(ts % 32768)) * (1 - ts / 32768 % 1) ** 3 + (64 * random() - 32) * (1 - ts / 8192 % 1) ** 7 + ((ts * sin(t / .66 >> 2) & 128) - 64) * (1 - ts / 8192 % 1) ** 3 * '0010001000100011'[ts >> 13 & 15],
+Drvms = (random() -.5) / 2 * max(.5, 1 - ts / 16384 % 1) * 32,
+
+
+// Sequence
+SongSequence = [
+	Chords - 192, 
+	Melody + Chords - 192,
+	Melody + Chords + Bass - 192 + Drvms * 4 + Transition(51, 52, ts / 32768 % 1),
+	(Melody + Chords + Bass / 2) + Drums * 4 - 256 + 
+Transition(52, 53, 1 - ts / 32768 % 1),
+	(Melody + Chords + Bass / 2) + Drums * 4 - 256 + (Drvms * 6) + Transition(85.7, 86.7, ts / 32768 % 1),
+	 Transition(86.7, 87.7, 1 - ts / 32768 % 1) + (Melody + Bass) * 1.5 - 64 + Transition(103, 104, ts / 32768 % 1),
+	(SecondChords + SecondBass) / 1.5 + Transition(104, 108, 1 - ts / 131072 % 1) + Transition(120.3, 122, ts / 32768 % 1),
+	Transition(121, 122.4, 1 - ts / 32768 % 1) + 
+	(SecondChords + SecondBass + SecondMelody * 1.5) / 1.5+
+	Transition(137.75, 138.75, ts / 32768 % 1),
+	Transition(138.65, 142.75, 1 - ts / 131072 % 1) +(SecondChords + SecondBass + SecondMelody * 1.5) / 1.5 + Drvms * 4 + Transition(152, 156, ts / 131072 % 1),
+	Transition(156, 160, 1 - ts / 131072 % 1) + 
+	(SecondChords + SecondBass + SecondMelody * 1.5) / 1.5 + Drums * 4,
+	(SecondChords + SecondBass + SecondMelody * 1.5) / 1.5 + Drum$ * 1 + Drvms * 4 + Transition(186.75, 190.75, ts / 131072 % 1),
+	Transition(190.75, 194.75, 1 - ts / 131072 % 1) + (SecondChords / 1.5 + Drum$ * 1 + Drvms * 4) * 1.5 - 64,
+  (SecondChords / 1.5 + Drum$ * 1 + Drvms * 4) * 1.5 - 64,
+  Transition(225, 226.4, 1 - ts / 32768 % 1) + SecondMelody + Drum$ + SecondChords / 1.5 + Transition(238.75, 242.75, ts / 131072 % 1),
+	Transition(242.75, 246.75, 1 - ts / 131072 % 1) + Chords,
+	Chords + Transition(274, 277.5, ts / 131072 % 1),
+	Transition(277.5, 281.5, 1 - ts / 131072 % 1)
+].map(Element => Element / 2),
+
+
+Clamp(SongSequence[ts >> 19])
+
+),
+
+[Song(1.005), Song(.995)]

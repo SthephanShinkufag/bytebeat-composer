@@ -12,6 +12,8 @@
 	--lib-header-color: #c5c8c6;
 	--song-tags-opacity: .75;
 	--songs-header-color: #c5c8c6;
+	--table-border: #445766;
+	--table-th-bg: #173051;
 	--volume-bg: #393d44;
 }
 
@@ -26,6 +28,8 @@ html[data-theme-type="light"] {
 	--inputs-color: #000;
 	--song-tags-opacity: 1;
 	--songs-header-color: #fff;
+	--table-border: #8a97a4;
+	--table-th-bg: #c0d4ea;
 	--volume-bg: #bbb;
 }
 
@@ -622,6 +626,12 @@ option {
 	color: var(--html-color);
 }
 
+.form-notes {
+	margin-top: 10px;
+	text-align: center;
+	font-size: 85%;
+}
+
 .form-row {
 	display: flex;
 	flex-direction: column;
@@ -664,6 +674,7 @@ option {
 }
 
 .form-submit {
+	width: 100%;
 	margin-top: 6px;
 	padding: 10px !important;
 	font-size: 14px !important;
@@ -724,6 +735,23 @@ h2 {
 	flex-wrap: wrap;
 	justify-content: center;
 	gap: 4px;
+}
+
+.table {
+	margin: 10px auto;
+	min-width: 400px;
+	border-collapse: collapse;
+}
+
+.table > tbody > tr > td {
+	padding: 1px 3px;
+	border: 1px solid var(--table-border);
+}
+
+.table > thead > tr > th {
+	padding: 3px;
+	background: var(--table-th-bg);
+	border: 1px solid var(--table-border);
 }
 
 .wrapper {

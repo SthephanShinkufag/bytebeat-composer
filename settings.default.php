@@ -11,10 +11,6 @@ define('BYTEBEAT_DBPASSWORD', '');
 define('BYTEBEAT_DBNAME', '');
 // Timezone
 define('BYTEBEAT_TIMEZONE', 'UTC');
-// "Make database" button to fulfill the database from library files (true = show, false = hide)
-define('BYTEBEAT_DBMAKE', false);
-// Administartors
-$bytebeat_admins = array(
-	'Username1' => 'Password1',
-	'Username2' => 'Password2'
-);
+// Administrator default password
+// Change the administrator password later in the management panel, and erase BYTEBEAT_ADMINPASS with '' here
+define('BYTEBEAT_ADMINPASS', '');

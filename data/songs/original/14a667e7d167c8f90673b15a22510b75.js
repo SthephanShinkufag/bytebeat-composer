@@ -4,7 +4,7 @@ return function(t) {
     let o = [];
 
     for (let _ = 0; _ < 32; _++) {
-        const bit = (lfsr & 1) ^ ((lfsr >> 1) & 1);
+        const bit = (lfsr & 1) ^ ((lfsr >> 2) & 1);
         lfsr = (lfsr >> 1) | (bit << 4);
         o.push(lfsr & 1);
     }

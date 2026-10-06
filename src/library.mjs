@@ -130,7 +130,7 @@ export class Library {
 		}
 		str += '</span>';
 		if(this.isAdmin) {
-			str += ` <a href="bytebeat.php?editsong_request&hash=${ hash }" target="_blank">Edit</a> / ` +
+			str += ` <a href="bytebeat.php?song_edit_call&hash=${ hash }" target="_blank">Edit</a> / ` +
 				`<a class="song-hash" href="#" data-hash="${ hash }">Hash</a>`;
 		}
 		if(description) {
@@ -142,10 +142,10 @@ export class Library {
 				str += '<div class="code-remix"><div class="code-remix-preview"> remix of ' +
 					`<button class="code-button code-remix-load" data-hash="${
 						rHash }" title="Show detailed source information">&gt;</button> <span>${
-						rUrl ? `<a href="${
-							rUrl.startsWith('[') ? rUrl.match(/"([^"]+)"/)[1] : rUrl }" target="_blank">${
-							rName || rAuthor }</a>` :
-						`"${ rName }"` }${ rName && rAuthor ? ' by ' + rAuthor : '' }</span></div></div>`;
+						rUrl ?
+							`<a href="${ Array.isArray(rUrl) ? rUrl[0] : rUrl }" target="_blank">${
+								rName || rAuthor }</a>` :
+							`"${ rName }"` }${ rName && rAuthor ? ' by ' + rAuthor : '' }</span></div></div>`;
 			}
 		}
 		if(coverName) {
