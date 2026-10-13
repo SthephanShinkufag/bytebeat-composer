@@ -100,17 +100,37 @@ globalThis.bytebeat = new class {
 			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
+			case 'library-show-songs': library.onclickShowSongsButton(); break;
 			default:
 				switch(true) {
-				case classList.contains('code-text'):
-					this.loadCode(Object.assign({ code: elem.innerText },
-						elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
+				case classList.contains('article-button'):
+					library.onclickArticleNavButton(elem);
 					break;
-				case classList.contains('code-load'): library.onclickCodeLoadButton(elem); break;
-				case classList.contains('code-remix-load'): library.onclickRemixLoadButton(elem); break;
-				case classList.contains('library-header'): library.onclickLibraryHeader(elem); break;
-				case elem.parentNode.classList.contains('library-header'):
-					library.onclickLibraryHeader(elem.parentNode);
+				case classList.contains('code-load'):
+					library.onclickCodeLoadButton(elem);
+					break;
+				case classList.contains('code-remix-load'):
+					library.onclickRemixLoadButton(elem);
+					break;
+				case classList.contains('code-size'):
+					library.onclickCodeLoadButton(elem.parentNode);
+					break;
+				case classList.contains('code-text'): {
+					// Look for the panel with "min / orig / format" buttons within the same song
+					const buttonsContainer = elem.previousElementSibling;
+					if(buttonsContainer) {
+						const targetButton = buttonsContainer.querySelector('[data-type="minified"]') ||
+							buttonsContainer.querySelector('[data-type="original"]') ||
+							buttonsContainer.querySelector('[data-type="formatted"]');
+						if(targetButton) {
+							// Simulate a click, passing the button to handler
+							library.onclickCodeLoadButton(targetButton);
+						}
+					}
+					break;
+				}
+				case classList.contains('filter-button'):
+					library.onclickFilterButton(elem);
 					break;
 				case classList.contains('song-hash'):
 					navigator.clipboard.writeText(elem.dataset.hash);
@@ -135,12 +155,18 @@ globalThis.bytebeat = new class {
 			case classList.contains('code-load'):
 				elem.title = `Click to play the ${ elem.dataset.type } code`;
 				break;
-			case classList.contains('code-text'): elem.title = 'Click to play this code'; break;
-			case classList.contains('songs-header'): elem.title = 'Click to show/hide the songs'; break;
+			case classList.contains('code-text'):
+				elem.title = 'Click to play this code';
+				break;
+			case classList.contains('songs-header'):
+				elem.title = 'Click to show/hide the songs';
+				break;
 			case classList.contains('song-hash'):
 				elem.title = 'Click to copy the song hash into clipboard';
 				break;
-			case classList.contains('tag-c'): elem.title = 'C-compatible code'; break;
+			case classList.contains('tag-c'):
+				elem.title = 'C-compatible code';
+				break;
 			case classList.contains('tag-console'):
 				elem.title = 'Outputs messages in the error console';
 				break;

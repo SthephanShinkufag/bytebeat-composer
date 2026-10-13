@@ -18,73 +18,102 @@ export class Library {
 		});
 		this.isAdmin = cookie.bytebeat_access;
 	}
+
+	// Cache the songs in a Map for quick access by hash
 	cacheSongs(libArr) {
 		this.songs = new Map();
 		for(let i = 0, iLen = libArr.length; i < iLen; ++i) {
-			const { author } = libArr[i];
-			for(let j = 0, jLen = libArr[i].songs.length; j < jLen; ++j) {
-				const song = libArr[i].songs[j];
-				song.author = author;
-				this.songs.set(song.hash, song);
+			const { author, songs } = libArr[i];
+			if(songs) {
+				for(let j = 0, jLen = songs.length; j < jLen; ++j) {
+					const song = songs[j];
+					song.author = author;
+					this.songs.set(song.hash, song);
+				}
 			}
 		}
 	}
+
+	// Escape HTML special characters to prevent XSS attacks
 	escapeHTML(text) {
 		this.cacheTextElem.nodeValue = text;
 		return this.cacheParentElem.innerHTML;
 	}
-	generateEntryHTML({
-		author, code, codeFormLen, codeLen, codeMin, codeMinLen, coverName, coverUrl, date, description,
-		drawing, fileForm, fileMin, fileOrig, hash, mode, name, remix, sampleRate, songs, stereo, tags, url
-	}, libName) {
-		const notAllLib = libName !== 'all' && libName !== 'recent';
-		if(songs) {
-			let songsStr = '';
+
+	// Generate the HTML for a song entry, including its details and buttons
+	generateEntryHTML(entry, libName) {
+		const isAllLib = libName === 'all';
+
+		// Generate an author block (containing an array of songs)
+		if(entry.songs) {
+			const { author, songs } = entry;
 			const len = songs.length;
 			const maxVisible = 10;
 			const needToHide = len - maxVisible;
-			if(notAllLib && len > maxVisible + 3) {
-				songsStr += `<details><summary class="code-button songs-toggle">${
-					needToHide } more bytebeats</summary>`;
+			const songsHtmlParts = [];
+			if(!isAllLib && len > maxVisible + 3) {
+				// If there are more songs than the maximum, wrap the extra songs in a <details> element
 				for(let i = 0; i < len; ++i) {
-					if(i === needToHide) {
-						songsStr += '</details>';
+					if(i === maxVisible) {
+						songsHtmlParts.push(`<details><summary class="code-button songs-toggle">${
+							needToHide } more bytebeats</summary>`);
 					}
-					songsStr += this.generateEntryHTML(songs[i], libName);
+					songsHtmlParts.push(this.generateEntryHTML(songs[i], libName));
 				}
+				songsHtmlParts.push('</details>');
 			} else {
+				// Generate the HTML for all songs
 				for(let i = 0; i < len; ++i) {
-					songsStr += this.generateEntryHTML(songs[i], libName);
+					songsHtmlParts.push(this.generateEntryHTML(songs[i], libName));
 				}
 			}
-			return `<details class="songs-block"${
-				notAllLib || this.showAllSongs ? ' open' : ''
-			}><summary class="songs-header"> <b>${ author }</b>${
-				author === 'SthephanShi' ? '<small style="color: #ff0;">dollchan creator</small>' : '' }${
-				len ? `<small> ${ len } song${ len > 1 ? 's' : '' }</small>` : ''
-			}</summary><div class="songs">${ songsStr }</div></details>`;
+			// Return the HTML for the author block, including the list of songs
+			return `<details class="songs-block"${ this.showAllSongs ? ' open' : '' }>` +
+				`<summary class="songs-header"> <b>${ author }</b>` +
+				`${ author === 'SthephanShi' ?
+					'<small style="color: #ff0;">dollchan creator</small>' : '' }` +
+				`${ len ? `<small> ${ len } song${ len > 1 ? 's' : '' }</small>` : '' }</summary>` +
+				`<div class="songs">${ songsHtmlParts.join('') }</div></details>`;
 		}
+
+		// Generate a specific song
+		const {
+			author, code, codeMin, coverName, coverUrl, date, description, drawing, fileMin, fileOrig, hash,
+			mode, name, remix, sampleRate, tags, url
+		} = entry;
 		let str = '';
-		const noArrayUrl = url && !Array.isArray(url);
+		const isUrlArray = Array.isArray(url);
+		const mainUrl = isUrlArray ? url[0] : url;
+
+		// Display the name of the song, either as a link if a URL is available or as bold text
 		if(name) {
-			str += url ? `<a href="${ noArrayUrl ? url : url[0] }" target="_blank">${ name }</a>` : name;
+			str += mainUrl ? `<a href="${ mainUrl }" target="_blank">${ name }</a>` : name;
 		}
+
+		// Display the author of the song, either as a link if a URL is available or as bold text
 		if(author) {
-			str += ` <span>by ${ name || !noArrayUrl ? `<b>${ author }</b>` :
-				`<a href="${ url }" target="_blank">${ author }</a>` }</span>`;
+			str += ` <span>by ${ name || !mainUrl ? `<b>${ author }</b>` :
+				`<a href="${ mainUrl }" target="_blank">${ author }</a>` }</span>`;
 		}
 		const songObj = { sampleRate, mode };
-		if(url && (!noArrayUrl || !name && !author)) {
-			if(noArrayUrl) {
-				str += `[<a href="${ url }" target="_blank">link</a>]`;
-			} else {
+
+		// Add [link, link2, ...] if no name and author
+		if(mainUrl && (isUrlArray || (!name && !author))) {
+			if(isUrlArray) {
 				const urlsArr = [];
+				// If the first link is already used for name/author, output the remaining
 				for(let i = name ? 1 : 0, len = url.length; i < len; ++i) {
 					urlsArr.push(`<a href="${ url[i] }" target="_blank">link${ i + 1 }</a>`);
 				}
-				str += ` [${ urlsArr.join(', ') }]`;
+				if(urlsArr.length) {
+					str += ` [${ urlsArr.join(', ') }]`;
+				}
+			} else {
+				str += ` [<a href="${ url }" target="_blank">link</a>]`;
 			}
 		}
+
+		// Display the date, mode, and sample rate of the song
 		str += ' <span class="code-info">';
 		if(date) {
 			str += date;
@@ -93,8 +122,10 @@ export class Library {
 			str += ' ' + mode;
 		}
 		str += ` ${ sampleRate }Hz`;
+
+		// Add tags for the song
 		const tagsArr = [];
-		if(stereo) {
+		if(entry.stereo) {
 			tagsArr.push('<span class="tag-stereo">stereo</span>');
 		}
 		if(drawing) {
@@ -102,142 +133,200 @@ export class Library {
 			songObj.scale = drawing.scale;
 			tagsArr.push('<span class="tag-drawing">drawing</span>');
 		}
-		for(let i = 0, len = tags.length; i < len; ++i) {
-			switch(tags[i]) {
-			case '1k':
-			case '256':
-			case 'big': continue;
-			case 'c':
-				if(!notAllLib) {
+		if(tags && Array.isArray(tags)) {
+			for(let i = 0, len = tags.length; i < len; ++i) {
+				switch(tags[i]) {
+				case '1k':
+				case '256':
+				case 'big': continue;
+				case 'c':
 					tagsArr.push('<span class="tag-c">c</span>');
+					continue;
+				case 'console':
+					tagsArr.push('<span class="tag-console">console</span>');
+					continue;
+				case 'sample':
+					tagsArr.push('<span class="tag-sample">sample</span>');
+					continue;
+				case 'slow':
+					tagsArr.push('<span class="tag-slow">slow</span>');
+					continue;
 				}
-				continue;
-			case 'console':
-				tagsArr.push('<span class="tag-console">console</span>');
-				continue;
-			case 'sample':
-				tagsArr.push('<span class="tag-sample">sample</span>');
-				continue;
-			case 'slow':
-				tagsArr.push('<span class="tag-slow">slow</span>');
-				continue;
+				tagsArr.push(`<span class="tag-custom">${ tags[i] }</span>`);
 			}
-			tagsArr.push(`<span class="tag-custom">${ tags[i] }</span>`);
-
 		}
 		if(tagsArr.length) {
 			str += ` <span class="code-tags">${ tagsArr.join('') }</span>`;
 		}
 		str += '</span>';
+
+		// Add admin controls for editing and viewing the hash of the song
 		if(this.isAdmin) {
 			str += ` <a href="bytebeat.php?song_edit_call&hash=${ hash }" target="_blank">Edit</a> / ` +
 				`<a class="song-hash" href="#" data-hash="${ hash }">Hash</a>`;
 		}
+
+		// Add the description of the song
 		if(description) {
 			str += `<div class="code-description">${ description }</div>`;
 		}
-		if(remix) {
-			for(let i = 0, len = remix.length; i < len; ++i) {
-				const { hash: rHash, url: rUrl, name: rName, author: rAuthor } = remix[i];
-				str += '<div class="code-remix"><div class="code-remix-preview"> remix of ' +
-					`<button class="code-button code-remix-load" data-hash="${
-						rHash }" title="Show detailed source information">&gt;</button> <span>${
-						rUrl ?
-							`<a href="${ Array.isArray(rUrl) ? rUrl[0] : rUrl }" target="_blank">${
-								rName || rAuthor }</a>` :
-							`"${ rName }"` }${ rName && rAuthor ? ' by ' + rAuthor : '' }</span></div></div>`;
-			}
-		}
+
+		// Add cover information for the song
 		if(coverName) {
 			str += `<div class="code-cover">cover of ${ coverUrl ?
 				`<a href="${ coverUrl }" target="_blank">${ coverName }</a>` : `"${ coverName }"` }</div>`;
 		}
+
+		// Add information if song is remix (parent song preview)
+		if(remix && Array.isArray(remix)) {
+			for(let i = 0, len = remix.length; i < len; ++i) {
+				const { hash: rHash, url: rUrl, name: rName, author: rAuthor } = remix[i];
+				const mainRemixUrl = Array.isArray(rUrl) ? rUrl[0] : rUrl;
+				str += '<div class="code-remix"><div class="code-remix-parent">' +
+					`<button class="code-button code-remix-load" data-hash="${
+						rHash }" title="Show detailed source information">▷</button>` +
+					`remix of <span class="code-remix-preview">${
+						mainRemixUrl ?
+							`<a href="${ mainRemixUrl }" target="_blank">${ rName || rAuthor }</a>` :
+							`"${ rName }"` }` +
+					`${ rName && rAuthor ? ' by ' + rAuthor : '' }<span></div></div>`;
+			}
+		}
+
+		// Add buttons for loading the song in different formats (minified, original, formatted)
 		const sData = ` data-songdata='${ JSON.stringify(songObj) }'`;
 		str += '<div class="code-buttons">';
-		if(codeMin || fileMin) {
-			str += `<button class="code-button code-load" data-type="minified"${ sData }${
-				fileMin ? ` data-code-file="${ hash }.js"` : '' }>min ${ formatBytes(codeMinLen) }</button>`;
+		// Min button: if the code is short, retrieve from codeMin; otherwise, load from the network
+		if(entry.codeMinLen || fileMin) {
+			str += `<button class="code-button code-load" data-type="minified"${ sData }` +
+				`${ fileMin ? ` data-code-file="${ hash }.js"` : '' }` +
+				`${ codeMin ? ' data-has-raw="1"' : '' }>Min <small class="code-size">${
+					formatBytes(entry.codeMinLen) }</small></button>`;
 		}
-		if(code || fileOrig) {
-			str += `<button class="code-button code-load" data-type="original"${ sData }${
-				fileOrig ? `data-code-file="${ hash }.js"` : '' }>orig ${ formatBytes(codeLen) }</button>`;
+		// Orig button: similarly, if it's a short code, write to data-raw-code
+		if(entry.codeLen || fileOrig) {
+			str += `<button class="code-button code-load" data-type="original"${ sData }` +
+				`${ fileOrig ? ` data-code-file="${ hash }.js"` : '' }` +
+				`${ code ? ' data-has-raw="1"' : '' }>Orig <small class="code-size">${
+					formatBytes(entry.codeLen) }</small></button>`;
 		}
-		if(fileForm) {
-			str += `<button class="code-button code-load" data-type="formatted"${ sData } data-code-file="${
-				hash }.js">format ${ formatBytes(codeFormLen) }</button>`;
+		// Format button
+		if(entry.fileForm) {
+			str += `<button class="code-button code-load" data-type="formatted"${
+				sData } data-code-file="${ hash }.js">Format <small class="code-size">${
+				formatBytes(entry.codeFormLen) }</small></button>`;
 		}
 		str += '</div>';
-		if(codeMin) {
-			str += `<button class="code-text code-text-min"${ sData }>${ this.escapeHTML(codeMin) }</button>`;
+
+		// Rendering the text preview (showing what is available)
+		const textPreview = codeMin || code || entry.codeText || '';
+		if(textPreview) {
+			// If the song is large (fileMin/fileOrig) or a flag has been received from the database
+			const isTruncated = fileMin || fileOrig || entry.isTruncated;
+			str += `<button class="code-text${ isTruncated ? ' truncated' : '' }">${
+				this.escapeHTML(textPreview) }</button>`;
 		}
-		if(code) {
-			str += `<button class="code-text code-text-orig${ codeMin ? ' hidden' : '' }"${
-				sData }>${ this.escapeHTML(code) }</button>`;
-		}
-		return `<div class="entry">${ str }</div>`;
+
+		return `<div class="entry" data-hash="${ hash }">${ str }</div>`;
 	}
+
+	// Collect the text values of buttons that have the .filter-selected class
+	getActiveFilters() {
+		const getSelectedText = id => {
+			const buttonElem = document.querySelector(`#${ id } .filter-selected`);
+			return buttonElem ? buttonElem.textContent.trim() : 'all';
+		};
+
+		// Assemble an array for the tags, since multiple tags can be selected
+		const selectedTags = [];
+		document.querySelectorAll('#filter-tags .filter-selected').forEach(buttonElem =>
+			selectedTags.push(buttonElem.textContent.trim()));
+
+		return {
+			sorting: getSelectedText('filter-sorting'),
+			size: getSelectedText('filter-size'),
+			mode: getSelectedText('filter-mode'),
+			tags: selectedTags
+		};
+	}
+
+	groupSongsByAuthor(songsList) {
+		const groupsMap = new Map();
+		for(let i = 0, len = songsList.length; i < len; ++i) {
+			const song = songsList[i];
+			const authorName = song.author || 'Unknown';
+			if(!groupsMap.has(authorName)) {
+				groupsMap.set(authorName, []);
+			}
+			groupsMap.get(authorName).push(song);
+		}
+		const result = [];
+		groupsMap.forEach((authorSongs, authorName) => {
+			result.push({ author: authorName, songs: authorSongs });
+		});
+		return result;
+	}
+
+	// Initialize the cache element for escaping HTML
 	initElements() {
 		this.cacheParentElem = document.createElement('div');
 		this.cacheParentElem.appendChild(this.cacheTextElem = document.createTextNode(''));
 	}
+
+	// Show corresponding article when article navigation button is clicked
+	onclickArticleNavButton(buttonElem) {
+		const id = buttonElem.dataset.target;
+		document.querySelectorAll('.article-button').forEach(el =>
+			el.classList.toggle('article-button-selected', el === buttonElem));
+		document.querySelectorAll('.article-container').forEach(el =>
+			el.classList.toggle('hidden', el.id !== id));
+	}
+
+	// Load the code of a song when the min/orig/format button is clicked
 	async onclickCodeLoadButton(buttonElem) {
+		// The full file is located on the server (network download)
 		if(buttonElem.dataset.codeFile) {
 			buttonElem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
 			const waitElem = buttonElem.lastChild;
+			// A network request for a specific folder (minified / original / formatted)
 			const response = await fetch(this.pathFiles + buttonElem.dataset.type +
 				'/' + buttonElem.dataset.codeFile);
 			globalThis.bytebeat.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
 				{ code: await response.text() }));
 			waitElem.remove();
-		} else {
-			const codeTextElem = buttonElem.parentNode.parentNode
-				.querySelector(buttonElem.dataset.type === 'minified' ?
-					':scope > .code-text-min' : ':scope > .code-text-orig');
+
+		// The code is small and stored directly within the button (instant launch)
+		} else if(buttonElem.dataset.rawCode) {
 			globalThis.bytebeat.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
-				{ code: codeTextElem.innerText }));
+				{ code: buttonElem.dataset.rawCode }));
 		}
 	}
-	async onclickLibraryHeader(headerElem) {
-		const containerElem = headerElem.nextElementSibling;
-		const state = containerElem.classList;
-		if(state.contains('loaded') || headerElem.parentNode.open) {
-			return;
+
+	// Toggle the selected state of filter buttons when clicked
+	onclickFilterButton(buttonElem) {
+		const parentElem = buttonElem.parentNode;
+		if(parentElem.id === 'filter-tags') {
+			buttonElem.classList.toggle('filter-selected');
+		} else {
+			parentElem.querySelectorAll('.filter-button').forEach(el =>
+				el.classList.toggle('filter-selected', el === buttonElem));
 		}
-		state.add('loaded');
-		const waitElem = headerElem.querySelector('.loading-wait');
-		waitElem.classList.remove('hidden');
-		const libName = containerElem.id.replace('library-', '');
-		const response = await fetch(this.pathLibrary + libName + '.gz');
-		const { status } = response;
-		if(status !== 200 && status !== 304) {
-			state.remove('loaded');
-			containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${ status } ${
-				response.statusText }</div>`;
-			waitElem.classList.add('hidden');
-			return;
-		}
-		containerElem.innerHTML = libName !== 'all' && libName !== 'recent' ? '' :
-			`<label><input type="checkbox" id="library-show-all"${
-				this.showAllSongs ? ' checked' : '' }> Show all songs</label>`;
-		let libHTML = '';
-		const libArr = JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' }));
-		for(let i = 0, len = libArr.length; i < len; ++i) {
-			libHTML += this.generateEntryHTML(libArr[i], libName);
-		}
-		if(!this.songs && libName === 'all') {
-			this.cacheSongs(libArr);
-		}
-		containerElem.insertAdjacentHTML('beforeend', libHTML);
-		waitElem.classList.add('hidden');
 	}
+
+	// Show the remix source song when the remix info button is clicked
 	async onclickRemixLoadButton(elem) {
+		// If the block is already open, close it (remove the adjacent element containing the song)
 		const parentElem = elem.parentNode;
-		if(parentElem.nextSibling) {
+		if(parentElem.nextSibling && parentElem.nextSibling.classList.contains('entry')) {
 			parentElem.nextSibling.remove();
-			elem.nextElementSibling.style.display = 'inline';
+			// Show the short preview
+			elem.parentNode.querySelector('.code-remix-preview').style.display = 'inline';
+			elem.textContent = '▷';
 			return;
 		}
+
+		// If the library has not yet been downloaded to memory, download it once
 		if(!this.songs) {
 			elem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
@@ -245,10 +334,189 @@ export class Library {
 			this.cacheSongs(JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' })));
 			elem.lastChild.remove();
 		}
-		parentElem.insertAdjacentHTML('afterend',
-			this.generateEntryHTML(this.songs.get(elem.dataset.hash), 'all'));
-		elem.nextElementSibling.style.display = 'none';
+
+		// Search for parent song
+		const songHash = elem.dataset.hash;
+		const parentSongData = this.songs.get(songHash);
+		if(!parentSongData) {
+			console.error(`Song with hash ${ songHash } not found in library.`);
+			return;
+		}
+
+		// Insert the generated HTML for the parent song immediately below the remix block
+		parentElem.insertAdjacentHTML('afterend', this.generateEntryHTML(parentSongData, 'all'));
+
+		// Buttons activation
+		const insertedEntryElem = parentElem.nextElementSibling;
+		if(insertedEntryElem) {
+			// Hide the short preview
+			elem.parentNode.querySelector('.code-remix-preview').style.display = 'none';
+			elem.textContent = '▽';
+			insertedEntryElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
+				// Safely write a raw string without HTML parser distortion
+				if(buttonElem.dataset.type === 'minified' && parentSongData.codeMin) {
+					buttonElem.dataset.rawCode = parentSongData.codeMin;
+				} else if(buttonElem.dataset.type === 'original' && parentSongData.code) {
+					buttonElem.dataset.rawCode = parentSongData.code;
+				}
+				// Removing the temporary marker
+				buttonElem.removeAttribute('data-has-raw');
+			});
+		}
 	}
+
+	// Show the library songs when the "Show songs" button is clicked
+	async onclickShowSongsButton() {
+		const containerElem = document.getElementById('library-songs');
+
+		// If the library is not in memory at all, first download its "all.gz" file once.
+		if(!this.songs) {
+			// Show the loading wait icon
+			containerElem.innerHTML = '<div class="library-loading-wait">' +
+				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg></div>';
+			const waitElem = containerElem.lastChild;
+
+			// Load the library file
+			const response = await fetch(this.pathLibrary + 'all.gz');
+			const { status } = response;
+			if(status !== 200 && status !== 304) {
+				containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
+					status } ${ response.statusText }</div>`;
+				waitElem.remove();
+				return;
+			}
+
+			// Get the unpacked JSON from the library file
+			const libArr = JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' }));
+			// Cache the songs for future use
+			this.cacheSongs(libArr);
+			waitElem.remove();
+		}
+
+		// Retrieve the active filters from the page
+		const filters = this.getActiveFilters();
+
+		// Filter and sort the flat array of songs from cache (this.songs)
+		let filteredSongs = Array.from(this.songs.values());
+
+		// Filter by size
+		const fSize = filters.size;
+		if(fSize !== 'all') {
+			filteredSongs = filteredSongs.filter(song => {
+				const len = song.codeLen || song.codeMinLen || song.codeFormLen || 0;
+				return fSize === '<256' ? len <= 256 :
+					fSize === '<1k' ? len > 256 && len <= 1024 :
+					fSize === 'big' ? len > 1024 : true;
+			});
+		}
+
+		// Filter by mode
+		const fMode = filters.mode;
+		if(fMode !== 'all') {
+			filteredSongs = filteredSongs.filter(song => {
+				const sMode = song.mode;
+				return fMode === 'uint8' ? !sMode : // mode === 'Bytebeat' is omitted to save JSON space
+					fMode === 'int8' ? sMode === 'Signed Bytebeat' :
+					fMode === 'float' ? sMode === 'Floatbeat' :
+					fMode === 'func' ? sMode === 'Funcbeat' : true;
+			});
+		}
+
+		// Filter by tags and independent stereo toggle
+		let fTags = filters.tags;
+		if(fTags.includes('stereo')) {
+			filteredSongs = filteredSongs.filter(song => song.stereo === 1);
+			// Exclude "stereo" from the array of text tags to avoid searching for it in the song.tags array.
+			fTags = fTags.filter(t => t !== 'stereo');
+		}
+		// Filter by the remaining text tags
+		if(fTags.length > 0) {
+			filteredSongs = filteredSongs.filter(song => {
+				if(song.tags && Array.isArray(song.tags)) {
+					return fTags.every(t => song.tags.includes(t));
+				}
+				return false;
+			});
+		}
+
+		// Sorting
+		const htmlParts = [];
+		const isSortByDate = filters.sorting === 'date';
+		if(isSortByDate) {
+			// Sort by date: flat list without grouping by author
+			filteredSongs.sort((a, b) => {
+				const dateA = a.date || '';
+				const dateB = b.date || '';
+				if(dateA !== dateB) {
+					return dateB.localeCompare(dateA); // New songs to the top
+				}
+				return (a.author || '').localeCompare(b.author || '');
+			});
+
+			// Render a flat list (each song individually)
+			for(let i = 0, len = filteredSongs.length; i < len; ++i) {
+				htmlParts.push(this.generateEntryHTML(filteredSongs[i], 'filtered'));
+			}
+		} else {
+			// Sort by author: classic behavior with <details> blocks
+			filteredSongs.sort((a, b) => {
+				const authA = a.author || '';
+				const authB = b.author || '';
+				if(authA !== authB) {
+					return authA.localeCompare(authB); // Authors in alphabetical order
+				}
+				return (b.date || '').localeCompare(a.date || '');
+			});
+
+			// Group the filtered songs back into author blocks
+			const groupedData = this.groupSongsByAuthor(filteredSongs);
+
+			// Rendering author blocks
+			for(let i = 0, len = groupedData.length; i < len; ++i) {
+				htmlParts.push(this.generateEntryHTML(groupedData[i], 'filtered'));
+			}
+		}
+
+		// Display the number of found songs in the counter
+		const count = filteredSongs.length;
+		document.getElementById('library-counter').innerHTML =
+			`Found: ${ count } song${ count !== 1 ? 's' : '' }`;
+
+		// Display "Expand all songs" checkbox
+		const showAllHtml = count && !isSortByDate ? `<label><input type="checkbox" id="library-show-all"${
+			this.showAllSongs ? ' checked' : '' }> Expand all songs</label>` : '';
+
+		// Render the library HTML
+		containerElem.innerHTML = '';
+		containerElem.insertAdjacentHTML('beforeend', showAllHtml + htmlParts.join(''));
+
+		// Find new buttons that require raw code
+		containerElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
+			// Find out the song hash
+			const { hash } = buttonElem.closest('.entry').dataset;
+			if(!hash) {
+				return;
+			}
+
+			// Take the song from the memory cache
+			const songCached = this.songs.get(hash);
+			if(!songCached) {
+				return;
+			}
+
+			// Safely write a raw string without HTML parser distortion
+			if(buttonElem.dataset.type === 'minified' && songCached.codeMin) {
+				buttonElem.dataset.rawCode = songCached.codeMin;
+			} else if(buttonElem.dataset.type === 'original' && songCached.code) {
+				buttonElem.dataset.rawCode = songCached.code;
+			}
+
+			// Removing the temporary marker
+			buttonElem.removeAttribute('data-has-raw');
+		});
+	}
+
+	// Toggle the "open" attribute of all songs blocks when the "Expand all songs" checkbox is clicked
 	toggleAll(elem, isChecked) {
 		this.showAllSongs = isChecked;
 		elem.parentNode.parentNode.querySelectorAll('.songs-block').forEach(

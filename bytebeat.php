@@ -175,29 +175,36 @@ function dbChangeUserPassword(string $userName, string $passw): void {
 		[password_hash($passw, PASSWORD_DEFAULT), $userName]);
 }
 
-
 // Checking authorization when trying to login
 function checkLogin(): string {
+	// Checking for login attempt
 	if (isset($_POST['manage_password'])) {
+		// If no users in the database, create the temporary admin
 		if (empty(dbGetAllUsers())) {
 			if ($_POST['manage_password'] === BYTEBEAT_ADMINPASS && BYTEBEAT_ADMINPASS !== '') {
 				$_SESSION['bytebeat_user'] = 'TemporaryAdmin';
 				$_SESSION['bytebeat_role'] = 'admin';
 			}
 		} else {
+			// If provided user is available, check the password hash
 			$users = dbGetUser($_POST['manage_user'] ?? '');
 			if ($users && password_verify($_POST['manage_password'], $users['password_hash'])) {
 				$userName = $users['username'];
 				$_SESSION['bytebeat_user'] = $userName;
 				$_SESSION['bytebeat_role'] = $users['role'];
 				dbUpdateUserLogin($userName);
-				 // Generate CSRF token if not already present
-				if (empty($_SESSION['bytebeat_token'])) {
-					$_SESSION['bytebeat_token'] = bin2hex(random_bytes(32));
-				}
 			}
 		}
+
+		// Generate the CSRF token as a single block for all successful logins
+		if (isset($_SESSION['bytebeat_role']) && $_SESSION['bytebeat_role'] !== 'disabled' &&
+			empty($_SESSION['bytebeat_token'])
+		) {
+			$_SESSION['bytebeat_token'] = bin2hex(random_bytes(32));
+		}
 	}
+
+	// Session update
 	$loginStatus = $_SESSION['bytebeat_role'] ?? 'disabled';
 	if ($loginStatus === 'disabled') {
 		setcookie('bytebeat_access', '', time() - 3600, '/');
@@ -228,8 +235,10 @@ function makeLoginPage(): string {
 
 // Generating the form for creating a new admin account during initial setup
 function makeNewAdminForm(): string {
+	$token = $_SESSION['bytebeat_token'] ?? '';
 	return '<h2>Initial Setup: Create admin account</h2>
 		<form method="post" action="?manage">
+			<input type="hidden" name="token" value="' . $token . '">
 			<div class="form-container">
 				<div class="form-row">
 					<div class="form-row-label">Admin username:</div>
@@ -439,13 +448,13 @@ function makeManagementPanel(): string {
 				<input type="hidden" name="token" value="' . $token . '">
 				<input type="hidden" name="song_add_form">
 				<button type="submit" class="link-button form-submit">Add a song</button>
-			</form>
+			</form>' .
+			(!$isAdmin ? '' : '
 			<form method="post" action="?">
 				<input type="hidden" name="token" value="' . $token . '">
 				<input type="hidden" name="db_to_files">
 				<button type="submit" class="link-button form-submit">Make library files</button>
-			</form>' .
-			(!$isAdmin ? '' : '
+			</form>
 			<form method="post" action="?">
 				<input type="hidden" name="token" value="' . $token . '">
 				<input type="hidden" name="files_to_db">
@@ -877,7 +886,7 @@ function makeLibraryFile(string $fileName, array $songsByHash, array $songs): vo
 
 	// Group songs by authors into arrays
 	foreach ($songs as $song) {
-		$author = $song['author'] ?? '';
+		$author = isset($song['author']) ? (string)$song['author'] : '';
 		if (isset($songsByHash[$song['hash']])) {
 			$songsArr[$author][] = $songsByHash[$song['hash']];
 		}
@@ -886,7 +895,7 @@ function makeLibraryFile(string $fileName, array $songsByHash, array $songs): vo
 	// Make an array of authors and their songs
 	$outputData = array();
 	foreach ($songsArr as $author => $songsListData) {
-		$outputData[] = ['author' => $author, 'songs' => $songsListData];
+		$outputData[] = ['author' => (string)$author, 'songs' => $songsListData];
 	}
 
 	// Compress the JSON data into the GZIP file
@@ -902,64 +911,138 @@ function databaseToFiles(): string {
 	$pathMinified = './data/songs/minified/';
 	$pathFormatted = './data/songs/formatted/';
 
-	// Create folders if they don't exist, or clear them if they do
+	// Create folders for heavy code files
 	$paths = [$pathOriginal, $pathMinified, $pathFormatted];
 	foreach ($paths as $path) {
 		if (!is_dir($path)) {
 			mkdir($path, 0755, true);
 			$message .= '"' . $path . '" folder created.<br>';
-		} else {
-			array_map('unlink', glob($path . '/*.*'));
 		}
 	}
 
-	// Get all remixes from the database
+	// Get all remixes in a single query (JOIN) instead of thousands of queries in a loop
 	$remixesRaw = DB::query(
 		"SELECT r.song AS song_hash, r.source AS source_hash, s.author, s.name, s.url 
-		FROM remixes r
-		LEFT JOIN songs s ON r.source = s.hash"
+		 FROM remixes r
+		 LEFT JOIN songs s ON r.source = s.hash"
 	)->fetchAll() ?: [];
 
-	// Group remixes by song hash into an associative array
+	// Group remixes by song hash for fast access
 	$remixesBySong = array();
 	foreach ($remixesRaw as $row) {
 		$remixesBySong[$row['song_hash']][] = [
 			'hash' => $row['source_hash'],
-			'author' => $row['author'] ?? null,
+			'author' => isset($row['author']) ? (string)$row['author'] : null,
 			'name' => $row['name'] ?? null,
 			'url' => isset($row['url']) ?
 				(str_starts_with($row['url'], '[') ? json_decode($row['url'], true) : $row['url']) : null];
 	}
 
-	// Get all songs from the database
-	$songs = DB::query("SELECT * FROM `songs` ORDER BY `author`, `date`, `id`")->fetchAll() ?: [];
+	// Get all songs from the database (default sorting for the frontend)
+	$songs = DB::query(
+		"SELECT * FROM `songs` ORDER BY `author`, `date`, `id`"
+	)->fetchAll() ?: [];
 
 	// Make an array for each song, save heavy code into files, and prepare data for JSON structure
+	$previewLimit = 512; // Byte limit for song (it will be saved to a file upon exceeding the limit)
+	$rowLimit = 8; // Code lines count limit
+	$activeHashes = []; // Array for tracking current hashes
 	$songsByHash = array();
 	foreach ($songs as $song) {
 		$fileMin = 0;
 		$fileOrig = 0;
 		$fileForm = 0;
 		$hash = $song['hash'];
-
-		// Save heavy code into separate files if necessary
-		if (isset($song['code_minified']) && mb_strlen($song['code_minified']) > 1024) {
-			file_put_contents($pathMinified . $hash . '.js', $song['code_minified']);
-			$fileMin = 1;
-		}
-		if (isset($song['code']) &&
-			(substr_count($song['code'], PHP_EOL) > 8 || mb_strlen($song['code']) > 1024)
-		) {
-			file_put_contents($pathOriginal . $hash . '.js', $song['code']);
-			$fileOrig = 1;
-		}
-		if (isset($song['code_formatted'])) {
-			file_put_contents($pathFormatted . $hash . '.js', $song['code_formatted']);
-			$fileForm = 1;
-		}
-
-		// Make an array of song data for JSON structure
 		$songData = ['hash' => $hash];
+		$activeHashes[$hash] = true; // Remembering that this song is alive
+
+		// Minified code
+		$hasMinified = isset($song['code_minified']) && $song['code_minified'] !== '';
+		if ($hasMinified) {
+			$codeMinLen = strlen($song['code_minified']);
+			$songData['codeMinLen'] = $codeMinLen;
+			// If the code exceeds the preview limit, save the file to disk
+			if ($codeMinLen > $previewLimit) {
+				$fileMinPath = $pathMinified . $hash . '.js';
+				// Write to the disk only if the file does not exist or the code has changed
+				if (!file_exists($fileMinPath) ||
+					file_get_contents($fileMinPath) !== $song['code_minified']) {
+					file_put_contents($fileMinPath, $song['code_minified']);
+				}
+				$fileMin = 1;
+			} else {
+				// Shortcode — write directly in JSON
+				$songData['codeMin'] = $song['code_minified'];
+			}
+		}
+
+		// Original code
+		$hasOriginal = isset($song['code']) && $song['code'] !== '';
+		if ($hasOriginal) {
+			$codeLen = strlen($song['code']);
+			$songData['codeLen'] = $codeLen;
+			// If the code exceeds the preview limit OR is multi-line, save the file to disk
+			if ($codeLen > $previewLimit || substr_count($song['code'], PHP_EOL) > $rowLimit) {
+				$fileOrigPath = $pathOriginal . $hash . '.js';
+				// Write to the disk only if the file does not exist or the code has changed
+				if (!file_exists($fileOrigPath) || file_get_contents($fileOrigPath) !== $song['code']) {
+					file_put_contents($fileOrigPath, $song['code']);
+				}
+				$fileOrig = 1;
+			} else {
+				// Shortcode — write directly in JSON
+				$songData['code'] = $song['code'];
+			}
+		}
+
+		// Formatted code (always write it to disk in its entirety)
+		if (isset($song['code_formatted']) && $song['code_formatted'] !== '') {
+			$fileFormPath = $pathFormatted . $hash . '.js';
+			if (!file_exists($fileFormPath) || file_get_contents($fileFormPath) !== $song['code_formatted']) {
+				file_put_contents($fileFormPath, $song['code_formatted']);
+			}
+			$fileForm = 1;
+			$songData['codeFormLen'] = strlen($song['code_formatted']);
+		}
+
+		// Set flags for external files
+		if ($fileOrig) {
+			$songData['fileOrig'] = 1;
+		}
+		if ($fileMin) {
+			$songData['fileMin'] = 1;
+		}
+		if ($fileForm) {
+			$songData['fileForm'] = 1;
+		}
+
+		// Preview for large songs
+		// If the song is large or vertical, or has only formatted code (which is always on disk),
+		// then generate a cropped preview for all.gz
+		$targetCode = $song['code_minified'] ?? $song['code'] ?? $song['code_formatted'] ?? null;
+		if ($targetCode !== null && $targetCode !== '' && ($fileMin || $fileOrig || $fileForm)) {
+			// Checking the row count limit
+			$lines = explode("\n", $targetCode);
+			if (count($lines) > $rowLimit) {
+				$previewText = implode("\n", array_slice($lines, 0, $rowLimit));
+			} else {
+				$previewText = $targetCode;
+			}
+
+			// Check the character length limit (in case the strings are long).
+			if (mb_strlen($previewText) > $previewLimit) {
+				$songData['codeText'] = mb_substr($previewText, 0, $previewLimit);
+			} else {
+				$songData['codeText'] = $previewText;
+			}
+			$songData['isTruncated'] = 1;
+		}
+
+		// Construct the rest JSON structure for the song
+		$author = isset($song['author']) && $song['author'] !== '' ? (string)$song['author'] : null;
+		if ($author !== null) {
+			$songData['author'] = $author;
+		}
 		if (isset($song['name'])) {
 			$songData['name'] = $song['name'];
 		}
@@ -979,26 +1062,6 @@ function databaseToFiles(): string {
 		$songData['sampleRate'] = (float)$song['samplerate'];
 		if (!empty($song['stereo'])) {
 			$songData['stereo'] = 1;
-		}
-		if ($fileOrig) {
-			$songData['fileOrig'] = 1;
-		} elseif (isset($song['code'])) {
-			$songData['code'] = $song['code'];
-		}
-		if (isset($song['code'])) {
-			$songData['codeLen'] = strlen($song['code']);
-		}
-		if ($fileMin) {
-			$songData['fileMin'] = 1;
-		} elseif (isset($song['code_minified'])) {
-			$songData['codeMin'] = $song['code_minified'];
-		}
-		if (isset($song['code_minified'])) {
-			$songData['codeMinLen'] = strlen($song['code_minified']);
-		}
-		if ($fileForm) {
-			$songData['fileForm'] = 1;
-			$songData['codeFormLen'] = strlen($song['code_formatted']);
 		}
 		if (isset($remixesBySong[$hash])) {
 			$songData['remix'] = $remixesBySong[$hash];
@@ -1024,80 +1087,28 @@ function databaseToFiles(): string {
 		$songsByHash[$hash] = $songData;
 	}
 
-	// Create/clear the library folder
+	// Cleanup: remove from the disk only those files that are no longer in the database
+	foreach ($paths as $path) {
+		$files = glob($path . '/*.js');
+		foreach ($files as $file) {
+			$filename = basename($file, '.js'); // Get a hash from the file name
+			if (!isset($activeHashes[$filename])) {
+				unlink($file); // Removing, as this song is no longer in the database
+			}
+		}
+	}
+
+	// Create a folder for library files
 	if (!is_dir($pathLibrary)) {
 		mkdir($pathLibrary, 0755, true);
 		$message .= '"' . $pathLibrary . '" folder created.<br>';
-	} else {
-		array_map('unlink', glob($pathLibrary . '/*.*'));
 	}
 
-	// Generate "all.gz" file with all songs sorted by authors
-	makeLibraryFile($pathLibrary . 'all.gz', $songsByHash, $songs);
+	// Generate a single library file with all songs sorted by authors
+	$fileName = $pathLibrary . 'all.gz';
+	makeLibraryFile($fileName, $songsByHash, $songs);
 
-	// Generate "recent.gz" file with songs added in the last 90 days
-	$cutoffDate = date('Y-m-d', strtotime('-90 days'));
-	$recentSongs = array_filter($songs, function($s) use ($cutoffDate) {
-		return isset($s['date_added']) && $s['date_added'] > $cutoffDate;
-	});
-	makeLibraryFile($pathLibrary . 'recent.gz', $songsByHash, $recentSongs);
-
-	// Generate "classic.gz" file with c-compatible songs (tagged as "c")
-	$classicSongs = array_filter($songs, function($s) {
-		return isset($s['tags']) && str_contains($s['tags'], '"c"');
-	});
-	makeLibraryFile($pathLibrary . 'classic.gz', $songsByHash, $classicSongs);
-
-	// Generate "js-256.gz" file with JS songs under 256b
-	$js256Songs = array_filter($songs, function($s) {
-		$modeValid = ($s['mode'] === 'Bytebeat' || $s['mode'] === 'Signed Bytebeat');
-		return $modeValid && isset($s['tags']) && str_contains($s['tags'], '"256"') &&
-			!str_contains($s['tags'], '"c"');
-	});
-	makeLibraryFile($pathLibrary . 'js-256.gz', $songsByHash, $js256Songs);
-
-	// Generate "js-1k.gz" file with JS songs under 1k
-	$js1kSongs = array_filter($songs, function($s) {
-		$modeValid = ($s['mode'] === 'Bytebeat' || $s['mode'] === 'Signed Bytebeat');
-		return $modeValid && isset($s['tags']) && str_contains($s['tags'], '"1k"') &&
-			!str_contains($s['tags'], '"c"');
-	});
-	makeLibraryFile($pathLibrary . 'js-1k.gz', $songsByHash, $js1kSongs);
-
-	// Generate "js-big.gz" file with big JS songs
-	$jsBigSongs = array_filter($songs, function($s) {
-		$modeValid = ($s['mode'] === 'Bytebeat' || $s['mode'] === 'Signed Bytebeat');
-		$hasTags = isset($s['tags']);
-		return $modeValid && (!$hasTags || (
-			!str_contains($s['tags'], '"256"') && 
-			!str_contains($s['tags'], '"1k"') && 
-			!str_contains($s['tags'], '"c"')));
-	});
-	makeLibraryFile($pathLibrary . 'js-big.gz', $songsByHash, $jsBigSongs);
-
-	// Generate "floatbeat.gz" with Floatbeat mode songs
-	$floatbeatSongs = array_filter($songs, function($s) {
-		return $s['mode'] === 'Floatbeat' && 
-			(!isset($s['tags']) || !str_contains($s['tags'], '"big"'));
-	});
-	makeLibraryFile($pathLibrary . 'floatbeat.gz', $songsByHash, $floatbeatSongs);
-
-	// Generate "floatbeat-big.gz" with big Floatbeat mode songs
-	$floatbeatBigSongs = array_filter($songs, function($s) {
-		$hasTags = isset($s['tags']);
-		return $s['mode'] === 'Floatbeat' && (!$hasTags || (
-			!str_contains($s['tags'], '"256"') && 
-			!str_contains($s['tags'], '"1k"')));
-	});
-	makeLibraryFile($pathLibrary . 'floatbeat-big.gz', $songsByHash, $floatbeatBigSongs);
-
-	// Generate "funcbeat.gz" with Funcbeat mode songs
-	$funcbeatSongs = array_filter($songs, function($s) {
-		return $s['mode'] === 'Funcbeat';
-	});
-	makeLibraryFile($pathLibrary . 'funcbeat.gz', $songsByHash, $funcbeatSongs);
-
-	return manageInfo($message . '"' . $pathLibrary . '*.gz" files created.<br>Success!');
+	return manageInfo($message . '"' . $fileName . '" file created.<br>Success!');
 }
 
 // Request to add or edit a song in the database
@@ -1114,12 +1125,15 @@ function manageSong(bool $isEdit): string {
 	$mode = $_POST['mode'] ?? 'Bytebeat';
 	$sampleRate = trim($_POST['samplerate'] ?? '');
 	$sampleRate = $sampleRate && is_numeric($sampleRate) ? (int)$sampleRate : 8000;
-	$code = isset($_POST['code']) ? str_replace("\r", '', $_POST['code']) : null;
-	$codeMinified = isset($_POST['code_minified']) ? str_replace("\r", '', $_POST['code_minified']) : null;
-	$codeFormatted = isset($_POST['code_formatted']) ? str_replace("\r", '', $_POST['code_formatted']) : null;
-	$coverName = isset($_POST['cover_name']) ? trim($_POST['cover_name']) : null;
+	$codeRaw = isset($_POST['code']) ? str_replace("\r", '', $_POST['code']) : '';
+	$code = $codeRaw !== '' ? $codeRaw : null;
+	$codeMinRaw = isset($_POST['code_minified']) ? str_replace("\r", '', $_POST['code_minified']) : '';
+	$codeMinified = $codeMinRaw !== '' ? $codeMinRaw : null;
+	$codeFormRaw = isset($_POST['code_formatted']) ? str_replace("\r", '', $_POST['code_formatted']) : '';
+	$codeFormatted = $codeFormRaw !== '' ? $codeFormRaw : null;
+	$coverName = isset($_POST['cover_name']) ? trim($_POST['cover_name']) : '';
 	$coverName = $coverName !== '' ? $coverName : null;
-	$coverUrl = isset($_POST['cover_url']) ? trim($_POST['cover_url']) : null;
+	$coverUrl = isset($_POST['cover_url']) ? trim($_POST['cover_url']) : '';
 	$coverUrl = $coverUrl !== '' ? $coverUrl : null;
 	$user = $_SESSION['bytebeat_user'] ?? 'System';
 	$currentDate = date('Y-m-d');
@@ -1243,8 +1257,8 @@ DB::init(BYTEBEAT_DBHOST, BYTEBEAT_DBNAME, BYTEBEAT_DBUSERNAME, BYTEBEAT_DBPASSW
 // Create songs table if not exist
 DB::exec("CREATE TABLE IF NOT EXISTS `songs` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`hash` CHAR(32) NULL,
-	`author` TEXT NULL,
+	`hash` CHAR(32) NOT NULL,
+	`author` VARCHAR(255) NULL,
 	`name` VARCHAR(255) NULL,
 	`description` TEXT NULL,
 	`url` TEXT NULL,
@@ -1253,7 +1267,7 @@ DB::exec("CREATE TABLE IF NOT EXISTS `songs` (
 	`samplerate` DOUBLE NULL,
 	`stereo` BOOL NULL,
 	`code` MEDIUMTEXT NULL,
-	`code_minified` TEXT NULL,
+	`code_minified` MEDIUMTEXT NULL,
 	`code_formatted` MEDIUMTEXT NULL,
 	`cover_name` VARCHAR(255) NULL,
 	`cover_url` TEXT NULL,
@@ -1262,15 +1276,19 @@ DB::exec("CREATE TABLE IF NOT EXISTS `songs` (
 	`user_added` VARCHAR(255) NULL,
 	`date_added` VARCHAR(10) NULL,
 	`user_edited` VARCHAR(255) NULL,
-	`date_edited` VARCHAR(10) NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+	`date_edited` VARCHAR(10) NULL,
+	UNIQUE KEY `hash_idx` (`hash`), -- Instant hash-based search and linking to remixes
+	INDEX `sorting_author_date_idx` (`author`, `date`, `id`) -- Speeds up export: ORDER BY author, date, id
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 // Create remixes table if not exist
 DB::exec("CREATE TABLE IF NOT EXISTS `remixes` (
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`song` CHAR(32) NOT NULL,
-	`source` CHAR(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+	`source` CHAR(32) NOT NULL,
+	INDEX `song_idx` (`song`), -- Speeds up DELETE and SELECT when searching for song remixes
+	INDEX `source_idx` (`source`) -- Speeds up the search for original tracks
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
 // Create users table if not exist
 DB::exec("CREATE TABLE IF NOT EXISTS `users` (
@@ -1288,13 +1306,13 @@ $loginStatus = checkLogin();
 $isAdmin = $loginStatus === 'admin';
 
 // CSRF checking for all POST requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
-	!(isset($_POST['manage_password']) || isset($_POST['new_admin_pass']))
-) {
-	$token = $_SESSION['bytebeat_token'] ?? '';
-	if (empty($token) || !hash_equals($token, $_POST['token'] ?? '')) {
-		fancyDie(manageError(
-			'Security error: Invalid CSRF token.<br>Try refreshing the page or re-logging in.'));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	if (!isset($_POST['manage_password'])) {
+		$token = $_SESSION['bytebeat_token'] ?? '';
+		if (empty($token) || !hash_equals($token, $_POST['token'] ?? '')) {
+			fancyDie(manageError(
+				'Security error: Invalid CSRF token.<br>Try refreshing the page or re-logging in.'));
+		}
 	}
 }
 
@@ -1304,10 +1322,12 @@ if ($loginStatus === 'disabled') {
 }
 
 // Create an admin account if logged in with a temporary password
-if ($isAdmin && $_SESSION['bytebeat_user'] === 'TemporaryAdmin') {
+if ($isAdmin && isset($_SESSION['bytebeat_user']) && $_SESSION['bytebeat_user'] === 'TemporaryAdmin') {
 	if (isset($_POST['new_admin_user'], $_POST['new_admin_pass'])) {
 		dbAddUser($_POST['new_admin_user'], $_POST['new_admin_pass'], 'admin');
-		session_destroy();
+		unset($_SESSION['bytebeat_user']); 
+		unset($_SESSION['bytebeat_role']);
+		unset($_SESSION['bytebeat_token']); 
 		fancyDie(manageInfo('Admin account created!<br>Please log in with new credentials.') . '
 		' . makeLoginPage());
 	}
@@ -1357,7 +1377,7 @@ if (isset($_POST['files_to_db']) && $isAdmin) {
 }
 
 // Request to create library files from database
-if (isset($_POST['db_to_files'])) {
+if (isset($_POST['db_to_files']) && $isAdmin) {
 	fancyDie(databaseToFiles());
 }
 
@@ -1368,7 +1388,9 @@ if (isset($_POST['song_add_form'])) {
 
 // Request to add a song to the database
 if (isset($_POST['song_add'])) {
-	fancyDie(manageSong(false));
+	$resultMessage = manageSong(false); // Save the song to the database
+	databaseToFiles(); // Automatically regenerate all.gz
+	fancyDie($resultMessage);
 }
 
 // Request to call the CSRF request to show form to edit a song
@@ -1383,12 +1405,16 @@ if (isset($_POST['song_edit_form'])) {
 
 // Request to edit a song in the database
 if (isset($_POST['song_edit'])) {
-	fancyDie(manageSong(true));
+	$resultMessage = manageSong(true); // Update the song in the database
+	databaseToFiles(); // Automatically regenerate all.gz
+	fancyDie($resultMessage);
 }
 
 // Request to delete a song from the database
 if (isset($_POST['song_delete'])) {
-	fancyDie(deleteSong());
+	$resultMessage = deleteSong(); // Remove the song from the database
+	databaseToFiles(); // Automatically cleaning up files for this song
+	fancyDie($resultMessage);
 }
 
 // Redirection to Bytebeat Player page
