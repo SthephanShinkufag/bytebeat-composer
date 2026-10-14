@@ -5,6 +5,7 @@ export class Library {
 	constructor() {
 		this.cacheParentElem = null;
 		this.cacheTextElem = null;
+		this.currentRenderId = 0; // ID of the currently active library interface build
 		this.pathFiles = './data/songs/';
 		this.pathLibrary = './data/library/';
 		this.showAllSongs = false;
@@ -267,6 +268,32 @@ export class Library {
 		return result;
 	}
 
+	// Activate the newly added code buttons of the current batch (dataset.rawCode insertion)
+	initDatasetForChunk(containerElem) {
+		// Look for buttons with the flag only in the fresh batch of elements
+		containerElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
+			const entryElem = buttonElem.closest('.entry');
+			if(!entryElem) {
+				return;
+			}
+			const { hash } = entryElem.dataset;
+			if(!hash) {
+				return;
+			}
+			const songCached = this.songs.get(hash);
+			if(!songCached) {
+				return;
+			}
+			const { type } = buttonElem.dataset;
+			if(type === 'minified' && songCached.codeMin) {
+				buttonElem.dataset.rawCode = songCached.codeMin;
+			} else if(type === 'original' && songCached.code) {
+				buttonElem.dataset.rawCode = songCached.code;
+			}
+			buttonElem.removeAttribute('data-has-raw');
+		});
+	}
+
 	// Initialize the cache element for escaping HTML
 	initElements() {
 		this.cacheParentElem = document.createElement('div');
@@ -346,7 +373,7 @@ export class Library {
 		// Insert the generated HTML for the parent song immediately below the remix block
 		parentElem.insertAdjacentHTML('afterend', this.generateEntryHTML(parentSongData, 'all'));
 
-		// Buttons activation
+		// Code buttons activation (dataset.rawCode insertion)
 		const insertedEntryElem = parentElem.nextElementSibling;
 		if(insertedEntryElem) {
 			// Hide the short preview
@@ -369,6 +396,10 @@ export class Library {
 	async onclickShowSongsButton() {
 		const containerElem = document.getElementById('library-songs');
 
+		// Generating a unique ID for this click
+		this.currentRenderId++;
+		const renderId = this.currentRenderId;
+
 		// If the library is not in memory at all, first download its "all.gz" file once.
 		if(!this.songs) {
 			// Show the loading wait icon
@@ -379,6 +410,13 @@ export class Library {
 			// Load the library file
 			const response = await fetch(this.pathLibrary + 'all.gz');
 			const { status } = response;
+
+			// Cancellation check: If the user clicks again while the file is downloading, cancel that stream
+			if(renderId !== this.currentRenderId) {
+				return;
+			}
+
+			// Loading error check
 			if(status !== 200 && status !== 304) {
 				containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
 					status } ${ response.statusText }</div>`;
@@ -393,10 +431,16 @@ export class Library {
 			waitElem.remove();
 		}
 
+		// Cancellation check: In case the user clicked right before caching finished
+		if(renderId !== this.currentRenderId) {
+			return;
+		}
+
 		// Retrieve the active filters from the page
 		const filters = this.getActiveFilters();
+		const isSortByDate = filters.sorting === 'date';
 
-		// Filter and sort the flat array of songs from cache (this.songs)
+		// Get the flat array of songs from cache (this.songs)
 		let filteredSongs = Array.from(this.songs.values());
 
 		// Filter by size
@@ -426,7 +470,7 @@ export class Library {
 		let fTags = filters.tags;
 		if(fTags.includes('stereo')) {
 			filteredSongs = filteredSongs.filter(song => song.stereo === 1);
-			// Exclude "stereo" from the array of text tags to avoid searching for it in the song.tags array.
+			// Exclude "stereo" from the array of text tags to avoid searching for it in the song.tags array
 			fTags = fTags.filter(t => t !== 'stereo');
 		}
 		// Filter by the remaining text tags
@@ -439,9 +483,22 @@ export class Library {
 			});
 		}
 
+		// Display the number of found songs in the counter
+		const count = filteredSongs.length;
+		const counterElem = document.getElementById('library-counter');
+		if(counterElem) {
+			counterElem.textContent = `Found: ${ count } song${ count !== 1 ? 's' : '' }`;
+		}
+
+		// Clear the container before rendering
+		containerElem.innerHTML = '';
+
+		// Display the "Expand all songs" checkbox
+		containerElem.insertAdjacentHTML('beforeend',
+			count && !isSortByDate ? `<label><input type="checkbox" id="library-show-all"${
+				this.showAllSongs ? ' checked' : '' }> Expand all songs</label>` : '');
+
 		// Sorting
-		const htmlParts = [];
-		const isSortByDate = filters.sorting === 'date';
 		if(isSortByDate) {
 			// Sort by date: flat list without grouping by author
 			filteredSongs.sort((a, b) => {
@@ -452,11 +509,6 @@ export class Library {
 				}
 				return (a.author || '').localeCompare(b.author || '');
 			});
-
-			// Render a flat list (each song individually)
-			for(let i = 0, len = filteredSongs.length; i < len; ++i) {
-				htmlParts.push(this.generateEntryHTML(filteredSongs[i], 'filtered'));
-			}
 		} else {
 			// Sort by author: classic behavior with <details> blocks
 			filteredSongs.sort((a, b) => {
@@ -467,53 +519,45 @@ export class Library {
 				}
 				return (b.date || '').localeCompare(a.date || '');
 			});
-
 			// Group the filtered songs back into author blocks
-			const groupedData = this.groupSongsByAuthor(filteredSongs);
-
-			// Rendering author blocks
-			for(let i = 0, len = groupedData.length; i < len; ++i) {
-				htmlParts.push(this.generateEntryHTML(groupedData[i], 'filtered'));
-			}
+			filteredSongs = this.groupSongsByAuthor(filteredSongs);
 		}
 
-		// Display the number of found songs in the counter
-		const count = filteredSongs.length;
-		document.getElementById('library-counter').innerHTML =
-			`Found: ${ count } song${ count !== 1 ? 's' : '' }`;
+		// Configuring Time Slicing (Chunked Rendering)
+		const itemsPerChunk = 40; // Size of a single pack (optimal for 60–144 Hz screens)
+		let currentIndex = 0;
+		const totalItems = filteredSongs.length;
 
-		// Display "Expand all songs" checkbox
-		const showAllHtml = count && !isSortByDate ? `<label><input type="checkbox" id="library-show-all"${
-			this.showAllSongs ? ' checked' : '' }> Expand all songs</label>` : '';
-
-		// Render the library HTML
-		containerElem.innerHTML = '';
-		containerElem.insertAdjacentHTML('beforeend', showAllHtml + htmlParts.join(''));
-
-		// Find new buttons that require raw code
-		containerElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
-			// Find out the song hash
-			const { hash } = buttonElem.closest('.entry').dataset;
-			if(!hash) {
+		// Function to render a single piece of data
+		const renderChunk = () => {
+			// Critical cancellation check:
+			// If the global currentRenderId has changed, it means the user clicked the filters again.
+			// Simply return, effectively killing off this old requestAnimationFrame loop.
+			if(renderId !== this.currentRenderId) {
 				return;
 			}
-
-			// Take the song from the memory cache
-			const songCached = this.songs.get(hash);
-			if(!songCached) {
+			// If all batches have been successfully rendered and activated; stopping the loop
+			if(currentIndex >= totalItems) {
 				return;
 			}
-
-			// Safely write a raw string without HTML parser distortion
-			if(buttonElem.dataset.type === 'minified' && songCached.codeMin) {
-				buttonElem.dataset.rawCode = songCached.codeMin;
-			} else if(buttonElem.dataset.type === 'original' && songCached.code) {
-				buttonElem.dataset.rawCode = songCached.code;
+			const chunkHtmlParts = [];
+			const endIndex = Math.min(currentIndex + itemsPerChunk, totalItems);
+			// Assemble the HTML code strictly for the current batch (e.g., elements 0 through 40)
+			for(let i = currentIndex; i < endIndex; ++i) {
+				chunkHtmlParts.push(this.generateEntryHTML(filteredSongs[i], 'filtered'));
 			}
+			// Inject a batch into the DOM
+			containerElem.insertAdjacentHTML('beforeend', chunkHtmlParts.join(''));
+			// Attach dataset.rawCode specifically to the inserted batch to avoid accumulating it for the end
+			this.initDatasetForChunk(containerElem, currentIndex, endIndex);
+			// Shift the pointer
+			currentIndex = endIndex;
+			// Schedule the rendering of the next batch for the next monitor animation frame
+			requestAnimationFrame(renderChunk);
+		};
 
-			// Removing the temporary marker
-			buttonElem.removeAttribute('data-has-raw');
-		});
+		// Launch the first batch of rendering
+		requestAnimationFrame(renderChunk);
 	}
 
 	// Toggle the "open" attribute of all songs blocks when the "Expand all songs" checkbox is clicked
