@@ -911,7 +911,7 @@ function databaseToFiles(): string {
 	$pathMinified = './data/songs/minified/';
 	$pathFormatted = './data/songs/formatted/';
 
-	// Create folders for heavy code files
+	// Check and create folders for heavy code files
 	$paths = [$pathOriginal, $pathMinified, $pathFormatted];
 	foreach ($paths as $path) {
 		if (!is_dir($path)) {
@@ -937,18 +937,22 @@ function databaseToFiles(): string {
 			'url' => isset($row['url']) ?
 				(str_starts_with($row['url'], '[') ? json_decode($row['url'], true) : $row['url']) : null];
 	}
+	unset($remixesRaw); // Clear the memory immediately
 
 	// Get all songs from the database (default sorting for the frontend)
-	$songs = DB::query(
-		"SELECT * FROM `songs` ORDER BY `author`, `date`, `id`"
-	)->fetchAll() ?: [];
+	// Streaming read: Request data, but do not call fetchAll()
+	// The query() method returns a PDOStatement object that acts as a cursor
+	$statement = DB::query("SELECT * FROM `songs` ORDER BY `author`, `date`, `id`");
 
-	// Make an array for each song, save heavy code into files, and prepare data for JSON structure
+	$songsByHash = array(); // An array for each song
+	$activeHashes = []; // Array for tracking current hashes
+	$songsMetadataList = []; // Array containing only metadata (for makeLibraryFile)
 	$previewLimit = 512; // Byte limit for song (it will be saved to a file upon exceeding the limit)
 	$rowLimit = 8; // Code lines count limit
-	$activeHashes = []; // Array for tracking current hashes
-	$songsByHash = array();
-	foreach ($songs as $song) {
+
+	// Make an array for each song, save heavy code into files, and prepare data for JSON structure
+	// Read the database line by line. Memory is allocated for only a single current record.
+	while ($song = $statement->fetch()) {
 		$fileMin = 0;
 		$fileOrig = 0;
 		$fileForm = 0;
@@ -966,12 +970,13 @@ function databaseToFiles(): string {
 				$fileMinPath = $pathMinified . $hash . '.js';
 				// Write to the disk only if the file does not exist or the code has changed
 				if (!file_exists($fileMinPath) ||
-					file_get_contents($fileMinPath) !== $song['code_minified']) {
+					file_get_contents($fileMinPath) !== $song['code_minified']
+				) {
 					file_put_contents($fileMinPath, $song['code_minified']);
 				}
 				$fileMin = 1;
 			} else {
-				// Shortcode — write directly in JSON
+				// Short code — write directly in JSON
 				$songData['codeMin'] = $song['code_minified'];
 			}
 		}
@@ -1016,11 +1021,10 @@ function databaseToFiles(): string {
 			$songData['fileForm'] = 1;
 		}
 
-		// Preview for large songs
-		// If the song is large or vertical, or has only formatted code (which is always on disk),
-		// then generate a cropped preview for all.gz
-		$targetCode = $song['code_minified'] ?? $song['code'] ?? $song['code_formatted'] ?? null;
-		if ($targetCode !== null && $targetCode !== '' && ($fileMin || $fileOrig || $fileForm)) {
+		// Generate a cropped preview in all.gz for large songs
+		// If the song is large or vertical, or has only formatted code (which is always on disk)
+		if ($fileMin || $fileOrig || $fileForm) {
+			$targetCode = $song['code_minified'] ?? $song['code'] ?? $song['code_formatted'] ?? '';
 			// Checking the row count limit
 			$lines = explode("\n", $targetCode);
 			if (count($lines) > $rowLimit) {
@@ -1029,8 +1033,8 @@ function databaseToFiles(): string {
 				$previewText = $targetCode;
 			}
 
-			// Check the character length limit (in case the strings are long).
-			if (mb_strlen($previewText) > $previewLimit) {
+			// Check the character length limit (in case the strings are long)
+			if (strlen($previewText) > $previewLimit) {
 				$songData['codeText'] = mb_substr($previewText, 0, $previewLimit);
 			} else {
 				$songData['codeText'] = $previewText;
@@ -1038,7 +1042,7 @@ function databaseToFiles(): string {
 			$songData['isTruncated'] = 1;
 		}
 
-		// Construct the rest JSON structure for the song
+		// Construct the rest JSON metadata for the song
 		$author = isset($song['author']) && $song['author'] !== '' ? (string)$song['author'] : null;
 		if ($author !== null) {
 			$songData['author'] = $author;
@@ -1084,8 +1088,15 @@ function databaseToFiles(): string {
 		if (isset($song['date_edited'])) {
 			$songData['date_edited'] = $song['date_edited'];
 		}
+
+		// Save the song to cache
 		$songsByHash[$hash] = $songData;
+		// Write a flat structure here, solely for passing to the makeLibraryFile function
+		$songsMetadataList[] = ['hash' => $hash, 'author' => $author];
+		// Destroy the current iteration variable so that PHP frees up the memory immediately
+		unset($song);
 	}
+	unset($remixesBySong); // Memory is no longer needed
 
 	// Cleanup: remove from the disk only those files that are no longer in the database
 	foreach ($paths as $path) {
@@ -1097,6 +1108,7 @@ function databaseToFiles(): string {
 			}
 		}
 	}
+	unset($activeHashes);
 
 	// Create a folder for library files
 	if (!is_dir($pathLibrary)) {
@@ -1106,7 +1118,7 @@ function databaseToFiles(): string {
 
 	// Generate a single library file with all songs sorted by authors
 	$fileName = $pathLibrary . 'all.gz';
-	makeLibraryFile($fileName, $songsByHash, $songs);
+	makeLibraryFile($fileName, $songsByHash, $songsMetadataList);
 
 	return manageInfo($message . '"' . $fileName . '" file created.<br>Success!');
 }
