@@ -239,7 +239,11 @@
 				</label>
 			</article>
 			<article id="songs" class="article-container entry">
-				<h2 class="article-title">Songs filters</h2>
+				<h2 class="article-title">Songs library</h2>
+				<label id="library-search-container">
+					<span class="library-search-icon">⌕</span>
+					<input type="text" id="library-search-input" placeholder="Type to search by name, author or description...">
+				</label>
 				<table id="filters-table" style="border-collapse: collapse;"><tbody>
 					<tr>
 						<td>Sorting:</td>
@@ -278,11 +282,12 @@
 						</td>
 					</tr>
 				</tbody></table>
-				<div class="settings-block">
-					<button id="library-show-songs" class="control-button" title="Apply filters">Show songs</button>
-					<div id="library-counter"></div>
-				</div>
 			</article>
+			<button id="library-show-songs" class="control-button" title="Apply filters">Show songs</button>
+			<div id="library-counter" class="entry" style="display: none;"></div>
+			<div id="library-expand-container" style="display: none;">
+				<label><input type="checkbox" id="library-expand-checkbox"> Expand all</label>
+			</div>
 			<div id="library-songs"></div>
 		</section>
 	</main>

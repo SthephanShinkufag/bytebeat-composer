@@ -247,7 +247,9 @@ export class Library {
 			sorting: getSelectedText('filter-sorting'),
 			size: getSelectedText('filter-size'),
 			mode: getSelectedText('filter-mode'),
-			tags: selectedTags
+			tags: selectedTags,
+			// Get the search text
+			query: document.getElementById('library-search-input')?.value.toLowerCase().trim() || ''
 		};
 	}
 
@@ -339,6 +341,11 @@ export class Library {
 			parentElem.querySelectorAll('.filter-button').forEach(el =>
 				el.classList.toggle('filter-selected', el === buttonElem));
 		}
+
+		// If the library has already been downloaded and the cache is ready, update the list instantly
+		if(this.songs) {
+			this.onclickShowSongsButton();
+		}
 	}
 
 	// Show the remix source song when the remix info button is clicked
@@ -418,7 +425,7 @@ export class Library {
 
 			// Loading error check
 			if(status !== 200 && status !== 304) {
-				containerElem.innerHTML = `<div class="loading-error">Unable to load the library: ${
+				containerElem.innerHTML = `<div class="loading-error entry">Unable to load the library: ${
 					status } ${ response.statusText }</div>`;
 				waitElem.remove();
 				return;
@@ -429,6 +436,12 @@ export class Library {
 			// Cache the songs for future use
 			this.cacheSongs(libArr);
 			waitElem.remove();
+		}
+
+		// Hide the initial load button
+		const actionButton = document.getElementById('library-show-songs');
+		if(actionButton) {
+			actionButton.style.display = 'none';
 		}
 
 		// Cancellation check: In case the user clicked right before caching finished
@@ -483,20 +496,46 @@ export class Library {
 			});
 		}
 
+		// Filtering by search query
+		const fQuery = filters.query;
+		if(fQuery !== '') {
+			filteredSongs = filteredSongs.filter(song => {
+				// Convert all fields to lowercase for case-insensitive searching
+				const name = (song.name || '').toLowerCase();
+				const author = (song.author || '').toLowerCase();
+				const description = (song.description || '').toLowerCase();
+
+				// Check if there is a match in at least one of the fields
+				return name.includes(fQuery) || author.includes(fQuery) || description.includes(fQuery);
+			});
+		}
+
 		// Display the number of found songs in the counter
-		const count = filteredSongs.length;
+		const songsCount = filteredSongs.length;
 		const counterElem = document.getElementById('library-counter');
 		if(counterElem) {
-			counterElem.textContent = `Found: ${ count } song${ count !== 1 ? 's' : '' }`;
+			// Collect all unique authors from the filtered songs
+			const uniqueAuthors = new Set();
+			for(let i = 0; i < songsCount; ++i) {
+				// If there is no author, we’ll record 'Unknown' so that it also counts as one unique block
+				uniqueAuthors.add(filteredSongs[i].author || 'Unknown');
+			}
+			const authorsCount = uniqueAuthors.size;
+			const songsText = `${ songsCount } song${ songsCount !== 1 ? 's' : '' }`;
+			const authorsText = `${ authorsCount } author${ authorsCount !== 1 ? 's' : '' }`;
+			counterElem.textContent = `Found: ${ songsText } by ${ authorsText }`;
+			counterElem.style.display = '';
+		}
+
+		// Display/hide the "Expand all songs" checkbox
+		const expandElem = document.getElementById('library-expand-container');
+		if(expandElem) {
+			expandElem.style.display = !songsCount || isSortByDate ? 'none' : '';
+			expandElem.toggleAttribute('checked', this.showAllSongs);
 		}
 
 		// Clear the container before rendering
 		containerElem.innerHTML = '';
-
-		// Display the "Expand all songs" checkbox
-		containerElem.insertAdjacentHTML('beforeend',
-			count && !isSortByDate ? `<label><input type="checkbox" id="library-show-all"${
-				this.showAllSongs ? ' checked' : '' }> Expand all songs</label>` : '');
 
 		// Sorting
 		if(isSortByDate) {
@@ -561,9 +600,9 @@ export class Library {
 	}
 
 	// Toggle the "open" attribute of all songs blocks when the "Expand all songs" checkbox is clicked
-	toggleAll(elem, isChecked) {
+	toggleExpandSongs(isChecked) {
 		this.showAllSongs = isChecked;
-		elem.parentNode.parentNode.querySelectorAll('.songs-block').forEach(
+		document.querySelectorAll('#library-songs > .songs-block').forEach(
 			node => node.toggleAttribute('open', isChecked));
 	}
 }

@@ -65,8 +65,8 @@ globalThis.bytebeat = new class {
 			case 'control-samplerate':
 			case 'control-samplerate-select': this.setSampleRate(+elem.value); break;
 			case 'control-theme-style': this.setThemeStyle(elem.value); break;
-			case 'library-show-all':
-				library.toggleAll(elem, elem.checked);
+			case 'library-expand-checkbox':
+				library.toggleExpandSongs(elem.checked);
 				this.saveSettings();
 				break;
 			}
@@ -143,6 +143,7 @@ globalThis.bytebeat = new class {
 			switch(elem.id) {
 			case 'control-counter': this.oninputCounter(event); break;
 			case 'control-volume': this.setVolume(false); break;
+			case 'library-search-input': library.onclickShowSongsButton(); break;
 			}
 			return;
 		case 'keydown':
@@ -223,6 +224,7 @@ globalThis.bytebeat = new class {
 		ui.mainElem.addEventListener('change', this);
 		ui.containerFixed.addEventListener('input', this);
 		ui.containerFixed.addEventListener('keydown', this);
+		ui.containerScroll.addEventListener('input', this);
 		ui.containerScroll.addEventListener('mouseover', this);
 	}
 	async initAudio() {
