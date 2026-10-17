@@ -479,8 +479,13 @@ export class Library {
 			});
 		}
 
-		// Filter by tags and independent stereo toggle
+		// Filter by tags and independent stereo and drawing toggles
 		let fTags = filters.tags;
+		if(fTags.includes('drawing')) {
+			filteredSongs = filteredSongs.filter(song => !!song.drawing);
+			// Exclude "drawing" from the array of text tags to avoid searching for it in the song.tags array
+			fTags = fTags.filter(t => t !== 'drawing');
+		}
 		if(fTags.includes('stereo')) {
 			filteredSongs = filteredSongs.filter(song => song.stereo === 1);
 			// Exclude "stereo" from the array of text tags to avoid searching for it in the song.tags array
