@@ -73,6 +73,7 @@ Some songs in the library have visible tags:
 * **drawing** if the code does something in the visualiser;
 * **c** for C-compatible songs;
 * **console** for when a song uses throw to display arbitrary text;
+* **port** for songs ported to bytebeat from other platform formats;
 * **slow** for songs that are very demanding on performance;
 * **sample** for songs that use encoded audio samples (by PCM, for example).
 
@@ -222,6 +223,7 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2026-10-18:** **Compact Code Previews:** All song entries now contain short previews of the code. It's automatically cut off at 512 bytes or 8 lines so giant code blocks don't stretch or break the page.
 * **2026-10-18:** **SSD Disk Protection:** During database exports, file contents are audited via hashes. Unchanged data blocks bypass write filters, reducing wear on server SSD modules.
 * **2026-10-18:** **Security Hardening:** Secured all administrative panel actions with native SQL prepared statements (PDO) to block injection exploits, combined with rigid CSRF validation to stop cross-site scripting attacks.
+* **2026-10-18:** Added the **`#port` tag** for songs ported to bytebeat from other platform formats.
 
 ## License
 

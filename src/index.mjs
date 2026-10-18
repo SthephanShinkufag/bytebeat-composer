@@ -174,6 +174,9 @@ globalThis.bytebeat = new class {
 			case classList.contains('tag-drawing'):
 				elem.title = 'Generates art in the visualiser\'s scope';
 				break;
+			case classList.contains('tag-port'):
+				elem.title = 'Ported to bytebeat from other platform formats.';
+				break;
 			case classList.contains('tag-sample'):
 				elem.title = 'Uses encoded audio samples (PCM, for example)';
 				break;

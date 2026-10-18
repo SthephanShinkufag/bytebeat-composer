@@ -146,6 +146,9 @@ export class Library {
 				case 'console':
 					tagsArr.push('<span class="tag-console">console</span>');
 					continue;
+				case 'port':
+					tagsArr.push('<span class="tag-port">port</span>');
+					continue;
 				case 'sample':
 					tagsArr.push('<span class="tag-sample">sample</span>');
 					continue;

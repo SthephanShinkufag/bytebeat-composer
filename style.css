@@ -1298,6 +1298,10 @@ button[name="close"] {
 	background-color: #8f2fdd;
 }
 
+.tag-port {
+	background-color: #1fa246
+}
+
 .tag-sample {
 	background-color: #0d684f;
 }
