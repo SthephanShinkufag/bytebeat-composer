@@ -331,12 +331,6 @@ export class Library {
 			waitElem.remove();
 		}
 
-		// Hide the initial load button
-		const actionButton = document.getElementById('library-show-songs');
-		if(actionButton) {
-			actionButton.style.display = 'none';
-		}
-
 		// Cancellation check: In case the user clicked right before caching finished
 		if(renderId !== this.currentRenderId) {
 			return;
@@ -423,7 +417,7 @@ export class Library {
 		const expandElem = document.getElementById('library-expand-container');
 		if(expandElem) {
 			expandElem.style.display = !songsCount || isSortByDate ? 'none' : '';
-			expandElem.toggleAttribute('checked', this.showAllSongs);
+			document.getElementById('library-expand-checkbox').toggleAttribute('checked', this.showAllSongs);
 		}
 
 		// Sorting

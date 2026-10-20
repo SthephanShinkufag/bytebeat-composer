@@ -83,6 +83,12 @@ globalThis.bytebeat = new class {
 				}
 			}
 			switch(elem.id) {
+			case 'scroll-btn-down':
+				ui.containerScroll.scrollTo({ top: ui.containerScroll.scrollHeight, behavior: 'smooth' });
+				break;
+			case 'scroll-btn-up':
+				ui.containerScroll.scrollTo({ top: 0, behavior: 'smooth' });
+				break;
 			case 'canvas-container':
 			case 'canvas-main':
 			case 'canvas-play':
@@ -102,7 +108,6 @@ globalThis.bytebeat = new class {
 			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
-			case 'library-show-songs': library.showSongs(); break;
 			default:
 				switch(true) {
 				case classList.contains('article-button'):
@@ -198,6 +203,14 @@ globalThis.bytebeat = new class {
 				break;
 			}
 			return;
+		case 'scroll': {
+			const { clientHeight, scrollHeight, scrollTop } = ui.containerScroll;
+			// Show "Back to top" if scrolled more than 100px from the top
+			ui.containerScrollUp.classList.toggle('hidden', scrollTop < 5);
+			// Hide "To the end" if the bottom limit has already been reached (with a 5px margin)
+			ui.containerScrollDown.classList.toggle('hidden', scrollTop >= scrollHeight - clientHeight - 5);
+			return;
+		}
 		}
 	}
 	async init() {
@@ -206,7 +219,7 @@ globalThis.bytebeat = new class {
 			scope.drawMode = this.settings.drawMode;
 			scope.drawScale = this.settings.drawScale;
 			scope.setFFTSize(+this.settings.fftSize || 10);
-			library.filters = this.settings.libraryFilters;
+			library.filters = this.settings.libraryFilters || this.defaultSettings.libraryFilters;
 			library.showAllSongs = this.settings.showAllSongs;
 		} catch(err) {
 			this.saveSettings();
@@ -220,6 +233,7 @@ globalThis.bytebeat = new class {
 		this.initAfterDom();
 	}
 	initAfterDom() {
+		library.showSongs();
 		editor.init();
 		ui.initElements();
 		scope.initElements();
@@ -243,6 +257,7 @@ globalThis.bytebeat = new class {
 		ui.containerFixed.addEventListener('keydown', this);
 		ui.containerScroll.addEventListener('input', this);
 		ui.containerScroll.addEventListener('mouseover', this);
+		ui.containerScroll.addEventListener('scroll', this);
 	}
 	async initAudio() {
 		this.audioCtx = new AudioContext({ latencyHint: 'balanced', sampleRate: 48000 });

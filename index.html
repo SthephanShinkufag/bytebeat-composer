@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026101804">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026101804">
-	<script type="module" async src="./build/index.js?version=2026101804"></script>
-	<script src="./build/theme.js?version=2026101804"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026102001">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026102001">
+	<script type="module" async src="./build/index.js?version=2026102001"></script>
+	<script src="./build/theme.js?version=2026102001"></script>
 </head>
 <body>
 	<main id="content">
@@ -122,176 +122,183 @@
 				</div>
 			</div>
 		</section>
-		<section id="container-scroll">
-			<div id="article-navigation">
-				<button class="article-button control-button article-button-selected" data-target="songs" title="Songs library">Songs</button>
-				<button class="article-button control-button" data-target="info" title="About bytebeat">Info</button>
-				<button class="article-button control-button" data-target="settings" title="Player settings">Settings</button>
-				<a class="control-button" href="/btb/" title="Bytebeat discussion threads" target="_blank">Discussion</a>
-				<a class="control-button" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">Source</a>
-				<a href="bytebeat.php?manage" class="control-button" title="Manage songs library" target="_blank">Manage</a>
-			</div>
-			<article id="info" class="article-container entry hidden">
-				<h2 class="article-title">About bytebeat</h2>
-				<section>
-					<p>Bytebeat music was invented in September 2011.</p>
-					<p>
-						Classic simple bytebeats are generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
-						It's simply an expression that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
-						If you put that expression into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
-						Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.
-					</p>
-					<p>Initially, expressions were typically written in C or were C-compatible, written in JavaScript. But bytebeat music has evolved over the years, and modern songs with complex JavaScript code are now popular. You'll find examples in the library on this site.</p>
-				</section>
-				<section>
-					<p><a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a></p>
-					<p>
-						Original blog posts and videos from Viznut:
+		<div id="container-scroll-wrapper">
+			<button id="scroll-btn-up" class="scroll-btn hidden" aria-label="Back to top">
+				<svg><use href="#symbol-arrow-up"></use></svg>
+			</button>
+			<button id="scroll-btn-down" class="scroll-btn" aria-label="To the end">
+				<svg><use href="#symbol-arrow-down"></use></svg>
+			</button>
+			<section id="container-scroll">
+				<div id="article-navigation">
+					<button class="article-button control-button article-button-selected" data-target="songs" title="Songs library">Songs</button>
+					<button class="article-button control-button" data-target="info" title="About bytebeat">Info</button>
+					<button class="article-button control-button" data-target="settings" title="Player settings">Settings</button>
+					<a class="control-button" href="/btb/" title="Bytebeat discussion threads" target="_blank">Discussion</a>
+					<a class="control-button" href="https://github.com/SthephanShinkufag/bytebeat-composer" title="Github repo" target="_blank">Source</a>
+					<a href="bytebeat.php?manage" class="control-button" title="Manage songs library" target="_blank">Manage</a>
+				</div>
+				<article id="info" class="article-container entry hidden">
+					<h2 class="article-title">About bytebeat</h2>
+					<section>
+						<p>Bytebeat music was invented in September 2011.</p>
+						<p>
+							Classic simple bytebeats are generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
+							It's simply an expression that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
+							If you put that expression into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
+							Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.
+						</p>
+						<p>Initially, expressions were typically written in C or were C-compatible, written in JavaScript. But bytebeat music has evolved over the years, and modern songs with complex JavaScript code are now popular. You'll find examples in the library on this site.</p>
+					</section>
+					<section>
+						<p><a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a></p>
+						<p>
+							Original blog posts and videos from Viznut:
+							<ul>
+								<li><a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a></li>
+								<li><a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a></li>
+								<li><a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a></li>
+								<li><a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a></li>
+								<li><a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a></li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<p>This website is a live editing bytebeats player, it has a collection of bytebeat music. Online JavaScript players:</p>
 						<ul>
-							<li><a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a></li>
-							<li><a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a></li>
-							<li><a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a></li>
-							<li><a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a></li>
-							<li><a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a></li>
+							<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
+							<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
+							<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
+							<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
 						</ul>
-					</p>
-				</section>
-				<section>
-					<p>This website is a live editing bytebeats player, it has a collection of bytebeat music. Online JavaScript players:</p>
-					<ul>
-						<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
-						<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
-						<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
-						<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
-					</ul>
-				</section>
-				<section>
-					<p>Playback modes are:</p>
-					<ul>
-						<li><b>Bytebeat</b> &mdash; output is an unsigned 8bit integer from 0 to 255, values outside this are wrapped, and non-integers are floored.</li>
-						<li><b>Signed Bytebeat</b> &mdash; output is a signed 8bit integer from -127 to 128, values outside this are wrapped, and non-integers are floored.</li>
-						<li><b>Floatbeat</b> &mdash; output is -1.0 to 1.0. Allows higher quality audio since it is not limited to 255 values, unlike the previous ones.</li>
-						<li><b>Funcbeat</b> &mdash; the code is run only once and is not an expression, it expects the function to return. The returned function is ran with time in seconds, output is -1.0 to 1.0.
-					</ul>
-				</section>
-				<section>
-					<p>This project is made by SthephanShi, and is a fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer by Paul Hayes</a>.</p>
-				</section>
-			</article>
-			<article id="settings" class="article-container entry hidden">
-				<h2 class="article-title">Settings</h2>
-				<label class="settings-block">
-					<select id="control-theme-style" class="control-select" title="Player theme style">
-						<option value="Default Dark" selected>Default Dark</option>
-						<option value="Blue Dark">Blue Dark</option>
-						<option value="Cake Dark">Cake Dark</option>
-						<option value="Dusk Dark">Dusk Dark</option>
-						<option value="Green Dark">Green Dark</option>
-						<option value="Orange Dark">Orange Dark</option>
-						<option value="Purple Dark">Purple Dark</option>
-						<option value="Teal Dark">Teal Dark</option>
-						<option disabled>──────────</option>
-						<option value="Default Light">Default Light</option>
-						<option value="Blue Light">Blue Light</option>
-						<option value="Green Light">Green Light</option>
-					</select>
-					Theme style
-				</label>
-				<label class="settings-block">
-					<select id="control-code-style" class="control-select" title="Code highlight style">
-						<option value="Atom Dark" selected>Atom Dark</option>
-						<option value="Github Dark">Github Dark</option>
-						<option value="Github v2 Dark">Github v2 Dark</option>
-						<option value="Monokai">Monokai</option>
-						<option value="One Dark">One Dark</option>
-						<option value="Retro Green">Retro Green</option>
-						<option value="VSCode Dark">VSCode Dark</option>
-						<option disabled>──────────</option>
-						<option value="Atom Light">Atom Light</option>
-						<option value="Github Light">Github Light</option>
-						<option value="Github v2 Light">Github v2 Light</option>
-						<option value="One Light">One Light</option>
-						<option value="VSCode Light">VSCode Light</option>
-					</select>
-					Code highlight style
-				</label>
-				<label class="settings-block">
-					<input type="color" id="control-color-timecursor" class="control-color" title="Click to pick the time cursor color">
-					Time cursor color in the scope
-				</label>
-				<label class="settings-block">
-					<input type="color" id="control-color-waveform" class="control-color" title="Click to pick the Waveform color">
-					Waveform color in the scope.&nbsp;
-					<span id="control-color-waveform-info"></span>
-				</label>
-				<label class="settings-block">
-					<input type="color" id="control-color-diagram" class="control-color" title="Click to pick the Diagram color">
-					Diagram color in the scope.&nbsp;
-					<span id="control-color-diagram-info"></span>
-				</label>
-				<label class="settings-block">
-					<select id="control-color-stereo" class="control-select" title="Color channels for waveform and diagram">
-						<option value="0">Left=R, Right=G+B</option>
-						<option value="1" selected>Left=G, Right=R+B</option>
-						<option value="2">Left=B, Right=R+G</option>
-					</select>
-					Colors for stereo channels&nbsp;
-				</label>
-			</article>
-			<article id="songs" class="article-container entry">
-				<h2 class="article-title">Songs library</h2>
-				<label id="library-search-container">
-					<span class="library-search-icon">⌕</span>
-					<input type="text" id="library-search-input" placeholder="Type to search by name, author or description...">
-				</label>
-				<table id="filters-table" style="border-collapse: collapse;"><tbody>
-					<tr>
-						<td>Sorting:</td>
-						<td class="filter-container" data-type="sorting">
-							<button class="filter-button" title="Sort by author">author</button>
-							<button class="filter-button" title="Sort by date">date</button>
-						</td>
-					</tr>
-					<tr>
-						<td>Size:</td>
-						<td class="filter-container" data-type="size">
-							<button class="filter-button" title="All sizes">all</button>
-							<button class="filter-button" title="Less than 256 bytes">&lt;256</button>
-							<button class="filter-button" title="From 256 bytes to 1 KB">&lt;1k</button>
-							<button class="filter-button" title="More than 1 KB">big</button>
-						</td>
-					</tr>
-					<tr>
-						<td>Mode:</td>
-						<td class="filter-container" data-type="mode">
-							<button class="filter-button" title="All modes">all</button>
-							<button class="filter-button" title="Funcbeat (unsigned 8-bit integer)">Bytebeat</button>
-							<button class="filter-button" title="Signed Bytebeat (signed 8-bit integer)">Signed Bytebeat</button>
-							<button class="filter-button" title="Floatbeat (floating-point)">Floatbeat</button>
-							<button class="filter-button" title="Funcbeat (expects a function to be returned)">Funcbeat</button>
-						</td>
-					</tr>
-					<tr>
-						<td>Tags:</td>
-						<td class="filter-container" data-type="tags">
-							<button class="filter-button" title="C-compatible 8-bit, one variable (t)">c</button>
-							<button class="filter-button" title="Outputs messages in the error console">console</button>
-							<button class="filter-button" title="Creates art on a visualizer scope">drawing</button>
-							<button class="filter-button" title="Uses encoded audio samples">sample</button>
-							<button class="filter-button" title="Ported to bytebeat from other platform formats">port</button>
-							<button class="filter-button" title="Has performance issues">slow</button>
-							<button class="filter-button" title="Stereo song">stereo</button>
-						</td>
-					</tr>
-				</tbody></table>
-			</article>
-			<button id="library-show-songs" class="control-button" title="Apply filters">Show songs</button>
-			<div id="library-counter" class="entry" style="display: none;"></div>
-			<div id="library-expand-container" style="display: none;">
-				<label><input type="checkbox" id="library-expand-checkbox"> Expand all</label>
-			</div>
-			<div id="library-songs"></div>
-		</section>
+					</section>
+					<section>
+						<p>Playback modes are:</p>
+						<ul>
+							<li><b>Bytebeat</b> &mdash; output is an unsigned 8bit integer from 0 to 255, values outside this are wrapped, and non-integers are floored.</li>
+							<li><b>Signed Bytebeat</b> &mdash; output is a signed 8bit integer from -127 to 128, values outside this are wrapped, and non-integers are floored.</li>
+							<li><b>Floatbeat</b> &mdash; output is -1.0 to 1.0. Allows higher quality audio since it is not limited to 255 values, unlike the previous ones.</li>
+							<li><b>Funcbeat</b> &mdash; the code is run only once and is not an expression, it expects the function to return. The returned function is ran with time in seconds, output is -1.0 to 1.0.
+						</ul>
+					</section>
+					<section>
+						<p>This project is made by SthephanShi, and is a fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer by Paul Hayes</a>.</p>
+					</section>
+				</article>
+				<article id="settings" class="article-container entry hidden">
+					<h2 class="article-title">Settings</h2>
+					<label class="settings-block">
+						<select id="control-theme-style" class="control-select" title="Player theme style">
+							<option value="Default Dark" selected>Default Dark</option>
+							<option value="Blue Dark">Blue Dark</option>
+							<option value="Cake Dark">Cake Dark</option>
+							<option value="Dusk Dark">Dusk Dark</option>
+							<option value="Green Dark">Green Dark</option>
+							<option value="Orange Dark">Orange Dark</option>
+							<option value="Purple Dark">Purple Dark</option>
+							<option value="Teal Dark">Teal Dark</option>
+							<option disabled>──────────</option>
+							<option value="Default Light">Default Light</option>
+							<option value="Blue Light">Blue Light</option>
+							<option value="Green Light">Green Light</option>
+						</select>
+						Theme style
+					</label>
+					<label class="settings-block">
+						<select id="control-code-style" class="control-select" title="Code highlight style">
+							<option value="Atom Dark" selected>Atom Dark</option>
+							<option value="Github Dark">Github Dark</option>
+							<option value="Github v2 Dark">Github v2 Dark</option>
+							<option value="Monokai">Monokai</option>
+							<option value="One Dark">One Dark</option>
+							<option value="Retro Green">Retro Green</option>
+							<option value="VSCode Dark">VSCode Dark</option>
+							<option disabled>──────────</option>
+							<option value="Atom Light">Atom Light</option>
+							<option value="Github Light">Github Light</option>
+							<option value="Github v2 Light">Github v2 Light</option>
+							<option value="One Light">One Light</option>
+							<option value="VSCode Light">VSCode Light</option>
+						</select>
+						Code highlight style
+					</label>
+					<label class="settings-block">
+						<input type="color" id="control-color-timecursor" class="control-color" title="Click to pick the time cursor color">
+						Time cursor color in the scope
+					</label>
+					<label class="settings-block">
+						<input type="color" id="control-color-waveform" class="control-color" title="Click to pick the Waveform color">
+						Waveform color in the scope.&nbsp;
+						<span id="control-color-waveform-info"></span>
+					</label>
+					<label class="settings-block">
+						<input type="color" id="control-color-diagram" class="control-color" title="Click to pick the Diagram color">
+						Diagram color in the scope.&nbsp;
+						<span id="control-color-diagram-info"></span>
+					</label>
+					<label class="settings-block">
+						<select id="control-color-stereo" class="control-select" title="Color channels for waveform and diagram">
+							<option value="0">Left=R, Right=G+B</option>
+							<option value="1" selected>Left=G, Right=R+B</option>
+							<option value="2">Left=B, Right=R+G</option>
+						</select>
+						Colors for stereo channels&nbsp;
+					</label>
+				</article>
+				<article id="songs" class="article-container entry">
+					<h2 class="article-title">Songs library</h2>
+					<label id="library-search-container">
+						<span class="library-search-icon">⌕</span>
+						<input type="text" id="library-search-input" placeholder="Type to search by name, author or description...">
+					</label>
+					<table id="filters-table" style="border-collapse: collapse;"><tbody>
+						<tr>
+							<td>Sorting:</td>
+							<td class="filter-container" data-type="sorting">
+								<button class="filter-button" title="Sort by author">author</button>
+								<button class="filter-button" title="Sort by date">date</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Size:</td>
+							<td class="filter-container" data-type="size">
+								<button class="filter-button" title="All sizes">all</button>
+								<button class="filter-button" title="Less than 256 bytes">&lt;256</button>
+								<button class="filter-button" title="From 256 bytes to 1 KB">&lt;1k</button>
+								<button class="filter-button" title="More than 1 KB">big</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Mode:</td>
+							<td class="filter-container" data-type="mode">
+								<button class="filter-button" title="All modes">all</button>
+								<button class="filter-button" title="Funcbeat (unsigned 8-bit integer)">Bytebeat</button>
+								<button class="filter-button" title="Signed Bytebeat (signed 8-bit integer)">Signed Bytebeat</button>
+								<button class="filter-button" title="Floatbeat (floating-point)">Floatbeat</button>
+								<button class="filter-button" title="Funcbeat (expects a function to be returned)">Funcbeat</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Tags:</td>
+							<td class="filter-container" data-type="tags">
+								<button class="filter-button" title="C-compatible 8-bit, one variable (t)">c</button>
+								<button class="filter-button" title="Outputs messages in the error console">console</button>
+								<button class="filter-button" title="Creates art on a visualizer scope">drawing</button>
+								<button class="filter-button" title="Uses encoded audio samples">sample</button>
+								<button class="filter-button" title="Ported to bytebeat from other platform formats">port</button>
+								<button class="filter-button" title="Has performance issues">slow</button>
+								<button class="filter-button" title="Stereo song">stereo</button>
+							</td>
+						</tr>
+					</tbody></table>
+				</article>
+				<div id="library-counter" class="entry" style="display: none;"></div>
+				<div id="library-expand-container" style="display: none;">
+					<label><input type="checkbox" id="library-expand-checkbox"> Expand all</label>
+				</div>
+				<div id="library-songs"></div>
+			</section>
+		</div>
 	</main>
 
 	<!-- SVG BUTTONS -->
@@ -336,6 +343,12 @@
 				<circle fill="#9F9C93" cx="3.75" cy="3.75" r="2" />
 				<circle fill="#B9B6AE" cx="3.75" cy="12.25" r="2" />
 				<circle fill="#868379" cx="12.25" cy="3.75" r="2" />
+			</symbol>
+			<symbol viewBox="0 0 32 32" id="symbol-arrow-up">
+				<path d="M16 4 L28 16 L22 16 L22 28 L10 28 L10 16 L4 16 Z" fill="currentColor"/>
+			</symbol>
+			<symbol viewBox="0 0 32 32" id="symbol-arrow-down">
+				<path d="M16 28 L4 16 L10 16 L10 4 L22 4 L22 16 L28 16 Z" fill="currentColor"/>
 			</symbol>
 		</svg>
 	</div>

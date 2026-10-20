@@ -11,10 +11,10 @@ A highly optimized, live-editing algorithmic music generator and player, featuri
 
 ### 🎹 Supported Playback modes
 
-* **Bytebeat (uint8):** Outputs value as an *unsigned 8-bit integer* (0 to 255). Values outside this range wrap around, decimals are floored.
-* **Signed Bytebeat (int8):** Outputs as a *signed 8-bit integer* (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).
-* **Floatbeat (float):** Uses *floating-point values* from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.
-* **Funcbeat (func):** *Statement-based tracking*. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.
+* **Bytebeat:** Outputs value as an *unsigned 8-bit integer (uint8)* (0 to 255). Values outside this range wrap around, decimals are floored.
+* **Signed Bytebeat:** Outputs as a *signed 8-bit integer (int8)* (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).
+* **Floatbeat:** Uses *floating-point values (float)* from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.
+* **Funcbeat:** *Statement-based tracking*. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.
 * **Stereo sound:** Return a two-element array `[left, right]` to separate channels. For example, `[t*(t>>10&42), t*(t>>11&42)]`
 
 ### 〰️ Visualizer Scope modes
@@ -60,7 +60,7 @@ A highly optimized, live-editing algorithmic music generator and player, featuri
 ### 🎼 Song Library & Discovery
 
 The composer includes a structured song catalog compiled from communities like Battle of the Bits and Reddit:
-* **Library filters:** Quickly filter songs by size limits (`all`, `<256`, `<1k`, `big`), by audio types (`all`, `uint8`, `int8`, `float`, `func`), by tags, and to sort songs by author or by date.
+* **Library filters:** Quickly filter songs by size limits (`all`, `<256`, `<1k`, `big`), by audio types (`all`, `Bytebeat`, `Signed Bytebeat`, `Floatbeat`, `Funcbeat`), by tags, and to sort songs by author or by date.
 * **Library search:** Type in the search field to find songs by name, author or description.
 * **Remix Tree Navigation:** If a song is a remix of another song, click the `▷` arrow button to load parent metadata right below it. This lets you browse nested remix histories without losing your place.
 * **Code Format Toggles:** Each song entry can contain code execution buttons: `min` (minified), `orig` (original), and `format` (pretty-printed). Switch between them instantly to load necessary code.
@@ -215,7 +215,7 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2025-12-01:** Deployed a **FFT Frequency Spectrum Display Mode**, with a logarithmic grid mapped in Hertz (Hz) and Decibels (dB) to analyze sound output scientifically.
 * **2025-12-23:** Introduced a package of **Light Themes** (`Default Light`, `Blue Light`, `Green Light`) and 12 **Syntax Highlighting Styles**, including `Atom Dark/Light`, `Github Dark/Light`, `Github v2 Dark/Light`, `Monokai`, `One Dark/Light`, `Retro Green`, `VSCode Dark/Light`.
 * **2025-12-23:** **Improvement for code higlighting:** it now separately detects function calls, bolds keywords, and italicizes comments or parameters.
-* **2026-10-18:** Introduced **Library Filters** system. All old library sections are removed. Use filter buttons to filter songs by their size limits (`all`, `<256`, `<1k`, `big`), audio types (`all`, `uint8`, `int8`, `float`, `func`) or tags.
+* **2026-10-18:** Introduced **Library Filters** system. All old library sections are removed. Use filter buttons to filter songs by their size limits (`all`, `<256`, `<1k`, `big`), audio types (`all`, `Bytebeat`, `Signed Bytebeat`, `Floatbeat`, `Funcbeat`) or tags.
 * **2026-10-18:** Added **Library Text Search**. Type in the search field to find songs by Name, Author or Description.
 * **2026-10-18:** A buttons to **sort songs by author or by date** has also been added to the filters. The order of songs has also been changed, **new songs now appear at the top of the list**.
 * **2026-10-18:** **Smooth list scrolling (Sliced Rendering):** When opening massive songs lists with thousands of items, the app now loads elements using `requestAnimationFrame`. This keeps scrolling fluid and eliminates interface lag.
@@ -224,6 +224,9 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2026-10-18:** **SSD Disk Protection:** During database exports, file contents are audited via hashes. Unchanged data blocks bypass write filters, reducing wear on server SSD modules.
 * **2026-10-18:** **Security Hardening:** Secured all administrative panel actions with native SQL prepared statements (PDO) to block injection exploits, combined with rigid CSRF validation to stop cross-site scripting attacks.
 * **2026-10-18:** Added the **`#port` tag** for songs ported to bytebeat from other platform formats.
+* **2026-10-20** The state of the **selected filters is now saved**.
+* **2026-10-20** **The library now loads automatically** when the page loads.
+* **2026-10-20** **Scroll-up and scroll-down buttons** have been added.
 
 ## License
 

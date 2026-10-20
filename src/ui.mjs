@@ -68,6 +68,8 @@ export class UI {
 	initElements() {
 		this.containerFixed = document.getElementById('container-fixed');
 		this.containerScroll = document.getElementById('container-scroll');
+		this.containerScrollUp = document.getElementById('scroll-btn-up');
+		this.containerScrollDown = document.getElementById('scroll-btn-down');
 		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlCodeStyle = document.getElementById('control-code-style');
 		this.controlColorDiagram = document.getElementById('control-color-diagram');
