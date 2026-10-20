@@ -3,21 +3,26 @@ import { formatBytes } from './utils.mjs';
 
 export class Library {
 	constructor() {
-		this.cacheParentElem = null;
-		this.cacheTextElem = null;
 		this.currentRenderId = 0; // ID of the currently active library interface build
+		this.filters = { sorting: 'author', size: 'all', mode: 'all', tags: [], query: '' };
+		this.isAdmin = document.cookie.match(/(?:^|; )bytebeat_access=([^;]*)/)?.[1] || ''; // Admin check
 		this.pathFiles = './data/songs/';
 		this.pathLibrary = './data/library/';
 		this.showAllSongs = false;
 		this.songs = null;
+	}
 
-		// Check for admin login
-		const cookie = {};
-		document.cookie.split(';').forEach(el => {
-			const split = el.split('=');
-			cookie[split[0].trim()] = split.slice(1).join('=');
-		});
-		this.isAdmin = cookie.bytebeat_access;
+	// Escape HTML special characters to prevent XSS attacks
+	get escapeHTML() {
+		const parent = document.createElement('div');
+		const textNode = document.createTextNode('');
+		parent.appendChild(textNode);
+		const value = text => {
+			textNode.nodeValue = text;
+			return parent.innerHTML;
+		};
+		Object.defineProperty(this, 'escapeHTML', { value, configurable: true });
+		return value;
 	}
 
 	// Cache the songs in a Map for quick access by hash
@@ -35,16 +40,8 @@ export class Library {
 		}
 	}
 
-	// Escape HTML special characters to prevent XSS attacks
-	escapeHTML(text) {
-		this.cacheTextElem.nodeValue = text;
-		return this.cacheParentElem.innerHTML;
-	}
-
 	// Generate the HTML for a song entry, including its details and buttons
 	generateEntryHTML(entry, libName) {
-		const isAllLib = libName === 'all';
-
 		// Generate an author block (containing an array of songs)
 		if(entry.songs) {
 			const { author, songs } = entry;
@@ -52,7 +49,7 @@ export class Library {
 			const maxVisible = 10;
 			const needToHide = len - maxVisible;
 			const songsHtmlParts = [];
-			if(!isAllLib && len > maxVisible + 3) {
+			if(libName !== 'all' && len > maxVisible + 3) {
 				// If there are more songs than the maximum, wrap the extra songs in a <details> element
 				for(let i = 0; i < len; ++i) {
 					if(i === maxVisible) {
@@ -96,7 +93,6 @@ export class Library {
 			str += ` <span>by ${ name || !mainUrl ? `<b>${ author }</b>` :
 				`<a href="${ mainUrl }" target="_blank">${ author }</a>` }</span>`;
 		}
-		const songObj = { sampleRate, mode };
 
 		// Add [link, link2, ...] if no name and author
 		if(mainUrl && (isUrlArray || (!name && !author))) {
@@ -115,6 +111,7 @@ export class Library {
 		}
 
 		// Display the date, mode, and sample rate of the song
+		const songObj = { sampleRate, mode };
 		str += ' <span class="code-info">';
 		if(date) {
 			str += date;
@@ -198,27 +195,24 @@ export class Library {
 		}
 
 		// Add buttons for loading the song in different formats (minified, original, formatted)
-		const sData = ` data-songdata='${ JSON.stringify(songObj) }'`;
-		str += '<div class="code-buttons">';
-		// Min button: if the code is short, retrieve from codeMin; otherwise, load from the network
+		str += `<div class="code-buttons" data-hash="${
+			hash }" data-songdata='${ JSON.stringify(songObj) }'>`;
+		// Min button: if the code is short, retrieve from codeMin. Otherwise, load from the network.
 		if(entry.codeMinLen || fileMin) {
-			str += `<button class="code-button code-load" data-type="minified"${ sData }` +
-				`${ fileMin ? ` data-code-file="${ hash }.js"` : '' }` +
-				`${ codeMin ? ' data-has-raw="1"' : '' }>Min <small class="code-size">${
-					formatBytes(entry.codeMinLen) }</small></button>`;
+			str += `<button class="code-button code-load" data-type="minified"${
+				fileMin ? ' data-has-file="1"' : '' }${ codeMin ? ' data-has-local="1"' : '' }>` +
+				`Min <small class="code-size">${ formatBytes(entry.codeMinLen) }</small></button>`;
 		}
 		// Orig button: similarly, if it's a short code, write to data-raw-code
 		if(entry.codeLen || fileOrig) {
-			str += `<button class="code-button code-load" data-type="original"${ sData }` +
-				`${ fileOrig ? ` data-code-file="${ hash }.js"` : '' }` +
-				`${ code ? ' data-has-raw="1"' : '' }>Orig <small class="code-size">${
-					formatBytes(entry.codeLen) }</small></button>`;
+			str += `<button class="code-button code-load" data-type="original"${
+				fileOrig ? ' data-has-file="1"' : '' }${ code ? ' data-has-local="1"' : '' }>` +
+				`Orig <small class="code-size">${ formatBytes(entry.codeLen) }</small></button>`;
 		}
 		// Format button
 		if(entry.fileForm) {
-			str += `<button class="code-button code-load" data-type="formatted"${
-				sData } data-code-file="${ hash }.js">Format <small class="code-size">${
-				formatBytes(entry.codeFormLen) }</small></button>`;
+			str += '<button class="code-button code-load" data-type="formatted" data-has-file="1">' +
+				`Format <small class="code-size">${ formatBytes(entry.codeFormLen) }</small></button>`;
 		}
 		str += '</div>';
 
@@ -234,146 +228,54 @@ export class Library {
 		return `<div class="entry" data-hash="${ hash }">${ str }</div>`;
 	}
 
-	// Collect the text values of buttons that have the .filter-selected class
-	getActiveFilters() {
-		const getSelectedText = id => {
-			const buttonElem = document.querySelector(`#${ id } .filter-selected`);
-			return buttonElem ? buttonElem.textContent.trim() : 'all';
-		};
-
-		// Assemble an array for the tags, since multiple tags can be selected
-		const selectedTags = [];
-		document.querySelectorAll('#filter-tags .filter-selected').forEach(buttonElem =>
-			selectedTags.push(buttonElem.textContent.trim()));
-
-		return {
-			sorting: getSelectedText('filter-sorting'),
-			size: getSelectedText('filter-size'),
-			mode: getSelectedText('filter-mode'),
-			tags: selectedTags,
-			// Get the search text
-			query: document.getElementById('library-search-input')?.value.toLowerCase().trim() || ''
-		};
-	}
-
-	groupSongsByAuthor(songsList) {
-		const groupsMap = new Map();
-		for(let i = 0, len = songsList.length; i < len; ++i) {
-			const song = songsList[i];
-			const authorName = song.author || 'Unknown';
-			if(!groupsMap.has(authorName)) {
-				groupsMap.set(authorName, []);
-			}
-			groupsMap.get(authorName).push(song);
-		}
-		const result = [];
-		groupsMap.forEach((authorSongs, authorName) => {
-			result.push({ author: authorName, songs: authorSongs });
-		});
-		return result;
-	}
-
-	// Activate the newly added code buttons of the current batch (dataset.rawCode insertion)
-	initDatasetForChunk(containerElem) {
-		// Look for buttons with the flag only in the fresh batch of elements
-		containerElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
-			const entryElem = buttonElem.closest('.entry');
-			if(!entryElem) {
-				return;
-			}
-			const { hash } = entryElem.dataset;
-			if(!hash) {
-				return;
-			}
-			const songCached = this.songs.get(hash);
-			if(!songCached) {
-				return;
-			}
-			const { type } = buttonElem.dataset;
-			if(type === 'minified' && songCached.codeMin) {
-				buttonElem.dataset.rawCode = songCached.codeMin;
-			} else if(type === 'original' && songCached.code) {
-				buttonElem.dataset.rawCode = songCached.code;
-			}
-			buttonElem.removeAttribute('data-has-raw');
-		});
-	}
-
-	// Initialize the cache element for escaping HTML
-	initElements() {
-		this.cacheParentElem = document.createElement('div');
-		this.cacheParentElem.appendChild(this.cacheTextElem = document.createTextNode(''));
-	}
-
-	// Show corresponding article when article navigation button is clicked
-	onclickArticleNavButton(buttonElem) {
-		const id = buttonElem.dataset.target;
-		document.querySelectorAll('.article-button').forEach(el =>
-			el.classList.toggle('article-button-selected', el === buttonElem));
-		document.querySelectorAll('.article-container').forEach(el =>
-			el.classList.toggle('hidden', el.id !== id));
-	}
-
 	// Load the code of a song when the min/orig/format button is clicked
 	async onclickCodeLoadButton(buttonElem) {
+		let code;
+		const { hash, songdata } = buttonElem.parentNode.dataset;
+		const { hasFile, hasLocal, type } = buttonElem.dataset;
 		// The full file is located on the server (network download)
-		if(buttonElem.dataset.codeFile) {
+		if(hasFile === '1') {
 			buttonElem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
 			const waitElem = buttonElem.lastChild;
 			// A network request for a specific folder (minified / original / formatted)
-			const response = await fetch(this.pathFiles + buttonElem.dataset.type +
-				'/' + buttonElem.dataset.codeFile);
-			globalThis.bytebeat.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
-				{ code: await response.text() }));
+			const result = await fetch(this.pathFiles + type + '/' + hash + '.js');
+			code = await result.text();
 			waitElem.remove();
 
 		// The code is small and stored directly within the button (instant launch)
-		} else if(buttonElem.dataset.rawCode) {
-			globalThis.bytebeat.loadCode(Object.assign(JSON.parse(buttonElem.dataset.songdata),
-				{ code: buttonElem.dataset.rawCode }));
+		} else if(hasLocal === '1') {
+			// Get the song code from cash
+			const songCached = this.songs.get(hash);
+			code = type === 'minified' ? songCached.codeMin : songCached.code;
 		}
-	}
-
-	// Toggle the selected state of filter buttons when clicked
-	onclickFilterButton(buttonElem) {
-		const parentElem = buttonElem.parentNode;
-		if(parentElem.id === 'filter-tags') {
-			buttonElem.classList.toggle('filter-selected');
-		} else {
-			parentElem.querySelectorAll('.filter-button').forEach(el =>
-				el.classList.toggle('filter-selected', el === buttonElem));
-		}
-
-		// If the library has already been downloaded and the cache is ready, update the list instantly
-		if(this.songs) {
-			this.onclickShowSongsButton();
-		}
+		// Copy the code property into the songdata object then play the song form it
+		globalThis.bytebeat.loadCode(Object.assign(JSON.parse(songdata), { code }));
 	}
 
 	// Show the remix source song when the remix info button is clicked
-	async onclickRemixLoadButton(elem) {
+	async onclickRemixLoadButton(buttonElem) {
 		// If the block is already open, close it (remove the adjacent element containing the song)
-		const parentElem = elem.parentNode;
-		if(parentElem.nextSibling && parentElem.nextSibling.classList.contains('entry')) {
+		const parentElem = buttonElem.parentNode;
+		if(parentElem.nextSibling?.classList.contains('entry')) {
 			parentElem.nextSibling.remove();
 			// Show the short preview
-			elem.parentNode.querySelector('.code-remix-preview').style.display = 'inline';
-			elem.textContent = '▷';
+			parentElem.querySelector('.code-remix-preview').style.display = 'inline';
+			buttonElem.textContent = '▷';
 			return;
 		}
 
 		// If the library has not yet been downloaded to memory, download it once
 		if(!this.songs) {
-			elem.insertAdjacentHTML('beforeend',
+			buttonElem.insertAdjacentHTML('beforeend',
 				'<svg class="loading-wait"><use xlink:href="#symbol-wait"></use></svg>');
 			const response = await fetch(this.pathLibrary + 'all.gz');
 			this.cacheSongs(JSON.parse(ungzip(await response.arrayBuffer(), { to: 'string' })));
-			elem.lastChild.remove();
+			buttonElem.lastChild.remove();
 		}
 
 		// Search for parent song
-		const songHash = elem.dataset.hash;
+		const songHash = buttonElem.dataset.hash;
 		const parentSongData = this.songs.get(songHash);
 		if(!parentSongData) {
 			console.error(`Song with hash ${ songHash } not found in library.`);
@@ -383,27 +285,15 @@ export class Library {
 		// Insert the generated HTML for the parent song immediately below the remix block
 		parentElem.insertAdjacentHTML('afterend', this.generateEntryHTML(parentSongData, 'all'));
 
-		// Code buttons activation (dataset.rawCode insertion)
-		const insertedEntryElem = parentElem.nextElementSibling;
-		if(insertedEntryElem) {
-			// Hide the short preview
-			elem.parentNode.querySelector('.code-remix-preview').style.display = 'none';
-			elem.textContent = '▽';
-			insertedEntryElem.querySelectorAll('.code-load[data-has-raw="1"]').forEach(buttonElem => {
-				// Safely write a raw string without HTML parser distortion
-				if(buttonElem.dataset.type === 'minified' && parentSongData.codeMin) {
-					buttonElem.dataset.rawCode = parentSongData.codeMin;
-				} else if(buttonElem.dataset.type === 'original' && parentSongData.code) {
-					buttonElem.dataset.rawCode = parentSongData.code;
-				}
-				// Removing the temporary marker
-				buttonElem.removeAttribute('data-has-raw');
-			});
+		// Hide the short preview
+		if(parentElem.nextElementSibling) {
+			parentElem.querySelector('.code-remix-preview').style.display = 'none';
+			buttonElem.textContent = '▽';
 		}
 	}
 
-	// Show the library songs when the "Show songs" button is clicked
-	async onclickShowSongsButton() {
+	// Loading and filtering the list of songs
+	async showSongs() {
 		const containerElem = document.getElementById('library-songs');
 
 		// Generating a unique ID for this click
@@ -452,15 +342,11 @@ export class Library {
 			return;
 		}
 
-		// Retrieve the active filters from the page
-		const filters = this.getActiveFilters();
-		const isSortByDate = filters.sorting === 'date';
-
 		// Get the flat array of songs from cache (this.songs)
 		let filteredSongs = Array.from(this.songs.values());
 
 		// Filter by size
-		const fSize = filters.size;
+		const fSize = this.filters.size;
 		if(fSize !== 'all') {
 			filteredSongs = filteredSongs.filter(song => {
 				const len = song.codeLen || song.codeMinLen || song.codeFormLen || 0;
@@ -471,19 +357,17 @@ export class Library {
 		}
 
 		// Filter by mode
-		const fMode = filters.mode;
+		const fMode = this.filters.mode;
 		if(fMode !== 'all') {
 			filteredSongs = filteredSongs.filter(song => {
 				const sMode = song.mode;
-				return fMode === 'uint8' ? !sMode : // mode === 'Bytebeat' is omitted to save JSON space
-					fMode === 'int8' ? sMode === 'Signed Bytebeat' :
-					fMode === 'float' ? sMode === 'Floatbeat' :
-					fMode === 'func' ? sMode === 'Funcbeat' : true;
+				return fMode === 'Bytebeat' ? !sMode : // mode === 'Bytebeat' is omitted to save JSON space
+					fMode === 'all' ? true : fMode === sMode;
 			});
 		}
 
-		// Filter by tags and independent stereo and drawing toggles
-		let fTags = filters.tags;
+		// Filter by tags and independent drawing and stereo toggles
+		let fTags = this.filters.tags;
 		if(fTags.includes('drawing')) {
 			filteredSongs = filteredSongs.filter(song => !!song.drawing);
 			// Exclude "drawing" from the array of text tags to avoid searching for it in the song.tags array
@@ -491,7 +375,6 @@ export class Library {
 		}
 		if(fTags.includes('stereo')) {
 			filteredSongs = filteredSongs.filter(song => song.stereo === 1);
-			// Exclude "stereo" from the array of text tags to avoid searching for it in the song.tags array
 			fTags = fTags.filter(t => t !== 'stereo');
 		}
 		// Filter by the remaining text tags
@@ -505,7 +388,7 @@ export class Library {
 		}
 
 		// Filtering by search query
-		const fQuery = filters.query;
+		const fQuery = this.filters.query;
 		if(fQuery !== '') {
 			filteredSongs = filteredSongs.filter(song => {
 				// Convert all fields to lowercase for case-insensitive searching
@@ -536,14 +419,12 @@ export class Library {
 		}
 
 		// Display/hide the "Expand all songs" checkbox
+		const isSortByDate = this.filters.sorting === 'date';
 		const expandElem = document.getElementById('library-expand-container');
 		if(expandElem) {
 			expandElem.style.display = !songsCount || isSortByDate ? 'none' : '';
 			expandElem.toggleAttribute('checked', this.showAllSongs);
 		}
-
-		// Clear the container before rendering
-		containerElem.innerHTML = '';
 
 		// Sorting
 		if(isSortByDate) {
@@ -566,24 +447,36 @@ export class Library {
 				}
 				return (b.date || '').localeCompare(a.date || '');
 			});
+
 			// Group the filtered songs back into author blocks
-			filteredSongs = this.groupSongsByAuthor(filteredSongs);
+			const groupsMap = new Map();
+			for(let i = 0, len = filteredSongs.length; i < len; ++i) {
+				const song = filteredSongs[i];
+				const authorName = song.author || 'Unknown';
+				if(!groupsMap.has(authorName)) {
+					groupsMap.set(authorName, []);
+				}
+				groupsMap.get(authorName).push(song);
+			}
+			filteredSongs = [];
+			groupsMap.forEach((authorSongs, authorName) =>
+				filteredSongs.push({ author: authorName, songs: authorSongs }));
 		}
 
 		// Configuring Time Slicing (Chunked Rendering)
-		const itemsPerChunk = 40; // Size of a single pack (optimal for 60–144 Hz screens)
 		let currentIndex = 0;
+		const itemsPerChunk = 40; // Size of a single pack (optimal for 60–144 Hz screens)
 		const totalItems = filteredSongs.length;
 
 		// Function to render a single piece of data
 		const renderChunk = () => {
-			// Critical cancellation check:
-			// If the global currentRenderId has changed, it means the user clicked the filters again.
-			// Simply return, effectively killing off this old requestAnimationFrame loop.
+			// Cancellation check:
+			// If the currentRenderId has changed, it means the user clicked the filters again.
+			// Simply return, stopping this old requestAnimationFrame loop.
 			if(renderId !== this.currentRenderId) {
 				return;
 			}
-			// If all batches have been successfully rendered and activated; stopping the loop
+			// If all batches have been successfully rendered and activated, stopping the loop.
 			if(currentIndex >= totalItems) {
 				return;
 			}
@@ -595,22 +488,15 @@ export class Library {
 			}
 			// Inject a batch into the DOM
 			containerElem.insertAdjacentHTML('beforeend', chunkHtmlParts.join(''));
-			// Attach dataset.rawCode specifically to the inserted batch to avoid accumulating it for the end
-			this.initDatasetForChunk(containerElem, currentIndex, endIndex);
 			// Shift the pointer
 			currentIndex = endIndex;
 			// Schedule the rendering of the next batch for the next monitor animation frame
 			requestAnimationFrame(renderChunk);
 		};
 
+		// Clear the container before rendering
+		containerElem.innerHTML = '';
 		// Launch the first batch of rendering
 		requestAnimationFrame(renderChunk);
-	}
-
-	// Toggle the "open" attribute of all songs blocks when the "Expand all songs" checkbox is clicked
-	toggleExpandSongs(isChecked) {
-		this.showAllSongs = isChecked;
-		document.querySelectorAll('#library-songs > .songs-block').forEach(
-			node => node.toggleAttribute('open', isChecked));
 	}
 }

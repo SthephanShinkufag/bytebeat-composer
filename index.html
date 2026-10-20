@@ -247,15 +247,15 @@
 				<table id="filters-table" style="border-collapse: collapse;"><tbody>
 					<tr>
 						<td>Sorting:</td>
-						<td id="filter-sorting">
-							<button class="filter-button filter-selected" title="Sort by author">author</button>
+						<td class="filter-container" data-type="sorting">
+							<button class="filter-button" title="Sort by author">author</button>
 							<button class="filter-button" title="Sort by date">date</button>
 						</td>
 					</tr>
 					<tr>
 						<td>Size:</td>
-						<td id="filter-size">
-							<button class="filter-button filter-selected" title="All sizes">all</button>
+						<td class="filter-container" data-type="size">
+							<button class="filter-button" title="All sizes">all</button>
 							<button class="filter-button" title="Less than 256 bytes">&lt;256</button>
 							<button class="filter-button" title="From 256 bytes to 1 KB">&lt;1k</button>
 							<button class="filter-button" title="More than 1 KB">big</button>
@@ -263,17 +263,17 @@
 					</tr>
 					<tr>
 						<td>Mode:</td>
-						<td id="filter-mode">
-							<button class="filter-button filter-selected" title="All modes">all</button>
-							<button class="filter-button" title="Funcbeat (unsigned 8-bit integer)">uint8</button>
-							<button class="filter-button" title="Signed Bytebeat (signed 8-bit integer)">int8</button>
-							<button class="filter-button" title="Floatbeat (floating-point)">float</button>
-							<button class="filter-button" title="Funcbeat (expects a function to be returned)">func</button>
+						<td class="filter-container" data-type="mode">
+							<button class="filter-button" title="All modes">all</button>
+							<button class="filter-button" title="Funcbeat (unsigned 8-bit integer)">Bytebeat</button>
+							<button class="filter-button" title="Signed Bytebeat (signed 8-bit integer)">Signed Bytebeat</button>
+							<button class="filter-button" title="Floatbeat (floating-point)">Floatbeat</button>
+							<button class="filter-button" title="Funcbeat (expects a function to be returned)">Funcbeat</button>
 						</td>
 					</tr>
 					<tr>
 						<td>Tags:</td>
-						<td id="filter-tags">
+						<td class="filter-container" data-type="tags">
 							<button class="filter-button" title="C-compatible 8-bit, one variable (t)">c</button>
 							<button class="filter-button" title="Outputs messages in the error console">console</button>
 							<button class="filter-button" title="Creates art on a visualizer scope">drawing</button>

@@ -1133,7 +1133,7 @@ button[name="close"] {
 /* ==[ Song elements ] ==================================================================================== */
 
 .code-button {
-	margin: 2px 0 4px 0;
+	margin: 2px 4px 4px 0;
 	padding: 2px 5px;
 	border: none;
 	border-radius: 3px;
@@ -1191,10 +1191,6 @@ button[name="close"] {
 }
 
 .code-cover, .code-remix-parent {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	height: 20px;
 	padding-left: 4px;
 	font-size: 90%;
 }

@@ -27,6 +27,7 @@ globalThis.bytebeat = new class {
 			drawScale: scope.drawScale,
 			fftSize: scope.fftSize,
 			isSeconds: false,
+			libraryFilters: library.filters,
 			showAllSongs: library.showAllSongs,
 			srDivisor: 1,
 			themeStyle: 'Default Dark',
@@ -66,7 +67,8 @@ globalThis.bytebeat = new class {
 			case 'control-samplerate-select': this.setSampleRate(+elem.value); break;
 			case 'control-theme-style': this.setThemeStyle(elem.value); break;
 			case 'library-expand-checkbox':
-				library.toggleExpandSongs(elem.checked);
+				library.showAllSongs = elem.checked;
+				ui.toggleExpandSongs(library.showAllSongs);
 				this.saveSettings();
 				break;
 			}
@@ -100,11 +102,11 @@ globalThis.bytebeat = new class {
 			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
-			case 'library-show-songs': library.onclickShowSongsButton(); break;
+			case 'library-show-songs': library.showSongs(); break;
 			default:
 				switch(true) {
 				case classList.contains('article-button'):
-					library.onclickArticleNavButton(elem);
+					ui.onclickArticleNavButton(elem);
 					break;
 				case classList.contains('code-load'):
 					library.onclickCodeLoadButton(elem);
@@ -130,7 +132,10 @@ globalThis.bytebeat = new class {
 					break;
 				}
 				case classList.contains('filter-button'):
-					library.onclickFilterButton(elem);
+					ui.onclickFilterButton(elem);
+					this.settings.libraryFilters = library.filters = ui.getLibraryFilters();
+					this.saveSettings();
+					library.showSongs();
 					break;
 				case classList.contains('song-hash'):
 					navigator.clipboard.writeText(elem.dataset.hash);
@@ -141,9 +146,17 @@ globalThis.bytebeat = new class {
 			return;
 		case 'input':
 			switch(elem.id) {
-			case 'control-counter': this.oninputCounter(event); break;
-			case 'control-volume': this.setVolume(false); break;
-			case 'library-search-input': library.onclickShowSongsButton(); break;
+			case 'control-counter':
+				this.oninputCounter(event);
+				break;
+			case 'control-volume':
+				this.setVolume(false);
+				break;
+			case 'library-search-input':
+				this.settings.libraryFilters = library.filters = ui.getLibraryFilters();
+				this.saveSettings();
+				library.showSongs();
+				break;
 			}
 			return;
 		case 'keydown':
@@ -193,6 +206,7 @@ globalThis.bytebeat = new class {
 			scope.drawMode = this.settings.drawMode;
 			scope.drawScale = this.settings.drawScale;
 			scope.setFFTSize(+this.settings.fftSize || 10);
+			library.filters = this.settings.libraryFilters;
 			library.showAllSongs = this.settings.showAllSongs;
 		} catch(err) {
 			this.saveSettings();
@@ -209,7 +223,6 @@ globalThis.bytebeat = new class {
 		editor.init();
 		ui.initElements();
 		scope.initElements();
-		library.initElements();
 		this.setVolume(true);
 		this.setCounterUnits();
 		this.setCodeStyle();
@@ -220,6 +233,7 @@ globalThis.bytebeat = new class {
 		this.setScopeAdjustment(0);
 		this.parseUrl();
 		this.sendData({ drawMode: scope.drawMode });
+		ui.setLibraryFilters(library.filters);
 		ui.controlDrawMode.value = scope.drawMode;
 		ui.controlThemeStyle.value = this.settings.themeStyle;
 		ui.controlCodeStyle.value = this.settings.codeStyle;
@@ -423,6 +437,7 @@ globalThis.bytebeat = new class {
 		this.settings.drawMode = scope.drawMode;
 		this.settings.drawScale = scope.drawScale;
 		this.settings.fftSize = scope.fftSize;
+		this.settings.libraryFilters = library.filters;
 		this.settings.showAllSongs = library.showAllSongs;
 		localStorage.settings = JSON.stringify(this.settings);
 	}
