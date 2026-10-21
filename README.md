@@ -17,7 +17,7 @@ A highly optimized, live-editing algorithmic music generator and player, featuri
 * **Funcbeat:** *Statement-based tracking*. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.
 * **Stereo sound:** Return a two-element array `[left, right]` to separate channels. For example, `[t*(t>>10&42), t*(t>>11&42)]`
 
-### 〰️ Visualizer Scope modes
+### ♒ Visualizer Scope modes
 
 * **Points:** Renders raw calculated values as separate coordinate dots on the grid.
 * **Waveform:** Connects points with lines, keeping the wave clean and legible at high zoom.

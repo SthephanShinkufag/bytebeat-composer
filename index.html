@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026102001">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026102001">
-	<script type="module" async src="./build/index.js?version=2026102001"></script>
-	<script src="./build/theme.js?version=2026102001"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026102002">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026102002">
+	<script type="module" async src="./build/index.js?version=2026102002"></script>
+	<script src="./build/theme.js?version=2026102002"></script>
 </head>
 <body>
 	<main id="content">
@@ -124,10 +124,10 @@
 		</section>
 		<div id="container-scroll-wrapper">
 			<button id="scroll-btn-up" class="scroll-btn hidden" aria-label="Back to top">
-				<svg><use href="#symbol-arrow-up"></use></svg>
+				<svg><use href="#symbol-arrow"></use></svg>
 			</button>
 			<button id="scroll-btn-down" class="scroll-btn" aria-label="To the end">
-				<svg><use href="#symbol-arrow-down"></use></svg>
+				<svg><use href="#symbol-arrow"></use></svg>
 			</button>
 			<section id="container-scroll">
 				<div id="article-navigation">
@@ -141,48 +141,162 @@
 				<article id="info" class="article-container entry hidden">
 					<h2 class="article-title">About bytebeat</h2>
 					<section>
-						<p>Bytebeat music was invented in September 2011.</p>
-						<p>
-							Classic simple bytebeats are generally a piece of rhythmic and somewhat melodic music with no score, no instruments, and no real oscillators.
-							It's simply an expression that defines a waveform as a function of time, processed (usually) 8000 times per second, resulting in an audible waveform with a 256-step resolution from silence (0) to full amplitude (256).
-							If you put that expression into a program with a loop that increments time variable (t), you can generate the headerless unsigned 8 bit mono 8kHz audio stream on output, like in this application.
-							Since these directly output a waveform, they have great performance in compiled languages and can often be ran on even the weakest embedded devices.
-						</p>
-						<p>Initially, expressions were typically written in C or were C-compatible, written in JavaScript. But bytebeat music has evolved over the years, and modern songs with complex JavaScript code are now popular. You'll find examples in the library on this site.</p>
-					</section>
-					<section>
-						<p><a href="http://canonical.org/~kragen/bytebeat/" target="_blank">History of bytebeat</a></p>
-						<p>
-							Original blog posts and videos from Viznut:
+						<div class="article-block">
+							<h3>🎵 What is Bytebeat?</h3>
+							<p>
+								Classic simple bytebeats are generally pieces of rhythmic and somewhat melodic music generated with no score, no instruments, and no traditional synthesizers or oscillators. 
+								Instead, the music is produced by a single mathematical expression that defines a waveform as a function of time (<code>t</code>). 
+								Evaluated usually 8,000 times per second, this formula outputs an audio stream with a 256-step resolution, ranging from complete silence (0) to full amplitude (255).
+							</p>
+							<p>
+								When you put this expression into a loop that increments the time variable <code>t++</code>, it generates a headerless, unsigned 8-bit mono PCM stream directly to the audio output. 
+								Because these equations require minimal CPU processing power, they offer incredible performance in compiled languages and can easily run on even the weakest embedded devices, like an Arduino or tiny microcontrollers.
+							</p>
+						</div>
+						<div class="article-block">
+							<h3>📜 History & Original Resources</h3>
+							<p>
+								Bytebeat music officially dates back to September 2011, emerging directly from the demoscene community where programmers constantly try to squeeze maximum art out of minimal file sizes. 
+								Initially, expressions were strictly written in C-syntax or were C-compatible mathematical formulas running in early JavaScript environments. 
+							</p>
+							<p>
+								Over the years, bytebeat has evolved dramatically. Modern composers often move past simple one-liners, utilizing complex JavaScript code, multiple operational channels, custom sample rates (like 11kHz, 32kHz, or 44.1kHz), and advanced math equations to simulate complex synthesizers, drums, filters and DAW. 
+								You can explore a vast variety of these historical and modern algorithmic pieces in the library on this site.
+							</p>
+							<p>
+								To dive deeper into the early history of bytebeat, explore the essential write-ups:
+							</p>
 							<ul>
-								<li><a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank">Blog posts #1</a></li>
-								<li><a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank">Blog posts #2</a></li>
-								<li><a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank">YouTube video #1</a></li>
-								<li><a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank">YouTube video #2</a></li>
-								<li><a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank">YouTube video #3</a></li>
+								<li>Read the comprehensive <a href="http://canonical.org/~kragen/bytebeat/" target="_blank" rel="noopener">article by Kragen</a> covering the earliest days of bytebeat experiments.</li>
+								<li>
+									Check out Viznut's blog posts: 
+									<a href="http://countercomplex.blogspot.com/2011/10/algorithmic-symphonies-from-one-line-of.html" target="_blank" rel="noopener">Algorithmic Symphonies from One Line of Code</a> and 
+									<a href="http://countercomplex.blogspot.com.au/search/label/algorithmic%20music" target="_blank" rel="noopener">Deep Analysis of One-Line Music Programs</a>.
+								</li>
+								<li>
+									Watch the original YouTube videos that started the craze: 
+									<a href="https://www.youtube.com/watch?v=GtQdIYUtAHg" target="_blank" rel="noopener">Iteration #1</a>, 
+									<a href="https://www.youtube.com/watch?v=qlrs2Vorw2Y" target="_blank" rel="noopener">Iteration #2</a>, and 
+									<a href="https://www.youtube.com/watch?v=tCRPUv8V22o" target="_blank" rel="noopener">Iteration #3</a>.
+								</li>
 							</ul>
-						</p>
+						</div>
+						<div class="article-block">
+							<h3>🧾 Facts & Concepts</h3>
+							<ul>
+								<li><strong>The Pioneer:</strong> Invented by Finnish demoscene coder and artist Ville-Matias Heikkilä (known as Viznut) in September 2011.</li>
+								<li><strong>Sierpinski Harmony:</strong> The famous formula <code>t & t >> 8</code> automatically plots and plays a structural auditory equivalent of the fractal Sierpinski triangle.</li>
+								<li><strong>The 42 Melody:</strong> One of the earliest discovered algorithmic melodies is <code>t * (42 & t >> 10)</code>, which creates a complex rhythmic structure using just a bitwise AND operator.</li>
+								<li><strong>Standard Playback:</strong> Historically executed via Linux command line.</li>
+							</ul>
+						</div>
 					</section>
+
+					<h2 class="article-title">About the Dollchan Player</h2>
 					<section>
-						<p>This website is a live editing bytebeats player, it has a collection of bytebeat music. Online JavaScript players:</p>
-						<ul>
-							<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
-							<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
-							<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
-							<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
-						</ul>
-					</section>
-					<section>
-						<p>Playback modes are:</p>
-						<ul>
-							<li><b>Bytebeat</b> &mdash; output is an unsigned 8bit integer from 0 to 255, values outside this are wrapped, and non-integers are floored.</li>
-							<li><b>Signed Bytebeat</b> &mdash; output is a signed 8bit integer from -127 to 128, values outside this are wrapped, and non-integers are floored.</li>
-							<li><b>Floatbeat</b> &mdash; output is -1.0 to 1.0. Allows higher quality audio since it is not limited to 255 values, unlike the previous ones.</li>
-							<li><b>Funcbeat</b> &mdash; the code is run only once and is not an expression, it expects the function to return. The returned function is ran with time in seconds, output is -1.0 to 1.0.
-						</ul>
-					</section>
-					<section>
-						<p>This project is made by SthephanShi, and is a fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer by Paul Hayes</a>.</p>
+						<div class="article-block">
+							<p>
+								This is a highly optimized, live-editing algorithmic music generator and player featuring a collection of bytebeat songs.
+							</p>
+							<p>
+								This project has been under development by StephanShi since 2018 (official announcement in January 2019), and is a heavily modified fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by Paul Hayes.
+							</p>
+							<p>
+								Please refer to the <a href="https://github.com/SthephanShinkufag/bytebeat-composer#bytebeat-composer" target="_blank">README</a> for full information regarding functionality, installation, configuration, as well as the changelog.
+							</p>
+						</div>
+						<div class="article-block">
+							<h3>🎹 Supported Playback modes</h3>
+							<ul>
+								<li><strong>Bytebeat:</strong> Outputs value as an <i>unsigned 8-bit integer (uint8)</i> (0 to 255). Values outside this range wrap around, decimals are floored.</li>
+								<li><strong>Signed Bytebeat:</strong> Outputs as a <i>signed 8-bit integer (int8)</i> (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).</li>
+								<li><strong>Floatbeat:</strong> Uses <i>floating-point values (float)</i> from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.</li>
+								<li><strong>Funcbeat:</strong> <i>Statement-based tracking</i>. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.</li>
+								<li><strong>Stereo sound:</strong> Return a two-element array <code>[left, right]</code> to separate channels. For example, <code>[t*(t>>10&42), t*(t>>11&42)]</code></li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>♒ Visualizer Scope modes</h3>
+							<ul>
+								<li><strong>Points:</strong> Renders raw calculated values as separate coordinate dots on the grid.</li>
+								<li><strong>Waveform:</strong> Connects points with lines, keeping the wave clean and legible at high zoom.</li>
+								<li><strong>Diagram:</strong> Draws vertical lines where brightness changes based on the signal amplitude.</li>
+								<li><strong>Combined:</strong> Overlays the Waveform line on top of the Diagram background.</li>
+								<li><strong>FFT (Fast Fourier Transform):</strong> Renders a real-time frequency spectrum map. Uses a logarithmic grid marked in Hertz (10 Hz to 24 kHz) and Decibels (-20 dB to -120 dB).</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>📊 Visualizer Scope features</h3>
+							<ul>
+								<li><strong>Interactive Timeline Cursor:</strong> Renders a moving playback cursor that you can color-customize. At high zoom levels, it moves faster and stops being displayed.</li>
+								<li><strong>Stereo Channel Splitting:</strong> Renders left and right audio channels using distinct colors, with multiple color preset configurations available.</li>
+								<li><strong>Visual Error Tracking:</strong> Audio overflows, out of bounds, and invalid calculations (NaN) automatically colors in warning red.</li>
+								<li><strong>Playback Toggling:</strong> Click directly on the scope timeline to pause or to resume the playback.</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>🎛️ Playback & Control Panel</h3>
+							<ul>
+								<li><strong>Time counter:</strong> Click the <code>t</code> button to switch to measuring in seconds. Click the counter number field to pause. Type a number and press <code>Enter</code> to jump to that specific time.</li>
+								<li><strong>Lag indicator:</strong> Shows a slowdown coefficient if heavy or unoptimized code overloads the audio worker. Use this value to monitor lag and to fix audio crackling.</li>
+								<li><strong>Stop and reset:</strong> Click the ⏹️ button to stop playback and to reset the time to 0.</li>
+								<li><strong>Reset:</strong> Click the ⏮️ button to set time back to 0 without stopping playback.</li>
+								<li><strong>Pause:</strong> Click the ⏸️ button to pause playback.</li>
+								<li><strong>Playback speed:</strong> Click the fast-forward ⏩ or fast-reverse ⏪ buttons multiple times to speed up or slow down playback (2x, 4x, ... up to 64x).</li>
+								<li><strong>Zoom controls:</strong> Use the <code>+</code> and <code>-</code> buttons to scale the visual scope. Zooming in helps you see the wave details, while zooming out gives a broader view of the pattern.</li>
+								<li><strong>Zoom indicator:</strong> Click the <code>1/x</code> button to reset the zoom to 1.</li>
+								<li><strong>Visual mode:</strong> Switch between different view types like <code>Waveform</code> (classic wave line), <code>Diagram</code> (2D pixel pattern), or <code>FFT</code> (frequency spectrum) to see your code's visual footprint.</li>
+								<li><strong>Playback mode:</strong> Switch between different playback types like <code>Bytebeat</code>, <code>Signed Bytebeat</code>, <code>Floatbeat</code> or <code>Funcbeat</code>.</li>
+								<li><strong>Sample rate:</strong> Select standard frequencies from lo-fi 4000 Hz to 48000 Hz. Type your own numbers into the sample rate selector input to set custom frequencies.</li>
+								<li><strong>Sample rate divisor:</strong> Located next to the sample rate selector. If your song is too heavy or you are on a weak mobile device, increase this value. It skips calculation steps to reduce CPU load (note: this causes sound stepping and visual distortion).</li>
+								<li><strong>Copy link:</strong> Click the chain/link 🔗 button to copy the unique URL of your song. It saves your code, sample rate, and playback mode so you can easily share your creation with others.</li>
+								<li><strong>Record audio:</strong> Click the record button ⏺️ to capture the output directly from the playback. It renders the audio into a downloadable <code>.ogg</code> file.</li>
+								<li><strong>Clean view:</strong> Use the expand <code>⛶</code> button to hide the code editor and settings, leaving only the visual scope and basic playback controls on the screen. Available on mobile devices or small screens.</li>
+								<li><strong>Byte counter:</strong> Tracks your code size in real-time. This helps you fit into classic bytebeat limits like 256 bytes or 1 KB.</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>📝 Code Editor</h3>
+							<ul>
+								<li><strong>Syntax Highlighting:</strong> Includes 12 themes (<code>Atom</code>, <code>GitHub</code>, <code>VSCode</code>, etc.) in both Dark and Light variants.</li>
+								<li><strong>Smart Shortcuts:</strong> Global aliases let you type <code>Math.</code> functions directly (<code>sin</code>, <code>cos</code>, <code>abs</code>, <code>min</code>, etc) and use <code>int()</code> shorthand instead of <code>Math.floor()</code>.</li>
+								<li><strong>Code Utilities:</strong> Includes full-text search (<code>Ctrl+F</code>), line numbers, and collapsible code blocks (function folding).</li>
+								<li><strong>Advanced Bracket Pairing:</strong> Highlights matching brackets in yellow and highlights orphan brackets in red to instantly spot syntax mistakes.</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>🎼 Song Library & Discovery</h3>
+							<p>The composer includes a structured song catalog compiled from communities like Battle of the Bits and Reddit:</p>
+							<ul>
+								<li><strong>Library filters:</strong> Quickly filter songs by size limits (<code>all</code>, <code>&lt;256</code>, <code>&lt;1k</code>, <code>big</code>), by audio types (<code>all</code>, <code>Bytebeat</code>, <code>Signed Bytebeat</code>, <code>Floatbeat</code>, <code>Funcbeat</code>), by tags, and to sort songs by author or by date.</li>
+								<li><strong>Library search:</strong> Type in the search field to find songs by name, author or description.</li>
+								<li><strong>Remix Tree Navigation:</strong> If a song is a remix of another song, click the <code>▷</code> arrow button to load parent metadata right below it. This lets you browse nested remix histories without losing your place.</li>
+								<li><strong>Code Format Toggles:</strong> Each song entry can contain code execution buttons: <code>min</code> (minified), <code>orig</code> (original), and <code>format</code> (pretty-printed). Switch between them instantly to load necessary code.</li>
+								<li><strong>Auto Zoom Syncing:</strong> Clicking a song with <code>drawing</code> tag automatically syncs the visualizer's zoom level and mode to what the author intended.</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>🏷️ Song tags</h3>
+							<p>Some songs in the library have visible tags:</p>
+							<ul>
+								<li><strong>stereo:</strong> for stereo songs;</li>
+								<li><strong>drawing:</strong> if the code does something in the visualiser;</li>
+								<li><strong>c:</strong> for C-compatible songs;</li>
+								<li><strong>console:</strong> for when a song uses throw to display arbitrary text;</li>
+								<li><strong>port:</strong> for songs ported to bytebeat from other platform formats;</li>
+								<li><strong>slow:</strong> for songs that are very demanding on performance;</li>
+								<li><strong>sample:</strong> for songs that use encoded audio samples (by PCM, for example).</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>⭐ Other online bytebeat players</h3>
+							<ul>
+								<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
+								<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
+								<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
+								<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
+							</ul>
+						</div>
 					</section>
 				</article>
 				<article id="settings" class="article-container entry hidden">
@@ -344,11 +458,8 @@
 				<circle fill="#B9B6AE" cx="3.75" cy="12.25" r="2" />
 				<circle fill="#868379" cx="12.25" cy="3.75" r="2" />
 			</symbol>
-			<symbol viewBox="0 0 32 32" id="symbol-arrow-up">
-				<path d="M16 4 L28 16 L22 16 L22 28 L10 28 L10 16 L4 16 Z" fill="currentColor"/>
-			</symbol>
-			<symbol viewBox="0 0 32 32" id="symbol-arrow-down">
-				<path d="M16 28 L4 16 L10 16 L10 4 L22 4 L22 16 L28 16 Z" fill="currentColor"/>
+			<symbol viewBox="0 0 32 32" id="symbol-arrow">
+				<path d="M16 4 L28 16 L22 16 L22 28 L10 28 L10 16 L4 16 Z"/>
 			</symbol>
 		</svg>
 	</div>

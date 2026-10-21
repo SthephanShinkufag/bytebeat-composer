@@ -987,7 +987,7 @@ button[name="close"] {
 }
 
 .article-title {
-	margin: 4px 0 8px 0;
+	margin: 6px 0 8px 0;
 	text-align: left;
 	font-size: 18px;
 }
@@ -1000,17 +1000,32 @@ button[name="close"] {
 	background-color: var(--entry-bg);
 }
 
+#info code {
+	background-color: #7775;
+	padding: 0 3px;
+}
+
+#info h3 {
+	margin: 10px 0 8px 0;
+	text-align: left;
+}
+
+#info li {
+	text-align: justify;
+}
+
 #info p {
-	margin: 0 0 4px 0;
+	margin: 0 0 8px 0;
+	text-align: justify;
 }
 
 #info section {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 }
 
 #info ul {
-	margin: 0;
-	padding-left: 15px;
+	margin: 0 0 8px 0;
+	padding-left: 20px;
 }
 
 /* ==[ Library ] ========================================================================================== */
@@ -1445,7 +1460,7 @@ button[name="close"] {
 }
 
 #control-samplerate {
-	width: 56px;
+	width: 40px;
 	border-radius: var(--ctrl-corners) 0 0 var(--ctrl-corners);
 }
 
@@ -1502,7 +1517,7 @@ button[name="close"] {
 }
 
 #control-volume {
-	width: 120px;
+	width: 90px;
 	flex-grow: 1;
 	appearance: none;
 	height: 10px;
@@ -1612,28 +1627,45 @@ button[name="close"] {
 	bottom: 20px;
 }
 
+#scroll-btn-down > svg {
+	transform: rotate(180deg);
+}
+
 .scroll-btn:hover {
 	background-color: #0007;
 	transform: scale(1.05);
 }
 
-.scroll-btn svg {
+.scroll-btn > svg {
 	width: 20px;
 	height: 20px;
+	fill: currentColor;
 }
 
 .scroll-btn.hidden {
 	opacity: 0;
 	pointer-events: none;
-	transform: scale(.9);
+	transform: scale(.6);
 }
 
 /* ==[ Adaptive screen ] ================================================================================== */
 
-@media screen and (max-height: 768px) and (min-width: 768px) {
+/* Desctop mode (Two rows: fixed on the left, scrollable on the right)
+   Screend with low height or wide monitors (1440px and up) */
+@media screen and (max-height: 768px) and (min-width: 768px), 
+	screen and (min-width: 1440px) {
+	
+	#content {
+		flex-flow: row;
+		align-items: start;
+	}
+
 	#container-fixed {
 		flex-shrink: 0;
-		max-width: 516px;
+		height: 100%;
+	}
+
+	#container-scroll-wrapper {
 		height: 100%;
 	}
 
@@ -1643,72 +1675,33 @@ button[name="close"] {
 		padding-right: 6px;
 	}
 
-	#container-scroll-wrapper {
-		height: 100%;
-	}
-
-	#content {
-		flex-flow: row;
-		align-items: start;
-	}
-
-	#control-counter {
-		width: 66px;
+	#editor-container {
+		flex: auto;
+		resize: none;
 	}
 
 	#control-expand {
 		display: none;
 	}
+}
 
-	#editor-container {
-		flex: auto;
-		resize: none;
+/* Screens with low height */
+@media screen and (max-height: 768px) {
+	#container-fixed {
+		max-width: 516px;
 	}
 }
 
-@media screen and (max-width: 512px) {
-	#editor-container {
-		height: calc(100vw/2);
-	}
-}
-
+/* Mobile devices and tablets in portrait orientation */
 @media screen and (max-width: 768px) {
 	#container-fixed, #container-scroll-wrapper {
 		max-width: 516px;
 	}
-
-	#control-counter {
-		width: 66px;
-	}
 }
 
-@media screen and (min-width: 1440px) {
-	#container-fixed {
-		flex-shrink: 0;
-		height: 100%;
-	}
-
-	#container-scroll {
-		margin-top: 0;
-		margin-left: 6px;
-		padding-right: 6px;
-	}
-
-	#container-scroll-wrapper {
-		height: 100%;
-	}
-
-	#content {
-		flex-flow: row;
-		align-items: start;
-	}
-
-	#control-expand {
-		display: none;
-	}
-
+/* Narrow smartphone screens */
+@media screen and (max-width: 512px) {
 	#editor-container {
-		flex: auto;
-		resize: none;
+		height: calc(100vw / 2);
 	}
 }
