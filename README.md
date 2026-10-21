@@ -1,6 +1,6 @@
 # bytebeat-composer
 
-A highly optimized, live-editing algorithmic music generator and player, featuring a collection of songs.
+A web-based algorithmic music generator and player for real-time live-coding, packed with a rich library of bytebeat songs.
 
 **Bytebeat Composer:** [https://dollchan.net/bytebeat/](https://dollchan.net/bytebeat/)<br>
 **Discussion Threads:** [https://dollchan.net/btb/](https://dollchan.net/btb/)
@@ -11,7 +11,7 @@ A highly optimized, live-editing algorithmic music generator and player, featuri
 
 ### 🎹 Supported Playback modes
 
-* **Bytebeat:** Outputs value as an *unsigned 8-bit integer (uint8)* (0 to 255). Values outside this range wrap around, decimals are floored.
+* **Bytebeat:** Outputs value as an *unsigned 8-bit integer (uint8)* (0 to 255). Values outside this range wrap around, decimals are truncated.
 * **Signed Bytebeat:** Outputs as a *signed 8-bit integer (int8)* (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).
 * **Floatbeat:** Uses *floating-point values (float)* from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.
 * **Funcbeat:** *Statement-based tracking*. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.
@@ -66,7 +66,7 @@ The composer includes a structured song catalog compiled from communities like B
 * **Code Format Toggles:** Each song entry can contain code execution buttons: `min` (minified), `orig` (original), and `format` (pretty-printed). Switch between them instantly to load necessary code.
 * **Auto Zoom Syncing:** Clicking a song with `drawing` tag automatically syncs the visualizer's zoom level and mode to what the author intended.
 
-### 🏷️ Song tags
+### 🏷️ Song Tags
 
 Some songs in the library have visible tags:
 * **stereo** for stereo songs;

@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026102002">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026102002">
-	<script type="module" async src="./build/index.js?version=2026102002"></script>
-	<script src="./build/theme.js?version=2026102002"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026102100">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026102100">
+	<script type="module" async src="./build/index.js?version=2026102100"></script>
+	<script src="./build/theme.js?version=2026102100"></script>
 </head>
 <body>
 	<main id="content">
@@ -149,8 +149,8 @@
 								Evaluated usually 8,000 times per second, this formula outputs an audio stream with a 256-step resolution, ranging from complete silence (0) to full amplitude (255).
 							</p>
 							<p>
-								When you put this expression into a loop that increments the time variable <code>t++</code>, it generates a headerless, unsigned 8-bit mono PCM stream directly to the audio output. 
-								Because these equations require minimal CPU processing power, they offer incredible performance in compiled languages and can easily run on even the weakest embedded devices, like an Arduino or tiny microcontrollers.
+								When you put this expression into a loop that increments the time variable <code>t++</code>, it generates a headerless, unsigned 8-bit mono PCM stream directly to the audio output.
+								Because these equations require minimal computational overhead, they can easily run on even the weakest embedded devices, like an Arduino or tiny microcontrollers.
 							</p>
 						</div>
 						<div class="article-block">
@@ -184,10 +184,19 @@
 						<div class="article-block">
 							<h3>🧾 Facts & Concepts</h3>
 							<ul>
-								<li><strong>The Pioneer:</strong> Invented by Finnish demoscene coder and artist Ville-Matias Heikkilä (known as Viznut) in September 2011.</li>
-								<li><strong>Sierpinski Harmony:</strong> The famous formula <code>t & t >> 8</code> automatically plots and plays a structural auditory equivalent of the fractal Sierpinski triangle.</li>
-								<li><strong>The 42 Melody:</strong> One of the earliest discovered algorithmic melodies is <code>t * (42 & t >> 10)</code>, which creates a complex rhythmic structure using just a bitwise AND operator.</li>
+								<li><strong>The Pioneer:</strong> Invented by Finnish demoscene coder and artist Ville-Matias Heikkilä (known as <strong>Viznut</strong>) in September 2011.</li>
+								<li><strong>Sierpinski Harmony:</strong> The famous formula <code>t&t>>8</code> automatically plots and plays a structural auditory equivalent of the fractal Sierpinski triangle.</li>
+								<li><strong>The 42 Melody:</strong> One of the earliest discovered algorithmic melodies is <code>t*(42&t>>10)</code>, which creates a complex rhythmic structure using just a bitwise AND operator.</li>
 								<li><strong>Standard Playback:</strong> Historically executed via Linux command line.</li>
+							</ul>
+						</div>
+						<div class="article-block">
+							<h3>⭐ Other online bytebeat players</h3>
+							<ul>
+								<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
+								<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
+								<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
+								<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
 							</ul>
 						</div>
 					</section>
@@ -196,10 +205,10 @@
 					<section>
 						<div class="article-block">
 							<p>
-								This is a highly optimized, live-editing algorithmic music generator and player featuring a collection of bytebeat songs.
+								This is a web-based algorithmic music generator and player for real-time live-coding, featuring a rich collection of bytebeat songs.
 							</p>
 							<p>
-								This project has been under development by StephanShi since 2018 (official announcement in January 2019), and is a heavily modified fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by Paul Hayes.
+								This project has been under development by <strong>SthephanShi</strong> since 2018 (official announcement in January 2019), and is a heavily modified fork of <a href="http://entropedia.co.uk/generative_music/" target="_blank">8-bit Generative Composer</a> by Paul Hayes.
 							</p>
 							<p>
 								Please refer to the <a href="https://github.com/SthephanShinkufag/bytebeat-composer#bytebeat-composer" target="_blank">README</a> for full information regarding functionality, installation, configuration, as well as the changelog.
@@ -208,10 +217,10 @@
 						<div class="article-block">
 							<h3>🎹 Supported Playback modes</h3>
 							<ul>
-								<li><strong>Bytebeat:</strong> Outputs value as an <i>unsigned 8-bit integer (uint8)</i> (0 to 255). Values outside this range wrap around, decimals are floored.</li>
-								<li><strong>Signed Bytebeat:</strong> Outputs as a <i>signed 8-bit integer (int8)</i> (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).</li>
-								<li><strong>Floatbeat:</strong> Uses <i>floating-point values (float)</i> from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.</li>
-								<li><strong>Funcbeat:</strong> <i>Statement-based tracking</i>. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.</li>
+								<li><strong>Bytebeat:</strong> Outputs value as an <strong>unsigned 8-bit integer (uint8)</strong> (0 to 255). Values outside this range wrap around, decimals are truncated.</li>
+								<li><strong>Signed Bytebeat:</strong> Outputs as a <strong>signed 8-bit integer (int8)</strong> (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).</li>
+								<li><strong>Floatbeat:</strong> Uses <strong>floating-point values (float)</strong> from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.</li>
+								<li><strong>Funcbeat:</strong> <strong>Statement-based tracking</strong>. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.</li>
 								<li><strong>Stereo sound:</strong> Return a two-element array <code>[left, right]</code> to separate channels. For example, <code>[t*(t>>10&42), t*(t>>11&42)]</code></li>
 							</ul>
 						</div>
@@ -276,7 +285,7 @@
 							</ul>
 						</div>
 						<div class="article-block">
-							<h3>🏷️ Song tags</h3>
+							<h3>🏷️ Song Tags</h3>
 							<p>Some songs in the library have visible tags:</p>
 							<ul>
 								<li><strong>stereo:</strong> for stereo songs;</li>
@@ -286,15 +295,6 @@
 								<li><strong>port:</strong> for songs ported to bytebeat from other platform formats;</li>
 								<li><strong>slow:</strong> for songs that are very demanding on performance;</li>
 								<li><strong>sample:</strong> for songs that use encoded audio samples (by PCM, for example).</li>
-							</ul>
-						</div>
-						<div class="article-block">
-							<h3>⭐ Other online bytebeat players</h3>
-							<ul>
-								<li><a href="https://wurstcaptures.untergrund.net/music/" target="_blank">by Bemmu and Rarefluid</a> &mdash; this is one of the first players.</li>
-								<li><a href="http://entropedia.co.uk/generative_music/" target="_blank">by Paul Hayes</a> &mdash; also is one of the first. Dollchan Player is a very deeply modified fork of it.</li>
-								<li><a href="https://greggman.com/downloads/examples/html5bytebeat/html5bytebeat.html" target="_blank">by Greggman</a> &mdash; a source of inspiration for creating Dollchan Player, but in turn, Greggman took the songs library from here.</li>
-								<li><a href="https://bytebeat.ficial.net/" target="_blank">by SArpnt</a> &mdash; a fork of Dollchan Player, but in turn Dollchan took many technologies and ideas from SArpnt.</li>
 							</ul>
 						</div>
 					</section>
