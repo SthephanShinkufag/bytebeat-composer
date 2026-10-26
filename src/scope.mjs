@@ -28,7 +28,7 @@ export class Scope {
 		this.fftXTable = null;
 		this.maxDecibels = -10;
 		this.minDecibels = -120;
-		this.ringBuffer = null;
+		this.ringBuffer = null; // Circular buffer for drawing samples
 	}
 
 	// Display the time cursor depending on scale
@@ -49,9 +49,9 @@ export class Scope {
 			return;
 		}
 
-		// Calculate how many elements have accumulated in the Ring Buffer
-		const bufferLen = this.bufferHead >= this.bufferTail ? this.bufferHead - this.bufferTail :
-			this.bufferSize - this.bufferTail + this.bufferHead;
+		// Calculate how many points have accumulated in the Ring Buffer
+		const bufferLen = this.bufferHead >= this.bufferTail ?
+			this.bufferHead - this.bufferTail : this.bufferSize - this.bufferTail + this.bufferHead;
 		if(bufferLen === 0) {
 			return;
 		}
@@ -127,8 +127,10 @@ export class Scope {
 			// Starting with the most recent element (before the head)
 			let scanIdx = (this.bufferHead - 1 + this.bufferSize) % this.bufferSize;
 			for(let i = 0; i < checkLen; ++i) {
-				const val = this.ringBuffer[scanIdx].value;
-				if(val[0] !== val[1] && !isNaN(val[0]) && !isNaN(val[1])) {
+				const bufIdx = scanIdx * 3;
+				const valL = this.ringBuffer[bufIdx + 1];
+				const valR = this.ringBuffer[bufIdx + 2];
+				if(valL !== valR && !isNaN(valL) && !isNaN(valR)) {
 					isStereo = true;
 					break;
 				}
@@ -137,13 +139,13 @@ export class Scope {
 			}
 
 			// Plotting the frequency graph (using a look-up table)
-			let ch = isStereo ? 2 : 1;
+			let chIdx = isStereo ? 2 : 1;
 			const xTable = this.fftXTable;
-			while(ch--) {
-				const data = this.analyserData[ch];
-				this.analyser[ch].getByteFrequencyData(data);
+			while(chIdx--) {
+				const data = this.analyserData[chIdx];
+				this.analyser[chIdx].getByteFrequencyData(data);
 				ctx.beginPath();
-				ctx.strokeStyle = isStereo ? this.colorStereoRGB[ch] :
+				ctx.strokeStyle = isStereo ? this.colorStereoRGB[chIdx] :
 					`rgb(${ this.colorWaveform.join(',') })`;
 				// Handle the first point separately to avoid a check inside the loop
 				ctx.moveTo(0, height * (1 - data[0] / 256));
@@ -153,18 +155,17 @@ export class Scope {
 				ctx.stroke();
 			}
 
-			// Limit the tail for the FFT so that, when switching to waveform mode,
+			// Limit the buffer tail for the FFT so that, when switching to waveform mode,
 			// the player doesn't render an accumulated tail spanning the duration of the FFT's operation
 			this.bufferTail = (this.bufferHead - bufferLimit + this.bufferSize) % this.bufferSize;
 			return;
 		}
 
 		// --- Points, Waveform, Diagram, Combined modes ---
-		const scale = this.drawScale;
 
-		// Retrieve the first (oldest) element for rendering using the tail index.
-		let curIdx = this.bufferTail;
-		let startTime = this.ringBuffer[curIdx].t;
+		// Retrieve the first (oldest) element for rendering using the tail index
+		// Sample format in ring buffer: [time0, R_value0, L_value0, time1, R_value1, L_value1, ...]
+		let startTime = this.ringBuffer[this.bufferTail * 3];
 
 		// Calculate X-coordinates of the segment
 		let startX = mod(this.getX(startTime), width);
@@ -173,6 +174,7 @@ export class Scope {
 		let drawWidth = Math.abs(endX - startX) + 1;
 
 		// Truncate large segments (for high playback speed or 512px canvas)
+		const scale = this.drawScale;
 		if(drawWidth > width) {
 			startTime = (this.getX(endTime) - width) * (1 << scale);
 			startX = mod(this.getX(startTime), width);
@@ -191,7 +193,6 @@ export class Scope {
 		// Restoring the last points of a previous segment from drawEndBuffer
 		const imageData = ctx.createImageData(drawWidth, height);
 		const { data } = imageData;
-		const buf32 = new Uint32Array(data.buffer); // Fast 32-bit window over Canvas bytes
 		const isReverse = globalThis.bytebeat.playbackSpeed < 0;
 		const status = new Uint8Array(drawWidth * height); // Pixel state buffer
 		if(scale) {
@@ -200,69 +201,84 @@ export class Scope {
 				const drawEndBuffer = this.drawEndBuffer[y];
 				if(drawEndBuffer) {
 					const idx = rowOffsets[255 - y] + x;
-					status[idx] = drawEndBuffer[3];
 					let dIdx = idx << 2;
 					data[dIdx++] = drawEndBuffer[0];
 					data[dIdx++] = drawEndBuffer[1];
 					data[dIdx] = drawEndBuffer[2];
+					status[idx] = drawEndBuffer[3];
 				}
 			}
 		}
 
 		// Setting the alpha channel via a 32-bit integer (set the transparency to 255)
+		const buf32 = new Uint32Array(data.buffer); // Fast 32-bit window over Canvas bytes
 		for(let i = 0; i < buf32.length; ++i) {
 			buf32[i] |= 0xFF000000;
 		}
 
-		// Colors and mode
-		const isPoints = this.drawMode === 'Points';
-		const isWaveform = this.drawMode === 'Waveform' || this.drawMode === 'Combined';
-		const isDiagram = this.drawMode === 'Diagram' || this.drawMode === 'Combined';
-		const { colorDiagram } = this;
-		const colorCh = this.colorChannels;
-		const colorPoints = this.colorWaveform;
-		const colorWaveform = [.65 * colorPoints[0] | 0, .65 * colorPoints[1] | 0, .65 * colorPoints[2] | 0];
-		const c0 = colorCh[0];
-		const c1 = colorCh[1];
-		const c2 = colorCh[2];
+		// Get drawing mode
+		const mode = this.drawMode;
+		const isPoints = mode === 'Points';
+		const isWaveform = mode === 'Waveform' || mode === 'Combined';
+		const isDiagram = mode === 'Diagram' || mode === 'Combined';
+
+		// Get drawing colors
+		const colorD = this.colorDiagram;
+		const colorP = this.colorWaveform; // Points color actually, "Waveform color" in settings
+		const colorW = [.65 * colorP[0] | 0, .65 * colorP[1] | 0, .65 * colorP[2] | 0];
+		const c0 = this.colorChannels[0];
+		const c1 = this.colorChannels[1];
+		const c2 = this.colorChannels[2];
+
+		// Speculative fast stereo detection from a typed array
+		let isStereo = false;
+		let scanIdx = this.bufferTail;
+		for(let i = 0; i < bufferLen; ++i) {
+			const bufIdx = scanIdx * 3;
+			const valL = this.ringBuffer[bufIdx + 1];
+			const valR = this.ringBuffer[bufIdx + 2];
+			if(valL !== valR && !isNaN(valL) && !isNaN(valR)) {
+				isStereo = true;
+				break;
+			}
+			scanIdx = (scanIdx + 1) % this.bufferSize;
+		}
+		const chCount = isStereo ? 2 : 1;
 
 		// Variables to detect pixel duplicates
 		let lastPlottedX = -1;
-		let lastPlottedY0 = -1;
-		let lastPlottedY1 = -1;
+		let lastPlottedYR = -1;
+		let lastPlottedYL = -1;
 
-		// Drawing in a segment. Iterate through the Ring Buffer from tail to head.
+		// Drawing in a segment, iterating through the Ring Buffer from tail to head
+		let curIdx = this.bufferTail;
 		for(let i = 0; i < bufferLen; ++i) {
-			const curItem = this.ringBuffer[curIdx];
-
-			// Get the next index in a circular fashion for prevY/nextTime
+			// Calculate the coordinates
 			const nextIdx = (curIdx + 1) % this.bufferSize;
-			const nextItem = i < bufferLen - 1 ? this.ringBuffer[nextIdx] : null;
-			const prevItem = i > 0 ?
-				this.ringBuffer[(curIdx - 1 + this.bufferSize) % this.bufferSize] : null;
-
-			// Get the current coordinates
-			const curY = curItem.value;
-			const curY0 = curY[0];
-			const curY1 = curY[1];
-			const curTime = curItem.t;
-			const curX = mod(Math.floor(this.getX(
-				isReverse ? (nextItem?.t ?? endTime) + 1 : curTime)) - startX, width);
+			const nextTime = i < bufferLen - 1 ? this.ringBuffer[nextIdx * 3] : endTime;
+			const bufIdx = curIdx * 3;
+			const curTime = this.ringBuffer[bufIdx];
+			const curYR = this.ringBuffer[bufIdx + 1];
+			const curYL = this.ringBuffer[bufIdx + 2];
+			const curX = mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
 
 			// Skip if X and Y are identical to the previous step
 			if(isPoints) {
-				if(curX === lastPlottedX && curY0 === lastPlottedY0 && curY1 === lastPlottedY1) {
+				if(curX === lastPlottedX && curYR === lastPlottedYR && curYL === lastPlottedYL) {
+					curIdx = nextIdx;
 					continue;
 				}
 				lastPlottedX = curX;
-				lastPlottedY0 = curY0;
-				lastPlottedY1 = curY1;
+				lastPlottedYR = curYR;
+				lastPlottedYL = curYL;
 			}
 
-			const isNaNCurY = [isNaN(curY0), isNaN(curY1)];
-			const prevY = prevItem?.value ?? [NaN, NaN];
-			const nextTime = nextItem?.t ?? endTime;
+			const prevBufIdx = ((curIdx - 1 + this.bufferSize) % this.bufferSize) * 3;
+			const prevYR = i > 0 ? this.ringBuffer[prevBufIdx + 1] : NaN;
+			const prevYL = i > 0 ? this.ringBuffer[prevBufIdx + 2] : NaN;
 			const nextX = mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
+			const isNaNCurY = [isNaN(curYR), isNaN(curYL)];
+
 			let diagramSize, diagramStart;
 			if(isDiagram) {
 				diagramSize = Math.max(1, 256 >> scale);
@@ -274,8 +290,7 @@ export class Scope {
 						continue;
 					}
 					for(let y = 0; y < height; ++y) {
-						const idx = rowOffsets[y] + x;
-						const dIdx = idx << 2;
+						const dIdx = (rowOffsets[y] + x) << 2;
 						if(!data[dIdx + 1] && !data[dIdx + 2]) {
 							data[dIdx] = 100; // Red error color
 						}
@@ -283,62 +298,60 @@ export class Scope {
 				}
 			}
 
-			// Detect mono/stereo
-			const isStereoNode =
-				!((curY0 === curY1 || isNaNCurY[0] && isNaNCurY[1]) && prevY[0] === prevY[1]);
-			let ch = isStereoNode ? 2 : 1;
-
-			while(ch--) {
-				const curYCh = curY[ch];
-				if(!isNaNCurY[ch] && (isPoints || isWaveform)) {
+			// Drawing for each channel (or mono)
+			let chIdx = chCount;
+			while(chIdx--) {
+				const curYCh = chIdx ? curYL : curYR;
+				if(!isNaNCurY[chIdx] && (isPoints || isWaveform)) {
 					// Points drawing
 					for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
 						if(x >= drawWidth) {
 							continue;
 						}
 						const idx = rowOffsets[255 - curYCh] + x;
-						status[idx] = 1;
+						status[idx] = 1; // Set the point status to "Point"
 						const dIdx = idx << 2;
-						if(isStereoNode) {
-							if(ch) { // Right channel
-								data[dIdx + c1] = colorPoints[c1];
-								data[dIdx + c2] = colorPoints[c2];
+						if(isStereo) {
+							if(chIdx) { // Right channel
+								data[dIdx + c1] = colorP[c1];
+								data[dIdx + c2] = colorP[c2];
 							} else { // Left channel
-								data[dIdx + c0] = colorPoints[c0];
+								data[dIdx + c0] = colorP[c0];
 							}
 						} else { // Mono
-							data[dIdx] = colorPoints[0];
-							data[dIdx + 1] = colorPoints[1];
-							data[dIdx + 2] = colorPoints[2];
+							data[dIdx] = colorP[0];
+							data[dIdx + 1] = colorP[1];
+							data[dIdx + 2] = colorP[2];
 						}
 					}
 
 					// Waveform vertical lines drawing
 					if(isWaveform) {
-						const prevYCh = prevY[ch];
+						const prevYCh = chIdx ? prevYL : prevYR;
 						if(!isNaN(prevYCh)) {
 							const x = isReverse ? mod(Math.floor(this.getX(curTime)) - startX, width) : curX;
-							if(x < drawWidth) {
-								const dy = prevYCh < curYCh ? 1 : -1;
-								for(let y = prevYCh; y !== curYCh; y += dy) {
-									const idx = rowOffsets[255 - y] + x;
-									if(status[idx] === 1) { // Skip if "Point" status exists
-										continue;
+							if(x >= drawWidth) {
+								continue;
+							}
+							const dy = prevYCh < curYCh ? 1 : -1;
+							for(let y = prevYCh; y !== curYCh; y += dy) {
+								const idx = rowOffsets[255 - y] + x;
+								if(status[idx] === 1) {
+									continue; // Skip if the status "Point" is present
+								}
+								status[idx] = 2; // Set the point status to "Waveform"
+								const dIdx = idx << 2;
+								if(isStereo) {
+									if(chIdx) { // Right channel
+										data[dIdx + c1] = colorW[c1];
+										data[dIdx + c2] = colorW[c2];
+									} else { // Left channel
+										data[dIdx + c0] = colorW[c0];
 									}
-									status[idx] = 2; // Set the "Waveform" status
-									const dIdx = idx << 2;
-									if(isStereoNode) {
-										if(ch) { // Right channel
-											data[dIdx + c1] = colorWaveform[c1];
-											data[dIdx + c2] = colorWaveform[c2];
-										} else { // Left channel
-											data[dIdx + c0] = colorWaveform[c0];
-										}
-									} else { // Mono
-										data[dIdx] = colorWaveform[0];
-										data[dIdx + 1] = colorWaveform[1];
-										data[dIdx + 2] = colorWaveform[2];
-									}
+								} else { // Mono
+									data[dIdx] = colorW[0];
+									data[dIdx + 1] = colorW[1];
+									data[dIdx + 2] = colorW[2];
 								}
 							}
 						}
@@ -347,28 +360,27 @@ export class Scope {
 
 				// Diagram drawing
 				if(isDiagram) {
-					const isNaNCurYCh = isNaNCurY[ch];
+					const isNaNCurYCh = isNaNCurY[chIdx];
 					const value = (curYCh & 255) / 256;
-					const cR = value * colorDiagram[0] | 0;
-					const cG = value * colorDiagram[1] | 0;
-					const cB = value * colorDiagram[2] | 0;
+					const cR = value * colorD[0] | 0;
+					const cG = value * colorD[1] | 0;
+					const cB = value * colorD[2] | 0;
 					for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
 						if(x >= drawWidth) {
 							continue;
 						}
 						for(let y = 0; y < diagramSize; ++y) {
 							const idx = rowOffsets[diagramStart + y] + x;
-							const s = status[idx];
-							if(s === 1 || s === 2) { // Skip if "Point" or "Waveform" status exists
-								continue;
+							if(status[idx] === 1 || status[idx] === 2) {
+								continue; // Skip if the status "Point" or "Waveform" is present
 							}
 							const dIdx = idx << 2;
 							if(isNaNCurYCh) {
 								data[dIdx] = 100; // Red error color
 								continue;
 							}
-							if(isStereoNode) {
-								if(ch) { // Right channel
+							if(isStereo) {
+								if(chIdx) { // Right channel
 									if(c1 === 1) {
 										data[dIdx + 1] = cG;
 									}
@@ -397,10 +409,9 @@ export class Scope {
 		if(scale) {
 			const x = isReverse ? 0 : drawWidth - 1;
 			for(let y = 0; y < height; ++y) {
-				let idx = rowOffsets[255 - y] + x;
-				const s = status[idx];
-				idx <<= 2;
-				this.drawEndBuffer[y] = [data[idx++], data[idx++], data[idx], s];
+				const idx = rowOffsets[255 - y] + x;
+				let dIdx = idx << 2;
+				this.drawEndBuffer[y] = [data[dIdx++], data[dIdx++], data[dIdx], status[idx]];
 			}
 		}
 
@@ -417,7 +428,7 @@ export class Scope {
 			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
 
-		// Instead of clearing the buffer: Simply shift tail to head.
+		// Instead of clearing the buffer, simply shift tail to head.
 		// We are signaling to the graphics engine that everything preceding head has already been read.
 		// In the next frame, we will begin reading only the newly arrived data.
 		this.bufferTail = this.bufferHead;
@@ -464,15 +475,11 @@ export class Scope {
 	// Initialization of the Graphics Ring Buffer
 	// Instead of removing and adding elements, we simply overwrite the old data using a pointer (index).
 	// Memory is allocated only once, and the Garbage Collector is never invoked.
-	initDrawBuffer() {
-		const size = this.bufferSize;
-		// Create a fixed-size array of objects (or a flat Float32Array for even greater speed)
-		this.ringBuffer = new Array(size);
-		for(let i = 0; i < size; i++) {
-			this.ringBuffer[i] = { t: 0, value: [0, 0] };
-		}
-		this.bufferHead = 0; // Pointer to where the next element should be written
-		this.bufferTail = 0; // Pointer indicating where to start reading for graphics
+	initRingBuffer() {
+		// Allocate a single contiguous array: 3 cells (t, L, R) for each point
+		this.ringBuffer = new Float32Array(this.bufferSize * 3);
+		this.bufferHead = 0; // Pointer to the index of the current point (0, 1, 2... size - 1)
+		this.bufferTail = 0;
 	}
 
 	// Canvas initialization
@@ -500,19 +507,21 @@ export class Scope {
 	}
 
 	// Push data values into the Ring Buffer
-	pushToDrawBuffer(t, value) {
+	pushToRingBuffer(t, value) {
 		if(!this.ringBuffer) {
-			this.initDrawBuffer();
+			this.initRingBuffer();
 		}
-		const item = this.ringBuffer[this.bufferHead];
-		item.t = t;
-		item.value[0] = value[0];
-		item.value[1] = value[1];
 
-		// Move the head pointer forward in a circle
+		// Calculate the actual offset in a flat array
+		const idx = this.bufferHead * 3;
+		this.ringBuffer[idx] = t;
+		this.ringBuffer[idx + 1] = value[0];
+		this.ringBuffer[idx + 2] = value[1];
+
+		// Move the pointer in a circle
 		this.bufferHead = (this.bufferHead + 1) % this.bufferSize;
 
-		// If the buffer has overflowed (head has caught up to tail), shift the tail forward to make room
+		// If the buffer has overflowed (head has caught up to tail), shift the tail forward to make space
 		if(this.bufferHead === this.bufferTail) {
 			this.bufferTail = (this.bufferTail + 1) % this.bufferSize;
 		}

@@ -412,7 +412,7 @@ globalThis.bytebeat = new class {
 			const len = drawBuffer.length;
 			for(let i = 0; i < len; ++i) {
 				const item = drawBuffer[i];
-				scope.pushToDrawBuffer(item.t, item.value);
+				scope.pushToRingBuffer(item.t, item.value);
 			}
 		}
 		if(error !== undefined) {
@@ -464,7 +464,7 @@ globalThis.bytebeat = new class {
 		this.byteSample = +value || 0;
 		if(this.isNeedClear && value === 0) {
 			this.isNeedClear = false;
-			scope.initDrawBuffer();
+			scope.initRingBuffer();
 			scope.canvasTimeCursor.style.left = 0;
 			scope.clearCanvas();
 			if(!this.isPlaying) {
