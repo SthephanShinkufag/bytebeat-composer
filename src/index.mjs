@@ -408,10 +408,11 @@ globalThis.bytebeat = new class {
 			this.setByteSample(byteSample);
 		}
 		if(Array.isArray(drawBuffer)) {
-			scope.drawBuffer = scope.drawBuffer.concat(drawBuffer);
-			const limit = scope.canvasWidth * (1 << scope.drawScale) - 1;
-			if(scope.drawBuffer.length > limit) {
-				scope.drawBuffer = scope.drawBuffer.slice(-limit);
+			// Iterate through the incoming points and add them directly to the Graphics Ring Buffer
+			const len = drawBuffer.length;
+			for(let i = 0; i < len; ++i) {
+				const item = drawBuffer[i];
+				scope.pushToDrawBuffer(item.t, item.value);
 			}
 		}
 		if(error !== undefined) {
@@ -463,7 +464,7 @@ globalThis.bytebeat = new class {
 		this.byteSample = +value || 0;
 		if(this.isNeedClear && value === 0) {
 			this.isNeedClear = false;
-			scope.drawBuffer = [];
+			scope.initDrawBuffer();
 			scope.canvasTimeCursor.style.left = 0;
 			scope.clearCanvas();
 			if(!this.isPlaying) {

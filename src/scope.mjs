@@ -6,6 +6,9 @@ export class Scope {
 	constructor() {
 		this.analyser = [null, null];
 		this.analyserData = [null, null];
+		this.bufferHead = 0;
+		this.bufferSize = 32768; // Allocate a buffer size with a margin to accommodate any drawScale limits
+		this.bufferTail = 0;
 		this.canvasContainer = null;
 		this.canvasCtx = null;
 		this.canvasElem = null;
@@ -17,7 +20,6 @@ export class Scope {
 		this.colorDiagram = null;
 		this.colorStereoRGB = [null, null];
 		this.colorWaveform = null;
-		this.drawBuffer = [];
 		this.drawEndBuffer = [];
 		this.drawMode = 'Combined';
 		this.drawScale = 5;
@@ -26,6 +28,7 @@ export class Scope {
 		this.fftXTable = null;
 		this.maxDecibels = -10;
 		this.minDecibels = -120;
+		this.ringBuffer = null;
 	}
 
 	// Display the time cursor depending on scale
@@ -45,11 +48,15 @@ export class Scope {
 			globalThis.bytebeat.resetTime();
 			return;
 		}
-		const buffer = this.drawBuffer;
-		const bufferLen = buffer.length;
-		if(!bufferLen) {
+
+		// Calculate how many elements have accumulated in the Ring Buffer
+		const bufferLen = this.bufferHead >= this.bufferTail ? this.bufferHead - this.bufferTail :
+			this.bufferSize - this.bufferTail + this.bufferHead;
+		if(bufferLen === 0) {
 			return;
 		}
+
+		// Canvas variables
 		const ctx = this.canvasCtx;
 		const width = this.canvasWidth;
 		const height = this.canvasHeight;
@@ -113,14 +120,20 @@ export class Scope {
 				gCtx.stroke();
 			}
 
-			// Stereo detect (scanning from the end)
+			// Stereo detection for a ring buffer (scanning up to bufferLimit recent elements from the end)
 			let isStereo = false;
-			for(let i = bufferLen - 1, len = Math.min(200, bufferLen); i >= bufferLen - len; --i) {
-				const val = buffer[i].value;
+			const bufferLimit = 200;
+			const checkLen = bufferLen > bufferLimit ? bufferLimit : bufferLen;
+			// Starting with the most recent element (before the head)
+			let scanIdx = (this.bufferHead - 1 + this.bufferSize) % this.bufferSize;
+			for(let i = 0; i < checkLen; ++i) {
+				const val = this.ringBuffer[scanIdx].value;
 				if(val[0] !== val[1] && !isNaN(val[0]) && !isNaN(val[1])) {
 					isStereo = true;
 					break;
 				}
+				// Stepping backward in a circle
+				scanIdx = (scanIdx - 1 + this.bufferSize) % this.bufferSize;
 			}
 
 			// Plotting the frequency graph (using a look-up table)
@@ -140,16 +153,20 @@ export class Scope {
 				ctx.stroke();
 			}
 
-			// Trim buffer only if it's too large (to avoid triggering GC too frequently)
-			if(bufferLen > 400) {
-				this.drawBuffer = buffer.slice(-200);
-			}
+			// Limit the tail for the FFT so that, when switching to waveform mode,
+			// the player doesn't render an accumulated tail spanning the duration of the FFT's operation
+			this.bufferTail = (this.bufferHead - bufferLimit + this.bufferSize) % this.bufferSize;
 			return;
 		}
 
 		// --- Points, Waveform, Diagram, Combined modes ---
 		const scale = this.drawScale;
-		let startTime = buffer[0].t;
+
+		// Retrieve the first (oldest) element for rendering using the tail index.
+		let curIdx = this.bufferTail;
+		let startTime = this.ringBuffer[curIdx].t;
+
+		// Calculate X-coordinates of the segment
 		let startX = mod(this.getX(startTime), width);
 		let endX = Math.floor(startX + this.getX(endTime - startTime));
 		startX = Math.floor(startX);
@@ -214,15 +231,23 @@ export class Scope {
 		let lastPlottedY0 = -1;
 		let lastPlottedY1 = -1;
 
-		// Drawing in a segment
+		// Drawing in a segment. Iterate through the Ring Buffer from tail to head.
 		for(let i = 0; i < bufferLen; ++i) {
-			// Get current coordinates
-			const curY = buffer[i].value;
+			const curItem = this.ringBuffer[curIdx];
+
+			// Get the next index in a circular fashion for prevY/nextTime
+			const nextIdx = (curIdx + 1) % this.bufferSize;
+			const nextItem = i < bufferLen - 1 ? this.ringBuffer[nextIdx] : null;
+			const prevItem = i > 0 ?
+				this.ringBuffer[(curIdx - 1 + this.bufferSize) % this.bufferSize] : null;
+
+			// Get the current coordinates
+			const curY = curItem.value;
 			const curY0 = curY[0];
 			const curY1 = curY[1];
-			const curTime = buffer[i].t;
+			const curTime = curItem.t;
 			const curX = mod(Math.floor(this.getX(
-				isReverse ? (buffer[i + 1]?.t ?? endTime) + 1 : curTime)) - startX, width);
+				isReverse ? (nextItem?.t ?? endTime) + 1 : curTime)) - startX, width);
 
 			// Skip if X and Y are identical to the previous step
 			if(isPoints) {
@@ -235,8 +260,8 @@ export class Scope {
 			}
 
 			const isNaNCurY = [isNaN(curY0), isNaN(curY1)];
-			const prevY = buffer[i - 1]?.value ?? [NaN, NaN];
-			const nextTime = buffer[i + 1]?.t ?? endTime;
+			const prevY = prevItem?.value ?? [NaN, NaN];
+			const nextTime = nextItem?.t ?? endTime;
 			const nextX = mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 			let diagramSize, diagramStart;
 			if(isDiagram) {
@@ -365,6 +390,7 @@ export class Scope {
 					}
 				}
 			}
+			curIdx = nextIdx;
 		}
 
 		// Saving the last points of a segment
@@ -391,8 +417,10 @@ export class Scope {
 			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
 
-		// Clear buffer
-		this.drawBuffer = [{ t: endTime, value: buffer[bufferLen - 1].value }];
+		// Instead of clearing the buffer: Simply shift tail to head.
+		// We are signaling to the graphics engine that everything preceding head has already been read.
+		// In the next frame, we will begin reading only the newly arrived data.
+		this.bufferTail = this.bufferHead;
 	}
 
 	// Stereo colors indicators
@@ -433,6 +461,20 @@ export class Scope {
 		return t / (1 << this.drawScale);
 	}
 
+	// Initialization of the Graphics Ring Buffer
+	// Instead of removing and adding elements, we simply overwrite the old data using a pointer (index).
+	// Memory is allocated only once, and the Garbage Collector is never invoked.
+	initDrawBuffer() {
+		const size = this.bufferSize;
+		// Create a fixed-size array of objects (or a flat Float32Array for even greater speed)
+		this.ringBuffer = new Array(size);
+		for(let i = 0; i < size; i++) {
+			this.ringBuffer[i] = { t: 0, value: [0, 0] };
+		}
+		this.bufferHead = 0; // Pointer to where the next element should be written
+		this.bufferTail = 0; // Pointer indicating where to start reading for graphics
+	}
+
 	// Canvas initialization
 	initElements() {
 		this.canvasContainer = document.getElementById('canvas-container');
@@ -455,6 +497,25 @@ export class Scope {
 			this.canvasWidth = this.canvasElem.width = 1024;
 		}
 		this.updateFFTLookUpTable();
+	}
+
+	// Push data values into the Ring Buffer
+	pushToDrawBuffer(t, value) {
+		if(!this.ringBuffer) {
+			this.initDrawBuffer();
+		}
+		const item = this.ringBuffer[this.bufferHead];
+		item.t = t;
+		item.value[0] = value[0];
+		item.value[1] = value[1];
+
+		// Move the head pointer forward in a circle
+		this.bufferHead = (this.bufferHead + 1) % this.bufferSize;
+
+		// If the buffer has overflowed (head has caught up to tail), shift the tail forward to make room
+		if(this.bufferHead === this.bufferTail) {
+			this.bufferTail = (this.bufferTail + 1) % this.bufferSize;
+		}
 	}
 
 	// Starting the visualizer animation
