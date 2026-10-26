@@ -125,9 +125,9 @@ export class Scope {
 			const bufferLimit = 200;
 			const checkLen = bufferLen > bufferLimit ? bufferLimit : bufferLen;
 			// Starting with the most recent element (before the head)
-			let scanIdx = (this.bufferHead - 1 + this.bufferSize) % this.bufferSize;
+			let checkIdx = (this.bufferHead - 1 + this.bufferSize) % this.bufferSize;
 			for(let i = 0; i < checkLen; ++i) {
-				const bufIdx = scanIdx * 3;
+				const bufIdx = checkIdx * 3;
 				const valL = this.ringBuffer[bufIdx + 1];
 				const valR = this.ringBuffer[bufIdx + 2];
 				if(valL !== valR && !isNaN(valL) && !isNaN(valR)) {
@@ -135,7 +135,7 @@ export class Scope {
 					break;
 				}
 				// Stepping backward in a circle
-				scanIdx = (scanIdx - 1 + this.bufferSize) % this.bufferSize;
+				checkIdx = (checkIdx - 1 + this.bufferSize) % this.bufferSize;
 			}
 
 			// Plotting the frequency graph (using a look-up table)
@@ -163,7 +163,7 @@ export class Scope {
 
 		// --- Points, Waveform, Diagram, Combined modes ---
 
-		// Retrieve the first (oldest) element for rendering using the tail index
+		// Get the first (oldest) element for rendering using the tail index
 		// Sample format in ring buffer: [time0, R_value0, L_value0, time1, R_value1, L_value1, ...]
 		let startTime = this.ringBuffer[this.bufferTail * 3];
 
@@ -226,24 +226,25 @@ export class Scope {
 		const colorD = this.colorDiagram;
 		const colorP = this.colorWaveform; // Points color actually, "Waveform color" in settings
 		const colorW = [.65 * colorP[0] | 0, .65 * colorP[1] | 0, .65 * colorP[2] | 0];
+		const colorErr = 0xFF000064; // Error color in 32-bit format (Alpha=255, Blue=0, Green=0, Red=100)
 		const c0 = this.colorChannels[0];
 		const c1 = this.colorChannels[1];
 		const c2 = this.colorChannels[2];
 
 		// Speculative fast stereo detection from a typed array
 		let isStereo = false;
-		let scanIdx = this.bufferTail;
+		let checkIdx = this.bufferTail;
 		for(let i = 0; i < bufferLen; ++i) {
-			const bufIdx = scanIdx * 3;
+			const bufIdx = checkIdx * 3;
 			const valL = this.ringBuffer[bufIdx + 1];
 			const valR = this.ringBuffer[bufIdx + 2];
 			if(valL !== valR && !isNaN(valL) && !isNaN(valR)) {
 				isStereo = true;
 				break;
 			}
-			scanIdx = (scanIdx + 1) % this.bufferSize;
+			checkIdx = (checkIdx + 1) % this.bufferSize;
 		}
-		const chCount = isStereo ? 2 : 1;
+		const channelsCount = isStereo ? 2 : 1;
 
 		// Variables to detect pixel duplicates
 		let lastPlottedX = -1;
@@ -253,16 +254,37 @@ export class Scope {
 		// Drawing in a segment, iterating through the Ring Buffer from tail to head
 		let curIdx = this.bufferTail;
 		for(let i = 0; i < bufferLen; ++i) {
-			// Calculate the coordinates
-			const nextIdx = (curIdx + 1) % this.bufferSize;
-			const nextTime = i < bufferLen - 1 ? this.ringBuffer[nextIdx * 3] : endTime;
+			// Calculate the current and next coordinates
 			const bufIdx = curIdx * 3;
 			const curTime = this.ringBuffer[bufIdx];
 			const curYR = this.ringBuffer[bufIdx + 1];
 			const curYL = this.ringBuffer[bufIdx + 2];
+			const nextIdx = (curIdx + 1) % this.bufferSize;
+			const nextTime = i < bufferLen - 1 ? this.ringBuffer[nextIdx * 3] : endTime;
 			const curX = mod(Math.floor(this.getX(isReverse ? nextTime + 1 : curTime)) - startX, width);
+			const nextX = mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
 
-			// Skip if X and Y are identical to the previous step
+			// NaN errors handling
+			if(isNaN(curYR) || isNaN(curYL)) {
+				for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
+					if(x >= drawWidth) {
+						continue;
+					}
+					for(let y = 0; y < height; ++y) {
+						const idx = rowOffsets[y] + x;
+						const dIdx = idx << 2;
+						// Fill with red if the pixel is not a restored point (status !== 1)
+						// and there is no color yet
+						if(status[idx] !== 1 && !data[dIdx + 1] && !data[dIdx + 2]) {
+							buf32[idx] = colorErr;
+						}
+					}
+				}
+				curIdx = nextIdx;
+				continue; // Moving on to the next sample, skipping the charts drawing
+			}
+
+			// Skip if X and Y are identical to the previous sample
 			if(isPoints) {
 				if(curX === lastPlottedX && curYR === lastPlottedYR && curYL === lastPlottedYL) {
 					curIdx = nextIdx;
@@ -273,36 +295,23 @@ export class Scope {
 				lastPlottedYL = curYL;
 			}
 
+			// Calculate the previous coordinates
 			const prevBufIdx = ((curIdx - 1 + this.bufferSize) % this.bufferSize) * 3;
 			const prevYR = i > 0 ? this.ringBuffer[prevBufIdx + 1] : NaN;
 			const prevYL = i > 0 ? this.ringBuffer[prevBufIdx + 2] : NaN;
-			const nextX = mod(Math.ceil(this.getX(isReverse ? curTime + 1 : nextTime)) - startX, width);
-			const isNaNCurY = [isNaN(curYR), isNaN(curYL)];
 
+			// Diagram mode parameters
 			let diagramSize, diagramStart;
 			if(isDiagram) {
 				diagramSize = Math.max(1, 256 >> scale);
 				diagramStart = diagramSize * mod(curTime, 1 << scale);
-			} else if(isNaNCurY[0] || isNaNCurY[1]) {
-				// Error value - filling with red color
-				for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
-					if(x >= drawWidth) {
-						continue;
-					}
-					for(let y = 0; y < height; ++y) {
-						const dIdx = (rowOffsets[y] + x) << 2;
-						if(!data[dIdx + 1] && !data[dIdx + 2]) {
-							data[dIdx] = 100; // Red error color
-						}
-					}
-				}
 			}
 
 			// Drawing for each channel (or mono)
-			let chIdx = chCount;
+			let chIdx = channelsCount;
 			while(chIdx--) {
 				const curYCh = chIdx ? curYL : curYR;
-				if(!isNaNCurY[chIdx] && (isPoints || isWaveform)) {
+				if(isPoints || isWaveform) {
 					// Points drawing
 					for(let x = curX; x !== nextX; x = mod(x + 1, width)) {
 						if(x >= drawWidth) {
@@ -360,7 +369,6 @@ export class Scope {
 
 				// Diagram drawing
 				if(isDiagram) {
-					const isNaNCurYCh = isNaNCurY[chIdx];
 					const value = (curYCh & 255) / 256;
 					const cR = value * colorD[0] | 0;
 					const cG = value * colorD[1] | 0;
@@ -375,10 +383,6 @@ export class Scope {
 								continue; // Skip if the status "Point" or "Waveform" is present
 							}
 							const dIdx = idx << 2;
-							if(isNaNCurYCh) {
-								data[dIdx] = 100; // Red error color
-								continue;
-							}
 							if(isStereo) {
 								if(chIdx) { // Right channel
 									if(c1 === 1) {
