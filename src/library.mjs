@@ -186,7 +186,7 @@ export class Library {
 				str += '<div class="code-remix"><div class="code-remix-parent">' +
 					`<button class="code-button code-remix-load" data-hash="${
 						rHash }" title="Show detailed source information">▷</button>` +
-					`remix of <span class="code-remix-preview">${
+					` remix of <span class="code-remix-preview">${
 						mainRemixUrl ?
 							`<a href="${ mainRemixUrl }" target="_blank">${ rName || rAuthor }</a>` :
 							`"${ rName }"` }` +

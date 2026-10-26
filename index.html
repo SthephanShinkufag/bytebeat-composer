@@ -218,7 +218,7 @@
 							<h3>🎹 Supported Playback modes</h3>
 							<ul>
 								<li><strong>Bytebeat:</strong> Outputs value as an <strong>unsigned 8-bit integer (uint8)</strong> (0 to 255). Values outside this range wrap around, decimals are truncated.</li>
-								<li><strong>Signed Bytebeat:</strong> Outputs as a <strong>signed 8-bit integer (int8)</strong> (-127 to 128). Required for classic demoscene music ports (e.g., *Longline Theory*).</li>
+								<li><strong>Signed Bytebeat:</strong> Outputs as a <strong>signed 8-bit integer (int8)</strong> (-127 to 128). Required for classic demoscene music ports (e.g., "Longline Theory").</li>
 								<li><strong>Floatbeat:</strong> Uses <strong>floating-point values (float)</strong> from -1.0 to 1.0. This mode provides clean sound without 8-bit distortion or noise on quiet songs.</li>
 								<li><strong>Funcbeat:</strong> <strong>Statement-based tracking</strong>. Runs a wrapper function once at startup and expects it to return a function evaluated in seconds.</li>
 								<li><strong>Stereo sound:</strong> Return a two-element array <code>[left, right]</code> to separate channels. For example, <code>[t*(t>>10&42), t*(t>>11&42)]</code></li>
