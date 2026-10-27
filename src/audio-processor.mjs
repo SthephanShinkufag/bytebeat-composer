@@ -17,25 +17,29 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.sampleRate = 8000;
 		this.sampleRatio = 1;
 		this.srDivisor = 1;
+		// Allocate a fixed flat array for sending graphics points (t, valL, valR)
+		this.drawBufferRaw = new Float32Array(128 * 3);
 		Object.seal(this);
 		audioProcessor.deleteGlobals();
 		audioProcessor.freezeGlobals();
 		this.port.addEventListener('message', e => this.receiveData(e.data));
 		this.port.start();
 	}
+
+	// Deleting global variables
 	static deleteGlobals() {
 		// Delete single letter variables to prevent persistent variable errors (covers a good enough range)
 		for(let i = 0; i < 26; ++i) {
 			delete globalThis[String.fromCharCode(65 + i)];
 			delete globalThis[String.fromCharCode(97 + i)];
 		}
-		// Delete global variables
 		for(const name in globalThis) {
 			if(Object.prototype.hasOwnProperty.call(globalThis, name)) {
 				delete globalThis[name];
 			}
 		}
 	}
+
 	static freezeGlobals() {
 		Object.getOwnPropertyNames(globalThis).forEach(name => {
 			const prop = globalThis[name];
@@ -49,6 +53,8 @@ class audioProcessor extends AudioWorkletProcessor {
 			Object.defineProperty(globalThis, name, { writable: false, configurable: false });
 		});
 	}
+
+	// Errors handling
 	static getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
 		if(!(err instanceof Error)) {
@@ -59,30 +65,40 @@ class audioProcessor extends AudioWorkletProcessor {
 			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
 				` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
 	}
+
+	// Core calculations to obtain values and write them to the buffer
 	process(inputs, [chData]) {
 		const chDataLen = chData[0].length;
 		if(!chDataLen || !this.isPlaying) {
 			return true;
 		}
-		let time = this.sampleRatio * this.audioSample;
-		let { byteSample } = this;
-		const drawBuffer = [];
+		let { // Local caching to offload the JIT optimizer
+			byteSample,
+			errorDisplayed,
+			func,
+			getValues,
+			isFuncbeat,
+			sampleRate,
+			sampleRatio,
+			srDivisor
+		} = this;
+		let time = sampleRatio * this.audioSample;
+		let drawIdx = 0; // Position pointer in a flat array
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
+		const drawRaw = this.drawBufferRaw;
+		const outVal = this.outValue;
 		for(let i = 0; i < chDataLen; ++i) {
-			time += this.sampleRatio;
-			const currentTime = Math.floor(time / this.srDivisor) * this.srDivisor;
+			time += sampleRatio;
+			const currentTime = Math.floor(time / srDivisor) * srDivisor;
 			if(this.lastTime !== currentTime) {
 				let funcValue;
-				const currentSample = Math.floor(byteSample / this.srDivisor) * this.srDivisor;
+				const currentSample = Math.floor(byteSample / srDivisor) * srDivisor;
 				try {
-					if(this.isFuncbeat) {
-						funcValue = this.func(currentSample / this.sampleRate, this.sampleRate);
-					} else {
-						funcValue = this.func(currentSample);
-					}
+					funcValue = isFuncbeat ? func(currentSample / sampleRate, sampleRate) :
+						func(currentSample);
 				} catch(err) {
-					if(this.errorDisplayed) {
-						this.errorDisplayed = false;
+					if(errorDisplayed) {
+						errorDisplayed = false;
 						this.sendData({
 							error: {
 								message: audioProcessor.getErrorMessage(err, currentSample),
@@ -92,43 +108,65 @@ class audioProcessor extends AudioWorkletProcessor {
 					}
 					funcValue = NaN;
 				}
-				funcValue = Array.isArray(funcValue) ? [funcValue[0], funcValue[1]] : [funcValue, funcValue];
+
+				// Eliminate memory allocation for arrays in the case of mono signals
+				const isArrayValue = Array.isArray(funcValue);
+				let fv0 = isArrayValue ? funcValue[0] : funcValue;
+				let fv1 = isArrayValue ? funcValue[1] : funcValue;
+
+				fv0 = +fv0;
+				fv1 = +fv1;
 				let hasValue = false;
-				let ch = 2;
-				while(ch--) {
-					try {
-						funcValue[ch] = +funcValue[ch];
-					} catch(err) {
-						funcValue[ch] = NaN;
+
+				// Channel 1 (Right)
+				if(isDiagram) {
+					if(!isNaN(fv1)) {
+						outVal[1] = getValues(fv1, 1);
+					} else {
+						this.lastByteValue[1] = NaN;
 					}
-					if(isDiagram) {
-						if(!isNaN(funcValue[ch])) {
-							this.outValue[ch] = this.getValues(funcValue[ch], ch);
-						} else {
-							this.lastByteValue[ch] = NaN;
-						}
+					hasValue = true;
+				} else if(fv1 !== this.lastFuncValue[1]) {
+					if(!isNaN(fv1)) {
+						outVal[1] = getValues(fv1, 1);
 						hasValue = true;
-						continue;
-					}
-					if(funcValue[ch] === this.lastFuncValue[ch]) {
-						continue;
-					} else if(!isNaN(funcValue[ch])) {
-						this.outValue[ch] = this.getValues(funcValue[ch], ch);
-						hasValue = true;
-					} else if(!isNaN(this.lastFuncValue[ch])) {
-						this.lastByteValue[ch] = NaN;
+					} else if(!isNaN(this.lastFuncValue[1])) {
+						this.lastByteValue[1] = NaN;
 						hasValue = true;
 					}
 				}
+
+				// Channel 0 (Left)
+				if(isDiagram) {
+					if(!isNaN(fv0)) {
+						outVal[0] = getValues(fv0, 0);
+					} else {
+						this.lastByteValue[0] = NaN;
+					}
+					hasValue = true;
+				} else if(fv0 !== this.lastFuncValue[0]) {
+					if(!isNaN(fv0)) {
+						outVal[0] = getValues(fv0, 0);
+						hasValue = true;
+					} else if(!isNaN(this.lastFuncValue[0])) {
+						this.lastByteValue[0] = NaN;
+						hasValue = true;
+					}
+				}
+
 				if(hasValue) {
-					drawBuffer.push({ t: currentSample, value: [...this.lastByteValue] });
+					// Serialize the data directly into a flat array
+					drawRaw[drawIdx++] = currentSample;
+					drawRaw[drawIdx++] = this.lastByteValue[0];
+					drawRaw[drawIdx++] = this.lastByteValue[1];
 				}
 				byteSample += currentTime - this.lastTime;
-				this.lastFuncValue = funcValue;
+				this.lastFuncValue[0] = fv0;
+				this.lastFuncValue[1] = fv1;
 				this.lastTime = currentTime;
 			}
-			chData[0][i] = this.outValue[0];
-			chData[1][i] = this.outValue[1];
+			chData[0][i] = outVal[0];
+			chData[1][i] = outVal[1];
 		}
 		if(Math.abs(byteSample) > Number.MAX_SAFE_INTEGER) {
 			this.resetTime();
@@ -141,15 +179,29 @@ class audioProcessor extends AudioWorkletProcessor {
 			isSend = true;
 			data.byteSample = this.byteSample = byteSample;
 		}
-		if(drawBuffer.length) {
+		if(drawIdx > 0) {
 			isSend = true;
-			data.drawBuffer = drawBuffer;
+			// Create a quick Float32Array slice of exactly the size needed for the current quantum
+			data.drawBuffer = new Float32Array(drawRaw.buffer, 0, drawIdx);
 		}
 		if(isSend) {
-			this.sendData(data);
+			if(data.drawBuffer) {
+				// Send data using the Zero-Copy Transferable Object method. How Zero-Copy works:
+				// The browser instantly (in 0 ms) redirects the pointer to this memory buffer from the worker
+				// to the main thread (in index.js). The memory in the worker is cleared (its size becomes 0).
+				this.port.postMessage(data, [data.drawBuffer.buffer]);
+				// Reallocate the internal array, since the old memory buffer has "flown off" to the UI thread
+				this.drawBufferRaw = new Float32Array(128 * 3);
+			} else {
+				// If data contains only the byteSample value (the current timecode)
+				// but the worker has not generated any new points for the graph.
+				this.sendData(data);
+			}
 		}
 		return true;
 	}
+
+	// Handler for received commands
 	receiveData(data) {
 		if(data.byteSample !== undefined) {
 			this.byteSample = +data.byteSample || 0;
@@ -206,20 +258,29 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.setSampleRatio(data.sampleRatio);
 		}
 	}
+
+	// Data sending
 	sendData(data) {
 		this.port.postMessage(data);
 	}
+
+	// Set time to 0
 	resetTime() {
 		this.byteSample = 0;
 		this.resetValues();
 		this.sendData({ byteSample: 0 });
 	}
+
+	// Reset calculations
 	resetValues() {
 		this.audioSample = 0;
-		this.lastByteValue = this.lastFuncValue = [null, null];
+		this.lastByteValue = [null, null];
+		this.lastFuncValue = [null, null];
 		this.lastTime = -1;
 		this.outValue = [0, 0];
 	}
+
+	// Parsing text into function and preparing it for execution
 	setFunction(codeText) {
 		// Create shortened Math functions
 		const params = Object.getOwnPropertyNames(Math);
@@ -262,9 +323,11 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.errorDisplayed = false;
 		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
 	}
-	setSampleRatio(sampleRatio) {
+
+	// Get sample parameters
+	setSampleRatio(sRatio) {
 		const timeOffset = Math.floor(this.sampleRatio * this.audioSample) - this.lastTime;
-		this.sampleRatio = sampleRatio * this.playbackSpeed;
+		this.sampleRatio = sRatio * this.playbackSpeed;
 		this.lastTime = Math.floor(this.sampleRatio * this.audioSample) - timeOffset;
 	}
 }

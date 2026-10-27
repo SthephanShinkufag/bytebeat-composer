@@ -28,7 +28,7 @@ export class Scope {
 		this.fftXTable = null;
 		this.maxDecibels = -10;
 		this.minDecibels = -120;
-		this.ringBuffer = null; // Circular buffer for drawing samples
+		this.ringBuffer = null; // Ring Buffer for drawing samples, 3 cells (t, valL, valR) for each point
 	}
 
 	// Display the time cursor depending on scale
@@ -49,9 +49,15 @@ export class Scope {
 			return;
 		}
 
-		// Calculate how many points have accumulated in the Ring Buffer
-		const bufferLen = this.bufferHead >= this.bufferTail ?
-			this.bufferHead - this.bufferTail : this.bufferSize - this.bufferTail + this.bufferHead;
+		// Save the head (the newest point)
+		// While rendering is in progress, even newer points may arrive from the worker
+		const currentHead = this.bufferHead;
+
+		// Calculate how many points have accumulated in the Ring Buffer before head
+		const bufferLen = currentHead >= this.bufferTail ?
+			currentHead - this.bufferTail : this.bufferSize - this.bufferTail + currentHead;
+
+		// If there are no points sent by an audio worker, then skip the drawing
 		if(bufferLen === 0) {
 			return;
 		}
@@ -163,8 +169,7 @@ export class Scope {
 
 		// --- Points, Waveform, Diagram, Combined modes ---
 
-		// Get the first (oldest) element for rendering using the tail index
-		// Sample format in ring buffer: [time0, R_value0, L_value0, time1, R_value1, L_value1, ...]
+		// Get the start time, taking the first (oldest) element using the tail index
 		let startTime = this.ringBuffer[this.bufferTail * 3];
 
 		// Calculate X-coordinates of the segment
@@ -432,10 +437,11 @@ export class Scope {
 			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
 
-		// Instead of clearing the buffer, simply shift tail to head.
-		// We are signaling to the graphics engine that everything preceding head has already been read.
-		// In the next frame, we will begin reading only the newly arrived data.
-		this.bufferTail = this.bufferHead;
+		// Instead of clearing the Ring Buffer, shift the tail to the (currentHead - 1) position.
+		// We are signaling to the graphics engine that everything preceding that point has already been read.
+		// New points that arrive while this function is runnung will remain in the buffer for the next frame.
+		this.bufferTail = (currentHead - 1 + this.bufferSize) % this.bufferSize;
+		this.ringBuffer[this.bufferTail * 3] = endTime;
 	}
 
 	// Stereo colors indicators
@@ -480,9 +486,9 @@ export class Scope {
 	// Instead of removing and adding elements, we simply overwrite the old data using a pointer (index).
 	// Memory is allocated only once, and the Garbage Collector is never invoked.
 	initRingBuffer() {
-		// Allocate a single contiguous array: 3 cells (t, L, R) for each point
+		// Allocate a single contiguous array: 3 cells (t, valL, valR) for each point
 		this.ringBuffer = new Float32Array(this.bufferSize * 3);
-		this.bufferHead = 0; // Pointer to the index of the current point (0, 1, 2... size - 1)
+		this.bufferHead = 0; // Pointer to the index of the current point
 		this.bufferTail = 0;
 	}
 
@@ -511,7 +517,7 @@ export class Scope {
 	}
 
 	// Push data values into the Ring Buffer
-	pushToRingBuffer(t, value) {
+	pushToRingBuffer(t, valL, valR) {
 		if(!this.ringBuffer) {
 			this.initRingBuffer();
 		}
@@ -519,8 +525,8 @@ export class Scope {
 		// Calculate the actual offset in a flat array
 		const idx = this.bufferHead * 3;
 		this.ringBuffer[idx] = t;
-		this.ringBuffer[idx + 1] = value[0];
-		this.ringBuffer[idx + 2] = value[1];
+		this.ringBuffer[idx + 1] = valL;
+		this.ringBuffer[idx + 2] = valR;
 
 		// Move the pointer in a circle
 		this.bufferHead = (this.bufferHead + 1) % this.bufferSize;

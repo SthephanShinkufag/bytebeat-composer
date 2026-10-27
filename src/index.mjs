@@ -407,12 +407,16 @@ globalThis.bytebeat = new class {
 			this.setCounterValue(byteSample);
 			this.setByteSample(byteSample);
 		}
-		if(Array.isArray(drawBuffer)) {
-			// Iterate through the incoming points and add them directly to the Graphics Ring Buffer
+		// If sample data for the buffer has arrived
+		// Iterate through the incoming points and add them directly to the Graphics Ring Buffer
+		if(drawBuffer && drawBuffer instanceof Float32Array) {
 			const len = drawBuffer.length;
-			for(let i = 0; i < len; ++i) {
-				const item = drawBuffer[i];
-				scope.pushToRingBuffer(item.t, item.value);
+			// Step with a stride of 3, extracting (t, valL, valR)
+			for(let i = 0; i < len; i += 3) {
+				const t = drawBuffer[i];
+				const valL = drawBuffer[i + 1];
+				const valR = drawBuffer[i + 2];
+				scope.pushToRingBuffer(t, valL, valR);
 			}
 		}
 		if(error !== undefined) {
