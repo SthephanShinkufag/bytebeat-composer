@@ -123,6 +123,12 @@ globalThis.bytebeat = new class {
 					library.onclickCodeLoadButton(elem.parentNode);
 					break;
 				case classList.contains('code-text'): {
+					// If in the description block then load code from text
+					if(elem.parentNode.classList.contains('code-description')) {
+						this.loadCode(Object.assign({ code: elem.innerText },
+							elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
+						break;
+					}
 					// Look for the panel with "min / orig / format" buttons within the same song
 					const buttonsContainer = elem.previousElementSibling;
 					if(buttonsContainer) {

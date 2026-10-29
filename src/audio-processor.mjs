@@ -311,7 +311,8 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Extract all properties of Math (including PI, E, sin, cos)
 		// Use `var` to allow the user's code any redefinitions and re-declarations.
 		const mathProps = Object.getOwnPropertyNames(Math).filter(k => k !== 'constructor');
-		const mathHeader = `var { ${ mathProps.join(', ') } } = Math; var int = Math.trunc;`;
+		const mathHeader = `var { ${
+			mathProps.join(', ') } } = Math; var int = Math.trunc; var window = globalThis;`;
 
 		try {
 			if(this.isFuncbeat) {

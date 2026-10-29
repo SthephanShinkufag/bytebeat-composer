@@ -1207,6 +1207,10 @@ button[name="close"] {
 	opacity: .9;
 }
 
+.code-description > .code-text {
+	width: auto;
+}
+
 .code-info {
 	color: #808080;
 	cursor: default;
