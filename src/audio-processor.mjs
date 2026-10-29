@@ -18,6 +18,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.sampleRatio = 1;
 		this.srDivisor = 1;
 		// Allocate a fixed flat array for sending graphics points (t, valL, valR)
+		// The standard quantum size in the Web Audio API is 128 samples
 		this.drawBufferRaw = new Float32Array(128 * 3);
 		Object.seal(this);
 		audioProcessor.deleteGlobals();
@@ -54,16 +55,36 @@ class audioProcessor extends AudioWorkletProcessor {
 		});
 	}
 
-	// Errors handling
-	static getErrorMessage(err, time) {
+	// Handling code errors and thrown messages
+	getErrorMessage(err, time) {
 		const when = time === null ? 'compilation' : 't=' + time;
+
+		// Display `throw` messages
 		if(!(err instanceof Error)) {
 			return `${ when } thrown: ${ typeof err === 'string' ? err : JSON.stringify(err) }`;
 		}
-		const { message, lineNumber, columnNumber } = err;
+
+		const { message } = err;
+		let { lineNumber, columnNumber } = err;
+
+		// If this is a Funcbeat validation error, remove the technical line number
+		if(this.isFuncbeat && message === 'this.func is not a function') {
+			return `${ when } error: Funcbeat code must return a function!`;
+		}
+
+		// Parse err.stack to find a reference to virtual file "user-code.js"
+		if(err.stack) {
+			// Look for a pattern matching user-code.js:line:character
+			const match = err.stack.match(/user-code\.js:(\d+):(\d+)/);
+			if(match) {
+				lineNumber = parseInt(match[1], 10);
+				columnNumber = parseInt(match[2], 10);
+			}
+		}
+
 		return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message) }${
 			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
-				` (at line ${ lineNumber - 3 }, character ${ +columnNumber })` : '' }`;
+				` (at line ${ lineNumber - 3 }, character ${ columnNumber })` : '' }`;
 	}
 
 	// Core calculations to obtain values and write them to the buffer
@@ -75,7 +96,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		let { // Local caching to offload the JIT optimizer
 			byteSample,
 			errorDisplayed,
-			func,
 			getValues,
 			isFuncbeat,
 			sampleRate,
@@ -94,14 +114,14 @@ class audioProcessor extends AudioWorkletProcessor {
 				let funcValue;
 				const currentSample = Math.floor(byteSample / srDivisor) * srDivisor;
 				try {
-					funcValue = isFuncbeat ? func(currentSample / sampleRate, sampleRate) :
-						func(currentSample);
+					funcValue = isFuncbeat ? this.func(currentSample / sampleRate, sampleRate) :
+						this.func(currentSample);
 				} catch(err) {
 					if(errorDisplayed) {
 						errorDisplayed = false;
 						this.sendData({
 							error: {
-								message: audioProcessor.getErrorMessage(err, currentSample),
+								message: this.getErrorMessage(err, currentSample),
 								isRuntime: true
 							}
 						});
@@ -111,11 +131,8 @@ class audioProcessor extends AudioWorkletProcessor {
 
 				// Eliminate memory allocation for arrays in the case of mono signals
 				const isArrayValue = Array.isArray(funcValue);
-				let fv0 = isArrayValue ? funcValue[0] : funcValue;
-				let fv1 = isArrayValue ? funcValue[1] : funcValue;
-
-				fv0 = +fv0;
-				fv1 = +fv1;
+				const fv0 = +(isArrayValue ? funcValue[0] : funcValue);
+				const fv1 = +(isArrayValue ? funcValue[1] : funcValue);
 				let hasValue = false;
 
 				// Channel 1 (Right)
@@ -193,8 +210,8 @@ class audioProcessor extends AudioWorkletProcessor {
 				// Reallocate the internal array, since the old memory buffer has "flown off" to the UI thread
 				this.drawBufferRaw = new Float32Array(128 * 3);
 			} else {
-				// If data contains only the byteSample value (the current timecode)
-				// but the worker has not generated any new points for the graph.
+				// Use regular sending if the worker has not generated any new points for the graph.
+				// The data contains only the byteSample value (the current timecode).
 				this.sendData(data);
 			}
 		}
@@ -282,44 +299,62 @@ class audioProcessor extends AudioWorkletProcessor {
 
 	// Parsing text into function and preparing it for execution
 	setFunction(codeText) {
-		// Create shortened Math functions
-		const params = Object.getOwnPropertyNames(Math);
-		const values = params.map(k => Math[k]);
-		params.push('int', 'window');
-		values.push(Math.floor, globalThis);
-		audioProcessor.deleteGlobals();
-		// Code testing
 		let isCompiled = false;
+
+		// Deleting globalThis variables
+		audioProcessor.deleteGlobals();
+
+		// Save previously compiled function
 		const oldFunc = this.func;
+
+		// Environment setup. Construct a function header that will extract Math methods into local variables
+		// Extract all properties of Math (including PI, E, sin, cos)
+		// Use `var` to allow the user's code any redefinitions and re-declarations.
+		const mathProps = Object.getOwnPropertyNames(Math).filter(k => k !== 'constructor');
+		const mathHeader = `var { ${ mathProps.join(', ') } } = Math; var int = Math.trunc;`;
+
 		try {
 			if(this.isFuncbeat) {
-				this.func = new Function(...params, codeText).bind(globalThis, ...values);
+				// Wrap the call in .call(globalThis) so `this` keyword in the user's code
+				//    is guaranteed to refer to the global object.
+				// The //# sourceURL=... directive will cause the getErrorMessage() to treat
+				//    this code as an independent script for correct column and character numbers.
+				// \n is needed for the getErrorMessage() to calculate the character position from 0.
+				this.func = new Function(`${ mathHeader }return (function() {\n${
+					codeText }}).call(globalThis);
+					//# sourceURL=user-code.js`)();
 			} else {
 				// Optimize code like eval(unescape(escape`XXXX`.replace(/u(..)/g,"$1%")))
 				codeText = codeText.trim().replace(
 					/^eval\(unescape\(escape(?:`|\('|\("|\(`)(.*?)(?:`|'\)|"\)|`\)).replace\(\/u\(\.\.\)\/g,["'`]\$1%["'`]\)\)\)$/,
 					(match, m1) => unescape(escape(m1).replace(/u(..)/g, '$1%')));
-				this.func = new Function(...params, 't', `return 0,\n${ codeText || 0 };`)
-					.bind(globalThis, ...values);
+				this.func = new Function('t', `${ mathHeader }return (function(t) { return 0,\n${
+					codeText || 0 }}).call(globalThis, t);
+					//# sourceURL=user-code.js`);
 			}
 			isCompiled = true;
+
+			// Test run to check for runtime compilation errors
 			if(this.isFuncbeat) {
-				this.func = this.func();
 				this.func(0, this.sampleRate);
 			} else {
 				this.func(0);
 			}
 		} catch(err) {
 			if(!isCompiled) {
+				// Returning the old function
 				this.func = oldFunc;
 			}
 			this.errorDisplayed = false;
+
+			// Sending an error
 			this.sendData({
-				error: { message: audioProcessor.getErrorMessage(err, isCompiled ? 0 : null), isCompiled },
+				error: { message: this.getErrorMessage(err, isCompiled ? 0 : null), isCompiled },
 				updateUrl: isCompiled
 			});
 			return;
 		}
+
 		this.errorDisplayed = false;
 		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
 	}
