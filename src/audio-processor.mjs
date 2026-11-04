@@ -35,7 +35,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.audioCacheLimit = 1048576; // 2**20 samples / 48000 = 21.845 seconds of audio at 48kHz
 
 		// The standard quantum size in the Web Audio API is 128 samples (chData[0].length in process())
-		// but can be larger (256, 512, ..) depending on the system
+		//   but can be larger (256, 512, ..) depending on the system
 		this.audioQuantumSize = 128;
 
 		// Allocate a fixed flat array for sending graphics points (t, valL, valR)
@@ -124,7 +124,6 @@ class audioProcessor extends AudioWorkletProcessor {
 	makeData(chData) {
 		// The standard quantum size in the Web Audio API (chData[0].length) is 128 samples
 		const chDataLen = chData ? chData[0].length : this.audioQuantumSize;
-
 		// Data object for sending to the main thread
 		// It will be filled with the graphics points, current time, and cache seconds
 		const data = {};
@@ -132,6 +131,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		const drawRaw = this.drawBufferRaw;
 		// Position pointer in a fixed flat array
 		let drawIdx = 0;
+		// Destructure frequently used properties
+		const { getValues, isFuncbeat, outValue, sampleRate } = this;
+		// If the drawing mode requires a diagram
+		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 
 		// --- PAUSE MODE: PRE-CALCULATING CACHE ---
 		if(!this.isPlaying) {
@@ -140,129 +143,102 @@ class audioProcessor extends AudioWorkletProcessor {
 				this.cacheSample = this.byteSample;
 			}
 
-			// If the cache is too far ahead of the current time,
-			// stop caching to avoid overloading and output silence
+			// If the cache is too far ahead of the current time, stop caching to avoid overloading
 			if(this.cacheSample - this.byteSample > this.audioCacheLimit) {
-				if(chData) {
-					for(let i = 0; i < chDataLen; ++i) {
-						chData[0][i] = 0;
-						chData[1][i] = 0;
-					}
-				}
 				return true;
 			}
 
-			const outVal = this.outValue;
-			const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
-
-			// For one process call while paused, we will calculate a fixed batch (e.g., 256 samples)
-			// This will not overload the main thread and allow the cache to grow smoothly
+			// How many samples to calculate per single trigger while paused
 			let aheadLoops = 512;
-			let virtualTime = this.sampleRatio * this.audioSample;
-			let localLastTime = this.lastTime;
 
 			// Loop to pre-calculate audio samples and fill the cache
 			while(aheadLoops-- > 0 && (this.cacheSample - this.byteSample <= this.audioCacheLimit)) {
-				virtualTime += this.sampleRatio;
-				const currentTime = Math.floor(virtualTime / this.srDivisor) * this.srDivisor;
+				const currentSample = this.cacheSample;
 
-				if(localLastTime !== currentTime) {
-					const currentSample = Math.floor(this.cacheSample / this.srDivisor) * this.srDivisor;
-					const cacheIdx = currentSample % this.audioCacheSize;
+				// Calculate the cell index in the circular cache array
+				const cacheIdx = currentSample % this.audioCacheSize;
 
-					// If this sample is already in the cache - just skip the calculation step
-					if(this.audioCacheTime[cacheIdx] === currentSample) {
-						this.cacheSample += currentTime - localLastTime;
-						localLastTime = currentTime;
-						continue;
-					}
-
-					let funcValue;
-					try {
-						// Get the raw unscaled value from a user-defined compiled function
-						funcValue = this.isFuncbeat ?
-							this.func(currentSample / this.sampleRate, this.sampleRate) :
-							this.func(currentSample);
-					} catch(err) {
-						// Send an error if occured during the function calculation
-						if(this.errorDisplayed) {
-							this.errorDisplayed = false;
-							this.sendData({
-								error: {
-									message: this.getErrorMessage(err, currentSample),
-									isRuntime: true
-								}
-							});
-						}
-						// Set the value to NaN (to highlight the error in red in the visualizer)
-						funcValue = NaN;
-					}
-
-					// Fill in the raw values for each channel (left and right)
-					// Eliminate memory allocation for arrays in the case of mono signals
-					const isArrayValue = Array.isArray(funcValue);
-					const fv0 = +(isArrayValue ? funcValue[0] : funcValue);
-					const fv1 = +(isArrayValue ? funcValue[1] : funcValue);
-
-					// Scaling the raw values according to the mode (Bytebeat 0..255, Floatbeat -1..1, etc).
-					// Channel 1 (Right)
-					if(isDiagram) {
-						if(!isNaN(fv1)) {
-							outVal[1] = this.getValues(fv1, 1);
-						} else {
-							this.lastByteValue[1] = NaN;
-						}
-					} else if(fv1 !== this.lastFuncValue[1]) {
-						if(!isNaN(fv1)) {
-							outVal[1] = this.getValues(fv1, 1);
-						} else if(!isNaN(this.lastFuncValue[1])) {
-							this.lastByteValue[1] = NaN;
-						}
-					}
-
-					// Channel 0 (Left)
-					if(isDiagram) {
-						if(!isNaN(fv0)) {
-							outVal[0] = this.getValues(fv0, 0);
-						} else {
-							this.lastByteValue[0] = NaN;
-						}
-					} else if(fv0 !== this.lastFuncValue[0]) {
-						if(!isNaN(fv0)) {
-							outVal[0] = this.getValues(fv0, 0);
-						} else if(!isNaN(this.lastFuncValue[0])) {
-							this.lastByteValue[0] = NaN;
-						}
-					}
-
-					// Write data to the worker's cache
-					this.audioCacheL[cacheIdx] = outVal[0];
-					this.audioCacheR[cacheIdx] = outVal[1];
-					this.audioCacheTime[cacheIdx] = currentSample;
-
-					// Save the latest modified raw values
-					this.lastFuncValue[0] = fv0;
-					this.lastFuncValue[1] = fv1;
-
-					// Pre-assembling points for the visualizer
-					if(drawIdx < drawRaw.length - 3) {
-						drawRaw[drawIdx++] = currentSample;
-						drawRaw[drawIdx++] = this.lastByteValue[0];
-						drawRaw[drawIdx++] = this.lastByteValue[1];
-					}
-
-					// Move the cache pointer forward by the number of samples processed in this batch
-					this.cacheSample += currentTime - localLastTime;
-					localLastTime = currentTime;
+				// If the currentSample time point is already cached, just skip the calculation step
+				if(this.audioCacheTime[cacheIdx] === currentSample) {
+					this.cacheSample++;
+					continue;
 				}
-			}
 
-			// Send absolute silence to the speakers, as we are paused
-			if(chData) {
-				for(let i = 0; i < chDataLen; ++i) {
-					chData[0][i] = 0;
-					chData[1][i] = 0;
+				let funcValue;
+				try {
+					// Get the raw unscaled value from a user-defined compiled function
+					funcValue = isFuncbeat ? this.func(currentSample / sampleRate, sampleRate) :
+						this.func(currentSample);
+				} catch(err) {
+					// Send an error if occured during the function calculation
+					if(this.errorDisplayed) {
+						this.errorDisplayed = false;
+						this.sendData({
+							error: {
+								message: this.getErrorMessage(err, currentSample),
+								isRuntime: true
+							}
+						});
+					}
+					// Set the value to NaN (to highlight the error in red in the visualizer)
+					funcValue = NaN;
 				}
+
+				// Fill in the raw values for each channel (left and right)
+				// Eliminate memory allocation for arrays in the case of mono signals
+				const isArrayValue = Array.isArray(funcValue);
+				const fv0 = +(isArrayValue ? funcValue[0] : funcValue);
+				const fv1 = +(isArrayValue ? funcValue[1] : funcValue);
+
+				// Scaling the raw values according to the mode (Bytebeat 0..255, Floatbeat -1..1, etc).
+				// Channel 1 (Right)
+				if(isDiagram) {
+					if(!isNaN(fv1)) {
+						outValue[1] = getValues(fv1, 1);
+					} else {
+						this.lastByteValue[1] = NaN;
+					}
+				} else if(fv1 !== this.lastFuncValue[1]) {
+					if(!isNaN(fv1)) {
+						outValue[1] = getValues(fv1, 1);
+					} else if(!isNaN(this.lastFuncValue[1])) {
+						this.lastByteValue[1] = NaN;
+					}
+				}
+
+				// Channel 0 (Left)
+				if(isDiagram) {
+					if(!isNaN(fv0)) {
+						outValue[0] = getValues(fv0, 0);
+					} else {
+						this.lastByteValue[0] = NaN;
+					}
+				} else if(fv0 !== this.lastFuncValue[0]) {
+					if(!isNaN(fv0)) {
+						outValue[0] = getValues(fv0, 0);
+					} else if(!isNaN(this.lastFuncValue[0])) {
+						this.lastByteValue[0] = NaN;
+					}
+				}
+
+				// Write data to the worker's cache
+				this.audioCacheL[cacheIdx] = outValue[0];
+				this.audioCacheR[cacheIdx] = outValue[1];
+				this.audioCacheTime[cacheIdx] = this.cacheSample;
+
+				// Save the latest modified raw values
+				this.lastFuncValue[0] = fv0;
+				this.lastFuncValue[1] = fv1;
+
+				// Pre-assembling points for the visualizer
+				if(drawIdx < drawRaw.length - 3) {
+					drawRaw[drawIdx++] = currentSample;
+					drawRaw[drawIdx++] = this.lastByteValue[0];
+					drawRaw[drawIdx++] = this.lastByteValue[1];
+				}
+
+				// Step one point forward along the cache timeline
+				this.cacheSample++;
 			}
 
 		// --- PLAY MODE: LIVE CALCULATION ---
@@ -272,10 +248,10 @@ class audioProcessor extends AudioWorkletProcessor {
 				return true;
 			}
 
-			let time = this.sampleRatio * this.audioSample; // Get the current time based on the last sample
-			const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
-			const outVal = this.outValue;
+			// Get the current time based on the last sample
+			let time = this.sampleRatio * this.audioSample;
 
+			// Iterate over each sample in the current audio quantum
 			for(let i = 0; i < chDataLen; ++i) {
 				// Increment the time by the sample ratio for each sample in the quantum
 				time += this.sampleRatio;
@@ -291,24 +267,23 @@ class audioProcessor extends AudioWorkletProcessor {
 					// CACHE CHECK: is there already a pre-calculated sample available for this time t?
 					if(this.audioCacheTime[cacheIdx] === currentSample) {
 						// Instant reading from the cache
-						outVal[0] = this.audioCacheL[cacheIdx];
-						outVal[1] = this.audioCacheR[cacheIdx];
+						outValue[0] = this.audioCacheL[cacheIdx];
+						outValue[1] = this.audioCacheR[cacheIdx];
 
 						// Restore the original bytes for the visualizer to work correctly
-						if(this.isFuncbeat || this.drawMode === 'Floatbeat') {
-							this.lastByteValue[0] = Math.round((outVal[0] + 1) * 127.5);
-							this.lastByteValue[1] = Math.round((outVal[1] + 1) * 127.5);
+						if(isFuncbeat || this.drawMode === 'Floatbeat') {
+							this.lastByteValue[0] = Math.round((outValue[0] + 1) * 127.5);
+							this.lastByteValue[1] = Math.round((outValue[1] + 1) * 127.5);
 						} else {
-							this.lastByteValue[0] = Math.round((outVal[0] + 1) * 127.5) & 255;
-							this.lastByteValue[1] = Math.round((outVal[1] + 1) * 127.5) & 255;
+							this.lastByteValue[0] = Math.round((outValue[0] + 1) * 127.5) & 255;
+							this.lastByteValue[1] = Math.round((outValue[1] + 1) * 127.5) & 255;
 						}
 					} else {
 						// Cache is empty, performing the intensive calculation
 						let funcValue;
 						try {
 							// Get the raw unscaled value from a user-defined compiled function
-							funcValue = this.isFuncbeat ?
-								this.func(currentSample / this.sampleRate, this.sampleRate) :
+							funcValue = isFuncbeat ? this.func(currentSample / sampleRate, sampleRate) :
 								this.func(currentSample);
 						} catch(err) {
 							// Send an error if occured during the function calculation
@@ -335,13 +310,13 @@ class audioProcessor extends AudioWorkletProcessor {
 						// Channel 1 (Right)
 						if(isDiagram) {
 							if(!isNaN(fv1)) {
-								outVal[1] = this.getValues(fv1, 1);
+								outValue[1] = getValues(fv1, 1);
 							} else {
 								this.lastByteValue[1] = NaN;
 							}
 						} else if(fv1 !== this.lastFuncValue[1]) {
 							if(!isNaN(fv1)) {
-								outVal[1] = this.getValues(fv1, 1);
+								outValue[1] = getValues(fv1, 1);
 							} else if(!isNaN(this.lastFuncValue[1])) {
 								this.lastByteValue[1] = NaN;
 							}
@@ -350,22 +325,27 @@ class audioProcessor extends AudioWorkletProcessor {
 						// Channel 0 (Left)
 						if(isDiagram) {
 							if(!isNaN(fv0)) {
-								outVal[0] = this.getValues(fv0, 0);
+								outValue[0] = getValues(fv0, 0);
 							} else {
 								this.lastByteValue[0] = NaN;
 							}
 						} else if(fv0 !== this.lastFuncValue[0]) {
 							if(!isNaN(fv0)) {
-								outVal[0] = this.getValues(fv0, 0);
+								outValue[0] = getValues(fv0, 0);
 							} else if(!isNaN(this.lastFuncValue[0])) {
 								this.lastByteValue[0] = NaN;
 							}
 						}
 
-						// Write a fresh sample (values and time) to the worker cache
-						this.audioCacheL[cacheIdx] = outVal[0];
-						this.audioCacheR[cacheIdx] = outVal[1];
-						this.audioCacheTime[cacheIdx] = currentSample; // Mark as valid by setting the time
+						// Write a fresh sample (values and time) to the worker cache.
+						// Write only for playing speed of 1 or -1 and divisor of 1,
+						//   to prevent the cache from getting cluttered with "gappy" samples
+						if(Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1) {
+							this.audioCacheL[cacheIdx] = outValue[0];
+							this.audioCacheR[cacheIdx] = outValue[1];
+							// Mark as valid by setting the time
+							this.audioCacheTime[cacheIdx] = currentSample;
+						}
 
 						// Save the latest modified raw values
 						this.lastFuncValue[0] = fv0;
@@ -384,8 +364,8 @@ class audioProcessor extends AudioWorkletProcessor {
 				}
 
 				// Output obtained values to the speakers
-				chData[0][i] = outVal[0];
-				chData[1][i] = outVal[1];
+				chData[0][i] = outValue[0];
+				chData[1][i] = outValue[1];
 			}
 
 			// Reset the time if its value is too large
@@ -396,6 +376,9 @@ class audioProcessor extends AudioWorkletProcessor {
 
 			// Increment the audio time by the number of samples processed in this quantum
 			this.audioSample += chDataLen;
+
+			// Synchronize cacheSample with byteSample so that the cache doesn't fall behind during playback
+			this.cacheSample = this.byteSample;
 
 			// Send the time if it has changed
 			if(this.byteSample !== this.byteSampleSent) {
@@ -419,7 +402,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			checkSample += chDataLen;
 		}
 		// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
-		data.cacheSeconds = Math.max(0, continuousSamples / this.sampleRate);
+		data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
 
 		// Get a chunk of new data points to send to the main thread
 		if(drawIdx > 0) {
@@ -431,7 +414,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(data.drawBuffer) {
 			// Send data using the Zero-Copy Transferable Object method. How Zero-Copy works:
 			// The browser instantly (in 0 ms) redirects the pointer to this memory buffer from the worker
-			// to the main thread (in index.js). The memory in the worker is cleared (its size becomes 0).
+			//   to the main thread (in index.js). The memory in the worker is cleared (its size becomes 0).
 			this.port.postMessage(data, [data.drawBuffer.buffer]);
 			// Reallocate the internal array, since the old buffer has "flown off" to the main thread
 			this.drawBufferRaw = new Float32Array(this.audioQuantumSize * 3);
@@ -507,7 +490,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		if(data.sampleRatio !== undefined) {
 			this.setSampleRatio(data.sampleRatio);
 		}
-		if(data.triggerPrecache === true) {
+		if(data.runPrecache === true) {
 			// Run the precache function in the background while paused
 			// This will fill the cache with audio samples ahead of the current time
 			this.makeData();
@@ -556,9 +539,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		try {
 			if(this.isFuncbeat) {
 				// Wrap the call in .call(globalThis) so `this` keyword in the user's code
-				//    is guaranteed to refer to the global object.
+				//   is guaranteed to refer to the global object.
 				// The //# sourceURL=... directive will cause the getErrorMessage() to treat
-				//    this code as an independent script for correct column and character numbers.
+				//   this code as an independent script for correct column and character numbers.
 				// \n is needed for the getErrorMessage() to calculate the character position from 0.
 				this.func = new Function(`${ mathHeader }return (function() {\n${
 					codeText }\n}).call(globalThis);

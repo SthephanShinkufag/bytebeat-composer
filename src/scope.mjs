@@ -173,7 +173,7 @@ export class Scope {
 			}
 
 			// Limit the buffer tail for the FFT so that, when switching to waveform mode,
-			// the player doesn't render an accumulated tail spanning the duration of the FFT's operation
+			//   the player doesn't render an accumulated tail spanning the duration of the FFT's operation
 			this.bufferTail = (this.bufferHead - bufferLimit + this.bufferSize) % this.bufferSize;
 			return;
 		}
@@ -290,7 +290,7 @@ export class Scope {
 						const idx = rowOffsets[y] + x;
 						const dIdx = idx << 2;
 						// Fill with red if the pixel is not a restored point (status !== 1)
-						// and there is no color yet
+						//   and there is no color yet
 						if(status[idx] !== 1 && !data[dIdx + 1] && !data[dIdx + 2]) {
 							buf32[idx] = colorErr;
 						}

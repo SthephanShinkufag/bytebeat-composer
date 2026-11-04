@@ -54,8 +54,8 @@ globalThis.bytebeat = new class {
 		this.audioRecorder = null;
 		this.audioWorkletNode = null;
 
-		// A timer that sends signals to warm up the cache after a page has loaded,
-		// covering the period before any user interaction and while the worker process() is not yet available
+		// A timer that sends signals to warm up the cache after a page has loaded, covering the period
+		//   before any user interaction and while the worker process() is not yet available
 		this.precacheInterval = null;
 
 		// Start the initialization
@@ -372,18 +372,18 @@ globalThis.bytebeat = new class {
 			data.resetTime = true;
 		} else {
 			// If the song has loaded without autoplay (on the page load),
-			// instruct the worker to begin warming up the cache in the background
+			//   instruct the worker to begin warming up the cache in the background
 			if(!this.precacheInterval) {
 				this.precacheInterval = setInterval(() => {
-					// Send a nudge to the worker only if the player is actually paused
+					// Send a trigger to the worker only if the player is actually paused
 					if(!this.isPlaying) {
-						console.log('loadCode > sendData', { triggerPrecache: true });
-						this.sendData({ triggerPrecache: true });
+						console.log('loadCode > sendData', { runPrecache: true });
+						this.sendData({ runPrecache: true });
 					} else {
 						clearInterval(this.precacheInterval);
 						this.precacheInterval = true;
 					}
-				}, 16); // Send nudges at 60 Hz
+				}, 10);
 			}
 		}
 		data.isPlaying = isPlay;
