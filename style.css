@@ -1354,6 +1354,14 @@ button[name="close"] {
 	fill: currentColor;
 }
 
+#control-cache {
+	width: 45px;
+}
+
+#control-cache::after {
+	content: "Cache";
+}
+
 #control-codesize {
 	min-width: 56px;
 	cursor: default;
@@ -1392,7 +1400,7 @@ button[name="close"] {
 }
 
 #control-counter {
-	width: 80px;
+	width: 42px;
 	border-radius: 0 var(--ctrl-corners) var(--ctrl-corners) 0;
 }
 
@@ -1401,9 +1409,13 @@ button[name="close"] {
 }
 
 #control-counter-units {
-	width: 32px;
+	width: 30px;
 	text-align: center;
 	user-select: none;
+}
+
+#control-drawmode, #control-mode {
+	font-size: 90%;
 }
 
 .control-fast > .svg-play, .control-play > .svg-fast, .control-play > .control-fast-multiplier {
@@ -1414,11 +1426,27 @@ button[name="close"] {
 	position: absolute;
 }
 
-#control-lag {
-	width: 30px;
+.control-indicator {
+	position: relative;
 	border-radius: var(--ctrl-corners);
 	text-align: right;
+	overflow: hidden;
 	cursor: default;
+}
+
+.control-indicator::after {
+	position: absolute;
+	bottom: 0;
+	left: 2px;
+	font: 11px sans-serif;
+}
+
+#control-lag{
+	width: 30px;
+}
+
+#control-lag::after {
+	content: "Lag";
 }
 
 .control-lag-red {

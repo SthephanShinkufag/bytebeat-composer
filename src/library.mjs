@@ -8,8 +8,8 @@ export class Library {
 		this.isAdmin = document.cookie.match(/(?:^|; )bytebeat_access=([^;]*)/)?.[1] || ''; // Admin check
 		this.pathFiles = './data/songs/';
 		this.pathLibrary = './data/library/';
-		this.showAllSongs = false;
-		this.songs = null;
+		this.showAllSongs = false; // Expanding all author blocks in the library
+		this.songs = null; // Cache for songs
 	}
 
 	// Escape HTML special characters to prevent XSS attacks

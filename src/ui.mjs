@@ -4,6 +4,9 @@ export class UI {
 	constructor() {
 		this.containerFixed = null;
 		this.containerScroll = null;
+		this.containerScrollUp = null;
+		this.containerScrollDown = null;
+		this.controlCacheCounter = null;
 		this.controlCodeSize = null;
 		this.controlCodeStyle = null;
 		this.controlColorDiagram = null;
@@ -30,6 +33,7 @@ export class UI {
 		this.controlTime = null;
 		this.controlTimeUnits = null;
 		this.controlVolume = null;
+		this.downloader = null;
 		this.mainElem = null;
 	}
 
@@ -70,6 +74,7 @@ export class UI {
 		this.containerScroll = document.getElementById('container-scroll');
 		this.containerScrollUp = document.getElementById('scroll-btn-up');
 		this.containerScrollDown = document.getElementById('scroll-btn-down');
+		this.controlCacheCounter = document.getElementById('control-cache');
 		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlCodeStyle = document.getElementById('control-code-style');
 		this.controlColorDiagram = document.getElementById('control-color-diagram');
@@ -117,6 +122,13 @@ export class UI {
 		} else {
 			parentElem.querySelectorAll('.filter-button').forEach(el =>
 				el.classList.toggle('filter-selected', el === buttonElem));
+		}
+	}
+
+	// Update the cache counter
+	setCacheCounter(seconds) {
+		if(this.controlCacheCounter) {
+			this.controlCacheCounter.innerText = seconds.toFixed(1) + 's';
 		}
 	}
 

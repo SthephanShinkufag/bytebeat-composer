@@ -4,11 +4,20 @@ function mod(a, b) {
 
 export class Scope {
 	constructor() {
-		this.analyser = [null, null];
-		this.analyserData = [null, null];
+		// Buffer for restoring the last points between the drawing of segments
+		this.drawEndBuffer = [];
+
+		// Default settings
+		this.drawMode = 'Combined';
+		this.drawScale = 5;
+
+		// Buffer with sample points
 		this.bufferHead = 0;
-		this.bufferSize = 32768; // Allocate a buffer size with a margin to accommodate any drawScale limits
+		this.bufferSize = 1048576; // 2**20 elements; 1048576 / 48000 = 21.8453 sec
 		this.bufferTail = 0;
+		this.ringBuffer = null; // Ring buffer for drawing samples, 3 cells (t, valL, valR) for each point
+
+		// Canvas
 		this.canvasContainer = null;
 		this.canvasCtx = null;
 		this.canvasElem = null;
@@ -16,19 +25,21 @@ export class Scope {
 		this.canvasPlayButton = null;
 		this.canvasTimeCursor = null;
 		this.canvasWidth = 1024;
+
+		// Colors
 		this.colorChannels = null;
 		this.colorDiagram = null;
 		this.colorStereoRGB = [null, null];
 		this.colorWaveform = null;
-		this.drawEndBuffer = [];
-		this.drawMode = 'Combined';
-		this.drawScale = 5;
+
+		// FFT visualizer
+		this.analyser = [null, null];
+		this.analyserData = [null, null];
 		this.fftGridCanvas = null;
 		this.fftSize = 10;
 		this.fftXTable = null;
 		this.maxDecibels = -10;
 		this.minDecibels = -120;
-		this.ringBuffer = null; // Ring Buffer for drawing samples, 3 cells (t, valL, valR) for each point
 	}
 
 	// Display the time cursor depending on scale
@@ -53,7 +64,7 @@ export class Scope {
 		// While rendering is in progress, even newer points may arrive from the worker
 		const currentHead = this.bufferHead;
 
-		// Calculate how many points have accumulated in the Ring Buffer before head
+		// Calculate how many points have accumulated in the ring buffer before head
 		const bufferLen = currentHead >= this.bufferTail ?
 			currentHead - this.bufferTail : this.bufferSize - this.bufferTail + currentHead;
 
@@ -256,7 +267,7 @@ export class Scope {
 		let lastPlottedYR = -1;
 		let lastPlottedYL = -1;
 
-		// Drawing in a segment, iterating through the Ring Buffer from tail to head
+		// Drawing in a segment, iterating through the ring buffer from tail to head
 		let curIdx = this.bufferTail;
 		for(let i = 0; i < bufferLen; ++i) {
 			// Calculate the current and next coordinates
@@ -437,7 +448,7 @@ export class Scope {
 			this.canvasTimeCursor.style.left = endX / width * 100 + '%';
 		}
 
-		// Instead of clearing the Ring Buffer, shift the tail to the (currentHead - 1) position.
+		// Instead of clearing the ring buffer, shift the tail to the (currentHead - 1) position.
 		// We are signaling to the graphics engine that everything preceding that point has already been read.
 		// New points that arrive while this function is runnung will remain in the buffer for the next frame.
 		this.bufferTail = (currentHead - 1 + this.bufferSize) % this.bufferSize;
@@ -482,7 +493,7 @@ export class Scope {
 		return t / (1 << this.drawScale);
 	}
 
-	// Initialization of the Graphics Ring Buffer
+	// Initialization of the graphics ring buffer
 	// Instead of removing and adding elements, we simply overwrite the old data using a pointer (index).
 	// Memory is allocated only once, and the Garbage Collector is never invoked.
 	initRingBuffer() {
@@ -516,7 +527,7 @@ export class Scope {
 		this.updateFFTLookUpTable();
 	}
 
-	// Push data values into the Ring Buffer
+	// Push data values into the ring buffer
 	pushToRingBuffer(t, valL, valR) {
 		if(!this.ringBuffer) {
 			this.initRingBuffer();
