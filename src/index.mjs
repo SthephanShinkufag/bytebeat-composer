@@ -509,7 +509,7 @@ globalThis.bytebeat = new class {
 
 		// Output the accumulated number of cache seconds before the cursor
 		if(typeof data.cacheSeconds === 'number') {
-			ui.setCacheCounter(data.cacheSeconds);
+			ui.setCacheCounter(data.cacheSeconds, this.sampleRate);
 		}
 
 		// If an error has arrived, display it in the error console

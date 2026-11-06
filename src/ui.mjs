@@ -126,9 +126,10 @@ export class UI {
 	}
 
 	// Update the cache counter
-	setCacheCounter(seconds) {
+	setCacheCounter(seconds, sampleRate) {
 		if(this.controlCacheCounter) {
-			this.controlCacheCounter.innerText = seconds.toFixed(1) + 's';
+			this.controlCacheCounter.innerText =
+				(seconds >= 1048576 / sampleRate ? '>' : '') + seconds.toFixed(1) + 's';
 		}
 	}
 

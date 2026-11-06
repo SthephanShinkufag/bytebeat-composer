@@ -13,10 +13,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.isPlaying = false;
 		this.lastByteValue = [null, null]; // Last values for L and R channels (used for drawing the scope)
 		this.lastFuncValue = [null, null]; // Last raw values for L and R channels
-		this.lastTime = -1; // Last time in samples
+		this.lastTime = -1; // Last processed time (used for checking if the time has changed)
 		this.outValue = [0, 0]; // Output values for L and R channels (used for audio output)
-		this.playbackSpeed = 1;
-		this.sampleRate = 8000;
+		this.playbackSpeed = 1; // Playback speed multiplier
+		this.sampleRate = 8000; // The sample rate for bytebeat audio generation
 		this.sampleRatio = 1; // Ratio of the sample rate to the audio context's sample rate
 		this.srDivisor = 1; // Divisor for sample rate (used for downsampling)
 
@@ -28,11 +28,18 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.audioCacheR = new Float32Array(this.audioCacheSize);
 
 		// An array of timestamps. Fill it with -1 (indicating that a cell is empty)
-		this.audioCacheTime = new Int32Array(this.audioCacheSize); // 2**24 samples * 4 bytes = ~67.1MB
+		// 2**24 samples * 4 bytes = ~67.1MB
+		this.audioCacheTime = new Int32Array(this.audioCacheSize);
 		this.audioCacheTime.fill(-1);
 
+		// Array of strings for caching runtime output in the error console
+		this.audioCacheError = new Array(this.audioCacheSize);
+		// Flag for controlling the sending of runtime messages
+		this.lastSentErrorSample = -1;
+
 		// How far ahead the cache can be filled
-		this.audioCacheLimit = 1048576; // 2**20 samples / 48000 = 21.845 seconds of audio at 48kHz
+		// 2**20 samples / 48000 = 21.845 seconds of audio at 48kHz
+		this.audioCacheLimit = 1048576;
 
 		// The standard quantum size in the Web Audio API is 128 samples (chData[0].length in process())
 		//   but can be larger (256, 512, ..) depending on the system
@@ -67,6 +74,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 	}
 
+	// Freezing global variables to prevent modification
 	static freezeGlobals() {
 		Object.getOwnPropertyNames(globalThis).forEach(name => {
 			const prop = globalThis[name];
@@ -81,10 +89,15 @@ class audioProcessor extends AudioWorkletProcessor {
 		});
 	}
 
+	// Clear the audio cache and reset the cache sample pointer
 	clearAudioCache() {
 		this.cacheSample = 0;
 		if(this.audioCacheTime) {
 			this.audioCacheTime.fill(-1);
+		}
+		this.lastSentErrorSample = -1;
+		if(this.audioCacheError) {
+			this.audioCacheError.fill(undefined);
 		}
 	}
 
@@ -132,7 +145,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Position pointer in a fixed flat array
 		let drawIdx = 0;
 		// Destructure frequently used properties
-		const { getValues, isFuncbeat, outValue, sampleRate } = this;
+		const { func, getValues, isFuncbeat, outValue, sampleRate } = this;
 		// If the drawing mode requires a diagram
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 
@@ -165,21 +178,14 @@ class audioProcessor extends AudioWorkletProcessor {
 				}
 
 				let funcValue;
+				let currentErrorMsg = null;
 				try {
 					// Get the raw unscaled value from a user-defined compiled function
-					funcValue = isFuncbeat ? this.func(currentSample / sampleRate, sampleRate) :
-						this.func(currentSample);
+					funcValue = isFuncbeat ?
+						func(currentSample / sampleRate, sampleRate) : func(currentSample);
 				} catch(err) {
-					// Send an error if occured during the function calculation
-					if(this.errorDisplayed) {
-						this.errorDisplayed = false;
-						this.sendData({
-							error: {
-								message: this.getErrorMessage(err, currentSample),
-								isRuntime: true
-							}
-						});
-					}
+					// Extract the error message for the current sample
+					currentErrorMsg = this.getErrorMessage(err, currentSample);
 					// Set the value to NaN (to highlight the error in red in the visualizer)
 					funcValue = NaN;
 				}
@@ -221,10 +227,11 @@ class audioProcessor extends AudioWorkletProcessor {
 					}
 				}
 
-				// Write data to the worker's cache
+				// Write the current sample's data to the worker's cache
 				this.audioCacheL[cacheIdx] = outValue[0];
 				this.audioCacheR[cacheIdx] = outValue[1];
-				this.audioCacheTime[cacheIdx] = this.cacheSample;
+				this.audioCacheTime[cacheIdx] = currentSample; // Mark as valid by setting the time
+				this.audioCacheError[cacheIdx] = currentErrorMsg; // Store the error message
 
 				// Save the latest modified raw values
 				this.lastFuncValue[0] = fv0;
@@ -260,6 +267,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				// Get new values (from the cache or by calculation) if the time has changed
 				if(this.lastTime !== currentTime) {
 					const currentSample = Math.floor(this.byteSample / this.srDivisor) * this.srDivisor;
+					let currentErrorMsg = null;
 
 					// Calculate the cell index in the worker's ring cache array
 					const cacheIdx = currentSample % this.audioCacheSize;
@@ -269,6 +277,11 @@ class audioProcessor extends AudioWorkletProcessor {
 						// Instant reading from the cache
 						outValue[0] = this.audioCacheL[cacheIdx];
 						outValue[1] = this.audioCacheR[cacheIdx];
+
+						// Restore the error message from the cache if available
+						if(this.audioCacheError[cacheIdx]) {
+							currentErrorMsg = this.audioCacheError[cacheIdx];
+						}
 
 						// Restore the original bytes for the visualizer to work correctly
 						if(isFuncbeat || this.drawMode === 'Floatbeat') {
@@ -283,19 +296,12 @@ class audioProcessor extends AudioWorkletProcessor {
 						let funcValue;
 						try {
 							// Get the raw unscaled value from a user-defined compiled function
-							funcValue = isFuncbeat ? this.func(currentSample / sampleRate, sampleRate) :
-								this.func(currentSample);
+							funcValue = isFuncbeat ?
+								func(currentSample / sampleRate, sampleRate) :
+								func(currentSample);
 						} catch(err) {
-							// Send an error if occured during the function calculation
-							if(this.errorDisplayed) {
-								this.errorDisplayed = false;
-								this.sendData({
-									error: {
-										message: this.getErrorMessage(err, currentSample),
-										isRuntime: true
-									}
-								});
-							}
+							// Extract the error message for the current sample
+							currentErrorMsg = this.getErrorMessage(err, currentSample);
 							// Set the value to NaN (to highlight the error in red in the visualizer)
 							funcValue = NaN;
 						}
@@ -343,13 +349,21 @@ class audioProcessor extends AudioWorkletProcessor {
 						if(Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1) {
 							this.audioCacheL[cacheIdx] = outValue[0];
 							this.audioCacheR[cacheIdx] = outValue[1];
-							// Mark as valid by setting the time
-							this.audioCacheTime[cacheIdx] = currentSample;
+							this.audioCacheTime[cacheIdx] = currentSample; // Mark as valid
+							this.audioCacheError[cacheIdx] = currentErrorMsg; // Cache the runtime error
 						}
 
 						// Save the latest modified raw values
 						this.lastFuncValue[0] = fv0;
 						this.lastFuncValue[1] = fv1;
+					}
+
+					// If a new unique error occurred while paused, send it to the main thread
+					// Triggered both during live playback and when reading from the cache
+					if(currentErrorMsg && this.errorDisplayed && this.lastSentErrorSample !== currentSample) {
+						this.errorDisplayed = false;
+						this.lastSentErrorSample = currentSample;
+						this.sendData({ error: { message: currentErrorMsg, isRuntime: true } });
 					}
 
 					// Serialize the data point into a flat array for the scope visualizer
@@ -376,11 +390,10 @@ class audioProcessor extends AudioWorkletProcessor {
 
 			// Increment the audio time by the number of samples processed in this quantum
 			this.audioSample += chDataLen;
-
 			// Synchronize cacheSample with byteSample so that the cache doesn't fall behind during playback
 			this.cacheSample = this.byteSample;
 
-			// Send the time if it has changed
+			// Send the current byteSample to the main thread if it has changed
 			if(this.byteSample !== this.byteSampleSent) {
 				data.byteSample = this.byteSampleSent = this.byteSample;
 			}
