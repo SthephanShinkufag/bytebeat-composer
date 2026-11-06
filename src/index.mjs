@@ -278,7 +278,6 @@ globalThis.bytebeat = new class {
 		this.setColorTimeCursor();
 		this.setScopeAdjustment(0);
 		this.parseUrl(); // Load the code from the location hash
-		console.log('initAfterDom > sendData', { drawMode: scope.drawMode });
 		this.sendData({ drawMode: scope.drawMode });
 		ui.setLibraryFilters(library.filters);
 		ui.controlDrawMode.value = scope.drawMode;
@@ -377,7 +376,6 @@ globalThis.bytebeat = new class {
 				this.precacheInterval = setInterval(() => {
 					// Send a trigger to the worker only if the player is actually paused
 					if(!this.isPlaying) {
-						console.log('loadCode > sendData', { runPrecache: true });
 						this.sendData({ runPrecache: true });
 					} else {
 						clearInterval(this.precacheInterval);
@@ -401,7 +399,6 @@ globalThis.bytebeat = new class {
 		}
 
 		// Update the worker with the new code and parameters
-		console.log('loadCode > sendData', data);
 		this.sendData(data);
 	}
 
@@ -415,7 +412,6 @@ globalThis.bytebeat = new class {
 		const byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * this.sampleRate) :
 			ui.controlTime.value;
 		this.setByteSample(byteSample);
-		console.log('oninputCounter > sendData', { byteSample });
 		this.sendData({ byteSample });
 	}
 
@@ -432,7 +428,6 @@ globalThis.bytebeat = new class {
 	// Stop the playback and reset the time
 	playbackStop() {
 		this.playbackToggle(false, false);
-		console.log('playbackStop > sendData', { isPlaying: false, resetTime: true });
 		this.sendData({ isPlaying: false, resetTime: true });
 	}
 
@@ -479,7 +474,6 @@ globalThis.bytebeat = new class {
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
-			console.log('playbackToggle > sendData', { isPlaying, playbackSpeed: this.playbackSpeed });
 			this.sendData({ isPlaying, playbackSpeed: this.playbackSpeed });
 		} else {
 			// Set a flag to clear the ring buffer, the scope canvas and time cursor in the UI
@@ -526,7 +520,6 @@ globalThis.bytebeat = new class {
 			}
 			if(isUpdate) {
 				editor.errorElem.innerText = error.message;
-				console.log('receiveData > sendData', { errorDisplayed: true });
 				this.sendData({ errorDisplayed: true });
 			}
 			if(data.updateUrl !== true) {
@@ -555,7 +548,6 @@ globalThis.bytebeat = new class {
 		this.isNeedClear = true;
 
 		// Send command to the worker to reset the time
-		console.log('resetTime > sendData', { resetTime: true, playbackSpeed: this.playbackSpeed });
 		this.sendData({ resetTime: true, playbackSpeed: this.playbackSpeed });
 	}
 
@@ -705,7 +697,6 @@ globalThis.bytebeat = new class {
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
 		this.saveSettings();
-		console.log('setDrawMode > sendData', { drawMode });
 		this.sendData({ drawMode });
 	}
 
@@ -726,7 +717,6 @@ globalThis.bytebeat = new class {
 	setPlaybackMode(mode) {
 		this.mode = mode;
 		this.updateUrl();
-		console.log('setPlaybackMode > sendData', { mode, setFunction: editor.value });
 		this.sendData({ mode, setFunction: editor.value });
 	}
 
@@ -766,7 +756,6 @@ globalThis.bytebeat = new class {
 				this.setByteSample(data.byteSample);
 			}
 			this.updateUrl();
-			console.log('setSampleRate > sendData', data);
 			this.sendData(data);
 		}
 	}
@@ -809,7 +798,6 @@ globalThis.bytebeat = new class {
 		}
 		ui.controlSRDivisor.textContent = this.settings.srDivisor = value;
 		this.saveSettings();
-		console.log('setSRDivisor > sendData', { srDivisor: value });
 		this.sendData({ srDivisor: value });
 	}
 

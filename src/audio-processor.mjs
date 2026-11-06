@@ -41,12 +41,11 @@ class audioProcessor extends AudioWorkletProcessor {
 		// 2**21 samples / 48000 = 43.69 seconds of audio at 48kHz
 		this.audioCacheLimit = 2097152;
 
-		// The standard quantum size in the Web Audio API is 128 samples (chData[0].length in process())
-		//   but can be larger (256, 512, ..) depending on the system
-		this.audioQuantumSize = 128;
-
-		// Allocate a fixed flat array for sending graphics points (t, valL, valR)
-		this.drawBufferRaw = new Float32Array(this.audioQuantumSize * 3);
+		// Allocate a fixed flat array for sending graphics points (time, Left value, Right value)
+		this.drawBufferSize = 1024; // Number of points that can be sent at once
+		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+		// Position pointer in the draw buffer
+		this.drawIdx = 0;
 
 		// Seal the instance to prevent adding new properties and ensure the structure remains fixed
 		Object.seal(this);
@@ -136,14 +135,13 @@ class audioProcessor extends AudioWorkletProcessor {
 	// Make sound and generate data for the main thread
 	makeData(chData) {
 		// The standard quantum size in the Web Audio API (chData[0].length) is 128 samples
-		const chDataLen = chData ? chData[0].length : this.audioQuantumSize;
+		//   but can be larger (256, 512, ..) depending on the system
+		const chDataLen = chData ? chData[0].length : 128;
 		// Data object for sending to the main thread
 		// It will be filled with the graphics points, current time, and cache seconds
 		const data = {};
-		// Position pointer in a fixed flat array
-		let drawIdx = 0;
 		// Destructure frequently used properties
-		const { drawBufferRaw, func, getValues, isFuncbeat, outValue, sampleRate } = this;
+		const { func, getValues, isFuncbeat, outValue, sampleRate } = this;
 		// If the drawing mode requires a diagram
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 
@@ -237,10 +235,10 @@ class audioProcessor extends AudioWorkletProcessor {
 				this.lastFuncValue[1] = funcValueR;
 
 				// Serialize the data point into a flat array (t, valL, valR) for the scope visualizer
-				if(drawIdx < drawBufferRaw.length - 3) {
-					drawBufferRaw[drawIdx++] = currentSample;
-					drawBufferRaw[drawIdx++] = this.lastByteValue[0];
-					drawBufferRaw[drawIdx++] = this.lastByteValue[1];
+				if(this.drawIdx < this.drawBuffer.length - 3) {
+					this.drawBuffer[this.drawIdx++] = currentSample;
+					this.drawBuffer[this.drawIdx++] = this.lastByteValue[0];
+					this.drawBuffer[this.drawIdx++] = this.lastByteValue[1];
 				}
 
 				// Step one point forward along the cache timeline
@@ -367,11 +365,11 @@ class audioProcessor extends AudioWorkletProcessor {
 				}
 
 				// Serialize the data point into a flat array (t, valL, valR) for the scope visualizer
-				if(drawIdx < drawBufferRaw.length - 3) {
+				if(this.drawIdx < this.drawBuffer.length - 3) {
 					// Data points are collected from the cache or during live calculation
-					drawBufferRaw[drawIdx++] = currentSample;
-					drawBufferRaw[drawIdx++] = this.lastByteValue[0];
-					drawBufferRaw[drawIdx++] = this.lastByteValue[1];
+					this.drawBuffer[this.drawIdx++] = currentSample;
+					this.drawBuffer[this.drawIdx++] = this.lastByteValue[0];
+					this.drawBuffer[this.drawIdx++] = this.lastByteValue[1];
 				}
 
 				// Move the time
@@ -401,49 +399,60 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.audioSample += chDataLen;
 			// Synchronize cacheSample with byteSample so that the cache doesn't fall behind during playback
 			this.cacheSample = this.byteSample;
+		}
+
+		// Send data if the player is paused (when paused, send data for each individual tick immediately)
+		// OR if enough points have accumulated (for 512 samples, drawIdx >= 512 * 3).
+		// If the buffer isn't full yet while playing, do NOT send a postMessage during this quantum.
+		// The next call to process() will append more points.
+		if(!this.isPlaying || this.drawIdx >= 1536) {
+			// --- Calculate of the continuous cache preceding the cursor (current byteSample) ---
+			let continuousSamples = 0;
+			let checkSample = this.byteSample;
+			// Check up to audioCacheLimit samples ahead
+			while(continuousSamples < this.audioCacheLimit) {
+				// Stop if there's a gap ahead, or if the data belongs to a different time loop
+				if(this.audioCacheTime[checkSample % this.audioCacheSize] !== checkSample) {
+					break;
+				}
+				// If the block is valid, increment the step and continue checking
+				// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
+				continuousSamples += chDataLen;
+				checkSample += chDataLen;
+			}
+			// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
+			data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
 
 			// Send the current byteSample to the main thread if it has changed
 			if(this.byteSample !== this.byteSampleSent) {
 				data.byteSample = this.byteSampleSent = this.byteSample;
 			}
-		}
 
-		// --- Calculate of the continuous cache preceding the cursor (current byteSample) ---
-		let continuousSamples = 0;
-		let checkSample = this.byteSample;
-		// Check up to audioCacheLimit samples ahead
-		while(continuousSamples < this.audioCacheLimit) {
-			// Stop if there's a gap ahead, or if the data belongs to a different time loop
-			if(this.audioCacheTime[checkSample % this.audioCacheSize] !== checkSample) {
-				break;
+			// Get a chunk of new data points to send to the main thread
+			if(this.drawIdx > 0) {
+				// Create a quick Float32Array slice of the size needed for the current quantum
+				data.drawBuffer = new Float32Array(this.drawBuffer.buffer, 0, this.drawIdx);
 			}
-			// If the block is valid, increment the step and continue checking
-			// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
-			continuousSamples += chDataLen;
-			checkSample += chDataLen;
-		}
-		// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
-		data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
 
-		// Get a chunk of new data points to send to the main thread
-		if(drawIdx > 0) {
-			// Create a quick Float32Array slice of the size needed for the current quantum
-			data.drawBuffer = new Float32Array(drawBufferRaw.buffer, 0, drawIdx);
+			// Send the data to the main thread
+			if(data.drawBuffer) {
+				// Send data using the Zero-Copy Transferable Object method. How Zero-Copy works:
+				// The browser instantly (in 0 ms) redirects the pointer to this memory buffer from the worker
+				//   to the main thread (in index.js). The memory in the worker is cleared (size becomes 0).
+				this.port.postMessage(data, [data.drawBuffer.buffer]);
+				// Reallocate the internal array, since the old buffer has "flown off" to the main thread
+				this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+			} else {
+				// Use regular sending if the worker has not generated any new points for the graph.
+				// The data contains only the byteSample value (the current timecode).
+				this.sendData(data);
+			}
+
+			// Reset the draw buffer index after sending the data to the main thread
+			this.drawIdx = 0;
 		}
 
-		// Send the data
-		if(data.drawBuffer) {
-			// Send data using the Zero-Copy Transferable Object method. How Zero-Copy works:
-			// The browser instantly (in 0 ms) redirects the pointer to this memory buffer from the worker
-			//   to the main thread (in index.js). The memory in the worker is cleared (its size becomes 0).
-			this.port.postMessage(data, [data.drawBuffer.buffer]);
-			// Reallocate the internal array, since the old buffer has "flown off" to the main thread
-			this.drawBufferRaw = new Float32Array(this.audioQuantumSize * 3);
-		} else {
-			// Use regular sending if the worker has not generated any new points for the graph.
-			// The data contains only the byteSample value (the current timecode).
-			this.sendData(data);
-		}
+		// Return true to indicate that the processor should continue running
 		return true;
 	}
 
