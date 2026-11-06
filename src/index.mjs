@@ -44,7 +44,8 @@ globalThis.bytebeat = new class {
 
 		// Lag detection
 		this.isLagging = false;
-		this.lastUpdateTime = 0;
+		this.lastUpdateByteSample = undefined; // The last byte sample received from the worker
+		this.lastUpdateTime = 0; // The last time the byte sample was updated
 		this.updateCounter = 0;
 
 		// Audio nodes
@@ -460,6 +461,7 @@ globalThis.bytebeat = new class {
 			}
 			scope.requestAnimationFrame(); // Main call for drawing in the scope
 		} else {
+			this.lastUpdateByteSample = undefined;
 			this.lastUpdateTime = 0;
 			this.updateCounter = 0;
 			this.isLagging = false;
@@ -573,6 +575,7 @@ globalThis.bytebeat = new class {
 		// If the time has been reset to 0, then clear the ring buffer, scope canvas and time cursor in the UI
 		if(this.isNeedClear && value === 0) {
 			this.isNeedClear = false;
+			this.lastUpdateByteSample = undefined;
 			scope.initRingBuffer();
 			scope.clearCanvas();
 			scope.canvasTimeCursor.style.left = 0;
@@ -666,28 +669,53 @@ globalThis.bytebeat = new class {
 
 	// Set the value for the timer counter, and detect the calculation lag
 	setCounterValue(value) {
+		// Update the timer counter display based on the current value and units
 		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
-		// Lag detection
+
+		// Detect the calculation lag, taking a measurement once every 30 incoming packets.
+		// The worker sent data.byteSample messages in batches of 512 samples
+		//   (93.75 times per second at a sample rate of 48000 Hz).
 		this.updateCounter++;
-		if(this.updateCounter === 400) {
-			this.updateCounter = 0;
-			const time = Date.now();
-			if(this.lastUpdateTime) {
-				const lag =
-					Math.min(Math.max(Math.round((time - this.lastUpdateTime) * 37.5 / 400) - 100, 0), 999);
-				ui.controlLag.innerText = lag + '%';
-				if(lag > 3) {
-					if(!this.isLagging) {
-						this.isLagging = true;
-						ui.controlLag.classList.add('control-lag-red');
-					}
-				} else if(this.isLagging) {
-					this.isLagging = false;
-					ui.controlLag.classList.remove('control-lag-red');
-				}
-			}
-			this.lastUpdateTime = time;
+		if(this.updateCounter < 30) {
+			return;
 		}
+		this.updateCounter = 0;
+		const currentTimeMs = Date.now();
+		if(this.lastUpdateTime && this.lastUpdateByteSample !== undefined) {
+			// How much physical time has elapsed according to the computer's clock (in ms)
+			const realTimePassedMs = currentTimeMs - this.lastUpdateTime;
+
+			// How many `t` units (byteSamples) the track should have played during this time
+			//   based on its own custom sample rate
+			const idealSamplesPassed = realTimePassedMs * (this.sampleRate / 1000);
+
+			// How many samples the song has actually processed along the timeline
+			const realSamplesPassed = Math.abs(value - this.lastUpdateByteSample);
+
+			// Calculate the lag percentage
+			let lag = 0;
+			if(realSamplesPassed < idealSamplesPassed && idealSamplesPassed > 0) {
+				// Lag percentage = (how many samples weren't processed / how many should have been) * 100
+				lag = Math.min(999,
+					Math.round(((idealSamplesPassed - realSamplesPassed) / idealSamplesPassed) * 100));
+			}
+			ui.controlLag.innerText = lag + '%';
+
+			// Switching the red color indicator
+			if(lag > 3) {
+				if(!this.isLagging) {
+					this.isLagging = true;
+					ui.controlLag.classList.add('control-lag-red');
+				}
+			} else if(this.isLagging) {
+				this.isLagging = false;
+				ui.controlLag.classList.remove('control-lag-red');
+			}
+		}
+
+		// Remember the current markers for the next measurement
+		this.lastUpdateTime = currentTimeMs;
+		this.lastUpdateByteSample = value;
 	}
 
 	// Apply a drawing mode for the visualizer scope
