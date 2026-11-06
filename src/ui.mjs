@@ -128,8 +128,11 @@ export class UI {
 	// Update the cache counter
 	setCacheCounter(seconds, sampleRate) {
 		if(this.controlCacheCounter) {
+			// Display a '>' if the cache is filled beyond the maximum limit
+			// Defined as audioCacheLimit in audio-processor.mjs
+			// 2**21 samples / 48000 = 43.69 seconds of audio at 48kHz
 			this.controlCacheCounter.innerText =
-				(seconds >= 1048576 / sampleRate ? '>' : '') + seconds.toFixed(1) + 's';
+				(seconds >= 2097152 / sampleRate ? '>' : '') + seconds.toFixed(1) + 's';
 		}
 	}
 
