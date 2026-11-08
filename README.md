@@ -35,6 +35,7 @@ A web-based algorithmic music generator and player for real-time live-coding, pa
 ### 🎛️ Playback & Control Panel
 
 * **Time counter:** Click the `t` button to switch to measuring in seconds. Click the counter number field to pause. Type a number and press `Enter` to jump to that specific time.
+* **Cache counter** Displays the number of seconds of the song that have been cached prior to the current playback position.
 * **Lag indicator:** Shows a slowdown coefficient if heavy or unoptimized code overloads the audio worker. Use this value to monitor lag and to fix audio crackling.
 * **Stop and reset:** Click the ⏹️ button to stop playback and to reset the time to 0.
 * **Reset:** Click the ⏮️ button to set time back to 0 without stopping playback.
@@ -50,6 +51,9 @@ A web-based algorithmic music generator and player for real-time live-coding, pa
 * **Record audio:** Click the record button ⏺️ to capture the output directly from the playback. It renders the audio into a downloadable `.ogg` file.
 * **Clean view:** Use the expand `⛶` button to hide the code editor and settings, leaving only the visual scope and basic playback controls on the screen. Available on mobile devices or small screens.
 * **Byte counter:** Tracks your code size in real-time. This helps you fit into classic bytebeat limits like 256 bytes or 1 KB.
+
+### 🗃️ Songs Caching
+A song loaded from an URL upon poage load begins to be cached immediately. Caching also occurs when playback is paused or stopped. The cache is limited to `2^24 t samples / 48000 Hz = 349.525 seconds` for 48kHz audio. The cache counter on the control panel is limited to `2^21 t samples / 48000 Hz = 43.69 seconds` for 48kHz audio. The cache counter counts up until it hits the first gap, in cases where you have cached a song in parts.
 
 ### 📝 Code Editor
 * **Syntax Highlighting:** Includes 12 themes (`Atom`, `GitHub`, `VSCode`, etc.) in both Dark and Light variants.
@@ -94,7 +98,7 @@ The management panel includes a set of tools for library curation, user access m
 * **"Manage Users":** Permits administrators to grant or revoke moderator access keys for community curators.
 * **"Change password":** Allows to change current account password.
 
-### 💾 Storage & Caching
+### 💾 Storage & Files Caching
 
 To reduce server load and skip unnecessary SQL queries during public accesses, song records are split into two layers:
 * **Meta Index (`/data/library/all.gz`):** The primary index layout (containing songs metadata, and truncated code preview) is stored in a structured JSON file compressed with GZIP.
@@ -227,6 +231,12 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2026-10-20** The state of the **selected filters is now saved**.
 * **2026-10-20** **The library now loads automatically** when the page loads.
 * **2026-10-20** **Scroll-up and scroll-down buttons** have been added.
+* **2026-10-26** Visualizer: Rendering has been optimized, eliminated memory leaks.
+* **2026-10-28** Audio worker: **Optimized calculatuons**, eliminated memory leaks, use of zero-copy data transfer.
+* **2026-10-29** Audio worker: **Optimized user code compiler** and error handler.
+* **2026-11-04** **Song caching has been implemented**.
+* **2026-11-06** Speed-up: **Data from the worker is now sent in batches** and less frequently, which reduces the load.
+* **2026-11-07** **More precise Lag Detector**.
 
 ## License
 

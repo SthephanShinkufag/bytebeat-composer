@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026110603">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026110603">
-	<script type="module" async src="./build/index.js?version=2026110603"></script>
-	<script src="./build/theme.js?version=2026110603"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026110802">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026110802">
+	<script type="module" async src="./build/index.js?version=2026110802"></script>
+	<script src="./build/theme.js?version=2026110802"></script>
 </head>
 <body>
 	<main id="content">
@@ -266,6 +266,16 @@
 								<li><strong>Clean view:</strong> Use the expand <code>⛶</code> button to hide the code editor and settings, leaving only the visual scope and basic playback controls on the screen. Available on mobile devices or small screens.</li>
 								<li><strong>Byte counter:</strong> Tracks your code size in real-time. This helps you fit into classic bytebeat limits like 256 bytes or 1 KB.</li>
 							</ul>
+						</div>
+						<div class="article-block">
+							<h3>🗃️ Songs Caching</h3>
+							<p>
+								A song loaded from an URL upon poage load begins to be cached immediately.
+								Caching also occurs when playback is paused or stopped.
+								The cache is limited to <code>2^24 t samples / 48000 Hz = 349.525 seconds</code> for 48kHz audio.
+								The cache counter on the control panel is limited to <code>2^21 t samples / 48000 Hz = 43.69 seconds</code> for 48kHz audio.
+								The cache counter counts up until it hits the first gap, in cases where you have cached a song in parts.
+							</p>
 						</div>
 						<div class="article-block">
 							<h3>📝 Code Editor</h3>

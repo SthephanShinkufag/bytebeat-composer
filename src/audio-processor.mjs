@@ -252,6 +252,9 @@ class audioProcessor extends AudioWorkletProcessor {
 				return true;
 			}
 
+			// Caching is permitted only during normal playback mode
+			const isCachingAllowed = Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1;
+
 			// Get the current time based on the last sample
 			let time = this.sampleRatio * this.audioSample;
 
@@ -352,7 +355,7 @@ class audioProcessor extends AudioWorkletProcessor {
 					// Write a fresh sample (values and time) to the worker cache.
 					// Write only for playing speed of 1 or -1 and divisor of 1,
 					//   to prevent the cache from getting cluttered with "gappy" samples
-					if(Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1) {
+					if(isCachingAllowed) {
 						this.audioCacheL[cacheIdx] = cacheValueL;
 						this.audioCacheR[cacheIdx] = cacheValueR;
 						this.audioCacheTime[cacheIdx] = currentSample; // Mark as valid
@@ -411,9 +414,25 @@ class audioProcessor extends AudioWorkletProcessor {
 			let checkSample = this.byteSample;
 			// Check up to audioCacheLimit samples ahead
 			while(continuousSamples < this.audioCacheLimit) {
-				// Stop if there's a gap ahead, or if the data belongs to a different time loop
-				if(this.audioCacheTime[checkSample % this.audioCacheSize] !== checkSample) {
-					break;
+				// If a cell with a time of -1 is encountered (a potential hole in the cache)
+				if(this.audioCacheTime[checkSample % this.audioCacheSize] === -1) {
+					// Looking ahead: Checking the next few cells (up to 4)
+					// If the song's sample rate is greater than 48000, then the step will be greater than 1
+					let isRealHole = true;
+					for(let lookAhead = 1; lookAhead <= 4; lookAhead++) {
+						const lookIdx = (checkSample + lookAhead) % this.audioCacheSize;
+						// If there is data a little further - it's not a hole, just a frequency skip
+						if(this.audioCacheTime[lookIdx] !== -1) {
+							isRealHole = false;
+							// Move scanner pointer to this found valid point
+							checkSample += lookAhead;
+							break;
+						}
+					}
+					// If searched the cells ahead and there is indeed a void - stop the loop
+					if(isRealHole) {
+						break;
+					}
 				}
 				// If the block is valid, increment the step and continue checking
 				// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
