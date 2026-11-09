@@ -74,6 +74,7 @@ export class UI {
 		this.containerScroll = document.getElementById('container-scroll');
 		this.containerScrollUp = document.getElementById('scroll-btn-up');
 		this.containerScrollDown = document.getElementById('scroll-btn-down');
+		this.controlAutoplay = document.getElementById('control-autoplay');
 		this.controlCacheCounter = document.getElementById('control-cache');
 		this.controlCodeSize = document.getElementById('control-codesize');
 		this.controlCodeStyle = document.getElementById('control-code-style');

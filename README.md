@@ -228,15 +228,15 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2026-10-18:** **SSD Disk Protection:** During database exports, file contents are audited via hashes. Unchanged data blocks bypass write filters, reducing wear on server SSD modules.
 * **2026-10-18:** **Security Hardening:** Secured all administrative panel actions with native SQL prepared statements (PDO) to block injection exploits, combined with rigid CSRF validation to stop cross-site scripting attacks.
 * **2026-10-18:** Added the **`#port` tag** for songs ported to bytebeat from other platform formats.
-* **2026-10-20** The state of the **selected filters is now saved**.
-* **2026-10-20** **The library now loads automatically** when the page loads.
-* **2026-10-20** **Scroll-up and scroll-down buttons** have been added.
-* **2026-10-26** Visualizer: Rendering has been optimized, eliminated memory leaks.
-* **2026-10-28** Audio worker: **Optimized calculatuons**, eliminated memory leaks, use of zero-copy data transfer.
-* **2026-10-29** Audio worker: **Optimized user code compiler** and error handler.
-* **2026-11-04** **Song caching has been implemented**.
-* **2026-11-06** Speed-up: **Data from the worker is now sent in batches** and less frequently, which reduces the load.
-* **2026-11-07** **More precise Lag Detector**.
+* **2026-10-20:** The state of the **selected filters is now saved**.
+* **2026-10-20:** **The library now loads automatically** when the page loads.
+* **2026-10-20:** **Scroll-up and scroll-down buttons** have been added.
+* **2026-10-26:** Visualizer: Rendering has been optimized, eliminated memory leaks.
+* **2026-10-29:** **Optimized audio worker**: faster calculations, user code compiler and error handler, eliminated memory leaks. 
+* **2026-11-04:** **Song caching has been implemented**.
+* **2026-11-06:** Speed-up: **Data from the worker is now sent in batches** and less frequently, which reduces the load.
+* **2026-11-07:** **More precise Lag Detector**.
+* **2026-11-09:** Added **Autoplay songs from the library** checkbox into the Settings section.
 
 ## License
 

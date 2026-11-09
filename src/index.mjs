@@ -13,6 +13,7 @@ globalThis.bytebeat = new class {
 	constructor() {
 		// Settings
 		this.defaultSettings = {
+			autoplay: true,
 			codeStyle: 'Atom Dark',
 			colorDiagram: '#0080ff',
 			colorStereo: 1,
@@ -112,6 +113,7 @@ globalThis.bytebeat = new class {
 			case 'canvas-main':
 			case 'canvas-play':
 			case 'canvas-timecursor': this.playbackToggle(!this.isPlaying); break;
+			case 'control-autoplay': this.toggleAutoplay(!this.settings.autoplay); break;
 			case 'control-counter':
 			case 'control-pause': this.playbackToggle(false); break;
 			case 'control-expand': ui.expandEditor(); break;
@@ -280,6 +282,7 @@ globalThis.bytebeat = new class {
 		this.setScopeAdjustment(0);
 		this.parseUrl(); // Load the code from the location hash
 		this.sendData({ drawMode: scope.drawMode });
+		this.toggleAutoplay(this.settings.autoplay);
 		ui.setLibraryFilters(library.filters);
 		ui.controlDrawMode.value = scope.drawMode;
 		ui.controlThemeStyle.value = this.settings.themeStyle;
@@ -347,7 +350,7 @@ globalThis.bytebeat = new class {
 	}
 
 	// Get the code with parameters and apply to player controls, scope and audio worker
-	loadCode({ code, sampleRate, mode, drawMode, scale }, isPlay = true) {
+	loadCode({ code, sampleRate, mode, drawMode, scale }, isAudioInited = true) {
 		// Get the playback mode
 		this.mode = ui.controlPlaybackMode.value = mode = mode || 'Bytebeat';
 
@@ -365,13 +368,13 @@ globalThis.bytebeat = new class {
 			sampleRatio: this.sampleRate / this.audioCtx.sampleRate
 		};
 
-		if(isPlay) {
-			// If the song has loaded with autoplay then start playing
+		if(isAudioInited) {
+			// The song has loaded from the library
 			data.playbackSpeed = this.playbackSpeed = 1;
-			this.playbackToggle(true, false);
+			this.playbackToggle(this.settings.autoplay, false);
 			data.resetTime = true;
 		} else {
-			// If the song has loaded without autoplay (on the page load),
+			// The song has loaded from the url on the page load,
 			//   instruct the worker to begin warming up the cache in the background
 			if(!this.precacheInterval) {
 				this.precacheInterval = setInterval(() => {
@@ -385,7 +388,9 @@ globalThis.bytebeat = new class {
 				}, 10);
 			}
 		}
-		data.isPlaying = isPlay;
+		// Set the playing state if the audio is initialized and autoplay is enabled
+		data.isPlaying = isAudioInited && this.settings.autoplay;
+		// Set the code for the worker to execute
 		data.setFunction = code;
 		// Notify the worker that the main thread is free and ready to process the first batch
 		data.readyForNextBatch = true;
@@ -911,6 +916,16 @@ globalThis.bytebeat = new class {
 		ui.controlVolume.title = `Volume: ${ (volumeValue * 100).toFixed(2) }%`;
 		this.saveSettings();
 		this.audioGain.gain.value = volumeValue * volumeValue;
+	}
+
+	// Toggle autoplay songs checkbox in settings
+	toggleAutoplay(isEnable) {
+		if(typeof isEnable !== 'boolean') {
+			isEnable = this.defaultSettings.autoplay;
+		}
+		this.settings.autoplay = isEnable;
+		this.saveSettings();
+		ui.controlAutoplay.checked = isEnable;
 	}
 
 	// Toggle between t and seconds for the timer counter
