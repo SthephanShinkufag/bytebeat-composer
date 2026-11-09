@@ -47,6 +47,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Position pointer in the draw buffer
 		this.drawIdx = 0;
 
+		// Backpressure flag: pauses cache calculations when the main thread is busy
+		this.isWaitForMain = false;
+
 		// Seal the instance to prevent adding new properties and ensure the structure remains fixed
 		Object.seal(this);
 
@@ -147,6 +150,11 @@ class audioProcessor extends AudioWorkletProcessor {
 
 		// --- PAUSE MODE: PRE-CALCULATING CACHE ---
 		if(!this.isPlaying) {
+			// Backpressure: If the main thread is still busy, don't perform any calculations
+			if(this.isWaitForMain) {
+				return true;
+			}
+
 			// Sync the cache pointer with the current time if it has fallen behind (e.g., during rewind)
 			if(this.cacheSample === undefined || this.cacheSample < this.byteSample) {
 				this.cacheSample = this.byteSample;
@@ -243,6 +251,12 @@ class audioProcessor extends AudioWorkletProcessor {
 
 				// Step one point forward along the cache timeline
 				this.cacheSample++;
+			}
+
+			// The worker has generated samples and is about to send them to the main thread,
+			//   so set the backpressure flag
+			if(this.drawIdx > 0) {
+				this.isWaitForMain = true;
 			}
 
 		// --- PLAY MODE: LIVE CALCULATION ---
@@ -543,6 +557,10 @@ class audioProcessor extends AudioWorkletProcessor {
 			// Run the precache function in the background while paused
 			// This will fill the cache with audio samples ahead of the current time
 			this.makeData();
+		}
+		if(data.readyForNextBatch === true) {
+			// The main thread has finished rendering the previous batch and is ready for a new one
+			this.isWaitForMain = false;
 		}
 	}
 

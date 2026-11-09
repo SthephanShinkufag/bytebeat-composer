@@ -387,6 +387,8 @@ globalThis.bytebeat = new class {
 		}
 		data.isPlaying = isPlay;
 		data.setFunction = code;
+		// Notify the worker that the main thread is free and ready to process the first batch
+		data.readyForNextBatch = true;
 
 		// Set the draw mode and scale for the visualizer scope, if they are specified in the song data
 		if(drawMode) {
@@ -476,7 +478,7 @@ globalThis.bytebeat = new class {
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
-			this.sendData({ isPlaying, playbackSpeed: this.playbackSpeed });
+			this.sendData({ isPlaying, playbackSpeed: this.playbackSpeed, readyForNextBatch: true });
 		} else {
 			// Set a flag to clear the ring buffer, the scope canvas and time cursor in the UI
 			this.isNeedClear = true;
@@ -532,6 +534,13 @@ globalThis.bytebeat = new class {
 		// Update the URL if the worker has requested it
 		if(data.updateUrl === true) {
 			this.updateUrl();
+		}
+
+		// Acknowledgment signal for backpressure
+		// If currently paused and a data packet arrives (containing graphics or timing information),
+		//   notify the worker that the main thread is free and ready to process the next batch
+		if(!this.isPlaying) {
+			this.sendData({ readyForNextBatch: true });
 		}
 	}
 
