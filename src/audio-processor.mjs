@@ -42,7 +42,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.audioCacheLimit = 2097152;
 
 		// Allocate a fixed flat array for sending graphics points (time, Left value, Right value)
-		this.drawBufferSize = 1024; // Number of points that can be sent at once
+		this.drawBufferSize = 2048; // Number of points that can be sent at once
 		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
 		// Position pointer in the draw buffer
 		this.drawIdx = 0;
@@ -166,7 +166,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			}
 
 			// How many samples to calculate per single trigger while paused
-			let aheadLoops = 512;
+			let aheadLoops = 2048; // Full this.drawBufferSize
 
 			// Loop to pre-calculate audio samples and fill the cache
 			while(aheadLoops-- > 0 && (this.cacheSample - this.byteSample <= this.audioCacheLimit)) {
@@ -419,7 +419,9 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 
 		// Send data if the player is paused (when paused, send data for each individual tick immediately)
-		// OR if enough points have accumulated (for 512 samples, drawIdx >= 512 * 3).
+		//   OR if enough points have accumulated while playing (for 512 samples, drawIdx >= 512 * 3).
+		// 512 samples is optimal for smooth visualization, at 1024 the cursor begins to move jerkily
+		//   because the packets are sent too infrequently.
 		// If the buffer isn't full yet while playing, do NOT send a postMessage during this quantum.
 		// The next call to process() will append more points.
 		if(!this.isPlaying || this.drawIdx >= 1536) {

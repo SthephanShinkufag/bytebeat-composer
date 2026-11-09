@@ -1355,7 +1355,7 @@ button[name="close"] {
 }
 
 #control-cache {
-	width: 45px;
+	width: 44px;
 }
 
 #control-cache::after {
@@ -1408,7 +1408,7 @@ button[name="close"] {
 }
 
 #control-counter-units {
-	width: 30px;
+	width: 29px;
 	text-align: center;
 	user-select: none;
 }
