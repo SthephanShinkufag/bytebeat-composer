@@ -542,7 +542,7 @@ globalThis.bytebeat = new class {
 		}
 
 		// Acknowledgment signal for backpressure
-		// If currently paused and a data packet arrives (containing graphics or timing information),
+		// If currently paused and a data batch arrives (containing graphics or timing information),
 		//   notify the worker that the main thread is free and ready to process the next batch
 		if(!this.isPlaying) {
 			this.sendData({ readyForNextBatch: true });
@@ -590,6 +590,8 @@ globalThis.bytebeat = new class {
 		if(this.isNeedClear && value === 0) {
 			this.isNeedClear = false;
 			this.lastUpdateByteSample = undefined;
+
+			// Reset and clear the canvas
 			scope.initRingBuffer();
 			scope.clearCanvas();
 			scope.canvasTimeCursor.style.left = 0;
@@ -686,11 +688,11 @@ globalThis.bytebeat = new class {
 		// Update the timer counter display based on the current value and units
 		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
 
-		// Detect the calculation lag, taking a measurement once every 50 incoming packets.
-		// The worker sent data.byteSample messages in batches of 512 samples
-		//   (93.75 times per second at a default sample rate of 48000 Hz in the Web Audio API).
+		// Detect the calculation lag, taking a measurement once every 60 incoming batches.
+		// The worker sent data.byteSample batches of 256 samples
+		//   (187.5 times per second at a default sample rate of 48000 Hz in the Web Audio API).
 		this.updateCounter++;
-		if(this.updateCounter < 50) {
+		if(this.updateCounter < 60) {
 			return;
 		}
 		this.updateCounter = 0;

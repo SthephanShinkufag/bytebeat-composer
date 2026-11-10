@@ -47,6 +47,13 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Position pointer in the draw buffer
 		this.drawIdx = 0;
 
+		// Number of points to accumulate before sending
+		// While paused: this.drawBufferSize is the maximum
+		this.batchSizePaused = 2048;
+		// While playing: 256 or 512 samples is optimal for smooth visualization,
+		//   at 1024 the cursor begins to move jerkily because the packets are sent too infrequently
+		this.batchSizePlaying = 256;
+
 		// Backpressure flag: pauses cache calculations when the main thread is busy
 		this.isWaitForMain = false;
 
@@ -166,7 +173,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			}
 
 			// How many samples to calculate per single trigger while paused
-			let aheadLoops = 2048; // Full this.drawBufferSize
+			let aheadLoops = this.batchSizePaused;
 
 			// Loop to pre-calculate audio samples and fill the cache
 			while(aheadLoops-- > 0 && (this.cacheSample - this.byteSample <= this.audioCacheLimit)) {
@@ -242,22 +249,13 @@ class audioProcessor extends AudioWorkletProcessor {
 				this.lastFuncValue[0] = funcValueL;
 				this.lastFuncValue[1] = funcValueR;
 
-				// Serialize the data point into a flat array (t, valL, valR) for the scope visualizer
-				if(this.drawIdx < this.drawBuffer.length - 3) {
-					this.drawBuffer[this.drawIdx++] = currentSample;
-					this.drawBuffer[this.drawIdx++] = this.lastByteValue[0];
-					this.drawBuffer[this.drawIdx++] = this.lastByteValue[1];
-				}
-
 				// Step one point forward along the cache timeline
 				this.cacheSample++;
 			}
 
 			// The worker has generated samples and is about to send them to the main thread,
 			//   so set the backpressure flag
-			if(this.drawIdx > 0) {
-				this.isWaitForMain = true;
-			}
+			this.isWaitForMain = true;
 
 		// --- PLAY MODE: LIVE CALCULATION ---
 		} else {
@@ -418,13 +416,10 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.cacheSample = this.byteSample;
 		}
 
-		// Send data if the player is paused (when paused, send data for each individual tick immediately)
-		//   OR if enough points have accumulated while playing (for 512 samples, drawIdx >= 512 * 3).
-		// 512 samples is optimal for smooth visualization, at 1024 the cursor begins to move jerkily
-		//   because the packets are sent too infrequently.
-		// If the buffer isn't full yet while playing, do NOT send a postMessage during this quantum.
-		// The next call to process() will append more points.
-		if(!this.isPlaying || this.drawIdx >= 1536) {
+		// If the player is paused: send data immediately.
+		// While playing: send data only if enough points have accumulated, otherwise do NOT send
+		//   a postMessage during this quantum - the next call to process() will append more points.
+		if(!this.isPlaying || this.drawIdx >= this.batchSizePlaying * 3) {
 			// --- Calculate of the continuous cache preceding the cursor (current byteSample) ---
 			let continuousSamples = 0;
 			let checkSample = this.byteSample;
@@ -586,6 +581,10 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.lastFuncValue = [null, null];
 		this.lastTime = -1;
 		this.outValue = [0, 0];
+
+		// Reset the draw buffer for the scope
+		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+		this.drawIdx = 0;
 	}
 
 	// Parsing text into function and preparing it for execution
