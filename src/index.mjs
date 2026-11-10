@@ -688,9 +688,7 @@ globalThis.bytebeat = new class {
 		// Update the timer counter display based on the current value and units
 		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
 
-		// Detect the calculation lag, taking a measurement once every 60 incoming batches.
-		// The worker sent data.byteSample batches of 256 samples
-		//   (187.5 times per second at a default sample rate of 48000 Hz in the Web Audio API).
+		// Detect the calculation lag, taking a measurement once every 60 incoming byteSample batches
 		this.updateCounter++;
 		if(this.updateCounter < 60) {
 			return;

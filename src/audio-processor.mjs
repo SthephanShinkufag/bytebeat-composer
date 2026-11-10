@@ -50,9 +50,11 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Number of points to accumulate before sending
 		// While paused: this.drawBufferSize is the maximum
 		this.batchSizePaused = 2048;
-		// While playing: 256 or 512 samples is optimal for smooth visualization,
-		//   at 1024 the cursor begins to move jerkily because the packets are sent too infrequently
-		this.batchSizePlaying = 256;
+		// While playing
+		this.batchSizePlaying = 1024;
+
+		// Counter for processed audio quanta while playing (makeData() call counter)
+		this.quantumCounter = 0;
 
 		// Backpressure flag: pauses cache calculations when the main thread is busy
 		this.isWaitForMain = false;
@@ -264,6 +266,9 @@ class audioProcessor extends AudioWorkletProcessor {
 				return true;
 			}
 
+			// If music is playing, increment the counter of audio quanta
+			this.quantumCounter++;
+
 			// Caching is permitted only during normal playback mode
 			const isCachingAllowed = Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1;
 
@@ -416,10 +421,12 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.cacheSample = this.byteSample;
 		}
 
-		// If the player is paused: send data immediately.
-		// While playing: send data only if enough points have accumulated, otherwise do NOT send
-		//   a postMessage during this quantum - the next call to process() will append more points.
-		if(!this.isPlaying || this.drawIdx >= this.batchSizePlaying * 3) {
+		// Send data to the main thread if:
+		// 1. We are paused (!this.isPlaying) - send on every Backpressure tick;
+		// 2. The graphics buffer is full (this.batchSizePlaying * 3) - enough points have accumulated;
+		// 3. Enough calls have passed (this.quantumCounter >= 6), for smooth time cursor on low sample rates.
+		// Otherwise do NOT send points during this quantum - the next call to makeData() will append more.
+		if(!this.isPlaying || this.drawIdx >= this.batchSizePlaying * 3 || this.quantumCounter >= 8) {
 			// --- Calculate of the continuous cache preceding the cursor (current byteSample) ---
 			let continuousSamples = 0;
 			let checkSample = this.byteSample;
@@ -478,8 +485,9 @@ class audioProcessor extends AudioWorkletProcessor {
 				this.sendData(data);
 			}
 
-			// Reset the draw buffer index after sending the data to the main thread
+			// Reset counters after sending the data to the main thread
 			this.drawIdx = 0;
+			this.quantumCounter = 0;
 		}
 
 		// Return true to indicate that the processor should continue running
