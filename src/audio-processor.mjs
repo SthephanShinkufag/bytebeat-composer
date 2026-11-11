@@ -44,7 +44,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		// --- Drawing graphics buffer ---
 		// Allocate a fixed flat array for sending graphics points (time, Left value, Right value)
 		this.drawBufferSize = 2048; // Number of points that can be sent at once
-		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+		this.drawBuffer = new Float64Array(this.drawBufferSize * 3);
 		// Position pointer in the draw buffer
 		this.drawIdx = 0;
 
@@ -469,8 +469,8 @@ class audioProcessor extends AudioWorkletProcessor {
 
 			// Get a chunk of new data points to send to the main thread
 			if(this.drawIdx > 0) {
-				// Create a quick Float32Array slice of the size needed for the current quantum
-				data.drawBuffer = new Float32Array(this.drawBuffer.buffer, 0, this.drawIdx);
+				// Create a quick Float64Array slice of the size needed for the current quantum
+				data.drawBuffer = new Float64Array(this.drawBuffer.buffer, 0, this.drawIdx);
 				isSendData = true;
 			}
 
@@ -481,7 +481,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				//   to the main thread (in index.js). The memory in the worker is cleared (size becomes 0).
 				this.port.postMessage(data, [data.drawBuffer.buffer]);
 				// Reallocate the internal array, since the old buffer has "flown off" to the main thread
-				this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+				this.drawBuffer = new Float64Array(this.drawBufferSize * 3);
 			} else if(isSendData) {
 				// Use regular sending if the worker has not generated any new points for the graph.
 				// The data contains only the byteSample value (the current timecode).
@@ -613,7 +613,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.outValue = [0, 0];
 
 		// Reset the draw buffer for the scope
-		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
+		this.drawBuffer = new Float64Array(this.drawBufferSize * 3);
 		this.drawIdx = 0;
 	}
 

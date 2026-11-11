@@ -498,7 +498,7 @@ export class Scope {
 	// Memory is allocated only once, and the Garbage Collector is never invoked.
 	initRingBuffer() {
 		// Allocate a single contiguous array: 3 cells (t, valL, valR) for each point
-		this.ringBuffer = new Float32Array(this.bufferSize * 3);
+		this.ringBuffer = new Float64Array(this.bufferSize * 3);
 		this.bufferHead = 0; // Pointer to the index of the current point
 		this.bufferTail = 0;
 	}

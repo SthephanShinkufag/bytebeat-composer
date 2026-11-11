@@ -508,7 +508,7 @@ globalThis.bytebeat = new class {
 
 		// If sample data for the buffer has arrived
 		// Iterate through the incoming points and add them directly to the graphics ring buffer
-		if(drawBuffer && drawBuffer instanceof Float32Array) {
+		if(drawBuffer && drawBuffer instanceof Float64Array) {
 			const len = drawBuffer.length;
 			// Step with a stride of 3, extracting (t, valL, valR)
 			for(let i = 0; i < len; i += 3) {
