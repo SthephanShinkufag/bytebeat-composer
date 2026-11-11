@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026111003">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026111003">
-	<script type="module" async src="./build/index.js?version=2026111003"></script>
-	<script src="./build/theme.js?version=2026111003"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026111100">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026111100">
+	<script type="module" async src="./build/index.js?version=2026111100"></script>
+	<script src="./build/theme.js?version=2026111100"></script>
 </head>
 <body>
 	<main id="content">
@@ -25,10 +25,11 @@
 			<div class="controls">
 				<div class="controls-group controls-grow">
 					<button id="control-counter-units" class="control-button" title="Time units">t</button>
-					<input type="text" id="control-counter" class="control-text" value="0" title="Set time to jump along the timeline then press Enter">
+					<input type="text" id="control-counter" class="control-text" value="0" title="Set the time to jump along the timeline, then press Enter">
 				</div>
 				<div class="controls-group">
-					<span id="control-cache" class="control-indicator control-text" title="Cached song data in seconds">0.0s</span>
+					<button id="control-cache-toggle" class="control-button" title="Toggle song caching">✔</button>
+					<span id="control-cache" class="control-indicator control-text" title="The amount of song cached ahead, in seconds">---</span>
 				</div>
 				<div class="controls-group">
 					<span id="control-lag" class="control-indicator control-text" title="Computing lag (freezes) factor">---</span>
@@ -250,6 +251,7 @@
 							<h3>🎛️ Playback & Control Panel</h3>
 							<ul>
 								<li><strong>Time counter:</strong> Click the <code>t</code> button to switch to measuring in seconds. Click the counter number field to pause. Type a number and press <code>Enter</code> to jump to that specific time.</li>
+								<li><strong>Cache counter:</strong> Click the toggle button to disable or enable the song caching. The counter displays the seconds of the song that have been precalculated ahead of the current playback position.</li>
 								<li><strong>Lag indicator:</strong> Shows a slowdown coefficient if heavy or unoptimized code overloads the audio worker. Use this value to monitor lag and to fix audio crackling.</li>
 								<li><strong>Stop and reset:</strong> Click the ⏹️ button to stop playback and to reset the time to 0.</li>
 								<li><strong>Reset:</strong> Click the ⏮️ button to set time back to 0 without stopping playback.</li>

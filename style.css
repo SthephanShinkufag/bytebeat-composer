@@ -1362,6 +1362,10 @@ button[name="close"] {
 	content: "Cache";
 }
 
+#control-cache-toggle {
+	width: 16px;
+}
+
 #control-codesize {
 	min-width: 56px;
 	cursor: default;
@@ -1399,7 +1403,7 @@ button[name="close"] {
 }
 
 #control-counter {
-	width: 42px;
+	width: 52px;
 	border-radius: 0 var(--ctrl-corners) var(--ctrl-corners) 0;
 }
 
@@ -1427,8 +1431,7 @@ button[name="close"] {
 
 .control-indicator {
 	position: relative;
-	border-radius: var(--ctrl-corners);
-	text-align: right;
+	text-align: left;
 	overflow: hidden;
 	cursor: default;
 }
@@ -1436,7 +1439,7 @@ button[name="close"] {
 .control-indicator::after {
 	position: absolute;
 	bottom: 0;
-	left: 2px;
+	left: 4px;
 	font: 10px sans-serif;
 }
 
@@ -1548,7 +1551,7 @@ button[name="close"] {
 }
 
 #control-volume {
-	width: 90px;
+	width: 68px;
 	flex-grow: 1;
 	appearance: none;
 	height: 10px;

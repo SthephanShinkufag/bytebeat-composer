@@ -14,6 +14,7 @@ globalThis.bytebeat = new class {
 		// Settings
 		this.defaultSettings = {
 			autoplay: true,
+			caching: true,
 			codeStyle: 'Atom Dark',
 			colorDiagram: '#0080ff',
 			colorStereo: 1,
@@ -114,6 +115,7 @@ globalThis.bytebeat = new class {
 			case 'canvas-play':
 			case 'canvas-timecursor': this.playbackToggle(!this.isPlaying); break;
 			case 'control-autoplay': this.toggleAutoplay(!this.settings.autoplay); break;
+			case 'control-cache-toggle': this.toggleCaching(!this.settings.caching); break;
 			case 'control-counter':
 			case 'control-pause': this.playbackToggle(false); break;
 			case 'control-expand': ui.expandEditor(); break;
@@ -180,7 +182,7 @@ globalThis.bytebeat = new class {
 		case 'input':
 			switch(elem.id) {
 			case 'control-counter':
-				this.oninputCounter(event);
+				this.oninputTimeCounter(event);
 				break;
 			case 'control-volume':
 				this.setVolume(false);
@@ -195,7 +197,7 @@ globalThis.bytebeat = new class {
 
 		case 'keydown':
 			if(elem.id === 'control-counter') {
-				this.oninputCounter(event);
+				this.oninputTimeCounter(event);
 			}
 			return;
 
@@ -282,6 +284,7 @@ globalThis.bytebeat = new class {
 		this.setScopeAdjustment(0);
 		this.parseUrl(); // Load the code from the location hash
 		this.sendData({ drawMode: scope.drawMode });
+		this.toggleCaching(this.settings.caching);
 		this.toggleAutoplay(this.settings.autoplay);
 		ui.setLibraryFilters(library.filters);
 		ui.controlDrawMode.value = scope.drawMode;
@@ -365,7 +368,8 @@ globalThis.bytebeat = new class {
 		const data = {
 			mode,
 			sampleRate: this.sampleRate,
-			sampleRatio: this.sampleRate / this.audioCtx.sampleRate
+			sampleRatio: this.sampleRate / this.audioCtx.sampleRate,
+			enableCaching: this.settings.caching
 		};
 
 		if(isAudioInited) {
@@ -392,9 +396,11 @@ globalThis.bytebeat = new class {
 		data.isPlaying = isAudioInited && this.settings.autoplay;
 		// Set the code for the worker to execute
 		data.setFunction = code;
-		// Notify the worker that the main thread is free and ready to process the first batch
-		data.readyForNextBatch = true;
-
+		// Allow cache calculations while paused
+		if(this.settings.caching) {
+			// Notify the worker that the main thread is free and ready to process the first batch
+			data.readyForNextBatch = true;
+		}
 		// Set the draw mode and scale for the visualizer scope, if they are specified in the song data
 		if(drawMode) {
 			ui.controlDrawMode.value = scope.drawMode = drawMode;
@@ -411,16 +417,16 @@ globalThis.bytebeat = new class {
 	}
 
 	// Apply the time from the timer counter input
-	oninputCounter(event) {
-		if(event.key === 'Enter') {
-			ui.controlTime.blur();
-			this.playbackToggle(true);
+	oninputTimeCounter(event) {
+		if(event.key !== 'Enter') {
 			return;
 		}
 		const byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * this.sampleRate) :
 			ui.controlTime.value;
 		this.setByteSample(byteSample);
 		this.sendData({ byteSample });
+		ui.controlTime.blur();
+		this.playbackToggle(true);
 	}
 
 	// Load the code from the location hash
@@ -511,7 +517,7 @@ globalThis.bytebeat = new class {
 		}
 
 		// Output the accumulated number of cache seconds before the cursor
-		if(typeof data.cacheSeconds === 'number') {
+		if(this.settings.caching &&typeof data.cacheSeconds === 'number') {
 			ui.setCacheCounter(data.cacheSeconds, this.sampleRate);
 		}
 
@@ -541,10 +547,10 @@ globalThis.bytebeat = new class {
 			this.updateUrl();
 		}
 
-		// Acknowledgment signal for backpressure
+		// Acknowledgment signal for backpressure (for cache calculations while paused)
 		// If currently paused and a data batch arrives (containing graphics or timing information),
 		//   notify the worker that the main thread is free and ready to process the next batch
-		if(!this.isPlaying) {
+		if(this.settings.caching && !this.isPlaying) {
 			this.sendData({ readyForNextBatch: true });
 		}
 	}
@@ -926,6 +932,25 @@ globalThis.bytebeat = new class {
 		this.settings.autoplay = isEnable;
 		this.saveSettings();
 		ui.controlAutoplay.checked = isEnable;
+	}
+
+	// Toggle songs caching checkbox in settings
+	toggleCaching(isEnable) {
+		if(typeof isEnable !== 'boolean') {
+			isEnable = this.defaultSettings.caching;
+		}
+		this.settings.caching = isEnable;
+		this.saveSettings();
+		ui.controlCacheToggle.innerText = isEnable ? '✔' : '✖';
+		ui.controlCacheCounter.innerText = isEnable ? '0.0s' : '---';
+
+		// Notify the worker about a change in the caching mode
+		const data = { enableCaching: isEnable };
+		// If caching has just been enabled while in a paused state, provide an initial warm-up process
+		if(isEnable && !this.isPlaying) {
+			data.readyForNextBatch = true;
+		}
+		this.sendData(data);
 	}
 
 	// Toggle between t and seconds for the timer counter

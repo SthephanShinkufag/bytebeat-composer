@@ -4,7 +4,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.audioSample = 0; // Current time in samples (audio time)
 		this.byteSample = 0; // Current time in samples (bytebeat time)
 		this.byteSampleSent = 0; // Last time sent to the main script (bytebeat time)
-		this.cacheSample = 0; // Current sample index in the cache
 		this.drawMode = 'Points';
 		this.errorDisplayed = true; // Flag to prevent sending multiple error messages to the main script
 		this.func = null; // User-defined function for generating audio samples
@@ -20,44 +19,41 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.sampleRatio = 1; // Ratio of the sample rate to the audio context's sample rate
 		this.srDivisor = 1; // Divisor for sample rate (used for downsampling)
 
-		// Allocate a fixed-size buffer for caching audio samples
-		// 2**24 samples / 48000 = 349.525 seconds of audio at 48kHz
-		// 2**24 samples * 4 bytes * 2 channels (L and R) will take ~134.2 MB
-		this.audioCacheSize = 16777216;
-		this.audioCacheL = new Float32Array(this.audioCacheSize);
-		this.audioCacheR = new Float32Array(this.audioCacheSize);
-
-		// An array of timestamps. Fill it with -1 (indicating that a cell is empty)
-		// 2**24 samples * 4 bytes = ~67.1MB
-		this.audioCacheTime = new Int32Array(this.audioCacheSize);
-		this.audioCacheTime.fill(-1);
-
-		// Array of strings for caching runtime output in the error console
-		this.audioCacheError = new Array(this.audioCacheSize);
-		// Flag for controlling the sending of runtime messages
-		this.lastSentErrorSample = -1;
-
+		// --- Songs caching ---
+		this.isCachingEnabled = false;
+		// Backpressure flag: pauses cache calculations when the main thread is busy
+		this.isWaitForMain = false;
+		// Current sample index in the cache
+		this.cacheSample = 0;
 		// How far ahead the cache can be filled
 		// 2**21 samples / 48000 = 43.69 seconds of audio at 48kHz
 		this.audioCacheLimit = 2097152;
+		// A fixed-size buffer for caching audio samples
+		// 2**24 samples / 48000 = 349.525 seconds of audio at 48kHz
+		// 2**24 samples * 4 bytes * 2 channels (L and R) will take ~134.2 MB
+		this.audioCacheSize = 16777216;
+		this.audioCacheL = null;
+		this.audioCacheR = null;
+		// An array of timestamps, 2**24 samples * 4 bytes = ~67.1MB
+		this.audioCacheTime = null;
+		// Array of strings for caching runtime output in the error console
+		this.audioCacheError = null;
+		// Flag for controlling the sending of runtime messages
+		this.lastSentErrorSample = -1;
 
+		// --- Drawing graphics buffer ---
 		// Allocate a fixed flat array for sending graphics points (time, Left value, Right value)
 		this.drawBufferSize = 2048; // Number of points that can be sent at once
 		this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
 		// Position pointer in the draw buffer
 		this.drawIdx = 0;
 
+		// --- Sending points to the main thread ---
 		// Number of points to accumulate before sending
-		// While paused: this.drawBufferSize is the maximum
-		this.batchSizePaused = 2048;
-		// While playing
-		this.batchSizePlaying = 1024;
-
+		this.batchSizePaused = 2048; // While paused: this.drawBufferSize is the maximum
+		this.batchSizePlaying = 1024; // While playing
 		// Counter for processed audio quanta while playing (makeData() call counter)
 		this.quantumCounter = 0;
-
-		// Backpressure flag: pauses cache calculations when the main thread is busy
-		this.isWaitForMain = false;
 
 		// Seal the instance to prevent adding new properties and ensure the structure remains fixed
 		Object.seal(this);
@@ -149,9 +145,6 @@ class audioProcessor extends AudioWorkletProcessor {
 		// The standard quantum size in the Web Audio API (chData[0].length) is 128 samples
 		//   but can be larger (256, 512, ..) depending on the system
 		const chDataLen = chData ? chData[0].length : 128;
-		// Data object for sending to the main thread
-		// It will be filled with the graphics points, current time, and cache seconds
-		const data = {};
 		// Destructure frequently used properties
 		const { func, getValues, isFuncbeat, outValue, sampleRate } = this;
 		// If the drawing mode requires a diagram
@@ -159,8 +152,8 @@ class audioProcessor extends AudioWorkletProcessor {
 
 		// --- PAUSE MODE: PRE-CALCULATING CACHE ---
 		if(!this.isPlaying) {
-			// Backpressure: If the main thread is still busy, don't perform any calculations
-			if(this.isWaitForMain) {
+			// If caching is disabled or the main thread is still busy, don't perform any calculations
+			if(!this.isCachingEnabled || this.isWaitForMain) {
 				return true;
 			}
 
@@ -270,7 +263,8 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.quantumCounter++;
 
 			// Caching is permitted only during normal playback mode
-			const isCachingAllowed = Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1;
+			const isCachingAllowed = this.isCachingEnabled &&
+				Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1;
 
 			// Get the current time based on the last sample
 			let time = this.sampleRatio * this.audioSample;
@@ -295,7 +289,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				const cacheIdx = currentSample % this.audioCacheSize;
 
 				// CACHE CHECK: is there already a pre-calculated sample available for this time t?
-				if(this.audioCacheTime[cacheIdx] === currentSample) {
+				if(this.isCachingEnabled && this.audioCacheTime[cacheIdx] === currentSample) {
 					// Instant reading from the cache
 					const cacheValueL = this.audioCacheL[cacheIdx];
 					const cacheValueR = this.audioCacheR[cacheIdx];
@@ -411,14 +405,16 @@ class audioProcessor extends AudioWorkletProcessor {
 
 			// Reset the time if its value is too large
 			if(Math.abs(this.byteSample) > Number.MAX_SAFE_INTEGER) {
-				this.resetTime();
+				this.resetTime(); // Set time to 0, notify the main thread that the time has been reset
 				return true;
 			}
 
 			// Increment the audio time by the number of samples processed in this quantum
 			this.audioSample += chDataLen;
 			// Synchronize cacheSample with byteSample so that the cache doesn't fall behind during playback
-			this.cacheSample = this.byteSample;
+			if(this.isCachingEnabled) {
+				this.cacheSample = this.byteSample;
+			}
 		}
 
 		// Send data to the main thread if:
@@ -427,48 +423,55 @@ class audioProcessor extends AudioWorkletProcessor {
 		// 3. Enough calls have passed (this.quantumCounter >= 6), for smooth time cursor on low sample rates.
 		// Otherwise do NOT send points during this quantum - the next call to makeData() will append more.
 		if(!this.isPlaying || this.drawIdx >= this.batchSizePlaying * 3 || this.quantumCounter >= 8) {
-			// --- Calculate of the continuous cache preceding the cursor (current byteSample) ---
-			let continuousSamples = 0;
-			let checkSample = this.byteSample;
-			// Check up to audioCacheLimit samples ahead
-			while(continuousSamples < this.audioCacheLimit) {
-				// If a cell with a time of -1 is encountered (a potential hole in the cache)
-				if(this.audioCacheTime[checkSample % this.audioCacheSize] === -1) {
-					// Looking ahead: Checking the next few cells (up to 4)
-					// If the song's sample rate is greater than 48000, then the step will be greater than 1
-					let isRealHole = true;
-					for(let lookAhead = 1; lookAhead <= 4; lookAhead++) {
-						const lookIdx = (checkSample + lookAhead) % this.audioCacheSize;
-						// If there is data a little further - it's not a hole, just a frequency skip
-						if(this.audioCacheTime[lookIdx] !== -1) {
-							isRealHole = false;
-							// Move scanner pointer to this found valid point
-							checkSample += lookAhead;
+			let isSendData = false;
+			const data = {};
+
+			// --- Calculate the continuous cache preceding the cursor (current byteSample) ---
+			if(this.isCachingEnabled) {
+				let continuousSamples = 0;
+				let checkSample = this.byteSample;
+				// Check up to audioCacheLimit samples ahead
+				while(continuousSamples < this.audioCacheLimit) {
+					// If a cell with a time of -1 is encountered (a potential hole in the cache)
+					if(this.audioCacheTime[checkSample % this.audioCacheSize] === -1) {
+						// Looking ahead: Checking the next few cells (up to 4)
+						// If the song's sample rate is greater than 48000, the step will be greater than 1
+						let isRealHole = true;
+						for(let lookAhead = 1; lookAhead <= 4; lookAhead++) {
+							// If there is data a little further - it's not a hole, just a frequency skip
+							if(this.audioCacheTime[(checkSample + lookAhead) % this.audioCacheSize] !== -1) {
+								isRealHole = false;
+								// Move scanner pointer to this found valid point
+								checkSample += lookAhead;
+								break;
+							}
+						}
+						// If searched the cells ahead and there is indeed a void - stop the loop
+						if(isRealHole) {
 							break;
 						}
 					}
-					// If searched the cells ahead and there is indeed a void - stop the loop
-					if(isRealHole) {
-						break;
-					}
+					// If the block is valid, increment the step and continue checking
+					// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
+					continuousSamples += chDataLen;
+					checkSample += chDataLen;
 				}
-				// If the block is valid, increment the step and continue checking
-				// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
-				continuousSamples += chDataLen;
-				checkSample += chDataLen;
+				// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
+				data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
+				isSendData = true;
 			}
-			// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
-			data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
 
 			// Send the current byteSample to the main thread if it has changed
 			if(this.byteSample !== this.byteSampleSent) {
 				data.byteSample = this.byteSampleSent = this.byteSample;
+				isSendData = true;
 			}
 
 			// Get a chunk of new data points to send to the main thread
 			if(this.drawIdx > 0) {
 				// Create a quick Float32Array slice of the size needed for the current quantum
 				data.drawBuffer = new Float32Array(this.drawBuffer.buffer, 0, this.drawIdx);
+				isSendData = true;
 			}
 
 			// Send the data to the main thread
@@ -479,7 +482,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				this.port.postMessage(data, [data.drawBuffer.buffer]);
 				// Reallocate the internal array, since the old buffer has "flown off" to the main thread
 				this.drawBuffer = new Float32Array(this.drawBufferSize * 3);
-			} else {
+			} else if(isSendData) {
 				// Use regular sending if the worker has not generated any new points for the graph.
 				// The data contains only the byteSample value (the current timecode).
 				this.sendData(data);
@@ -501,71 +504,89 @@ class audioProcessor extends AudioWorkletProcessor {
 
 	// Handler for received commands
 	receiveData(data) {
+		let isClearAudioCache = false;
+
+		// Set current sample position provided by the main thread
 		if(data.byteSample !== undefined) {
 			this.byteSample = +data.byteSample || 0;
 			this.resetValues();
 		}
-		if(data.errorDisplayed === true) {
-			this.errorDisplayed = true;
+
+		// Enable/disable caching and allocate/release the cache memory accordingly
+		if(data.enableCaching !== undefined) {
+			this.toggleCacheMemory(data.enableCaching);
 		}
+
+		// Update the playback status from the main thread
 		if(data.isPlaying !== undefined) {
 			this.isPlaying = data.isPlaying;
 		}
+
+		// Update the audio processing mode and corresponding value conversion function
+		if(data.mode !== undefined) {
+			isClearAudioCache = true;
+			this.updateMode(data.mode);
+		}
+
+		// Update drawing mode
+		if(data.drawMode !== undefined) {
+			this.drawMode = data.drawMode;
+			isClearAudioCache = true;
+		}
+
+		// Mark that an error has been displayed by the main thread
+		if(data.errorDisplayed === true) {
+			this.errorDisplayed = true;
+		}
+
+		// Parsing text from the editor into function and preparing it for execution
+		if(data.setFunction !== undefined) {
+			this.setFunction(data.setFunction);
+			isClearAudioCache = true;
+		}
+
+		// Forced time reset upon command from the main thread
+		// Send { byteSample: 0 } to the main thread in response
+		if(data.resetTime === true) {
+			this.resetTime();
+		}
+
+		// Update the sample rate from the main thread
+		if(data.sampleRate !== undefined) {
+			this.sampleRate = data.sampleRate;
+		}
+
+		// Update the sample rate divisor from the main thread
 		if(data.srDivisor !== undefined) {
 			this.srDivisor = data.srDivisor;
 		}
+
+		// Update playback speed and adjust the sample ratio accordingly
 		if(data.playbackSpeed !== undefined) {
 			const sampleRatio = this.sampleRatio / this.playbackSpeed;
 			this.playbackSpeed = data.playbackSpeed;
 			this.setSampleRatio(sampleRatio);
 		}
-		if(data.mode !== undefined) {
-			this.clearAudioCache();
-			this.isFuncbeat = data.mode === 'Funcbeat';
-			switch(data.mode) {
-			case 'Bytebeat':
-				this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = funcValue & 255) / 127.5 - 1;
-				break;
-			case 'Signed Bytebeat':
-				this.getValues = (funcValue, ch) =>
-					(this.lastByteValue[ch] = (funcValue + 128) & 255) / 127.5 - 1;
-				break;
-			case 'Floatbeat':
-			case 'Funcbeat':
-				this.getValues = (funcValue, ch) => {
-					const outValue = Math.max(Math.min(funcValue, 1), -1);
-					this.lastByteValue[ch] = Math.round((outValue + 1) * 127.5);
-					return outValue;
-				};
-				break;
-			default: this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
-			}
-		}
-		if(data.drawMode !== undefined) {
-			this.drawMode = data.drawMode;
-			this.clearAudioCache();
-		}
-		if(data.setFunction !== undefined) {
-			this.setFunction(data.setFunction);
-			this.clearAudioCache();
-		}
-		if(data.resetTime === true) {
-			this.resetTime();
-		}
-		if(data.sampleRate !== undefined) {
-			this.sampleRate = data.sampleRate;
-		}
+
+		// Update the sample ratio from the main thread
 		if(data.sampleRatio !== undefined) {
 			this.setSampleRatio(data.sampleRatio);
 		}
-		if(data.runPrecache === true) {
-			// Run the precache function in the background while paused
-			// This will fill the cache with audio samples ahead of the current time
-			this.makeData();
+
+		// Clear the audio cache if any relevant parameter has changed above
+		if(isClearAudioCache) {
+			this.clearAudioCache();
 		}
+
+		// The main thread has finished rendering the previous batch and is ready for a new one
 		if(data.readyForNextBatch === true) {
-			// The main thread has finished rendering the previous batch and is ready for a new one
 			this.isWaitForMain = false;
+		}
+
+		// Run the precache function in the background, covering the period
+		//   before any user interaction and while the worker process() is not yet available
+		if(data.runPrecache === true) {
+			this.makeData();
 		}
 	}
 
@@ -578,13 +599,14 @@ class audioProcessor extends AudioWorkletProcessor {
 	resetTime() {
 		this.byteSample = 0;
 		this.resetValues();
+		// Notify the main thread that the time has been reset
 		this.sendData({ byteSample: 0 });
 	}
 
 	// Reset calculations
 	resetValues() {
 		this.audioSample = 0;
-		this.cacheSample = Math.max(this.cacheSample, this.byteSample);
+		this.cacheSample = this.byteSample;
 		this.lastByteValue = [null, null];
 		this.lastFuncValue = [null, null];
 		this.lastTime = -1;
@@ -663,6 +685,51 @@ class audioProcessor extends AudioWorkletProcessor {
 		const timeOffset = Math.floor(this.sampleRatio * this.audioSample) - this.lastTime;
 		this.sampleRatio = sRatio * this.playbackSpeed;
 		this.lastTime = Math.floor(this.sampleRatio * this.audioSample) - timeOffset;
+	}
+
+	// Cache memory management
+	toggleCacheMemory(enable) {
+		this.isCachingEnabled = enable;
+		this.cacheSample = this.byteSample;
+		if(enable) {
+			// Allocate memory only if the arrays have not yet been created
+			if(!this.audioCacheTime) {
+				this.audioCacheL = new Float32Array(this.audioCacheSize);
+				this.audioCacheR = new Float32Array(this.audioCacheSize);
+				this.audioCacheTime = new Int32Array(this.audioCacheSize);
+				this.audioCacheError = new Array(this.audioCacheSize);
+				this.audioCacheTime.fill(-1); // -1 indicating that a cell is empty
+			}
+		} else {
+			// Memory release: nullify references, GC will instantly free the RAM
+			this.audioCacheL = null;
+			this.audioCacheR = null;
+			this.audioCacheTime = null;
+			this.audioCacheError = null;
+		}
+	}
+
+	// Update the audio processing mode and corresponding value conversion function
+	updateMode(mode) {
+		this.isFuncbeat = mode === 'Funcbeat';
+		switch(mode) {
+		case 'Bytebeat':
+			this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = funcValue & 255) / 127.5 - 1;
+			break;
+		case 'Signed Bytebeat':
+			this.getValues = (funcValue, ch) =>
+				(this.lastByteValue[ch] = (funcValue + 128) & 255) / 127.5 - 1;
+			break;
+		case 'Floatbeat':
+		case 'Funcbeat':
+			this.getValues = (funcValue, ch) => {
+				const outValue = Math.max(Math.min(funcValue, 1), -1);
+				this.lastByteValue[ch] = Math.round((outValue + 1) * 127.5);
+				return outValue;
+			};
+			break;
+		default: this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
+		}
 	}
 }
 

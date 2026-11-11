@@ -35,7 +35,7 @@ A web-based algorithmic music generator and player for real-time live-coding, pa
 ### 🎛️ Playback & Control Panel
 
 * **Time counter:** Click the `t` button to switch to measuring in seconds. Click the counter number field to pause. Type a number and press `Enter` to jump to that specific time.
-* **Cache counter** Displays the number of seconds of the song that have been cached prior to the current playback position.
+* **Cache counter:** Click the toggle button to disable or enable the song caching. The counter displays the seconds of the song that have been precalculated ahead of the current playback position.
 * **Lag indicator:** Shows a slowdown coefficient if heavy or unoptimized code overloads the audio worker. Use this value to monitor lag and to fix audio crackling.
 * **Stop and reset:** Click the ⏹️ button to stop playback and to reset the time to 0.
 * **Reset:** Click the ⏮️ button to set time back to 0 without stopping playback.
@@ -236,7 +236,8 @@ define('BYTEBEAT_ADMINPASS', '');
 * **2026-11-04:** **Song caching has been implemented**.
 * **2026-11-06:** Speed-up: **Data from the worker is now sent in batches** and less frequently, which reduces the load.
 * **2026-11-07:** **More precise Lag Detector**.
-* **2026-11-09:** Added **Autoplay songs from the library** checkbox into the Settings section.
+* **2026-11-09:** Added **Autoplay songs from the library** checkbox to the Settings section.
+* **2026-11-11:** Added **Toggle cache button** to the control panel.
 
 ## License
 
