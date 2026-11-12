@@ -146,7 +146,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		//   but can be larger (256, 512, ..) depending on the system
 		const chDataLen = chData ? chData[0].length : 128;
 		// Destructure frequently used properties
-		const { func, getValues, isFuncbeat, outValue, sampleRate } = this;
+		const { getValues, isFuncbeat, outValue, sampleRate } = this;
 		// If the drawing mode requires a diagram
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 
@@ -188,7 +188,10 @@ class audioProcessor extends AudioWorkletProcessor {
 				try {
 					// Get the raw unscaled value from a user-defined compiled function
 					funcValue = isFuncbeat ?
-						func(currentSample / sampleRate, sampleRate) : func(currentSample);
+						// Invoke the function with `.call(globalThis, ...)` to ensure `this` refers to
+						//   `globalThis` rather than the `audioProcessor` instance
+						this.func.call(globalThis, currentSample / sampleRate, sampleRate) :
+						this.func(currentSample);
 				} catch(err) {
 					// Extract the error message for the current sample
 					currentErrorMsg = this.getErrorMessage(err, currentSample);
@@ -316,8 +319,10 @@ class audioProcessor extends AudioWorkletProcessor {
 					try {
 						// Get the raw unscaled value from a user-defined compiled function
 						funcValue = isFuncbeat ?
-							func(currentSample / sampleRate, sampleRate) :
-							func(currentSample);
+							// Invoke the function with `.call(globalThis, ...)` to ensure `this` refers to
+							//   `globalThis` rather than the `audioProcessor` instance
+							this.func.call(globalThis, currentSample / sampleRate, sampleRate) :
+							this.func(currentSample);
 					} catch(err) {
 						// Extract the error message for the current sample
 						currentErrorMsg = this.getErrorMessage(err, currentSample);
@@ -627,8 +632,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		// Save previously compiled function
 		const oldFunc = this.func;
 
-		// Environment setup. Construct a function header that will extract Math methods into local variables
-		// Extract all properties of Math (including PI, E, sin, cos)
+		// Environment setup. Construct a function header that will extract Math methods into local variables.
 		// Use `var` to allow the user's code any redefinitions and re-declarations.
 		const mathProps = Object.getOwnPropertyNames(Math).filter(k => k !== 'constructor');
 		const mathHeader = `var { ${
@@ -657,7 +661,8 @@ class audioProcessor extends AudioWorkletProcessor {
 
 			// Test run to check for runtime compilation errors
 			if(this.isFuncbeat) {
-				this.func(0, this.sampleRate);
+				// Invoke the function with `.call(globalThis, ...)` to ensure `this` refers to `globalThis`
+				this.func.call(globalThis, 0, this.sampleRate);
 			} else {
 				this.func(0);
 			}

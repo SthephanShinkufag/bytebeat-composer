@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026111101">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026111101">
-	<script type="module" async src="./build/index.js?version=2026111101"></script>
-	<script src="./build/theme.js?version=2026111101"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026111200">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026111200">
+	<script type="module" async src="./build/index.js?version=2026111200"></script>
+	<script src="./build/theme.js?version=2026111200"></script>
 </head>
 <body>
 	<main id="content">
@@ -272,20 +272,23 @@
 						<div class="article-block">
 							<h3>🗃️ Songs Caching</h3>
 							<p>
-								A song loaded from an URL upon poage load begins to be cached immediately.
-								Caching also occurs when playback is paused or stopped.
-								The cache is limited to <code>2^24 t samples / 48000 Hz = 349.525 seconds</code> for 48kHz audio.
-								The cache counter on the control panel is limited to <code>2^21 t samples / 48000 Hz = 43.69 seconds</code> for 48kHz audio.
-								The cache counter counts up until it hits the first gap, in cases where you have cached a song in parts.
+								Caching must be enabled via <code>✔</code> button on the control panel. When enabled:
+								<ul>
+									<li><strong>Immediate caching:</strong> A song loaded from an URL upon page load begins to be cached immediately.</li>
+									<li><strong>Caching at pause:</strong> Caching also occurs when playback is paused or stopped.</li>
+									<li><strong>Cache limits:</strong> The cache is limited to <code>2^24 t samples / 48000 Hz = 349.525 seconds</code> for 48kHz audio.</li>
+									<li><strong>Cache counter:</strong> The cache counter on the control panel is limited to <code>2^21 t samples / 48000 Hz = 43.69 seconds</code> for 48kHz audio. It counts up until it hits the first gap, in case if you have cached a song in parts.</li>
+								</ul>
 							</p>
 						</div>
 						<div class="article-block">
 							<h3>📝 Code Editor</h3>
 							<ul>
-								<li><strong>Syntax Highlighting:</strong> Includes 12 themes (<code>Atom</code>, <code>GitHub</code>, <code>VSCode</code>, etc.) in both Dark and Light variants.</li>
-								<li><strong>Smart Shortcuts:</strong> Global aliases let you type <code>Math.</code> functions directly (<code>sin</code>, <code>cos</code>, <code>abs</code>, <code>min</code>, etc) and use <code>int()</code> shorthand instead of <code>Math.floor()</code>.</li>
-								<li><strong>Code Utilities:</strong> Includes full-text search (<code>Ctrl+F</code>), line numbers, and collapsible code blocks (function folding).</li>
-								<li><strong>Advanced Bracket Pairing:</strong> Highlights matching brackets in yellow and highlights orphan brackets in red to instantly spot syntax mistakes.</li>
+								<li><strong>Syntax highlighting:</strong> Includes 12 themes (<code>Atom</code>, <code>GitHub</code>, <code>VSCode</code>, etc.) in both Dark and Light variants.</li>
+								<li><strong>Math shortcuts:</strong> Global aliases let you type <code>Math.</code> functions directly (<code>sin</code>, <code>cos</code>, <code>abs</code>, <code>min</code>, <code>PI</code>, etc).</li>
+								<li><strong>int() shortcut:</strong> Use <code>int()</code> shorthand instead of <code>Math.trunc()</code>. Historically, <code>Math.floor()</code> was used in place of <code>int()</code> for compatibility with the Greggman player, which is incorrect when compared to actual C code.</li>
+								<li><strong>Code utilities:</strong> Includes full-text search (<code>Ctrl+F</code>), line numbers, and collapsible code blocks (function folding).</li>
+								<li><strong>Advanced bracket pairing:</strong> Highlights matching brackets in yellow and highlights orphan brackets in red to instantly spot syntax mistakes.</li>
 							</ul>
 						</div>
 						<div class="article-block">

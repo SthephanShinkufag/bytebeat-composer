@@ -44,7 +44,7 @@ export class Scope {
 
 	// Display the time cursor depending on scale
 	get timeCursorEnabled() {
-		return globalThis.bytebeat.sampleRate >> this.drawScale < 2000;
+		return globalThis.bytebeat.sampleRate >> this.drawScale < 3000;
 	}
 
 	// Clear the canvas

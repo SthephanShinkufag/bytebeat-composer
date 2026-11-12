@@ -53,11 +53,17 @@ A web-based algorithmic music generator and player for real-time live-coding, pa
 * **Byte counter:** Tracks your code size in real-time. This helps you fit into classic bytebeat limits like 256 bytes or 1 KB.
 
 ### 🗃️ Songs Caching
-A song loaded from an URL upon poage load begins to be cached immediately. Caching also occurs when playback is paused or stopped. The cache is limited to `2^24 t samples / 48000 Hz = 349.525 seconds` for 48kHz audio. The cache counter on the control panel is limited to `2^21 t samples / 48000 Hz = 43.69 seconds` for 48kHz audio. The cache counter counts up until it hits the first gap, in cases where you have cached a song in parts.
+
+Caching must be enabled via `✔` button on the control panel. When enabled:
+* **Immediate caching:** A song loaded from an URL upon page load begins to be cached immediately.
+* **Caching at pause:** Caching also occurs when playback is paused or stopped.
+* **Cache limits:** The cache is limited to `2^24 t samples / 48000 Hz = 349.525 seconds` for 48kHz audio.
+* **Cache counter:** The cache counter on the control panel is limited to `2^21 t samples / 48000 Hz = 43.69 seconds` for 48kHz audio. It counts up until it hits the first gap, in case if you have cached a song in parts.
 
 ### 📝 Code Editor
 * **Syntax Highlighting:** Includes 12 themes (`Atom`, `GitHub`, `VSCode`, etc.) in both Dark and Light variants.
-* **Smart Shortcuts:** Global aliases let you type `Math.` functions directly (`sin`, `cos`, `abs`, `min`, etc) and use `int()` shorthand instead of `Math.floor()`.
+* **Math shortcuts:** Global aliases let you type `Math.` functions directly (`sin`, `cos`, `abs`, `min`, `PI`, etc).
+* **int() shortcut:** Use `int()` shorthand instead of `Math.trunc()`. Historically, `Math.floor()` was used in place of `int()` for compatibility with the Greggman player, which is incorrect when compared to actual C code.
 * **Code Utilities:** Includes full-text search (`Ctrl+F`), line numbers, and collapsible code blocks (function folding).
 * **Advanced Bracket Pairing:** Highlights matching brackets in yellow and highlights orphan brackets in red to instantly spot syntax mistakes.
 
