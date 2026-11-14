@@ -1100,6 +1100,24 @@ button[name="close"] {
 	outline: none;
 }
 
+#library-show-songs {
+	position: relative;
+	margin-top: -3px;
+	padding: 0 6px !important;
+}
+
+#library-show-songs::after {
+	content: "";
+	position: absolute;
+	bottom: 1px;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px 8px 0 8px;
+	border-style: solid;
+	border-color: var(--ctrl-btn-color) transparent transparent transparent;
+	opacity: .7;
+}
+
 .loading-error {
 	color: #f92672;
 }

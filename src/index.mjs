@@ -131,6 +131,7 @@ globalThis.bytebeat = new class {
 			case 'control-srdivisor-up': this.setSRDivisor(1); break;
 			case 'control-stop': this.playbackStop(); break;
 			case 'control-counter-units': this.toggleCounterUnits(); break;
+			case 'library-show-songs': library.showSongs(); break;
 			default:
 				switch(true) {
 				case classList.contains('article-button'):
@@ -270,7 +271,6 @@ globalThis.bytebeat = new class {
 
 	// Running after the DOM content was loaded
 	initAfterDom() {
-		library.showSongs(); // Load the songs in the library
 		editor.init(); // Initialize the code editor and CodeMirror
 		ui.initElements();
 		scope.initElements();

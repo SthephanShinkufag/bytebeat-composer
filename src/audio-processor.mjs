@@ -117,27 +117,37 @@ class audioProcessor extends AudioWorkletProcessor {
 			return `${ when } thrown: ${ typeof err === 'string' ? err : JSON.stringify(err) }`;
 		}
 
-		const { message } = err;
+		const { message, stack } = err;
 		let { lineNumber, columnNumber } = err;
 
 		// If this is a Funcbeat validation error, remove the technical line number
-		if(this.isFuncbeat && message === 'this.func is not a function') {
+		if(this.isFuncbeat && message === 'this.func.call is not a function' ||
+			message === 'can\'t access property "call", this.func is undefined' ||
+			message === 'Cannot read properties of undefined (reading \'call\')'
+		) {
 			return `${ when } error: Funcbeat code must return a function!`;
 		}
 
 		// Parse err.stack to find a reference to virtual file "user-code.js"
-		if(err.stack) {
+		if(stack) {
 			// Look for a pattern matching user-code.js:line:character
-			const match = err.stack.match(/user-code\.js:(\d+):(\d+)/);
+			const match = stack.match(/user-code\.js:(\d+):(\d+)/);
 			if(match) {
 				lineNumber = parseInt(match[1], 10);
 				columnNumber = parseInt(match[2], 10);
 			}
 		}
 
-		return `${ when } error: ${ typeof message === 'string' ? message : JSON.stringify(message) }${
-			typeof lineNumber === 'number' && typeof columnNumber === 'number' ?
-				` (at line ${ lineNumber - 3 }, character ${ columnNumber })` : '' }`;
+		let lineInfo = '';
+		if(typeof lineNumber === 'number' && typeof columnNumber === 'number') {
+			lineNumber -= 3; // Adjust for the offset by the function wrapper
+			if(lineNumber > 0) {
+				lineInfo = ` (at line ${ lineNumber }, character ${ columnNumber })`;
+			}
+		}
+
+		return `${ when } error: ${
+			typeof message === 'string' ? message : JSON.stringify(message) }${ lineInfo }`;
 	}
 
 	// Make sound and generate data for the main thread

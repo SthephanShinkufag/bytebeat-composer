@@ -488,6 +488,8 @@ export class Library {
 			requestAnimationFrame(renderChunk);
 		};
 
+		// Hide the "Show songs" button before rendering
+		document.getElementById('library-show-songs').classList.add('hidden');
 		// Clear the container before rendering
 		containerElem.innerHTML = '';
 		// Launch the first batch of rendering
