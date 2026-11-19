@@ -401,15 +401,8 @@ export class Scope {
 							const dIdx = idx << 2;
 							if(isStereo) {
 								if(chIdx) { // Right channel
-									if(c1 === 1) {
-										data[dIdx + 1] = cG;
-									}
-									if(c2 === 2) {
-										data[dIdx + 2] = cB;
-									}
-									if(c1 === 0) {
-										data[dIdx] = cR;
-									}
+									data[dIdx + c1] = c1 === 1 ? cG : c1 === 2 ? cB : cR;
+									data[dIdx + c2] = c2 === 1 ? cG : c2 === 2 ? cB : cR;
 								} else { // Left channel
 									data[dIdx + c0] = c0 === 1 ? cG : c0 === 2 ? cB : cR;
 								}
@@ -503,7 +496,7 @@ export class Scope {
 		this.bufferTail = 0;
 	}
 
-	// Canvas initialization
+	// Initialization of canvas elements and window resize handling
 	initElements() {
 		this.canvasContainer = document.getElementById('canvas-container');
 		this.canvasElem = document.getElementById('canvas-main');

@@ -36,7 +36,6 @@ globalThis.bytebeat = new class {
 		this.byteSample = 0; // Current time in samples
 		this.isCompilationError = false;
 		this.isPlaying = false;
-		this.isRecording = false;
 		this.mode = 'Bytebeat';
 		this.playbackSpeed = 1;
 		this.sampleRate = 8000;
@@ -53,8 +52,6 @@ globalThis.bytebeat = new class {
 		// Audio nodes
 		this.audioCtx = null;
 		this.audioGain = null;
-		this.audioRecordChunks = [];
-		this.audioRecorder = null;
 		this.audioWorkletNode = null;
 
 		// A timer that sends signals to warm up the cache after a page has loaded, covering the period
@@ -65,27 +62,102 @@ globalThis.bytebeat = new class {
 		this.init();
 	}
 
+	// Detect the calculation lag, taking a measurement once every 60 incoming byteSample batches
+	detectLag(byteSample) {
+		this.updateCounter++;
+		if(this.updateCounter < 60) {
+			return;
+		}
+		this.updateCounter = 0;
+		const currentTimeMs = Date.now();
+		if(this.lastUpdateTime && this.lastUpdateByteSample !== undefined) {
+			// How much physical time has elapsed according to the computer's clock (in ms)
+			const realTimePassedMs = currentTimeMs - this.lastUpdateTime;
+
+			// How many `t` units (byteSamples) the track should have played during this time
+			//   based on its own custom sample rate
+			const idealSamplesPassed = realTimePassedMs * (this.sampleRate / 1000);
+
+			// How many samples the song has actually processed along the timeline
+			const realSamplesPassed = Math.abs(byteSample - this.lastUpdateByteSample);
+
+			// Calculate the lag percentage
+			let lag = 0;
+			if(realSamplesPassed < idealSamplesPassed && idealSamplesPassed > 0) {
+				// Lag percentage = (how many samples weren't processed / how many should have been) * 100
+				lag = Math.min(999,
+					Math.round(((idealSamplesPassed - realSamplesPassed) / idealSamplesPassed) * 100));
+			}
+			ui.controlLag.innerText = lag + '%';
+
+			// Switching the red color indicator
+			if(lag > 3) {
+				if(!this.isLagging) {
+					this.isLagging = true;
+					ui.controlLag.classList.add('control-lag-red');
+				}
+			} else if(this.isLagging) {
+				this.isLagging = false;
+				ui.controlLag.classList.remove('control-lag-red');
+			}
+		}
+
+		// Remember the current markers for the next measurement
+		this.lastUpdateTime = currentTimeMs;
+		this.lastUpdateByteSample = byteSample;
+	}
+
+	// Update the timer counter display based on the current value and units
+	getTime(value) {
+		return this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
+	}
+
 	// Main events handler on the page
 	handleEvent(event) {
 		let elem = event.target;
 		const { classList } = elem;
 		switch(event.type) {
+
+		// Handle change events
 		case 'change':
 			switch(elem.id) {
-			case 'control-code-style': this.setCodeStyle(elem.value); break;
-			case 'control-color-diagram': this.setColorDiagram(elem.value); break;
+			case 'control-code-style':
+				this.setCodeStyle(elem.value);
+				this.saveSettings();
+				break;
+			case 'control-color-diagram':
+				this.setColorDiagram(elem.value);
+				this.saveSettings();
+				break;
 			case 'control-color-stereo':
 				this.setColorStereo(+elem.value);
 				ui.controlColorDiagramInfo.innerHTML = scope.getColorTest('colorDiagram');
 				ui.controlColorWaveformInfo.innerHTML = scope.getColorTest('colorWaveform');
+				this.saveSettings();
 				break;
-			case 'control-color-timecursor': this.setColorTimeCursor(elem.value); break;
-			case 'control-color-waveform': this.setColorWaveform(elem.value); break;
-			case 'control-drawmode': this.setDrawMode(elem.value); break;
-			case 'control-mode': this.setPlaybackMode(elem.value); break;
+			case 'control-color-timecursor':
+				this.setColorTimeCursor(elem.value);
+				this.saveSettings();
+				break;
+			case 'control-color-waveform':
+				this.setColorWaveform(elem.value);
+				this.saveSettings();
+				break;
+			case 'control-drawmode':
+				this.setDrawMode(elem.value);
+				this.saveSettings();
+				break;
+			case 'control-mode':
+				this.setBytebeatMode(elem.value);
+				break;
 			case 'control-samplerate':
-			case 'control-samplerate-select': this.setSampleRate(+elem.value); break;
-			case 'control-theme-style': this.setThemeStyle(elem.value); break;
+			case 'control-samplerate-select':
+				this.setSampleRate(+elem.value);
+				break;
+			case 'control-theme-style':
+				this.setThemeStyle(elem.value, false);
+				this.saveSettings();
+				break;
 			case 'library-expand-checkbox':
 				library.showAllSongs = elem.checked;
 				ui.toggleExpandSongs(library.showAllSongs);
@@ -94,15 +166,24 @@ globalThis.bytebeat = new class {
 			}
 			return;
 
+		// Handle click events
 		case 'click':
+			// Clicks on elements with specific tags
 			switch(elem.tagName) {
-			case 'svg': elem = elem.parentNode; break;
-			case 'use': elem = elem.parentNode.parentNode; break;
+			case 'svg':
+				elem = elem.parentNode;
+				break;
+			case 'use':
+				elem = elem.parentNode.parentNode;
+				break;
 			default:
 				if(classList.contains('control-fast-multiplier')) {
 					elem = elem.parentNode;
 				}
+				/* Fall through */
 			}
+
+			// Click on elements with specific ids
 			switch(elem.id) {
 			case 'scroll-btn-down':
 				ui.containerScroll.scrollTo({ top: ui.containerScroll.scrollHeight, behavior: 'smooth' });
@@ -113,25 +194,82 @@ globalThis.bytebeat = new class {
 			case 'canvas-container':
 			case 'canvas-main':
 			case 'canvas-play':
-			case 'canvas-timecursor': this.playbackToggle(!this.isPlaying); break;
-			case 'control-autoplay': this.toggleAutoplay(!this.settings.autoplay); break;
-			case 'control-cache-toggle': this.toggleCaching(!this.settings.caching); break;
+			case 'canvas-timecursor':
+				this.playbackToggle(!this.isPlaying);
+				break;
+			case 'control-autoplay':
+				this.toggleAutoplay(!this.settings.autoplay);
+				this.saveSettings();
+				break;
+			case 'control-cache-toggle':
+				this.toggleCaching(!this.settings.caching);
+				this.saveSettings();
+				break;
 			case 'control-counter':
-			case 'control-pause': this.playbackToggle(false); break;
-			case 'control-expand': ui.expandEditor(); break;
-			case 'control-link': ui.copyLink(); break;
-			case 'control-play-backward': this.playbackToggle(true, true, -1); break;
-			case 'control-play-forward': this.playbackToggle(true, true, 1); break;
-			case 'control-rec': this.toggleRecording(); break;
-			case 'control-reset': this.resetTime(); break;
-			case 'control-scale': this.resetScopeAdjustment(); break;
-			case 'control-scaledown': this.setScopeAdjustment(-1, elem); break;
-			case 'control-scaleup': this.setScopeAdjustment(1); break;
-			case 'control-srdivisor-down': this.setSRDivisor(-1); break;
-			case 'control-srdivisor-up': this.setSRDivisor(1); break;
-			case 'control-stop': this.playbackStop(); break;
-			case 'control-counter-units': this.toggleCounterUnits(); break;
-			case 'library-show-songs': library.showSongs(); break;
+			case 'control-pause':
+				this.playbackToggle(false);
+				break;
+			case 'control-counter-units':
+				this.settings.isSeconds = !this.settings.isSeconds;
+				this.setCounterUnits();
+				this.saveSettings();
+				break;
+			case 'control-expand':
+				ui.expandEditor();
+				break;
+			case 'control-export':
+				this.openExportModal();
+				break;
+			case 'control-link':
+				ui.copyLink();
+				break;
+			case 'control-play-backward':
+				this.playbackToggle(true, true, -1);
+				break;
+			case 'control-play-forward':
+				this.playbackToggle(true, true, 1);
+				break;
+			case 'control-reset':
+				this.resetTime();
+				break;
+			case 'control-scale':
+				this.resetScopeAdjustment();
+				this.saveSettings();
+				break;
+			case 'control-scaledown':
+				this.setScopeAdjustment(-1, elem);
+				this.saveSettings();
+				break;
+			case 'control-scaleup':
+				this.setScopeAdjustment(1);
+				this.saveSettings();
+				break;
+			case 'control-srdivisor-down':
+				this.setSRDivisor(-1);
+				this.saveSettings();
+				break;
+			case 'control-srdivisor-up':
+				this.setSRDivisor(1);
+				this.saveSettings();
+				break;
+			case 'control-stop':
+				this.playbackStop();
+				break;
+			case 'modal-cancel':
+			case 'modal-close':
+				ui.exportWavModal.close();
+				break;
+			case 'export-wav-time-current':
+				ui.exportWavStart.value = this.getTime(this.byteSample);
+				break;
+			case 'export-wav-time-start':
+				ui.exportWavStart.value = this.getTime(0);
+				break;
+			case 'library-show-songs':
+				library.showSongs();
+				break;
+
+			// Click on elements with specific classes
 			default:
 				switch(true) {
 				case classList.contains('article-button'):
@@ -139,40 +277,31 @@ globalThis.bytebeat = new class {
 					break;
 				case classList.contains('code-load'):
 					library.onclickCodeLoadButton(elem);
+					this.saveSettings();
 					break;
 				case classList.contains('code-remix-load'):
 					library.onclickRemixLoadButton(elem);
 					break;
 				case classList.contains('code-size'):
 					library.onclickCodeLoadButton(elem.parentNode);
+					this.saveSettings();
 					break;
-				case classList.contains('code-text'): {
-					// If in the description block then load code from text
-					if(elem.parentNode.classList.contains('code-description')) {
-						this.loadCode(Object.assign({ code: elem.innerText },
-							elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
-						break;
-					}
-					// Look for the panel with "min / orig / format" buttons within the same song
-					const buttonsContainer = elem.previousElementSibling;
-					if(buttonsContainer) {
-						const targetButton = buttonsContainer.querySelector('[data-type="minified"]') ||
-							buttonsContainer.querySelector('[data-type="original"]') ||
-							buttonsContainer.querySelector('[data-type="formatted"]');
-						if(targetButton) {
-							// Simulate a click, passing the button to handler
-							library.onclickCodeLoadButton(targetButton);
-						}
-					}
+				case classList.contains('code-text'):
+					this.onclickCodeText(elem);
 					break;
-				}
+				case classList.contains('export-preset'):
+					// Set the WAV export duration based on the selected preset
+					ui.exportWavDuration.value = elem.dataset.dur;
+					break;
 				case classList.contains('filter-button'):
+					// Apply the selected library filter and load the songs library
 					ui.onclickFilterButton(elem);
-					this.settings.libraryFilters = library.filters = ui.getLibraryFilters();
+					this.updateLibraryFilters();
 					this.saveSettings();
 					library.showSongs();
 					break;
 				case classList.contains('song-hash'):
+					// Copy the song hash to the clipboard
 					navigator.clipboard.writeText(elem.dataset.hash);
 					event.preventDefault();
 					break;
@@ -180,28 +309,31 @@ globalThis.bytebeat = new class {
 			}
 			return;
 
+		// Handle input events on elements with specific ids
 		case 'input':
 			switch(elem.id) {
-			case 'control-counter':
-				this.oninputTimeCounter(event);
-				break;
 			case 'control-volume':
-				this.setVolume(false);
+				// Update the volume based on the current input value
+				this.setVolume();
+				this.saveSettings();
 				break;
 			case 'library-search-input':
-				this.settings.libraryFilters = library.filters = ui.getLibraryFilters();
+				// Apply the search filter and load the songs library
+				this.updateLibraryFilters();
 				this.saveSettings();
 				library.showSongs();
 				break;
 			}
 			return;
 
+		// Apply the time from the timer counter input when Enter is pressed
 		case 'keydown':
-			if(elem.id === 'control-counter') {
-				this.oninputTimeCounter(event);
+			if(elem.id === 'control-counter' && event.key === 'Enter') {
+				this.oninputTimeCounter();
 			}
 			return;
 
+		// Update element titles on mouseover
 		case 'mouseover':
 			switch(true) {
 			case classList.contains('code-load'):
@@ -237,14 +369,16 @@ globalThis.bytebeat = new class {
 			}
 			return;
 
-		case 'scroll': {
-			const { clientHeight, scrollHeight, scrollTop } = ui.containerScroll;
-			// Show "Back to top" if scrolled more than 100px from the top
-			ui.containerScrollUp.classList.toggle('hidden', scrollTop < 5);
-			// Hide "To the end" if the bottom limit has already been reached (with a 5px margin)
-			ui.containerScrollDown.classList.toggle('hidden', scrollTop >= scrollHeight - clientHeight - 5);
+		// Handle scrolling within the scrollable container
+		case 'scroll':
+			ui.onscrollContainer();
 			return;
-		}
+
+		// Handle the export to WAV form submission
+		case 'submit':
+			event.preventDefault();
+			this.onsubmitExportToWav();
+			return;
 		}
 	}
 
@@ -260,7 +394,7 @@ globalThis.bytebeat = new class {
 		} catch(err) {
 			this.saveSettings();
 		}
-		this.setThemeStyle();
+		this.setThemeStyle(this.settings.themeStyle, true);
 		await this.initAudio();
 		if(document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', () => this.initAfterDom());
@@ -272,24 +406,39 @@ globalThis.bytebeat = new class {
 	// Running after the DOM content was loaded
 	initAfterDom() {
 		editor.init(); // Initialize the code editor and CodeMirror
-		ui.initElements();
-		scope.initElements();
-		this.setVolume(true);
+		ui.initElements(); // Initialize UI elements and controls
+		scope.initElements(); // Initialize canvas elements and window resize handling
+
+		// Apply initial settings to the UI and scope
+		this.setVolume(parseFloat(this.settings.volume));
 		this.setCounterUnits();
-		this.setCodeStyle();
-		this.setColorStereo();
-		this.setColorDiagram();
-		this.setColorWaveform();
-		this.setColorTimeCursor();
+		this.setCodeStyle(this.settings.codeStyle);
+		this.setColorStereo(this.settings.colorStereo);
+		this.setColorDiagram(this.settings.colorDiagram);
+		this.setColorWaveform(this.settings.colorWaveform);
+		this.setColorTimeCursor(this.settings.colorTimeCursor);
 		this.setScopeAdjustment(0);
-		this.parseUrl(); // Load the code from the location hash
-		this.sendData({ drawMode: scope.drawMode });
 		this.toggleCaching(this.settings.caching);
 		this.toggleAutoplay(this.settings.autoplay);
+
+		// Load the code from the location hash
+		let urlHash = window.location.hash;
+		if(!urlHash) {
+			this.updateUrl();
+			urlHash = window.location.hash;
+		}
+		const songData = getCodeFromUrl(urlHash) || { code: editor.value };
+		songData.drawMode = scope.drawMode;
+		this.loadCode(songData, false);
+		this.saveSettings();
+
+		// Apply library filters and update UI controls
 		ui.setLibraryFilters(library.filters);
 		ui.controlDrawMode.value = scope.drawMode;
 		ui.controlThemeStyle.value = this.settings.themeStyle;
 		ui.controlCodeStyle.value = this.settings.codeStyle;
+
+		// Add event listeners for UI elements
 		ui.mainElem.addEventListener('click', this);
 		ui.mainElem.addEventListener('change', this);
 		ui.containerFixed.addEventListener('input', this);
@@ -297,6 +446,8 @@ globalThis.bytebeat = new class {
 		ui.containerScroll.addEventListener('input', this);
 		ui.containerScroll.addEventListener('mouseover', this);
 		ui.containerScroll.addEventListener('scroll', this);
+		ui.exportWavModal.addEventListener('click', this);
+		ui.exportWavModal.addEventListener('submit', this);
 	}
 
 	// Audio context initialization
@@ -327,29 +478,6 @@ globalThis.bytebeat = new class {
 		this.audioWorkletNode.port.start();
 		this.audioWorkletNode.connect(this.audioGain);
 		this.audioWorkletNode.connect(analyserGain);
-
-		// Recorder for recording audio files
-		const mediaDest = this.audioCtx.createMediaStreamDestination();
-		this.audioRecorder = new MediaRecorder(mediaDest.stream);
-		this.audioRecorder.addEventListener('dataavailable',
-			event => this.audioRecordChunks.push(event.data));
-		this.audioRecorder.addEventListener('stop', () => {
-			let fileName, type;
-			const types = ['audio/webm', 'audio/ogg'];
-			const files = ['track.webm', 'track.ogg'];
-			while((fileName = files.pop()) && !MediaRecorder.isTypeSupported(type = types.pop())) {
-				if(types.length === 0) {
-					console.error('Recording is not supported in this browser!');
-					break;
-				}
-			}
-			const url = URL.createObjectURL(new Blob(this.audioRecordChunks, { type }));
-			ui.downloader.href = url;
-			ui.downloader.download = fileName;
-			ui.downloader.click();
-			setTimeout(() => window.URL.revokeObjectURL(url));
-		});
-		this.audioGain.connect(mediaDest);
 	}
 
 	// Get the code with parameters and apply to player controls, scope and audio worker
@@ -406,7 +534,6 @@ globalThis.bytebeat = new class {
 			ui.controlDrawMode.value = scope.drawMode = drawMode;
 			scope.toggleTimeCursor();
 			scope.clearCanvas();
-			this.saveSettings();
 		}
 		if(scale !== undefined) {
 			this.setScale(scale - scope.drawScale);
@@ -416,27 +543,56 @@ globalThis.bytebeat = new class {
 		this.sendData(data);
 	}
 
-	// Apply the time from the timer counter input
-	oninputTimeCounter(event) {
-		if(event.key !== 'Enter') {
+	// Opening a modal window with the current units of measurement inserted
+	openExportModal() {
+		ui.exportWavStart.value = this.getTime(this.byteSample);
+		ui.exportWavStartUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
+		ui.exportWavModal.showModal();
+	}
+
+	// Handle click event on code text elements within the song entry
+	onclickCodeText(elem) {
+		// If in the description block then load code from text
+		if(elem.parentNode.classList.contains('code-description')) {
+			this.loadCode(Object.assign({ code: elem.innerText },
+				elem.hasAttribute('data-songdata') ? JSON.parse(elem.dataset.songdata) : {}));
+			this.saveSettings();
 			return;
 		}
-		const byteSample = this.settings.isSeconds ? Math.round(ui.controlTime.value * this.sampleRate) :
-			ui.controlTime.value;
+		// Look for the panel with "min / orig / format" buttons within the same song
+		const buttonsContainer = elem.previousElementSibling;
+		if(buttonsContainer) {
+			const targetButton = buttonsContainer.querySelector('[data-type="minified"]') ||
+				buttonsContainer.querySelector('[data-type="original"]') ||
+				buttonsContainer.querySelector('[data-type="formatted"]');
+			if(targetButton) {
+				// Simulate a click, passing the button to handler
+				library.onclickCodeLoadButton(targetButton);
+				this.saveSettings();
+			}
+		}
+	}
+
+	// Apply the time from the timer counter input
+	oninputTimeCounter() {
+		const byteSample = this.settings.isSeconds ?
+			Math.round(ui.controlTime.value * this.sampleRate) : ui.controlTime.value;
 		this.setByteSample(byteSample);
 		this.sendData({ byteSample });
 		ui.controlTime.blur();
 		this.playbackToggle(true);
 	}
 
-	// Load the code from the location hash
-	parseUrl() {
-		let urlHash = window.location.hash;
-		if(!urlHash) {
-			this.updateUrl();
-			urlHash = window.location.hash;
+	// Handle the export to WAV form submission
+	onsubmitExportToWav() {
+		const rawStart = parseFloat(ui.exportWavStart.value) || 0;
+		const durationSeconds = parseFloat(ui.exportWavDuration.value) || 60;
+		const startSample = Math.round(this.settings.isSeconds ? rawStart * this.sampleRate : rawStart);
+		ui.exportWavModal.close();
+		if(!this.audioWorkletNode) {
+			return;
 		}
-		this.loadCode(getCodeFromUrl(urlHash) || { code: editor.value }, false);
+		this.sendData({ exportWav: { durationSeconds, startSample } });
 	}
 
 	// Stop the playback and reset the time
@@ -461,8 +617,7 @@ globalThis.bytebeat = new class {
 		if(speedIncrement || !isPlaying) {
 			this.playbackSpeed = isPlaying ? speedIncrement * speed : Math.sign(this.playbackSpeed);
 		}
-		scope.canvasContainer.title = isPlaying ? `Click to ${
-			this.isRecording ? 'pause and stop recording' : 'pause' }` :
+		scope.canvasContainer.title = isPlaying ? 'Click to pause' :
 			`Click to play${ isReverse ? ' in reverse' : '' }`;
 		scope.canvasPlayButton.classList.toggle('canvas-play-backward', isReverse);
 		scope.canvasPlayButton.classList.toggle('canvas-play', !isPlaying);
@@ -480,12 +635,6 @@ globalThis.bytebeat = new class {
 			this.isLagging = false;
 			ui.controlLag.innerText = '---';
 			ui.controlLag.classList.remove('control-lag-red');
-			if(this.isRecording) {
-				this.isRecording = false;
-				ui.controlRecord.classList.remove('control-recording');
-				ui.controlRecord.title = 'Record to file';
-				this.audioRecorder.stop();
-			}
 		}
 		this.isPlaying = isPlaying;
 		if(isSendData) {
@@ -500,9 +649,10 @@ globalThis.bytebeat = new class {
 	receiveData(data) {
 		const { byteSample, drawBuffer, error } = data;
 
-		// If the current time has changed
+		// If the current time has changed, detect lag and update the timer counter
 		if(typeof byteSample === 'number') {
-			this.setCounterValue(byteSample);
+			this.detectLag(byteSample);
+			ui.controlTime.value = this.getTime(byteSample);
 			this.setByteSample(byteSample);
 		}
 
@@ -553,6 +703,23 @@ globalThis.bytebeat = new class {
 		if(this.settings.caching && !this.isPlaying) {
 			this.sendData({ readyForNextBatch: true });
 		}
+
+		// If a ready WAV file has arrived from the worker
+		if(data.exportWavBuffer) {
+			const blob = new Blob([data.exportWavBuffer], { type: 'audio/wav' });
+			const url = URL.createObjectURL(blob);
+
+			// Use the existing downloader element
+			ui.downloader.href = url;
+			ui.downloader.download = `bytebeat_${ data.exportSampleRate }Hz.wav`;
+			ui.downloader.click();
+
+			setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+
+			if(ui.controlCacheCounter) {
+				ui.controlCacheCounter.innerText = 'WAV Ready!';
+			}
+		}
 	}
 
 	// Reset the zoom (or FFT resolution) of the visualizator scope
@@ -588,6 +755,13 @@ globalThis.bytebeat = new class {
 		this.audioWorkletNode.port.postMessage(data);
 	}
 
+	// Apply the mode: Bytebeat, Floatbeat, etc
+	setBytebeatMode(mode) {
+		this.mode = mode;
+		this.updateUrl();
+		this.sendData({ mode, setFunction: editor.value });
+	}
+
 	// Set the current time (and clear the scope, time cursor and buffer if needed)
 	setByteSample(value) {
 		this.byteSample = +value || 0;
@@ -610,26 +784,20 @@ globalThis.bytebeat = new class {
 
 	// Apply the syntax highlighting style
 	setCodeStyle(value) {
-		if(value !== undefined) {
-			this.settings.codeStyle = value;
-			this.saveSettings();
-		} else if((value = this.settings.codeStyle) === undefined) {
-			value = this.settings.codeStyle = this.defaultSettings.codeStyle;
-			this.saveSettings();
+		if(value === undefined) {
+			value = this.defaultSettings.codeStyle;
 		}
+		this.settings.codeStyle = value;
 		document.documentElement.dataset.syntax = value;
 		document.documentElement.dataset.syntaxType = value.endsWith('Light') ? 'light' : 'dark';
 	}
 
 	// Apply color for the Diagram mode in the scope
 	setColorDiagram(value) {
-		if(value !== undefined) {
-			this.settings.colorDiagram = value;
-			this.saveSettings();
-		} else if((value = this.settings.colorDiagram) === undefined) {
-			value = this.settings.colorDiagram = this.defaultSettings.colorDiagram;
-			this.saveSettings();
+		if(value === undefined) {
+			value = this.defaultSettings.colorDiagram;
 		}
+		this.settings.colorDiagram = value;
 		ui.controlColorDiagram.value = value;
 		ui.controlColorDiagramInfo.innerHTML = scope.getColorTest('colorDiagram', value);
 	}
@@ -637,19 +805,21 @@ globalThis.bytebeat = new class {
 	// Apply colors for the left and right waveforms in the scope
 	setColorStereo(value) {
 		// value: Red=0, Green=1, Blue=2
-		if(value !== undefined) {
-			this.settings.colorStereo = value;
-			this.saveSettings();
-		} else if((value = this.settings.colorStereo) === undefined) {
-			value = this.settings.colorStereo = this.defaultSettings.colorStereo;
-			this.saveSettings();
+		if(value === undefined) {
+			value = this.defaultSettings.colorStereo;
 		}
+		this.settings.colorStereo = value;
 		ui.controlColorStereo.value = value;
 		switch(value) {
 		// [Left, Right1, Right2]
-		case 0: scope.colorChannels = [0, 1, 2]; break;
-		case 2: scope.colorChannels = [2, 0, 1]; break;
-		default: scope.colorChannels = [1, 0, 2];
+		case 0:
+			scope.colorChannels = [0, 1, 2];
+			break;
+		case 2:
+			scope.colorChannels = [2, 0, 1];
+			break;
+		default:
+			scope.colorChannels = [1, 0, 2];
 		}
 		if(scope.colorWaveform) {
 			scope.setStereoColors();
@@ -658,26 +828,20 @@ globalThis.bytebeat = new class {
 
 	// Apply color for the time cursor in the scope
 	setColorTimeCursor(value) {
-		if(value !== undefined) {
-			this.settings.colorTimeCursor = value;
-			this.saveSettings();
-		} else if((value = this.settings.colorTimeCursor) === undefined) {
-			value = this.settings.colorTimeCursor = this.defaultSettings.colorTimeCursor;
-			this.saveSettings();
+		if(value === undefined) {
+			value = this.defaultSettings.colorTimeCursor;
 		}
+		this.settings.colorTimeCursor = value;
 		ui.controlColorTimeCursor.value = value;
 		scope.canvasTimeCursor.style.borderLeft = '2px solid ' + value;
 	}
 
 	// Apply color for the waveform and points in the scope
 	setColorWaveform(value) {
-		if(value !== undefined) {
-			this.settings.colorWaveform = value;
-			this.saveSettings();
-		} else if((value = this.settings.colorWaveform) === undefined) {
-			value = this.settings.colorWaveform = this.defaultSettings.colorWaveform;
-			this.saveSettings();
+		if(value === undefined) {
+			value = this.defaultSettings.colorWaveform;
 		}
+		this.settings.colorWaveform = value;
 		ui.controlColorWaveform.value = value;
 		ui.controlColorWaveformInfo.innerHTML = scope.getColorTest('colorWaveform', value);
 		scope.setStereoColors();
@@ -686,56 +850,7 @@ globalThis.bytebeat = new class {
 	// Set t or seconds for the timer counter
 	setCounterUnits() {
 		ui.controlTimeUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
-		this.setCounterValue(this.byteSample);
-	}
-
-	// Set the value for the timer counter, and detect the calculation lag
-	setCounterValue(value) {
-		// Update the timer counter display based on the current value and units
-		ui.controlTime.value = this.settings.isSeconds ? (value / this.sampleRate).toFixed(2) : value;
-
-		// Detect the calculation lag, taking a measurement once every 60 incoming byteSample batches
-		this.updateCounter++;
-		if(this.updateCounter < 60) {
-			return;
-		}
-		this.updateCounter = 0;
-		const currentTimeMs = Date.now();
-		if(this.lastUpdateTime && this.lastUpdateByteSample !== undefined) {
-			// How much physical time has elapsed according to the computer's clock (in ms)
-			const realTimePassedMs = currentTimeMs - this.lastUpdateTime;
-
-			// How many `t` units (byteSamples) the track should have played during this time
-			//   based on its own custom sample rate
-			const idealSamplesPassed = realTimePassedMs * (this.sampleRate / 1000);
-
-			// How many samples the song has actually processed along the timeline
-			const realSamplesPassed = Math.abs(value - this.lastUpdateByteSample);
-
-			// Calculate the lag percentage
-			let lag = 0;
-			if(realSamplesPassed < idealSamplesPassed && idealSamplesPassed > 0) {
-				// Lag percentage = (how many samples weren't processed / how many should have been) * 100
-				lag = Math.min(999,
-					Math.round(((idealSamplesPassed - realSamplesPassed) / idealSamplesPassed) * 100));
-			}
-			ui.controlLag.innerText = lag + '%';
-
-			// Switching the red color indicator
-			if(lag > 3) {
-				if(!this.isLagging) {
-					this.isLagging = true;
-					ui.controlLag.classList.add('control-lag-red');
-				}
-			} else if(this.isLagging) {
-				this.isLagging = false;
-				ui.controlLag.classList.remove('control-lag-red');
-			}
-		}
-
-		// Remember the current markers for the next measurement
-		this.lastUpdateTime = currentTimeMs;
-		this.lastUpdateByteSample = value;
+		ui.controlTime.value = this.getTime(this.byteSample);
 	}
 
 	// Apply a drawing mode for the visualizer scope
@@ -744,7 +859,6 @@ globalThis.bytebeat = new class {
 		this.setScopeAdjustment(0);
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
-		this.saveSettings();
 		this.sendData({ drawMode });
 	}
 
@@ -756,16 +870,8 @@ globalThis.bytebeat = new class {
 		scope.setFFTSize(scope.fftSize + amount);
 		scope.setFFTAnalyzer();
 		scope.clearCanvas();
-		this.saveSettings();
 		ui.setControlScale(scope.fftSize >= 15, scope.fftSize <= 5,
 			scope.fftSize < 10 ? 2 ** scope.fftSize : `<sub>2</sub>${ scope.fftSize }`);
-	}
-
-	// Apply the mode: Bytebeat, Floatbeat, etc
-	setPlaybackMode(mode) {
-		this.mode = mode;
-		this.updateUrl();
-		this.sendData({ mode, setFunction: editor.value });
 	}
 
 	// Apply the sample rate
@@ -784,23 +890,23 @@ globalThis.bytebeat = new class {
 		case 22050:
 		case 32000:
 		case 44100:
-		case 48000: ui.controlSampleRateSelect.value = sampleRate; break;
+		case 48000:
+			ui.controlSampleRateSelect.value = sampleRate;
+			break;
 		default: ui.controlSampleRateSelect.selectedIndex = -1;
 		}
 		const oldSampleRate = this.sampleRate;
-		ui.controlSampleRate.value = this.sampleRate = sampleRate;
+		this.sampleRate = sampleRate;
+		ui.controlSampleRate.value = sampleRate;
 		ui.controlSampleRate.blur();
 		ui.controlSampleRateSelect.blur();
 		scope.toggleTimeCursor();
 		if(isSendData) {
-			const data = {
-				sampleRate: this.sampleRate,
-				sampleRatio: this.sampleRate / this.audioCtx.sampleRate
-			};
+			const data = { sampleRate, sampleRatio: sampleRate / this.audioCtx.sampleRate };
 			if(this.mode === 'Funcbeat') {
 				data.byteSample = Math.round(ui.controlTime.value * sampleRate /
 					(this.settings.isSeconds ? 1 : oldSampleRate));
-				this.setCounterValue(data.byteSample);
+				ui.controlTime.value = this.getTime(data.byteSample);
 				this.setByteSample(data.byteSample);
 			}
 			this.updateUrl();
@@ -816,7 +922,6 @@ globalThis.bytebeat = new class {
 		scope.drawScale = Math.min(Math.max(scope.drawScale + amount, 0), 20);
 		scope.toggleTimeCursor();
 		scope.clearCanvas();
-		this.saveSettings();
 		ui.setControlScale(scope.drawScale <= 0, scope.drawScale >= 20,
 			!scope.drawScale ? '1x' :
 			scope.drawScale < 7 ? `1/${ 2 ** scope.drawScale }${ scope.drawScale < 4 ? 'x' : '' }` :
@@ -844,83 +949,86 @@ globalThis.bytebeat = new class {
 		if(value === 0) {
 			return;
 		}
-		ui.controlSRDivisor.textContent = this.settings.srDivisor = value;
-		this.saveSettings();
+		this.settings.srDivisor = value;
+		ui.controlSRDivisor.textContent = value;
 		this.sendData({ srDivisor: value });
 	}
 
 	// Apply site style
-	setThemeStyle(value) {
+	setThemeStyle(value, isInit) {
 		if(value === undefined) {
-			if((value = this.settings.themeStyle) === undefined) {
-				value = this.settings.themeStyle = this.defaultSettings.themeStyle;
-				this.saveSettings();
+			value = this.defaultSettings.themeStyle;
+		}
+		if(!isInit) {
+			let colorCursor = '#80c0ff';
+			let colorDiagram = '#0080ff';
+			let colorStereo = 1; // Red=0, Green=1, Blue=2
+			let { codeStyle } = this.defaultSettings;
+			switch(value) {
+			case 'Blue Dark':
+				codeStyle = 'Github Dark';
+				break;
+			case 'Cake Dark':
+				colorCursor = '#40ffff';
+				colorDiagram = '#c000c0';
+				colorStereo = 0;
+				codeStyle = 'Monokai';
+				break;
+			case 'Dusk Dark':
+				codeStyle = 'One Dark';
+				break;
+			case 'Green Dark':
+				colorCursor = '#00ffa8';
+				colorDiagram = '#00a080';
+				codeStyle = 'Retro Green';
+				break;
+			case 'Orange Dark':
+				colorCursor = '#ffff80';
+				colorDiagram = '#8000ff';
+				colorStereo = 0;
+				codeStyle = 'Github v2 Dark';
+				break;
+			case 'Purple Dark':
+				colorCursor = '#ff50ff';
+				colorDiagram = '#a040ff';
+				colorStereo = 0;
+				codeStyle = 'Atom Dark';
+				break;
+			case 'Teal Dark':
+				colorCursor = '#80c0ff';
+				colorDiagram = '#00a0c0';
+				codeStyle = 'VSCode Dark';
+				break;
+			case 'Default Light':
+				codeStyle = 'Atom Light';
+				break;
+			case 'Blue Light':
+				codeStyle = 'Github Light';
+				break;
+			case 'Green Light':
+				codeStyle = 'VSCode Light';
+				break;
 			}
-			document.documentElement.dataset.theme = value;
-			document.documentElement.dataset.themeType = value.endsWith('Light') ? 'light' : 'dark';
-			return;
+			this.setCodeStyle(codeStyle);
+			ui.controlCodeStyle.value = codeStyle;
+			this.setColorStereo(colorStereo);
+			ui.controlColorWaveformInfo.innerHTML = scope.getColorTest('colorWaveform');
+			this.setColorDiagram(colorDiagram);
+			this.setColorTimeCursor(colorCursor);
 		}
-		document.documentElement.dataset.theme = this.settings.themeStyle = value;
+		this.settings.themeStyle = value;
+		document.documentElement.dataset.theme = value;
 		document.documentElement.dataset.themeType = value.endsWith('Light') ? 'light' : 'dark';
-		let colorCursor = '#80c0ff';
-		let colorDiagram = '#0080ff';
-		let colorStereo = 1; // Red=0, Green=1, Blue=2
-		let { codeStyle } = this.defaultSettings;
-		switch(value) {
-		case 'Blue Dark': codeStyle = 'Github Dark'; break;
-		case 'Cake Dark':
-			colorCursor = '#40ffff';
-			colorDiagram = '#c000c0';
-			colorStereo = 0;
-			codeStyle = 'Monokai';
-			break;
-		case 'Dusk Dark': codeStyle = 'One Dark'; break;
-		case 'Green Dark':
-			colorCursor = '#00ffa8';
-			colorDiagram = '#00a080';
-			codeStyle = 'Retro Green';
-			break;
-		case 'Orange Dark':
-			colorCursor = '#ffff80';
-			colorDiagram = '#8000ff';
-			colorStereo = 0;
-			codeStyle = 'Github v2 Dark';
-			break;
-		case 'Purple Dark':
-			colorCursor = '#ff50ff';
-			colorDiagram = '#a040ff';
-			colorStereo = 0;
-			codeStyle = 'Atom Dark';
-			break;
-		case 'Teal Dark':
-			colorCursor = '#80c0ff';
-			colorDiagram = '#00a0c0';
-			codeStyle = 'VSCode Dark';
-			break;
-		case 'Default Light': codeStyle = 'Atom Light'; break;
-		case 'Blue Light': codeStyle = 'Github Light'; break;
-		case 'Green Light': codeStyle = 'VSCode Light'; break;
-		}
-		this.setColorTimeCursor(colorCursor);
-		this.setColorStereo(colorStereo);
-		ui.controlColorWaveformInfo.innerHTML = scope.getColorTest('colorWaveform');
-		this.setColorDiagram(ui.controlColorDiagram.value = colorDiagram); // Contains this.saveSettings();
-		this.setCodeStyle(codeStyle);
-		ui.controlCodeStyle.value = codeStyle;
 	}
 
 	// Apply the volume value
-	setVolume(isInit) {
-		let volumeValue = NaN;
-		if(isInit) {
-			volumeValue = parseFloat(this.settings.volume);
-		}
+	setVolume(volumeValue = NaN) {
 		if(isNaN(volumeValue)) {
 			volumeValue = ui.controlVolume.value / ui.controlVolume.max;
 		}
-		ui.controlVolume.value = this.settings.volume = volumeValue;
+		this.settings.volume = volumeValue;
+		ui.controlVolume.value = volumeValue;
 		ui.controlVolume.title = `Volume: ${ (volumeValue * 100).toFixed(2) }%`;
-		this.saveSettings();
 		this.audioGain.gain.value = volumeValue * volumeValue;
 	}
 
@@ -930,7 +1038,6 @@ globalThis.bytebeat = new class {
 			isEnable = this.defaultSettings.autoplay;
 		}
 		this.settings.autoplay = isEnable;
-		this.saveSettings();
 		ui.controlAutoplay.checked = isEnable;
 	}
 
@@ -940,7 +1047,6 @@ globalThis.bytebeat = new class {
 			isEnable = this.defaultSettings.caching;
 		}
 		this.settings.caching = isEnable;
-		this.saveSettings();
 		ui.controlCacheToggle.innerText = isEnable ? '✔' : '✖';
 		ui.controlCacheCounter.innerText = isEnable ? '0.0s' : '---';
 
@@ -953,28 +1059,9 @@ globalThis.bytebeat = new class {
 		this.sendData(data);
 	}
 
-	// Toggle between t and seconds for the timer counter
-	toggleCounterUnits() {
-		this.settings.isSeconds = !this.settings.isSeconds;
-		this.saveSettings();
-		this.setCounterUnits();
-	}
-
-	// Toggle recording for the playback
-	toggleRecording() {
-		if(!this.audioCtx) {
-			return;
-		}
-		if(this.isRecording) {
-			this.playbackToggle(false);
-			return;
-		}
-		this.isRecording = true;
-		ui.controlRecord.classList.add('control-recording');
-		ui.controlRecord.title = 'Pause and stop recording';
-		this.audioRecorder.start();
-		this.audioRecordChunks = [];
-		this.playbackToggle(true);
+	// Update the library filters based on the current selections
+	updateLibraryFilters() {
+		this.settings.libraryFilters = library.filters = ui.getLibraryFilters();
 	}
 
 	// Get URL and size from the code

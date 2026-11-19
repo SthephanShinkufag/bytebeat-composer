@@ -6,7 +6,9 @@ export class UI {
 		this.containerScroll = null;
 		this.containerScrollUp = null;
 		this.containerScrollDown = null;
+		this.controlAutoplay = null;
 		this.controlCacheCounter = null;
+		this.controlCacheToggle = null;
 		this.controlCodeSize = null;
 		this.controlCodeStyle = null;
 		this.controlColorDiagram = null;
@@ -20,21 +22,24 @@ export class UI {
 		this.controlPlaybackMode = null;
 		this.controlPlayBackward = null;
 		this.controlPlayForward = null;
-		this.controlRecord = null;
 		this.controlSampleRate = null;
 		this.controlSampleRateSelect = null;
 		this.controlScale = null;
 		this.controlScaleDown = null;
 		this.controlScaleUp = null;
 		this.controlSRDivisor = null;
-		this.controlSRDivisorUp = null;
-		this.controlSRDivisorDown = null;
 		this.controlThemeStyle = null;
 		this.controlTime = null;
 		this.controlTimeUnits = null;
 		this.controlVolume = null;
 		this.downloader = null;
 		this.mainElem = null;
+
+		// Export to WAV elements
+		this.exportWavModal = null;
+		this.exportWavStart = null;
+		this.exportWavDuration = null;
+		this.exportWavStartUnits = null;
 	}
 
 	// Copy song link into clipboard
@@ -90,21 +95,24 @@ export class UI {
 		this.controlPlaybackMode = document.getElementById('control-mode');
 		this.controlPlayBackward = document.getElementById('control-play-backward');
 		this.controlPlayForward = document.getElementById('control-play-forward');
-		this.controlRecord = document.getElementById('control-rec');
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScale = document.getElementById('control-scale');
 		this.controlScaleDown = document.getElementById('control-scaledown');
 		this.controlScaleUp = document.getElementById('control-scaleup');
 		this.controlSRDivisor = document.getElementById('control-srdivisor');
-		this.controlSRDivisorUp = document.getElementById('control-srdivisor-up');
-		this.controlSRDivisorDown = document.getElementById('control-srdivisor-down');
 		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlTime = document.getElementById('control-counter');
 		this.controlTimeUnits = document.getElementById('control-counter-units');
 		this.controlVolume = document.getElementById('control-volume');
 		this.downloader = document.getElementById('downloader');
 		this.mainElem = document.getElementById('content');
+
+		// Export to WAV elements
+		this.exportWavModal = document.getElementById('export-wav-modal');
+		this.exportWavStart = document.getElementById('export-wav-start');
+		this.exportWavDuration = document.getElementById('export-wav-duration');
+		this.exportWavStartUnits = document.getElementById('export-wav-start-units');
 	}
 
 	// Show corresponding article when article navigation button is clicked
@@ -125,6 +133,15 @@ export class UI {
 			parentElem.querySelectorAll('.filter-button').forEach(el =>
 				el.classList.toggle('filter-selected', el === buttonElem));
 		}
+	}
+
+	// Handle scrolling within the scrollable container and update scroll buttons
+	onscrollContainer() {
+		const { clientHeight, scrollHeight, scrollTop } = this.containerScroll;
+		// Show "Back to top" if scrolled more than 100px from the top
+		this.containerScrollUp.classList.toggle('hidden', scrollTop < 5);
+		// Hide "To the end" if the bottom limit has already been reached (with a 5px margin)
+		this.containerScrollDown.classList.toggle('hidden', scrollTop >= scrollHeight - clientHeight - 5);
 	}
 
 	// Update the cache counter

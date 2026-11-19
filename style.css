@@ -1,6 +1,7 @@
 /* ==[ Themes variables ] ================================================================================= */
 
 :root { /* html[data-theme-type="dark"] */
+	color-scheme: dark;
 	--ctrl-filter: none;
 	--ctrl-lag-bg: linear-gradient(#300, #aa0020);
 	--entry-border: #2a2a2a;
@@ -8,7 +9,11 @@
 	--html-bg: #0a0a0a;
 	--html-color: #c5c8c6;
 	--inputs-border: 1px solid #38444d;
-	--inputs-color: #ccc;
+	--inputs-color: #eee;
+	--modal-bg: #1a1a1a;
+	--modal-border: #333;
+	--modal-head-bg: #222;
+	--modal-inputs-bg: #111;
 	--song-tags-opacity: .75;
 	--songs-header-color: #c5c8c6;
 	--table-border: #445766;
@@ -17,6 +22,7 @@
 }
 
 html[data-theme-type="light"] {
+	color-scheme: light;
 	--ctrl-filter: drop-shadow(2px 2px 3px #999);
 	--ctrl-lag-bg: linear-gradient(#db0000, #ff7b94);
 	--entry-border: #ccc;
@@ -24,7 +30,11 @@ html[data-theme-type="light"] {
 	--html-bg: #eee;
 	--html-color: #34343f;
 	--inputs-border: 1px solid #808080;
-	--inputs-color: #000;
+	--inputs-color: #111;
+	--modal-bg: #ddd;
+	--modal-border: #aaa;
+	--modal-head-bg: #c5c5c5;
+	--modal-inputs-bg: #eee;
 	--song-tags-opacity: 1;
 	--songs-header-color: #fff;
 	--table-border: #8a97a4;
@@ -1649,6 +1659,117 @@ button[name="close"] {
 .settings-block > .control-select {
 	height: 24px;
 	padding-left: 5px;
+}
+
+/* ==[ Modal Window ] ===================================================================================== */
+
+.modal-body {
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.modal-button {
+	background: #70707030;
+	color: var(--html-color);
+	border: 1px solid #444;
+	border-radius: 4px;
+	padding: 5px 10px;
+	cursor: pointer;
+	font-family: monospace;
+	font-size: 12px;
+}
+
+.modal-button:hover {
+	background: #70707070;
+	border-color: #666;
+}
+
+.modal-button-primary {
+	background: #2b5b84;
+	border-color: #3d7eb5;
+	color: #fff;
+	font-weight: bold;
+}
+
+.modal-button-primary:hover {
+	background: #3670a3;
+}
+
+.modal-close-button {
+	background: none;
+	border: none;
+	color: #888;
+	font-size: 18px;
+	cursor: pointer;
+	padding: 0 4px;
+}
+
+.modal-close-button:hover {
+	color: #fff;
+}
+
+.modal-container {
+	background: var(--modal-bg);
+	color: var(--html-color);
+	border: 1px solid #444;
+	border-radius: 6px;
+	padding: 0;
+	width: 300px;
+	font-family: monospace;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.modal-container::backdrop {
+	background: rgba(0, 0, 0, 0.65);
+}
+
+.modal-field {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 13px;
+}
+
+.modal-footer, .modal-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 14px;
+	background: var(--modal-head-bg);
+}
+
+.modal-footer {
+	border-top: 1px solid var(--modal-border);
+}
+
+.modal-header {
+	align-items: center;
+	border-bottom: 1px solid var(--modal-border);
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.modal-input {
+	width: 110px;
+	background: var(--modal-inputs-bg);
+	border: 1px solid #444;
+	color: var(--inputs-color);
+	padding: 5px 8px;
+	border-radius: 4px;
+	font-family: monospace;
+	text-align: right;
+}
+
+.modal-input:focus {
+	outline: none;
+	border-color: #80c0ff;
+}
+
+.modal-presets {
+	display: flex;
+	gap: 6px;
+	justify-content: flex-end;
 }
 
 /* ==[ Scroll buttons ] =================================================================================== */
