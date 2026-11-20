@@ -185,12 +185,6 @@ globalThis.bytebeat = new class {
 
 			// Click on elements with specific ids
 			switch(elem.id) {
-			case 'scroll-btn-down':
-				ui.containerScroll.scrollTo({ top: ui.containerScroll.scrollHeight, behavior: 'smooth' });
-				break;
-			case 'scroll-btn-up':
-				ui.containerScroll.scrollTo({ top: 0, behavior: 'smooth' });
-				break;
 			case 'canvas-container':
 			case 'canvas-main':
 			case 'canvas-play':
@@ -218,7 +212,10 @@ globalThis.bytebeat = new class {
 				ui.expandEditor();
 				break;
 			case 'control-export':
-				this.openExportModal();
+				// Stop playback and enable caching before opening the export to WAV window
+				this.playbackToggle(false);
+				this.toggleCaching(true);
+				this.openExportWavWindow();
 				break;
 			case 'control-link':
 				ui.copyLink();
@@ -236,11 +233,11 @@ globalThis.bytebeat = new class {
 				this.resetScopeAdjustment();
 				this.saveSettings();
 				break;
-			case 'control-scaledown':
+			case 'control-scale-down':
 				this.setScopeAdjustment(-1, elem);
 				this.saveSettings();
 				break;
-			case 'control-scaleup':
+			case 'control-scale-up':
 				this.setScopeAdjustment(1);
 				this.saveSettings();
 				break;
@@ -255,9 +252,11 @@ globalThis.bytebeat = new class {
 			case 'control-stop':
 				this.playbackStop();
 				break;
-			case 'modal-cancel':
-			case 'modal-close':
-				ui.exportWavModal.close();
+			case 'export-wav-cancel':
+			case 'export-wav-close':
+				// Cancel the WAV export (if in progress) and close the export window
+				this.sendData({ cancelExportWav: true });
+				ui.exportWavWindow.close();
 				break;
 			case 'export-wav-time-current':
 				ui.exportWavStart.value = this.getTime(this.byteSample);
@@ -267,6 +266,12 @@ globalThis.bytebeat = new class {
 				break;
 			case 'library-show-songs':
 				library.showSongs();
+				break;
+			case 'scroll-btn-down':
+				ui.containerScroll.scrollTo({ top: ui.containerScroll.scrollHeight, behavior: 'smooth' });
+				break;
+			case 'scroll-btn-up':
+				ui.containerScroll.scrollTo({ top: 0, behavior: 'smooth' });
 				break;
 
 			// Click on elements with specific classes
@@ -289,10 +294,16 @@ globalThis.bytebeat = new class {
 				case classList.contains('code-text'):
 					this.onclickCodeText(elem);
 					break;
-				case classList.contains('export-preset'):
+				case classList.contains('export-wav-duration-preset'):
 					// Set the WAV export duration based on the selected preset
 					ui.exportWavDuration.value = elem.dataset.dur;
 					break;
+				case classList.contains('export-wav-samplerate-preset'): {
+					// Set the WAV export sample rate based on the selected preset
+					const customSR = elem.dataset.rate;
+					ui.exportWavSampleRate.value = customSR === 'Native' ? this.sampleRate : customSR;
+					break;
+				}
 				case classList.contains('filter-button'):
 					// Apply the selected library filter and load the songs library
 					ui.onclickFilterButton(elem);
@@ -377,7 +388,7 @@ globalThis.bytebeat = new class {
 		// Handle the export to WAV form submission
 		case 'submit':
 			event.preventDefault();
-			this.onsubmitExportToWav();
+			this.onsubmitExportWav();
 			return;
 		}
 	}
@@ -446,8 +457,8 @@ globalThis.bytebeat = new class {
 		ui.containerScroll.addEventListener('input', this);
 		ui.containerScroll.addEventListener('mouseover', this);
 		ui.containerScroll.addEventListener('scroll', this);
-		ui.exportWavModal.addEventListener('click', this);
-		ui.exportWavModal.addEventListener('submit', this);
+		ui.exportWavWindow.addEventListener('click', this);
+		ui.exportWavWindow.addEventListener('submit', this);
 	}
 
 	// Audio context initialization
@@ -543,13 +554,6 @@ globalThis.bytebeat = new class {
 		this.sendData(data);
 	}
 
-	// Opening a modal window with the current units of measurement inserted
-	openExportModal() {
-		ui.exportWavStart.value = this.getTime(this.byteSample);
-		ui.exportWavStartUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
-		ui.exportWavModal.showModal();
-	}
-
 	// Handle click event on code text elements within the song entry
 	onclickCodeText(elem) {
 		// If in the description block then load code from text
@@ -575,8 +579,8 @@ globalThis.bytebeat = new class {
 
 	// Apply the time from the timer counter input
 	oninputTimeCounter() {
-		const byteSample = this.settings.isSeconds ?
-			Math.round(ui.controlTime.value * this.sampleRate) : ui.controlTime.value;
+		const value = +ui.controlTime.value || 0;
+		const byteSample = this.settings.isSeconds ? Math.round(value * this.sampleRate) : value;
 		this.setByteSample(byteSample);
 		this.sendData({ byteSample });
 		ui.controlTime.blur();
@@ -584,15 +588,33 @@ globalThis.bytebeat = new class {
 	}
 
 	// Handle the export to WAV form submission
-	onsubmitExportToWav() {
+	onsubmitExportWav() {
 		const rawStart = parseFloat(ui.exportWavStart.value) || 0;
 		const durationSeconds = parseFloat(ui.exportWavDuration.value) || 60;
+		const isNormalize = ui.exportWavNormalize.checked;
+		const sampleRate = parseInt(ui.exportWavSampleRate.value, 10) || this.sampleRate;
 		const startSample = Math.round(this.settings.isSeconds ? rawStart * this.sampleRate : rawStart);
-		ui.exportWavModal.close();
-		if(!this.audioWorkletNode) {
-			return;
-		}
-		this.sendData({ exportWav: { durationSeconds, startSample } });
+
+		// Show the progress bar and disable the submit button during rendering
+		ui.exportWavProgContainer.style.display = 'flex';
+		ui.exportWavProgBarFill.style.width = '0%';
+		ui.exportWavProgPercent.textContent = '0%';
+		ui.exportWavProgStatus.textContent = 'Starting...';
+		ui.exportWavSubmit.disabled = true;
+
+		// Send the export WAV request to the worker
+		this.sendData({ exportWav: { durationSeconds, isNormalize, sampleRate, startSample } });
+	}
+
+	// Opening a modal window for exporting to WAV
+	openExportWavWindow() {
+		ui.exportWavProgContainer.style.display = 'none';
+		ui.exportWavProgBarFill.style.width = '0%';
+		ui.exportWavSubmit.disabled = false;
+		ui.exportWavSampleRate.value = this.sampleRate;
+		ui.exportWavStart.value = this.getTime(this.byteSample);
+		ui.exportWavStartUnits.textContent = this.settings.isSeconds ? 'sec' : 't';
+		ui.exportWavWindow.showModal();
 	}
 
 	// Stop the playback and reset the time
@@ -667,12 +689,12 @@ globalThis.bytebeat = new class {
 		}
 
 		// Output the accumulated number of cache seconds before the cursor
-		if(this.settings.caching &&typeof data.cacheSeconds === 'number') {
+		if(this.settings.caching && typeof data.cacheSeconds === 'number') {
 			ui.setCacheCounter(data.cacheSeconds, this.sampleRate);
 		}
 
 		// If an error has arrived, display it in the error console
-		if(error !== undefined) {
+		if(typeof error === 'object') {
 			let isUpdate = false;
 			if(error.isCompiled === false) {
 				isUpdate = true;
@@ -704,20 +726,29 @@ globalThis.bytebeat = new class {
 			this.sendData({ readyForNextBatch: true });
 		}
 
-		// If a ready WAV file has arrived from the worker
-		if(data.exportWavBuffer) {
-			const blob = new Blob([data.exportWavBuffer], { type: 'audio/wav' });
-			const url = URL.createObjectURL(blob);
+		// Update the WAV rendering progress bar
+		if(typeof data.exportWavProgress === 'object') {
+			const { percent, status } = data.exportWavProgress;
+			ui.exportWavProgBarFill.style.width = ui.exportWavProgPercent.textContent = percent + '%';
+			ui.exportWavProgStatus.textContent = status;
+		}
 
-			// Use the existing downloader element
+		// Finalize rendering and download the completed WAV
+		if(typeof data.exportWavResult === 'object') {
+			const url = URL.createObjectURL(new Blob([data.exportWavResult.wavBuffer],
+				{ type: 'audio/wav' }));
+
+			// Set the download link and trigger the download
 			ui.downloader.href = url;
-			ui.downloader.download = `bytebeat_${ data.exportSampleRate }Hz.wav`;
+			ui.downloader.download = `bytebeat_${ data.exportWavResult.targetSampleRate }Hz.wav`;
 			ui.downloader.click();
 
+			// Kill the object URL after a delay to free up memory
 			setTimeout(() => window.URL.revokeObjectURL(url), 1000);
 
-			if(ui.controlCacheCounter) {
-				ui.controlCacheCounter.innerText = 'WAV Ready!';
+			// Close the modal window after completion
+			if(ui.exportWavWindow && ui.exportWavWindow.open) {
+				ui.exportWavWindow.close();
 			}
 		}
 	}
@@ -904,7 +935,7 @@ globalThis.bytebeat = new class {
 		if(isSendData) {
 			const data = { sampleRate, sampleRatio: sampleRate / this.audioCtx.sampleRate };
 			if(this.mode === 'Funcbeat') {
-				data.byteSample = Math.round(ui.controlTime.value * sampleRate /
+				data.byteSample = Math.round((+ui.controlTime.value || 0) * sampleRate /
 					(this.settings.isSeconds ? 1 : oldSampleRate));
 				ui.controlTime.value = this.getTime(data.byteSample);
 				this.setByteSample(data.byteSample);

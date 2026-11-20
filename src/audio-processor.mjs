@@ -6,6 +6,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSampleSent = 0; // Last time sent to the main script (bytebeat time)
 		this.drawMode = 'Points';
 		this.errorDisplayed = true; // Flag to prevent sending multiple error messages to the main script
+		this.exportWavState = null; // State of the WAV export process
 		this.func = null; // User-defined function for generating audio samples
 		this.getValues = null; // Function to convert raw values to audio samples based on the selected mode
 		this.isFuncbeat = false;
@@ -108,104 +109,39 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 	}
 
-	exportToWav({ durationSeconds = 60, startSample = 0 } = {}) {
-		const sampleRate = this.sampleRate || 8000;
-		const numChannels = 2;
-		const bitDepth = 16;
-		const totalSamples = Math.floor(sampleRate * durationSeconds);
-
-		// Allocate memory: 44 bytes for the WAV header + data (samples * 2 channels * 2 bytes)
-		const dataByteLength = totalSamples * numChannels * 2;
-		const wavBuffer = new ArrayBuffer(44 + dataByteLength);
-		const view = new DataView(wavBuffer);
-
-		// Helper for writing ASCII strings into the header
-		const writeString = (offset, str) => {
-			for(let i = 0; i < str.length; i++) {
-				view.setUint8(offset + i, str.charCodeAt(i));
-			}
-		};
-
-		// Form the standard RIFF/WAVE header
-		writeString(0, 'RIFF');
-		view.setUint32(4, 36 + dataByteLength, true);
-		writeString(8, 'WAVE');
-		writeString(12, 'fmt ');
-		view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
-		view.setUint16(20, 1, true);  // AudioFormat (1 = PCM without compression)
-		view.setUint16(22, numChannels, true);
-		view.setUint32(24, sampleRate, true);
-		view.setUint32(28, sampleRate * numChannels * (bitDepth / 8), true); // ByteRate
-		view.setUint16(32, numChannels * (bitDepth / 8), true); // BlockAlign
-		view.setUint16(34, bitDepth, true);
-		writeString(36, 'data');
-		view.setUint32(40, dataByteLength, true);
-
-		// Fill in the audio data (from cache or direct calculation)
-		let offset = 44;
-		let exportSample = Math.max(0, Math.floor(startSample));
-		const { func, getValues, isFuncbeat, srDivisor } = this;
-
-		// Save the current states so that offline calculation for WAV doesn't mess up the live player
-		let localOutL = 0;
-		let localOutR = 0;
-		let localLastFuncL = null;
-		let localLastFuncR = null;
-
-		for(let i = 0; i < totalSamples; i++) {
-			const currentSample = Math.floor(exportSample / srDivisor) * srDivisor;
-			const cacheIdx = currentSample % this.audioCacheSize;
-
-			// Check if caching is enabled and if this particular sample is in memory
-			if(this.isCachingEnabled && this.audioCacheTime &&
-				this.audioCacheTime[cacheIdx] === currentSample
-			) {
-				const cachedL = this.audioCacheL[cacheIdx];
-				const cachedR = this.audioCacheR[cacheIdx];
-				// Protection against NaN (if an error was stored in the cache, write a silent 0)
-				localOutL = isNaN(cachedL) ? 0 : cachedL;
-				localOutR = isNaN(cachedR) ? 0 : cachedR;
-			} else {
-				// If the cache is disabled or the sample has not yet been calculated, compute it on the fly
-				let funcValue;
-				try {
-					funcValue = isFuncbeat ?
-						func(currentSample / sampleRate, sampleRate) :
-						func(currentSample);
-				} catch(err) {
-					funcValue = NaN;
+	// Calculate the continuous cache in seconds preceding the cursor (current byteSample)
+	getCacheSeconds(step, sampleRate) {
+		let continuousSamples = 0;
+		let checkSample = this.byteSample;
+		// Check up to audioCacheLimit samples ahead
+		while(continuousSamples < this.audioCacheLimit) {
+			// If a cell with a time of -1 is encountered (a potential hole in the cache)
+			if(this.audioCacheTime[checkSample % this.audioCacheSize] === -1) {
+				// Looking ahead: Checking the next few cells (up to 4)
+				// If the song's sample rate is greater than 48000, the step will be greater than 1
+				let isRealHole = true;
+				for(let lookAhead = 1; lookAhead <= 4; lookAhead++) {
+					// If there is data a little further - it's not a hole, just a frequency skip
+					if(this.audioCacheTime[(checkSample + lookAhead) % this.audioCacheSize] !== -1) {
+						isRealHole = false;
+						// Move scanner pointer to this found valid point
+						checkSample += lookAhead;
+						break;
+					}
 				}
-
-				const isArrayValue = Array.isArray(funcValue);
-				const fvL = isArrayValue ? funcValue[0] : funcValue;
-				const fvR = isArrayValue ? funcValue[1] : funcValue;
-
-				if(fvL !== localLastFuncL) {
-					localOutL = isNaN(fvL) ? 0 : getValues(fvL, 0);
-					localLastFuncL = fvL;
-				}
-				if(fvR !== localLastFuncR) {
-					localOutR = isNaN(fvR) ? 0 : getValues(fvR, 1);
-					localLastFuncR = fvR;
+				// If searched the cells ahead and there is indeed a void - stop the loop
+				if(isRealHole) {
+					break;
 				}
 			}
-
-			// Limit the amplitude to [-1, 1] and convert to 16-bit Signed Integer
-			const sL = Math.max(-1, Math.min(1, localOutL));
-			view.setInt16(offset, sL < 0 ? sL * 0x8000 : sL * 0x7FFF, true);
-			offset += 2;
-
-			const sR = Math.max(-1, Math.min(1, localOutR));
-			view.setInt16(offset, sR < 0 ? sR * 0x8000 : sR * 0x7FFF, true);
-			offset += 2;
-
-			exportSample++;
+			// If the block is valid, increment the step and continue checking
+			// Step in blocks (chDataLen is typically 128) so that the loop executes instantaneously
+			continuousSamples += step;
+			checkSample += step;
 		}
-
-		// Instantly transfer the finished file to the UI via Transferable Object
-		this.port.postMessage({ exportWavBuffer: wavBuffer, exportSampleRate: sampleRate }, [wavBuffer]);
+		// Return the actual seconds of continuous cache ahead of the cursor
+		return Math.max(0, continuousSamples / sampleRate);
 	}
-
 
 	// Handling code errors and thrown messages
 	getErrorMessage(err, time) {
@@ -251,11 +187,25 @@ class audioProcessor extends AudioWorkletProcessor {
 
 	// Make sound and generate data for the main thread
 	makeData(chData) {
+		// If a WAV export is in progress, perform the next render chunk
+		if(this.exportWavState) {
+			if(chData) {
+				// Clear the audio buffer for the current chunk to silence it
+				const len = chData[0].length;
+				for(let i = 0; i < len; ++i) {
+					chData[0][i] = 0;
+					chData[1][i] = 0;
+				}
+			}
+			this.processExportWavChunk();
+			return true;
+		}
+
 		// The standard quantum size in the Web Audio API (chData[0].length) is 128 samples
 		//   but can be larger (256, 512, ..) depending on the system
 		const chDataLen = chData ? chData[0].length : 128;
 		// Destructure frequently used properties
-		const { getValues, isFuncbeat, outValue, sampleRate } = this;
+		const { getValues, isFuncbeat, outValue, sampleRate, srDivisor } = this;
 		// If the drawing mode requires a diagram
 		const isDiagram = this.drawMode === 'Combined' || this.drawMode === 'Diagram';
 
@@ -375,8 +325,8 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.quantumCounter++;
 
 			// Caching is permitted only during normal playback mode
-			const isCachingAllowed = this.isCachingEnabled &&
-				Math.abs(this.playbackSpeed) === 1 && this.srDivisor === 1;
+			const canWriteCache = this.isCachingEnabled &&
+				Math.abs(this.playbackSpeed) === 1 && srDivisor === 1;
 
 			// Get the current time based on the last sample
 			let time = this.sampleRatio * this.audioSample;
@@ -385,7 +335,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			for(let i = 0; i < chDataLen; ++i) {
 				// Increment the time by the sample ratio for each sample in the quantum
 				time += this.sampleRatio;
-				const currentTime = Math.floor(time / this.srDivisor) * this.srDivisor;
+				const currentTime = Math.floor(time / srDivisor) * srDivisor;
 
 				// Output old values to the speakers if the time has not changed
 				if(this.lastTime === currentTime) {
@@ -394,7 +344,7 @@ class audioProcessor extends AudioWorkletProcessor {
 					continue;
 				}
 
-				const currentSample = Math.floor(this.byteSample / this.srDivisor) * this.srDivisor;
+				const currentSample = Math.floor(this.byteSample / srDivisor) * srDivisor;
 				let currentErrorMsg = null;
 
 				// Calculate the cell index in the worker's ring cache array
@@ -480,7 +430,7 @@ class audioProcessor extends AudioWorkletProcessor {
 					// Write a fresh sample (values and time) to the worker cache.
 					// Write only for playing speed of 1 or -1 and divisor of 1,
 					//   to prevent the cache from getting cluttered with "gappy" samples
-					if(isCachingAllowed) {
+					if(canWriteCache) {
 						this.audioCacheL[cacheIdx] = cacheValueL;
 						this.audioCacheR[cacheIdx] = cacheValueR;
 						this.audioCacheTime[cacheIdx] = currentSample; // Mark as valid
@@ -509,7 +459,7 @@ class audioProcessor extends AudioWorkletProcessor {
 				if(currentErrorMsg && this.errorDisplayed && this.lastSentErrorSample !== currentSample) {
 					this.errorDisplayed = false;
 					this.lastSentErrorSample = currentSample;
-					this.sendData({ error: { message: currentErrorMsg, isRuntime: true } });
+					this.port.postMessage({ error: { message: currentErrorMsg, isRuntime: true } });
 				}
 
 				// Output obtained values to the speakers
@@ -540,38 +490,9 @@ class audioProcessor extends AudioWorkletProcessor {
 			let isSendData = false;
 			const data = {};
 
-			// --- Calculate the continuous cache preceding the cursor (current byteSample) ---
 			if(this.isCachingEnabled) {
-				let continuousSamples = 0;
-				let checkSample = this.byteSample;
-				// Check up to audioCacheLimit samples ahead
-				while(continuousSamples < this.audioCacheLimit) {
-					// If a cell with a time of -1 is encountered (a potential hole in the cache)
-					if(this.audioCacheTime[checkSample % this.audioCacheSize] === -1) {
-						// Looking ahead: Checking the next few cells (up to 4)
-						// If the song's sample rate is greater than 48000, the step will be greater than 1
-						let isRealHole = true;
-						for(let lookAhead = 1; lookAhead <= 4; lookAhead++) {
-							// If there is data a little further - it's not a hole, just a frequency skip
-							if(this.audioCacheTime[(checkSample + lookAhead) % this.audioCacheSize] !== -1) {
-								isRealHole = false;
-								// Move scanner pointer to this found valid point
-								checkSample += lookAhead;
-								break;
-							}
-						}
-						// If searched the cells ahead and there is indeed a void - stop the loop
-						if(isRealHole) {
-							break;
-						}
-					}
-					// If the block is valid, increment the step and continue checking
-					// Step in blocks of chDataLen (typically 128) so that the loop executes instantaneously
-					continuousSamples += chDataLen;
-					checkSample += chDataLen;
-				}
 				// Pass to the main thread the actual seconds of continuous cache ahead of the cursor
-				data.cacheSeconds = Math.max(0, continuousSamples / sampleRate);
+				data.cacheSeconds = this.getCacheSeconds(chDataLen, sampleRate);
 				isSendData = true;
 			}
 
@@ -599,7 +520,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			} else if(isSendData) {
 				// Use regular sending if the worker has not generated any new points for the graph.
 				// The data contains only the byteSample value (the current timecode).
-				this.sendData(data);
+				this.port.postMessage(data);
 			}
 
 			// Reset counters after sending the data to the main thread
@@ -621,29 +542,29 @@ class audioProcessor extends AudioWorkletProcessor {
 		let isClearAudioCache = false;
 
 		// Set current sample position provided by the main thread
-		if(data.byteSample !== undefined) {
-			this.byteSample = +data.byteSample || 0;
+		if(typeof data.byteSample === 'number') {
+			this.byteSample = data.byteSample;
 			this.resetValues();
 		}
 
 		// Enable/disable caching and allocate/release the cache memory accordingly
-		if(data.enableCaching !== undefined) {
+		if(typeof data.enableCaching === 'boolean') {
 			this.toggleCacheMemory(data.enableCaching);
 		}
 
 		// Update the playback status from the main thread
-		if(data.isPlaying !== undefined) {
+		if(typeof data.isPlaying === 'boolean') {
 			this.isPlaying = data.isPlaying;
 		}
 
 		// Update the audio processing mode and corresponding value conversion function
-		if(data.mode !== undefined) {
+		if(typeof data.mode === 'string') {
 			isClearAudioCache = true;
 			this.updateMode(data.mode);
 		}
 
 		// Update drawing mode
-		if(data.drawMode !== undefined) {
+		if(typeof data.drawMode === 'string') {
 			this.drawMode = data.drawMode;
 		}
 
@@ -653,7 +574,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 
 		// Parsing text from the editor into function and preparing it for execution
-		if(data.setFunction !== undefined) {
+		if(typeof data.setFunction === 'string') {
 			this.setFunction(data.setFunction);
 			isClearAudioCache = true;
 		}
@@ -665,24 +586,24 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 
 		// Update the sample rate from the main thread
-		if(data.sampleRate !== undefined) {
+		if(typeof data.sampleRate === 'number') {
 			this.sampleRate = data.sampleRate;
 		}
 
 		// Update the sample rate divisor from the main thread
-		if(data.srDivisor !== undefined) {
+		if(typeof data.srDivisor === 'number') {
 			this.srDivisor = data.srDivisor;
 		}
 
 		// Update playback speed and adjust the sample ratio accordingly
-		if(data.playbackSpeed !== undefined) {
+		if(typeof data.playbackSpeed === 'number') {
 			const sampleRatio = this.sampleRatio / this.playbackSpeed;
 			this.playbackSpeed = data.playbackSpeed;
 			this.setSampleRatio(sampleRatio);
 		}
 
 		// Update the sample ratio from the main thread
-		if(data.sampleRatio !== undefined) {
+		if(typeof data.sampleRatio === 'number') {
 			this.setSampleRatio(data.sampleRatio);
 		}
 
@@ -703,8 +624,13 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 
 		// Record to the WAV file if requested by the main thread
-		if(data.exportWav !== undefined) {
-			this.exportToWav(data.exportWav);
+		if(typeof data.exportWav === 'object') {
+			this.startExportWav(data.exportWav);
+		}
+
+		// Cancel WAV export if requested by the main thread
+		if(data.cancelExportWav === true) {
+			this.exportWavState = null;
 		}
 	}
 
@@ -718,7 +644,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		this.byteSample = 0;
 		this.resetValues();
 		// Notify the main thread that the time has been reset
-		this.sendData({ byteSample: 0 });
+		this.port.postMessage({ byteSample: 0 });
 	}
 
 	// Reset calculations
@@ -787,7 +713,7 @@ class audioProcessor extends AudioWorkletProcessor {
 			this.errorDisplayed = false;
 
 			// Sending an error
-			this.sendData({
+			this.port.postMessage({
 				error: { message: this.getErrorMessage(err, isCompiled ? 0 : null), isCompiled },
 				updateUrl: isCompiled
 			});
@@ -795,7 +721,7 @@ class audioProcessor extends AudioWorkletProcessor {
 		}
 
 		this.errorDisplayed = false;
-		this.sendData({ error: { message: '', isCompiled }, updateUrl: true });
+		this.port.postMessage({ error: { message: '', isCompiled }, updateUrl: true });
 	}
 
 	// Get sample parameters
@@ -806,10 +732,10 @@ class audioProcessor extends AudioWorkletProcessor {
 	}
 
 	// Cache memory management
-	toggleCacheMemory(enable) {
-		this.isCachingEnabled = enable;
+	toggleCacheMemory(isEnable) {
+		this.isCachingEnabled = isEnable;
 		this.cacheSample = this.byteSample;
-		if(enable) {
+		if(isEnable) {
 			// Allocate memory only if the arrays have not yet been created
 			if(!this.audioCacheTime) {
 				this.audioCacheL = new Float32Array(this.audioCacheSize);
@@ -848,6 +774,215 @@ class audioProcessor extends AudioWorkletProcessor {
 			break;
 		default: this.getValues = (funcValue, ch) => (this.lastByteValue[ch] = NaN);
 		}
+	}
+
+	// ---[ EXPORT TO WAV FILE ]---
+
+	// Start exporting audio to a WAV file
+	startExportWav({ durationSeconds = 60, startSample = 0, sampleRate, isNormalize = true } = {}) {
+		const songSampleRate = this.sampleRate;
+		const targetSampleRate = sampleRate || songSampleRate;
+		const totalSamples = Math.floor(targetSampleRate * durationSeconds);
+
+		// Initialize the incremental rendering task
+		this.exportWavState = {
+			songSampleRate,
+			targetSampleRate,
+			// Step ratio: if rendering 8000 Hz song into 48000 Hz WAV file, the step will be 0.1666...
+			stepRatio: songSampleRate / targetSampleRate,
+			isNativeRate: songSampleRate === targetSampleRate,
+			totalSamples,
+			isNormalize,
+			currentIdx: 0,
+			exportSample: Math.max(0, Math.floor(startSample)),
+			// Temporary Float32 buffers for storing raw audio before normalization
+			rawL: new Float32Array(totalSamples),
+			rawR: new Float32Array(totalSamples),
+			maxPeak: 0,
+			localOutL: 0,
+			localOutR: 0,
+			localLastFuncL: null,
+			localLastFuncR: null
+		};
+	}
+
+	// Process the next chunk of audio for WAV export
+	processExportWavChunk() {
+		const st = this.exportWavState;
+		if(!st) {
+			return;
+		}
+
+		// Commonly used properties for easier access
+		const { getValues, isFuncbeat, srDivisor } = this;
+
+		// Process 16384 samples per quantum (~375 times per second = ~6 million samples/second)
+		const chunkEnd = Math.min(st.totalSamples, st.currentIdx + 16384);
+
+		// Writing to the cache is only permissible if the export sample rate matches the song's sample rate
+		const canWriteCache = this.isCachingEnabled && st.isNativeRate &&
+			this.audioCacheTime && srDivisor === 1;
+
+		for(let i = st.currentIdx; i < chunkEnd; i++) {
+			const currentSample = Math.floor(Math.floor(st.exportSample) / srDivisor) * srDivisor;
+			const cacheIdx = currentSample % this.audioCacheSize;
+			let outL, outR;
+
+			// Check if caching is enabled and if this particular sample is in memory
+			// We can read from an existing cache at any export frequency
+			if(this.isCachingEnabled && this.audioCacheTime &&
+				this.audioCacheTime[cacheIdx] === currentSample
+			) {
+				const cacheValueL = this.audioCacheL[cacheIdx];
+				const cacheValueR = this.audioCacheR[cacheIdx];
+
+				// Protection against NaN (if an error was stored in the cache, write a silent 0)
+				outL = isNaN(cacheValueL) ? 0 : cacheValueL;
+				outR = isNaN(cacheValueR) ? 0 : cacheValueR;
+			} else {
+				// If the cache is disabled or the sample has not yet been calculated, compute it on the fly
+				let funcValue;
+				let currentErrorMsg = null;
+				try {
+					funcValue = isFuncbeat ?
+						this.func.call(globalThis, currentSample / st.songSampleRate, st.songSampleRate) :
+						this.func(currentSample);
+				} catch(err) {
+					currentErrorMsg = this.getErrorMessage(err, currentSample);
+					funcValue = NaN;
+				}
+
+				const isArrayValue = Array.isArray(funcValue);
+				const funcValueL = isArrayValue ? funcValue[0] : funcValue;
+				const funcValueR = isArrayValue ? funcValue[1] : funcValue;
+
+				let cacheValueL = st.localOutL;
+				let cacheValueR = st.localOutR;
+
+				if(funcValueL !== st.localLastFuncL) {
+					if(!isNaN(funcValueL)) {
+						st.localOutL = cacheValueL = getValues(funcValueL, 0);
+					} else {
+						st.localOutL = 0;
+						cacheValueL = NaN;
+					}
+					st.localLastFuncL = funcValueL;
+				}
+				if(funcValueR !== st.localLastFuncR) {
+					if(!isNaN(funcValueR)) {
+						st.localOutR = cacheValueR = getValues(funcValueR, 1);
+					} else {
+						st.localOutR = 0;
+						cacheValueR = NaN;
+					}
+					st.localLastFuncR = funcValueR;
+				}
+
+				outL = st.localOutL;
+				outR = st.localOutR;
+
+				// Save the fresh result to the player's shared cache
+				if(canWriteCache) {
+					this.audioCacheL[cacheIdx] = cacheValueL;
+					this.audioCacheR[cacheIdx] = cacheValueR;
+					this.audioCacheTime[cacheIdx] = currentSample;
+					this.audioCacheError[cacheIdx] = currentErrorMsg;
+				}
+			}
+
+			// Store the raw audio before normalization
+			st.rawL[i] = outL;
+			st.rawR[i] = outR;
+
+			// Find the peak volume for the future normalization
+			const absL = Math.abs(outL);
+			const absR = Math.abs(outR);
+			if(absL > st.maxPeak) st.maxPeak = absL;
+			if(absR > st.maxPeak) st.maxPeak = absR;
+
+			// Advance time, accounting for the frequency ratio (Zero-Order Hold resampling)
+			st.exportSample += st.stepRatio;
+		}
+
+		// Advance the cache pointer if the export has moved past the current time
+		const flooredExportSample = Math.floor(st.exportSample);
+		if(canWriteCache && flooredExportSample > this.cacheSample) {
+			this.cacheSample = flooredExportSample;
+		}
+
+		// Update the current index in the export state
+		st.currentIdx = chunkEnd;
+
+		// Update export progress for the main thread
+		const percent = Math.floor((st.currentIdx / st.totalSamples) * 100);
+		const status = st.currentIdx < st.totalSamples ? 'Rendering audio...' : 'Encoding WAV...';
+		const data = { exportWavProgress: { percent, status } };
+
+		// Calculate the continuous cache in seconds for the main thread
+		if(canWriteCache) {
+			data.cacheSeconds = this.getCacheSeconds(128, this.sampleRate);
+		}
+
+		// Send the export progress and the updated cache counter
+		this.port.postMessage(data);
+
+		// If the entire segment has been processed - finalize the WAV with normalization
+		if(st.currentIdx >= st.totalSamples) {
+			this.finalizeWavExport();
+		}
+	}
+
+	// Finalize the WAV export by creating the WAV buffer and sending it to the main thread
+	finalizeWavExport() {
+		// Retrieve and clear the export state for WAV rendering
+		const st = this.exportWavState;
+		this.exportWavState = null; // Freeing the state
+		const { totalSamples, targetSampleRate, rawL, rawR, maxPeak, isNormalize } = st;
+
+		// Allocate memory: 44 bytes for the WAV header + data (samples * 2 channels * 2 bytes)
+		const numChannels = 2;
+		const bitDepth = 16;
+		const dataByteLength = totalSamples * numChannels * 2;
+		const wavBuffer = new ArrayBuffer(44 + dataByteLength);
+		const view = new DataView(wavBuffer);
+
+		// Helper for writing ASCII strings into the header
+		const writeString = (offset, str) => {
+			for(let i = 0; i < str.length; i++) {
+				view.setUint8(offset + i, str.charCodeAt(i));
+			}
+		};
+
+		// Form the standard RIFF/WAVE header
+		writeString(0, 'RIFF');
+		view.setUint32(4, 36 + dataByteLength, true);
+		writeString(8, 'WAVE');
+		writeString(12, 'fmt ');
+		view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
+		view.setUint16(20, 1, true);  // AudioFormat (1 = PCM without compression)
+		view.setUint16(22, numChannels, true);
+		view.setUint32(24, targetSampleRate, true);
+		view.setUint32(28, targetSampleRate * numChannels * (bitDepth / 8), true); // ByteRate
+		view.setUint16(32, numChannels * (bitDepth / 8), true); // BlockAlign
+		view.setUint16(34, bitDepth, true);
+		writeString(36, 'data');
+		view.setUint32(40, dataByteLength, true);
+
+		// Calculate the normalization multiplier (if the track is not complete silence)
+		const gain = isNormalize && maxPeak > 0.0001 ? 1.0 / maxPeak : 1.0;
+		let offset = 44;
+		for(let i = 0; i < totalSamples; i++) {
+			// Limit the amplitude to [-1, 1] and convert to 16-bit Signed Integer
+			const sL = Math.max(-1, Math.min(1, rawL[i] * gain));
+			view.setInt16(offset, sL < 0 ? sL * 0x8000 : sL * 0x7FFF, true);
+			offset += 2;
+			const sR = Math.max(-1, Math.min(1, rawR[i] * gain));
+			view.setInt16(offset, sR < 0 ? sR * 0x8000 : sR * 0x7FFF, true);
+			offset += 2;
+		}
+
+		// Send the finalized WAV via Zero-Copy (Transferable Object)
+		this.port.postMessage({ exportWavResult: { wavBuffer, targetSampleRate } }, [wavBuffer]);
 	}
 }
 

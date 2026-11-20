@@ -9,10 +9,10 @@
 	<title>Bytebeat composer</title>
 	<link rel="canonical" href="https://dollchan.net/bytebeat/">
 	<link rel="shortcut icon" href="favicon.png">
-	<link rel="stylesheet" type="text/css" href="style.css?version=2026111900">
-	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026111900">
-	<script type="module" async src="./build/index.js?version=2026111900"></script>
-	<script src="./build/theme.js?version=2026111900"></script>
+	<link rel="stylesheet" type="text/css" href="style.css?version=2026112003">
+	<link rel="modulepreload" href="./build/audio-processor.mjs?version=2026112003">
+	<script type="module" async src="./build/index.js?version=2026112003"></script>
+	<script src="./build/theme.js?version=2026112003"></script>
 </head>
 <body>
 	<main id="content">
@@ -58,11 +58,11 @@
 					</button>
 				</div>
 				<div class="controls-group">
-					<button id="control-scaledown" class="control-button" title="Zoom in the scope">
+					<button id="control-scale-down" class="control-button" title="Zoom in the scope">
 						<svg><use xlink:href="#symbol-scaledown"></use></svg>
 					</button>
 					<div id="control-scale" class="control-button" title="Scope zoom factor. Click to reset.">1/32</div>
-					<button id="control-scaleup" class="control-button" title="Zoom out the scope">
+					<button id="control-scale-up" class="control-button" title="Zoom out the scope">
 						<svg><use xlink:href="#symbol-scaleup"></use></svg>
 					</button>
 				</div>
@@ -104,7 +104,7 @@
 					<button id="control-link" class="control-button" title="Copy the song link">
 						<svg><use xlink:href="#symbol-link"></use></svg>
 					</button>
-					<button id="control-export" class="control-button" title="Export to Wav file">
+					<button id="control-export" class="control-button" title="Export to WAV file">
 						<svg><use xlink:href="#symbol-download"></use></svg>
 					</button>
 					<button id="control-expand" class="control-button" title="Expand the code editor">
@@ -439,14 +439,14 @@
 	</main>
 
 	<!-- Export to WAV Modal -->
-	<dialog id="export-wav-modal" class="modal-container">
+	<dialog id="export-wav-window" class="modal-container">
 		<form method="dialog" class="modal-form">
 			<div class="modal-header">
 				<span>Export to WAV</span>
-				<button type="button" id="modal-close" class="modal-close-button" title="Close">&times;</button>
+				<button type="button" id="export-wav-close" class="modal-close-button" title="Close">&times;</button>
 			</div>
 			<div class="modal-body">
-				<label class="modal-field">
+				<label class="modal-label">
 					<span>Start time (<span id="export-wav-start-units">sec</span>):</span>
 					<input type="number" id="export-wav-start" class="modal-input" value="0" min="0" step="any" required>
 				</label>
@@ -454,20 +454,42 @@
 					<button type="button" id="export-wav-time-start" class="modal-button" title="Set start time to 0">From start</button>
 					<button type="button" id="export-wav-time-current" class="modal-button" title="Set current player time">From Cursor</button>
 				</div>
-				<label class="modal-field">
+				<label class="modal-label">
 					<span>Duration (sec):</span>
 					<input type="number" id="export-wav-duration" class="modal-input" value="60" min="1" max="600" step="any" required>
 				</label>
 				<div class="modal-presets">
-					<button type="button" class="modal-button export-preset" data-dur="30">30s</button>
-					<button type="button" class="modal-button export-preset" data-dur="60">1m</button>
-					<button type="button" class="modal-button export-preset" data-dur="180">3m</button>
-					<button type="button" class="modal-button export-preset" data-dur="300">5m</button>
+					<button type="button" class="modal-button export-wav-duration-preset" data-dur="30">30s</button>
+					<button type="button" class="modal-button export-wav-duration-preset" data-dur="60">1m</button>
+					<button type="button" class="modal-button export-wav-duration-preset" data-dur="180">3m</button>
+					<button type="button" class="modal-button export-wav-duration-preset" data-dur="300">5m</button>
+				</div>
+				<label class="modal-label">
+					<span>Sample rate (Hz):</span>
+					<input type="number" id="export-wav-samplerate" class="modal-input" min="100" max="192000" step="1" required>
+				</label>
+				<div class="modal-presets">
+					<button type="button" class="modal-button export-wav-samplerate-preset" data-rate="Native">Native</button>
+					<button type="button" class="modal-button export-wav-samplerate-preset" data-rate="44100">44.1kHz</button>
+					<button type="button" class="modal-button export-wav-samplerate-preset" data-rate="48000">48kHz</button>
+				</div>
+				<label class="modal-label-checkbox">
+					<input type="checkbox" id="export-wav-normalize" class="modal-checkbox">
+					<span>Normalize volume (0 dB peak)</span>
+				</label>
+				<div id="export-progress-container" class="modal-progress-wrap" style="display: none;">
+					<div class="modal-progress-info">
+						<span id="export-progress-status">Rendering...</span>
+						<span id="export-progress-percent">0%</span>
+					</div>
+					<div class="modal-progress-bar-bg">
+						<div id="export-progress-bar-fill" class="modal-progress-bar-fill"></div>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" id="modal-cancel" class="modal-button" title="Cancel">Cancel</button>
-				<button type="submit" id="modal-submit" class="modal-button modal-button-primary">Render &amp; Download</button>
+				<button type="button" id="export-wav-cancel" class="modal-button" title="Cancel">Cancel</button>
+				<button type="submit" id="export-wav-submit" class="modal-button modal-button-primary">Render &amp; Download</button>
 			</div>
 		</form>
 	</dialog>

@@ -35,11 +35,18 @@ export class UI {
 		this.downloader = null;
 		this.mainElem = null;
 
-		// Export to WAV elements
-		this.exportWavModal = null;
-		this.exportWavStart = null;
+		// Export to WAV modal window elements
 		this.exportWavDuration = null;
+		this.exportWavWindow = null;
+		this.exportWavNormalize = null;
+		this.exportWavProgContainer = null;
+		this.exportWavProgStatus = null;
+		this.exportWavProgPercent = null;
+		this.exportWavProgBarFill = null;
+		this.exportWavSampleRate = null;
+		this.exportWavStart = null;
 		this.exportWavStartUnits = null;
+		this.exportWavSubmit = null;
 	}
 
 	// Copy song link into clipboard
@@ -98,8 +105,8 @@ export class UI {
 		this.controlSampleRate = document.getElementById('control-samplerate');
 		this.controlSampleRateSelect = document.getElementById('control-samplerate-select');
 		this.controlScale = document.getElementById('control-scale');
-		this.controlScaleDown = document.getElementById('control-scaledown');
-		this.controlScaleUp = document.getElementById('control-scaleup');
+		this.controlScaleDown = document.getElementById('control-scale-down');
+		this.controlScaleUp = document.getElementById('control-scale-up');
 		this.controlSRDivisor = document.getElementById('control-srdivisor');
 		this.controlThemeStyle = document.getElementById('control-theme-style');
 		this.controlTime = document.getElementById('control-counter');
@@ -108,11 +115,18 @@ export class UI {
 		this.downloader = document.getElementById('downloader');
 		this.mainElem = document.getElementById('content');
 
-		// Export to WAV elements
-		this.exportWavModal = document.getElementById('export-wav-modal');
-		this.exportWavStart = document.getElementById('export-wav-start');
+		// Export to WAV modal window elements
 		this.exportWavDuration = document.getElementById('export-wav-duration');
+		this.exportWavWindow = document.getElementById('export-wav-window');
+		this.exportWavNormalize = document.getElementById('export-wav-normalize');
+		this.exportWavProgContainer = document.getElementById('export-progress-container');
+		this.exportWavProgStatus = document.getElementById('export-progress-status');
+		this.exportWavProgPercent = document.getElementById('export-progress-percent');
+		this.exportWavProgBarFill = document.getElementById('export-progress-bar-fill');
+		this.exportWavSampleRate = document.getElementById('export-wav-samplerate');
+		this.exportWavStart = document.getElementById('export-wav-start');
 		this.exportWavStartUnits = document.getElementById('export-wav-start-units');
+		this.exportWavSubmit = document.getElementById('export-wav-submit');
 	}
 
 	// Show corresponding article when article navigation button is clicked
